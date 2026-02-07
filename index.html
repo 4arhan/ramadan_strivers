@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ramadan Strivers">
+    <meta name="theme-color" content="#0a0f1a">
+    <meta name="description" content="Track your Ramadan journey - From Muslim to Mu'min">
+    <title>Ramadan Strivers</title>
+    <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ramadan%20Strivers%22%2C%22short_name%22%3A%22Ramadan%22%2C%22description%22%3A%22Track%20your%20Ramadan%20journey%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0f1a%22%2C%22theme_color%22%3A%22%230a0f1a%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520viewBox%3D%270%25200%2520100%2520100%27%253E%253Crect%2520fill%3D%27%25230a0f1a%27%2520width%3D%27100%27%2520height%3D%27100%27%2520rx%3D%2720%27%2F%253E%253Ctext%2520x%3D%2750%27%2520y%3D%2768%27%2520font-size%3D%2755%27%2520text-anchor%3D%27middle%27%253E%25F0%259F%258C%2599%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0f1a' width='100' height='100' rx='20'/><text x='50' y='68' font-size='55' text-anchor='middle'>🌙</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f7f5f0;
+            --bg-secondary: #ffffff;
+            --bg-header: #0a1628;
+            --text-primary: #1a1a2e;
+            --text-secondary: #555566;
+            --text-muted: #888899;
+            --accent-green: #1b5e3b;
+            --accent-green-light: #2a7b52;
+            --accent-green-glow: rgba(27,94,59,0.15);
+            --accent-gold: #c9a84c;
+            --accent-gold-light: #f5ecd3;
+            --accent-gold-glow: rgba(201,168,76,0.2);
+            --border-color: #e2ddd4;
+            --success: #2e7d32;
+            --warning: #e6a817;
+            --error: #c0392b;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --card-bg: #ffffff;
+            --overlay: rgba(0,0,0,0.5);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+            --font-display: 'Amiri', serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --bg-header: #050a14;
+            --text-primary: #e8e4dd;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-green: #34d399;
+            --accent-green-light: #6ee7b7;
+            --accent-green-glow: rgba(52,211,153,0.1);
+            --accent-gold: #f5c542;
+            --accent-gold-light: #2a2311;
+            --accent-gold-glow: rgba(245,197,66,0.12);
+            --border-color: #1f2937;
+            --success: #22c55e;
+            --warning: #eab308;
+            --error: #ef4444;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+            --card-bg: #1a1f2e;
+            --overlay: rgba(0,0,0,0.75);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            padding-bottom: calc(76px + var(--safe-bottom));
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(180deg, var(--bg-header) 0%, rgba(10,22,40,0.97) 100%);
+            color: white;
+            padding: calc(14px + var(--safe-top)) 20px 14px;
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.3);
+        }
+        .header-content { display:flex; justify-content:space-between; align-items:center; max-width:560px; margin:0 auto; }
+        .header h1 { font-family: var(--font-display); font-size:1.4em; font-weight:700; letter-spacing:0.5px; }
+        .header-tagline { font-size:0.72em; opacity:0.7; font-weight:400; display:block; color:var(--accent-gold); font-family:var(--font-display); font-style:italic; margin-top:2px; }
+        .theme-toggle {
+            background: rgba(255,255,255,0.08); border:1.5px solid rgba(201,168,76,0.4);
+            color: var(--accent-gold); width:42px; height:42px; font-size:1.2em;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
+            border-radius:12px; transition: all 0.2s;
+        }
+        .theme-toggle:active { transform:scale(0.92); background:rgba(255,255,255,0.15); }
+
+        /* ===== DAY BANNER ===== */
+        .day-banner {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #1b5e3b 100%);
+            color: white; padding: 22px 20px; text-align:center;
+            position: relative; overflow: hidden;
+        }
+        .day-banner::before {
+            content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+            background: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 60%);
+            animation: shimmer 8s ease-in-out infinite;
+        }
+        @keyframes shimmer { 0%,100%{transform:translateX(-20%)} 50%{transform:translateX(20%)} }
+        .day-banner.last-ten {
+            background: linear-gradient(135deg, #0a0a2e 0%, #1a1040 40%, #2d1b69 100%);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+        .day-banner .day-number { font-family:var(--font-display); font-size:2.2em; font-weight:700; position:relative; }
+        .day-banner .day-label { font-size:0.85em; opacity:0.8; margin-top:2px; }
+        .day-banner .hadith { font-family:var(--font-display); font-style:italic; font-size:0.88em; margin-top:12px; opacity:0.85; line-height:1.6; max-width:500px; margin-left:auto; margin-right:auto; position:relative; }
+        .odd-night-badge {
+            display:inline-block; background:linear-gradient(135deg, #f5c542 0%, #d4a520 100%);
+            color:#1a1a2e; padding:5px 16px; font-size:0.75em; font-weight:700;
+            margin-top:10px; text-transform:uppercase; letter-spacing:1.5px;
+            border-radius:20px; position:relative;
+            box-shadow: 0 0 20px rgba(245,197,66,0.3);
+        }
+
+        /* ===== DAY SELECTOR ===== */
+        .day-selector {
+            display:flex; align-items:center; justify-content:center; gap:16px;
+            padding:12px 20px; background:var(--bg-secondary); border-bottom:1px solid var(--border-color);
+        }
+        .day-selector button {
+            width:40px; height:40px; border-radius:50%; border:2px solid var(--border-color);
+            background:var(--card-bg); color:var(--text-primary); font-size:1.1em; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; transition:all 0.2s;
+        }
+        .day-selector button:active { transform:scale(0.9); background:var(--accent-green-glow); }
+        .day-selector .day-display { font-weight:600; font-size:0.95em; color:var(--text-secondary); min-width:80px; text-align:center; }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content { max-width:560px; margin:0 auto; padding:16px; }
+        .tab-content { display:none; animation: fadeIn 0.25s ease; }
+        .tab-content.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+        /* ===== PROGRESS CARD ===== */
+        .progress-card {
+            background: linear-gradient(135deg, var(--accent-green) 0%, #1a6b42 100%);
+            color:white; padding:20px; margin-bottom:14px; border-radius:var(--radius);
+            box-shadow: var(--shadow-lg); position:relative; overflow:hidden;
+        }
+        [data-theme="dark"] .progress-card { background: linear-gradient(135deg, #0f2922 0%, #163b2d 100%); border:1px solid rgba(52,211,153,0.2); }
+        .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+        .progress-title { font-weight:600; font-size:0.9em; opacity:0.9; }
+        .progress-percentage { font-size:2em; font-weight:700; font-family:var(--font-display); }
+        .progress-bar-container { background:rgba(255,255,255,0.2); height:8px; border-radius:4px; margin-bottom:10px; overflow:hidden; }
+        .progress-bar { height:100%; background:linear-gradient(90deg,#f5c542,#ffd700); border-radius:4px; transition:width 0.4s ease; }
+        .progress-stats { display:flex; justify-content:space-between; font-size:0.82em; opacity:0.85; }
+        .points-display { color:#ffd700; font-weight:600; }
+
+        /* ===== STREAKS ===== */
+        .streaks-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+        .streak-card {
+            background:var(--card-bg); border:1.5px solid var(--border-color);
+            padding:14px 8px; text-align:center; border-radius:var(--radius-sm);
+            transition: all 0.2s; box-shadow:var(--shadow-sm);
+        }
+        .streak-card.active { border-color:var(--accent-gold); box-shadow: 0 0 12px var(--accent-gold-glow); }
+        .streak-icon { font-size:1.4em; margin-bottom:4px; }
+        .streak-count { font-size:1.4em; font-weight:700; color:var(--accent-green); font-family:var(--font-display); }
+        .streak-label { font-size:0.68em; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+
+        /* ===== QURAN TRACKER ===== */
+        .quran-tracker {
+            background: linear-gradient(135deg, #1a1040 0%, #2d1b69 60%, #1b3a5e 100%);
+            color:white; padding:20px; margin-bottom:14px; border-radius:var(--radius);
+            border: 1px solid rgba(201,168,76,0.25); position:relative; overflow:hidden;
+        }
+        [data-theme="light"] .quran-tracker { background: linear-gradient(135deg, #1a2a44 0%, #2a3d5e 60%, #1b5e3b 100%); }
+        .quran-tracker h3 { font-family:var(--font-display); margin-bottom:12px; font-size:1.1em; }
+        .quran-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+        .quran-stat { background:rgba(255,255,255,0.1); padding:12px; border-radius:var(--radius-sm); text-align:center; }
+        .quran-stat-value { font-size:1.5em; font-weight:700; font-family:var(--font-display); color:#ffd700; }
+        .quran-stat-label { font-size:0.72em; opacity:0.8; margin-top:2px; }
+        .quran-input-row { display:flex; gap:10px; align-items:center; }
+        .quran-input-row input {
+            flex:1; padding:10px 14px; border-radius:var(--radius-sm); border:1.5px solid rgba(255,255,255,0.2);
+            background:rgba(255,255,255,0.1); color:white; font-size:1em; font-family:var(--font-body);
+        }
+        .quran-input-row input::placeholder { color:rgba(255,255,255,0.4); }
+        .quran-input-row button {
+            padding:10px 18px; border-radius:var(--radius-sm); border:none;
+            background:var(--accent-gold); color:#1a1a2e; font-weight:700; cursor:pointer;
+            font-family:var(--font-body); font-size:0.9em; white-space:nowrap;
+        }
+        .quran-input-row button:active { transform:scale(0.96); }
+        .quran-progress-bar { background:rgba(255,255,255,0.15); height:6px; border-radius:3px; margin-top:14px; overflow:hidden; }
+        .quran-progress-fill { height:100%; background:linear-gradient(90deg,#34d399,#ffd700); border-radius:3px; transition:width 0.4s; }
+        .quran-message { font-size:0.82em; opacity:0.8; margin-top:10px; font-style:italic; font-family:var(--font-display); line-height:1.5; text-align:center; }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            background:var(--card-bg); border:1.5px solid var(--border-color);
+            margin-bottom:12px; overflow:hidden; border-radius:var(--radius);
+            box-shadow:var(--shadow-sm); transition: all 0.2s;
+        }
+        .section.last-ten-section { border-color:var(--accent-gold); box-shadow:0 0 20px var(--accent-gold-glow); }
+        .section-header {
+            background:var(--accent-green); color:white;
+            padding:14px 16px; display:flex; justify-content:space-between; align-items:center;
+            cursor:pointer; user-select:none; border-radius:var(--radius) var(--radius) 0 0;
+        }
+        [data-theme="dark"] .section-header { background:linear-gradient(135deg, #0f2922 0%, #163b2d 100%); }
+        .section-header h2 { font-size:0.88em; font-weight:600; letter-spacing:0.3px; }
+        .section-progress { display:flex; align-items:center; gap:8px; }
+        .section-progress-text { font-size:0.78em; opacity:0.85; }
+        .toggle-icon { font-size:0.7em; transition:transform 0.3s ease; color:var(--accent-gold); }
+        .section.collapsed .toggle-icon { transform:rotate(-90deg); }
+        .section-content { padding:12px; max-height:8000px; overflow:hidden; transition:max-height 0.35s ease, padding 0.35s ease; }
+        .section.collapsed .section-content { max-height:0; padding:0 12px; }
+        .subsection-title {
+            font-size:0.82em; font-weight:700; color:var(--accent-gold);
+            padding:10px 0 8px; margin:12px 0 8px;
+            text-transform:uppercase; letter-spacing:1px;
+            border-bottom:1.5px solid var(--accent-gold-glow);
+            display:flex; align-items:center; gap:8px;
+        }
+        .hadith-note {
+            background:var(--accent-gold-glow); border-left:3px solid var(--accent-gold);
+            padding:12px 14px; margin:8px 0 12px; border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+            font-family:var(--font-display); font-style:italic; font-size:0.88em; line-height:1.6;
+            color:var(--text-secondary);
+        }
+        .checklist-item {
+            display:flex; align-items:flex-start; gap:12px;
+            padding:12px 14px; background:var(--bg-primary); border:1px solid var(--border-color);
+            margin-bottom:6px; transition:all 0.2s ease; border-radius:var(--radius-sm);
+            cursor:pointer;
+        }
+        .checklist-item:active { transform:scale(0.985); }
+        .checklist-item.checked { opacity:0.55; background:var(--accent-green-glow); }
+        .checklist-item input[type="checkbox"] {
+            width:22px; height:22px; cursor:pointer; accent-color:var(--accent-green);
+            flex-shrink:0; margin-top:1px; border-radius:4px;
+        }
+        .checklist-item label { flex:1; cursor:pointer; font-size:0.92em; line-height:1.5; }
+        .checklist-item.checked label { text-decoration:line-through; }
+        .item-points { font-size:0.72em; color:var(--accent-gold); font-weight:700; margin-left:6px; }
+        .reference { display:block; font-size:0.78em; color:var(--text-muted); font-style:italic; margin-top:2px; }
+        .reference a { color:var(--accent-green); text-decoration:none; }
+        .explanation { display:block; font-size:0.78em; color:var(--text-secondary); margin-top:3px; line-height:1.4; }
+
+        /* ===== CALENDAR ===== */
+        .calendar-container { background:var(--card-bg); border:1.5px solid var(--border-color); padding:18px; border-radius:var(--radius); }
+        .calendar-header { text-align:center; margin-bottom:16px; }
+        .calendar-header h2 { color:var(--accent-green); font-family:var(--font-display); font-size:1.2em; }
+        .calendar-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+        .calendar-day {
+            aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border:1.5px solid var(--border-color); background:var(--bg-primary); cursor:pointer;
+            transition:all 0.2s; position:relative; border-radius:var(--radius-sm);
+        }
+        .calendar-day:active { transform:scale(0.93); }
+        .calendar-day.today { border-color:var(--accent-gold); box-shadow:0 0 12px var(--accent-gold-glow); }
+        .calendar-day.completed-high { background:var(--success); color:white; border-color:var(--success); }
+        .calendar-day.completed-med { background:var(--warning); color:white; border-color:var(--warning); }
+        .calendar-day.completed-low { background:var(--error); color:white; border-color:var(--error); }
+        .calendar-day.odd-night::after { content:'🌙'; position:absolute; top:2px; right:3px; font-size:0.55em; }
+        .calendar-day-number { font-size:1.05em; font-weight:700; }
+        .calendar-day-percent { font-size:0.6em; opacity:0.85; }
+
+        /* ===== STATS ===== */
+        .stats-section { background:var(--card-bg); border:1.5px solid var(--border-color); padding:20px; margin-bottom:14px; border-radius:var(--radius); box-shadow:var(--shadow-sm); }
+        .stats-section h3 { color:var(--accent-green); font-size:1em; margin-bottom:14px; padding-bottom:8px; border-bottom:1.5px solid var(--accent-gold-glow); font-family:var(--font-display); }
+        .stat-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-color); }
+        .stat-row:last-child { border-bottom:none; }
+        .stat-label { color:var(--text-secondary); font-size:0.92em; }
+        .stat-value { font-weight:600; color:var(--accent-green); }
+        .category-bar { margin-bottom:14px; }
+        .category-bar-header { display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.88em; }
+        .category-bar-track { background:var(--border-color); height:8px; border-radius:4px; overflow:hidden; }
+        .category-bar-fill { height:100%; background:linear-gradient(90deg,var(--accent-green),var(--accent-gold)); border-radius:4px; transition:width 0.4s; }
+        .badges-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+        .badge-item { text-align:center; padding:14px 6px; background:var(--bg-primary); border:1.5px solid var(--border-color); border-radius:var(--radius-sm); transition:all 0.2s; }
+        .badge-item.unlocked { border-color:var(--accent-gold); background:var(--accent-gold-glow); }
+        .badge-item.locked { opacity:0.35; filter:grayscale(1); }
+        .badge-icon { font-size:1.8em; margin-bottom:4px; }
+        .badge-name { font-size:0.68em; font-weight:600; color:var(--text-secondary); }
+
+        /* ===== WEEKLY SUMMARY ===== */
+        .weekly-summary {
+            background:linear-gradient(135deg, var(--accent-green) 0%, #1a6b42 100%); color:white;
+            padding:20px; margin-bottom:14px; border-radius:var(--radius);
+        }
+        [data-theme="dark"] .weekly-summary { background:linear-gradient(135deg, #0f2922 0%, #163b2d 100%); border:1px solid rgba(52,211,153,0.2); }
+        .weekly-summary h3 { margin-bottom:14px; font-family:var(--font-display); }
+        .weekly-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+        .weekly-stat { background:rgba(255,255,255,0.12); padding:12px; text-align:center; border-radius:var(--radius-sm); }
+        .weekly-stat-value { font-size:1.4em; font-weight:700; font-family:var(--font-display); }
+        .weekly-stat-label { font-size:0.72em; opacity:0.85; }
+
+        /* ===== RECOMMENDED APPS ===== */
+        .apps-section { margin-bottom:14px; }
+        .app-card {
+            display:flex; align-items:center; gap:14px; padding:16px;
+            background:var(--card-bg); border:1.5px solid var(--border-color);
+            border-radius:var(--radius); margin-bottom:10px; text-decoration:none;
+            color:var(--text-primary); transition:all 0.2s; box-shadow:var(--shadow-sm);
+        }
+        .app-card:active { transform:scale(0.98); border-color:var(--accent-gold); }
+        .app-icon { font-size:2.2em; flex-shrink:0; }
+        .app-info { flex:1; }
+        .app-name { font-weight:700; font-size:0.95em; margin-bottom:2px; }
+        .app-desc { font-size:0.8em; color:var(--text-muted); line-height:1.4; }
+        .app-link { font-size:0.75em; color:var(--accent-green); margin-top:4px; font-weight:600; }
+        .app-badge { padding:4px 10px; background:var(--accent-green); color:white; font-size:0.7em; font-weight:700; border-radius:20px; white-space:nowrap; }
+
+        /* ===== SETTINGS ===== */
+        .setting-item { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--border-color); }
+        .setting-label { font-weight:500; font-size:0.95em; }
+        .setting-desc { font-size:0.82em; color:var(--text-muted); }
+        .toggle-switch {
+            width:50px; height:28px; background:var(--border-color); border:none;
+            cursor:pointer; position:relative; border-radius:14px;
+        }
+        .toggle-switch::after {
+            content:''; position:absolute; width:22px; height:22px; background:white;
+            top:3px; left:3px; transition:transform 0.2s; border-radius:50%;
+        }
+        .toggle-switch.active { background:var(--accent-green); }
+        .toggle-switch.active::after { transform:translateX(22px); }
+        .btn {
+            padding:13px 24px; border:1.5px solid var(--accent-green); background:var(--accent-green);
+            color:white; font-weight:600; cursor:pointer; transition:all 0.2s; width:100%;
+            margin-top:10px; border-radius:var(--radius-sm); font-family:var(--font-body); font-size:0.92em;
+        }
+        .btn:active { transform:scale(0.98); }
+        .btn-outline { background:transparent; color:var(--accent-green); }
+        .btn-danger { border-color:var(--error); background:var(--error); }
+
+        /* ===== FOOTER ===== */
+        .app-footer {
+            text-align:center; padding:30px 20px 20px; margin-top:20px;
+            border-top:1px solid var(--border-color); color:var(--text-muted); font-size:0.82em; line-height:1.7;
+        }
+        .app-footer .dua { font-family:var(--font-display); font-style:italic; font-size:1.05em; color:var(--accent-gold); margin-bottom:12px; }
+        .app-footer a { color:var(--accent-green); text-decoration:none; font-weight:600; }
+
+        /* ===== BOTTOM NAV ===== */
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0;
+            background:var(--card-bg); border-top:1px solid var(--border-color);
+            display:flex; padding-bottom:var(--safe-bottom); z-index:100;
+            backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+        }
+        .nav-item {
+            flex:1; padding:10px 0; display:flex; flex-direction:column; align-items:center;
+            gap:3px; cursor:pointer; color:var(--text-muted); border:none; background:transparent;
+            transition:color 0.2s; font-family:var(--font-body);
+        }
+        .nav-item.active { color:var(--accent-green); }
+        .nav-item .nav-icon { font-size:1.35em; }
+        .nav-item .nav-label { font-size:0.65em; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+            background:var(--overlay); z-index:200; align-items:center; justify-content:center; padding:20px;
+        }
+        .modal-overlay.active { display:flex; }
+        .modal {
+            background:var(--card-bg); border:1.5px solid var(--border-color); width:100%;
+            max-width:420px; max-height:80vh; overflow-y:auto; border-radius:var(--radius);
+        }
+        .modal-header {
+            background:var(--accent-green); color:white; padding:16px 20px;
+            display:flex; justify-content:space-between; align-items:center;
+            border-radius:var(--radius) var(--radius) 0 0;
+        }
+        [data-theme="dark"] .modal-header { background:linear-gradient(135deg, #0f2922 0%, #163b2d 100%); }
+        .modal-header h3 { font-size:1em; font-family:var(--font-display); }
+        .modal-close { background:transparent; border:none; color:white; font-size:1.5em; cursor:pointer; }
+        .modal-body { padding:20px; }
+
+        /* ===== TOAST ===== */
+        .toast-container { position:fixed; top:calc(80px + var(--safe-top)); left:50%; transform:translateX(-50%); z-index:300; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
+        .toast {
+            background:var(--accent-green); color:white; padding:12px 20px; font-size:0.88em;
+            font-weight:500; border-radius:var(--radius-sm); animation:slideDown 0.3s ease, fadeOut 0.3s ease 2.7s;
+            box-shadow:var(--shadow-lg);
+        }
+        .toast.badge-toast { background:linear-gradient(135deg,#f5c542,#d4a520); color:#1a1a2e; }
+        @keyframes slideDown { from{transform:translateY(-20px);opacity:0} to{transform:translateY(0);opacity:1} }
+        @keyframes fadeOut { from{opacity:1} to{opacity:0} }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width:400px) {
+            .header h1 { font-size:1.15em; }
+            .streaks-row { grid-template-columns:repeat(2,1fr); }
+            .badges-grid { grid-template-columns:repeat(3,1fr); }
+            .calendar-grid { grid-template-columns:repeat(5,1fr); }
+            .quran-stats { grid-template-columns:1fr 1fr; }
+        }
+        @media print {
+            .bottom-nav,.header-actions,.progress-card,.streaks-row,.day-selector { display:none; }
+            body { padding-bottom:0; }
+            .section.collapsed .section-content { max-height:none; padding:12px; }
+        }
+        /* iOS status bar fix */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .header { padding-top: calc(14px + env(safe-area-inset-top)); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1>🌙 RAMADAN STRIVERS</h1>
+                <span class="header-tagline">From Muslim to Mu'min — bringing out our best</span>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="day-banner" id="dayBanner">
+        <div class="day-number">Day <span id="currentDay">1</span></div>
+        <div class="day-label">of Ramadan 1447</div>
+        <div class="hadith" id="dailyHadith"></div>
+        <div id="oddNightBadge"></div>
+    </div>
+
+    <div class="day-selector">
+        <button onclick="changeDay(-1)" aria-label="Previous day">◀</button>
+        <div class="day-display" id="dayDisplay">Day 1 / 30</div>
+        <button onclick="changeDay(1)" aria-label="Next day">▶</button>
+    </div>
+
+    <main class="main-content">
+        <!-- TODAY TAB -->
+        <div class="tab-content active" id="tab-today">
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Today's Progress</span>
+                    <span class="progress-percentage" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar-container"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+                <div class="progress-stats">
+                    <span id="progressCount">0 of 0 completed</span>
+                    <span class="points-display">🔥 <span id="todayPoints">0</span> pts</span>
+                </div>
+            </div>
+
+            <div class="streaks-row">
+                <div class="streak-card" id="streakFajr"><div class="streak-icon">☀️</div><div class="streak-count" id="streakFajrCount">0</div><div class="streak-label">Fajr</div></div>
+                <div class="streak-card" id="streakNight"><div class="streak-icon">🌙</div><div class="streak-count" id="streakNightCount">0</div><div class="streak-label">Night</div></div>
+                <div class="streak-card" id="streakQuran"><div class="streak-icon">📖</div><div class="streak-count" id="streakQuranCount">0</div><div class="streak-label">Quran</div></div>
+                <div class="streak-card" id="streakCharity"><div class="streak-icon">💝</div><div class="streak-count" id="streakCharityCount">0</div><div class="streak-label">Sadaqah</div></div>
+            </div>
+
+            <!-- Quran Tracker -->
+            <div class="quran-tracker">
+                <h3>📖 Quran Completion Tracker</h3>
+                <div class="quran-stats">
+                    <div class="quran-stat"><div class="quran-stat-value" id="quranPagesRead">0</div><div class="quran-stat-label">Pages Read</div></div>
+                    <div class="quran-stat"><div class="quran-stat-value" id="quranPagesLeft">604</div><div class="quran-stat-label">Pages Left</div></div>
+                    <div class="quran-stat"><div class="quran-stat-value" id="quranDaysLeft">30</div><div class="quran-stat-label">Days Left</div></div>
+                    <div class="quran-stat"><div class="quran-stat-value" id="quranPagesPerDay">~20</div><div class="quran-stat-label">Pages/Day Needed</div></div>
+                </div>
+                <div class="quran-input-row">
+                    <input type="number" id="quranPagesInput" placeholder="Pages read today" min="0" step="1">
+                    <button onclick="logQuranPages()">Log</button>
+                </div>
+                <div class="quran-progress-bar"><div class="quran-progress-fill" id="quranProgressFill" style="width:0%"></div></div>
+                <div class="quran-message" id="quranMessage">The Quran was revealed in Ramadan — read it, understand it, and live by it.</div>
+            </div>
+
+            <div id="checklistContainer"></div>
+        </div>
+
+        <!-- CALENDAR TAB -->
+        <div class="tab-content" id="tab-calendar">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2>📅 30-Day Journey</h2>
+                    <p style="color:var(--text-muted);font-size:0.82em;margin-top:5px">Tap any day to view details</p>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+            <div class="stats-section" style="margin-top:14px">
+                <h3>📊 Calendar Legend</h3>
+                <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:0.82em">
+                    <span><span style="display:inline-block;width:14px;height:14px;background:var(--success);vertical-align:middle;margin-right:5px;border-radius:3px"></span>76-100%</span>
+                    <span><span style="display:inline-block;width:14px;height:14px;background:var(--warning);vertical-align:middle;margin-right:5px;border-radius:3px"></span>51-75%</span>
+                    <span><span style="display:inline-block;width:14px;height:14px;background:var(--error);vertical-align:middle;margin-right:5px;border-radius:3px"></span>1-50%</span>
+                    <span>🌙 Odd Night</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS TAB -->
+        <div class="tab-content" id="tab-stats">
+            <div class="weekly-summary" id="weeklySummary" style="display:none"><h3>📊 Weekly Summary</h3><div class="weekly-stats" id="weeklyStats"></div></div>
+            <div class="stats-section"><h3>📈 Overall Progress</h3>
+                <div class="stat-row"><span class="stat-label">Days Completed</span><span class="stat-value" id="statDaysCompleted">0 / 30</span></div>
+                <div class="stat-row"><span class="stat-label">Average Completion</span><span class="stat-value" id="statAvgCompletion">0%</span></div>
+                <div class="stat-row"><span class="stat-label">Total Points</span><span class="stat-value" id="statTotalPoints">0</span></div>
+                <div class="stat-row"><span class="stat-label">Best Day</span><span class="stat-value" id="statBestDay">-</span></div>
+                <div class="stat-row"><span class="stat-label">Perfect Days (100%)</span><span class="stat-value" id="statPerfectDays">0</span></div>
+                <div class="stat-row"><span class="stat-label">Quran Pages Read</span><span class="stat-value" id="statQuranTotal">0 / 604</span></div>
+            </div>
+            <div class="stats-section"><h3>📊 Category Breakdown (Today)</h3><div id="categoryBreakdown"></div></div>
+            <div class="stats-section"><h3>🏅 Achievements (<span id="badgeCount">0</span>/12)</h3><div class="badges-grid" id="badgesGrid"></div></div>
+            <div class="stats-section"><h3>🔥 Best Streaks</h3>
+                <div class="stat-row"><span class="stat-label">☀️ Fajr</span><span class="stat-value" id="bestStreakFajr">0 days</span></div>
+                <div class="stat-row"><span class="stat-label">🌙 Night Prayer</span><span class="stat-value" id="bestStreakNight">0 days</span></div>
+                <div class="stat-row"><span class="stat-label">📖 Quran</span><span class="stat-value" id="bestStreakQuran">0 days</span></div>
+                <div class="stat-row"><span class="stat-label">💝 Sadaqah</span><span class="stat-value" id="bestStreakCharity">0 days</span></div>
+            </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div class="tab-content" id="tab-settings">
+            <div class="stats-section"><h3>⚙️ Settings</h3>
+                <div class="setting-item">
+                    <div><div class="setting-label">Dark Mode</div><div class="setting-desc">Easier on eyes at night</div></div>
+                    <button class="toggle-switch" id="darkModeToggle" onclick="toggleTheme()"></button>
+                </div>
+            </div>
+
+            <div class="stats-section"><h3>📱 Recommended Apps</h3>
+                <a href="https://lifewithallah.com/app" target="_blank" class="app-card">
+                    <div class="app-icon">🤲</div>
+                    <div class="app-info">
+                        <div class="app-name">Life with Allah</div>
+                        <div class="app-desc">Authentic duas & adhkar from Quran and Sunnah. Daily reminders and guided dhikr.</div>
+                        <div class="app-link">lifewithallah.com/app</div>
+                    </div>
+                    <div class="app-badge">Free</div>
+                </a>
+                <a href="https://tarteel.ai" target="_blank" class="app-card">
+                    <div class="app-icon">📖</div>
+                    <div class="app-info">
+                        <div class="app-name">Tarteel AI</div>
+                        <div class="app-desc">AI-powered Quran recitation assistant with tajweed correction & memorisation tracking.</div>
+                        <div class="app-link">tarteel.ai</div>
+                    </div>
+                    <div class="app-badge">Free</div>
+                </a>
+            </div>
+
+            <div class="stats-section"><h3>💾 Data Management</h3>
+                <button class="btn btn-outline" onclick="exportData()">📤 Export Data (JSON)</button>
+                <button class="btn btn-outline" onclick="document.getElementById('importInput').click()">📥 Import Data</button>
+                <input type="file" id="importInput" accept=".json" onchange="importData(event)" style="display:none">
+                <button class="btn btn-danger" onclick="confirmReset()">🗑️ Reset All Data</button>
+            </div>
+
+            <div class="stats-section"><h3>ℹ️ About</h3>
+                <p style="color:var(--text-secondary);line-height:1.7;font-size:0.88em">
+                    <strong>Ramadan Strivers</strong><br>
+                    From Muslim to Mu'min — bringing out our best this Ramadan<br><br>
+                    Version 2.0<br>
+                    Works offline · No account needed · Data stored locally
+                </p>
+            </div>
+
+            <div class="app-footer">
+                <div class="dua">May Allah accept our fasting and deeds. Ramadan Mubarak! 🌙</div>
+                <p>For corrections, suggestions & feedback<br>please reach out to <a href="mailto:farhan@ramadanstrivers.com">Farhan</a></p>
+                <p style="margin-top:8px;font-size:0.78em;opacity:0.6">Built with ❤️ for the Ummah</p>
+            </div>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-tab="today" onclick="switchTab('today')"><span class="nav-icon">📋</span><span class="nav-label">Today</span></button>
+        <button class="nav-item" data-tab="calendar" onclick="switchTab('calendar')"><span class="nav-icon">📅</span><span class="nav-label">Calendar</span></button>
+        <button class="nav-item" data-tab="stats" onclick="switchTab('stats')"><span class="nav-icon">📊</span><span class="nav-label">Stats</span></button>
+        <button class="nav-item" data-tab="settings" onclick="switchTab('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">More</span></button>
+    </nav>
+
+    <div class="modal-overlay" id="dayModal">
+        <div class="modal">
+            <div class="modal-header"><h3 id="modalDayTitle">Day 1</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div class="modal-body" id="modalDayContent"></div>
+        </div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ==================== DATA ====================
+const TOTAL_QURAN_PAGES = 604;
+
+const DAILY_HADITHS = [
+    { text: "Whoever fasts Ramadan out of faith and seeking reward, his previous sins will be forgiven.", source: "Bukhari 38", link: "https://sunnah.com/bukhari:38" },
+    { text: "When Ramadan begins, the gates of Paradise are opened and the gates of Hell are closed.", source: "Bukhari 1899", link: "https://sunnah.com/bukhari:1899" },
+    { text: "Fasting is a shield; so when one of you is fasting, let him not speak obscenely or act ignorantly.", source: "Bukhari 1894", link: "https://sunnah.com/bukhari:1894" },
+    { text: "There is a gate in Paradise called Ar-Rayyan, through which only those who fast will enter.", source: "Bukhari 1896", link: "https://sunnah.com/bukhari:1896" },
+    { text: "Whoever gives iftar to a fasting person will have the same reward without reducing theirs.", source: "Tirmidhi 807", link: "https://sunnah.com/tirmidhi:807" },
+    { text: "The supplication of the fasting person is not rejected.", source: "Ibn Majah 1753", link: "https://sunnah.com/ibnmajah:1753" },
+    { text: "Fasting and the Quran will intercede for the servant on the Day of Resurrection.", source: "Ahmad 6626", link: "" },
+    { text: "Every action of the son of Adam is for him except fasting, for it is for Me and I shall reward it.", source: "Bukhari 1904", link: "https://sunnah.com/bukhari:1904" },
+    { text: "Whoever does not give up false speech, Allah has no need of him giving up food and drink.", source: "Bukhari 1903", link: "https://sunnah.com/bukhari:1903" },
+    { text: "Seek Laylatul Qadr in the odd nights of the last ten days of Ramadan.", source: "Bukhari 2017", link: "https://sunnah.com/bukhari:2017" },
+    { text: "The best charity is that given in Ramadan.", source: "Tirmidhi 663", link: "https://sunnah.com/tirmidhi:663" },
+    { text: "Whoever stands in prayer on Laylatul Qadr out of faith, his past sins will be forgiven.", source: "Bukhari 1901", link: "https://sunnah.com/bukhari:1901" },
+    { text: "The Prophet was the most generous in Ramadan when Jibreel would meet him.", source: "Bukhari 6", link: "https://sunnah.com/bukhari:6" },
+    { text: "Ramadan is the month of patience, and patience is rewarded with Paradise.", source: "Ibn Khuzaymah 1887", link: "" },
+    { text: "When the last ten days began, the Prophet would tighten his waist belt and pray all night.", source: "Bukhari 2024", link: "https://sunnah.com/bukhari:2024" },
+    { text: "There is nothing equivalent to fasting.", source: "Nasai 2220", link: "https://sunnah.com/nasai:2220" },
+    { text: "The breath of a fasting person is sweeter to Allah than the scent of musk.", source: "Bukhari 1904", link: "https://sunnah.com/bukhari:1904" },
+    { text: "Whoever prays qiyam in Ramadan with faith and seeking reward will be forgiven.", source: "Bukhari 37", link: "https://sunnah.com/bukhari:37" },
+    { text: "Make dua to Allah with certainty that He will answer.", source: "Tirmidhi 3479", link: "https://sunnah.com/tirmidhi:3479" },
+    { text: "The strong is not the one who overcomes people, but who controls himself when angry.", source: "Bukhari 6114", link: "https://sunnah.com/bukhari:6114" },
+    { text: "Laylatul Qadr is better than a thousand months.", source: "Quran 97:3", link: "" },
+    { text: "Whoever draws near to Allah with good character is like one who fasts and prays all night.", source: "Abu Dawud 4798", link: "https://sunnah.com/abudawud:4798" },
+    { text: "Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni — O Allah, You are Pardoning…", source: "Tirmidhi 3513", link: "https://sunnah.com/tirmidhi:3513" },
+    { text: "The one who recites Quran skillfully is with the noble scribes (angels).", source: "Bukhari 4937", link: "https://sunnah.com/bukhari:4937" },
+    { text: "Allah extends His hand at night to accept repentance of those who sinned by day.", source: "Muslim 2759", link: "https://sunnah.com/muslim:2759" },
+    { text: "Whoever believes in Allah and the Last Day, let him speak good or remain silent.", source: "Bukhari 6018", link: "https://sunnah.com/bukhari:6018" },
+    { text: "Nothing is heavier on the Scale than good character.", source: "Tirmidhi 2003", link: "https://sunnah.com/tirmidhi:2003" },
+    { text: "The best of you are those who are best to their families.", source: "Tirmidhi 3895", link: "https://sunnah.com/tirmidhi:3895" },
+    { text: "Charity does not decrease wealth.", source: "Muslim 2588", link: "https://sunnah.com/muslim:2588" },
+    { text: "Whoever fasts Ramadan then follows it with six days of Shawwal, it is as if he fasted forever.", source: "Muslim 1164", link: "https://sunnah.com/muslim:1164" }
+];
+
+const BADGES = [
+    { id:'firstStep',name:'First Step',icon:'🌱',desc:'Complete day 1' },
+    { id:'weekOne',name:'Week One',icon:'📅',desc:'Complete 7 days' },
+    { id:'halfway',name:'Halfway',icon:'🎯',desc:'Complete 15 days' },
+    { id:'fajrWarrior',name:'Fajr Warrior',icon:'☀️',desc:'10-day Fajr streak' },
+    { id:'nightOwl',name:'Night Owl',icon:'🦉',desc:'10 Tahajjud prayers' },
+    { id:'quranLover',name:'Quran Lover',icon:'📖',desc:'20 days with Quran' },
+    { id:'generousHeart',name:'Generous',icon:'💎',desc:'15 days with charity' },
+    { id:'abuBakrMedal',name:'Abu Bakr',icon:'🥇',desc:'Complete challenge once' },
+    { id:'abuBakrGold',name:'Abu Bakr Gold',icon:'🏆',desc:'Challenge 5 times' },
+    { id:'lastTenHero',name:'Last 10 Hero',icon:'🌟',desc:'80%+ in last 10' },
+    { id:'perfectionist',name:'Perfectionist',icon:'✨',desc:'3 perfect days' },
+    { id:'champion',name:'Champion',icon:'👑',desc:'All 30 days 70%+' }
+];
+
+const CHECKLIST_DATA = [
+    {
+        id:'salah',
+        title:'1. SALAH, SUNNAH & DHIKR',
+        hadithNote:'"Whoever attends Isha in congregation has the reward of standing half the night. And whoever prays Isha and Fajr in congregation has the reward of standing the entire night." — Muslim 656',
+        subcategories: [
+            {
+                name:'🌅 Fajr & Morning',
+                items:[
+                    { id:'fajr-sunnah',label:'2 Sunnah before Fajr',ref:'Muslim 724',refLink:'https://sunnah.com/muslim:724',explanation:'Better than the world and all it contains.',points:8 },
+                    { id:'fajr',label:'Fajr prayer',ref:'Bukhari 555',refLink:'https://sunnah.com/bukhari:555',explanation:'Foundation of the day; the angels of night and day witness it.',points:15,streak:'fajr' },
+                    { id:'morning-adhkar',label:'Morning adhkar',ref:'Abu Dawud 5068',refLink:'https://sunnah.com/abudawud:5068',explanation:'Prophetic protection until evening — a shield for the day.',points:5 },
+                    { id:'istighfar',label:'Istighfar (seek forgiveness)',ref:'Bukhari 6307',refLink:'https://sunnah.com/bukhari:6307',explanation:'The Prophet ﷺ sought forgiveness more than 70 times daily.',points:5 },
+                    { id:'salawat',label:'Salawat upon the Prophet ﷺ',ref:'Muslim 408',refLink:'https://sunnah.com/muslim:408',explanation:'One salawat brings ten blessings from Allah.',points:5 },
+                    { id:'duha',label:'Duha prayer (2–8 rakahs)',ref:'Muslim 720',refLink:'https://sunnah.com/muslim:720',explanation:'Charity for every joint in your body. Prayed after sunrise.',points:5 }
+                ]
+            },
+            {
+                name:'☀️ Dhuhr & Asr',
+                items:[
+                    { id:'dhuhr-sunnah-before',label:'4 Sunnah before Dhuhr',ref:'Tirmidhi 428',refLink:'https://sunnah.com/tirmidhi:428',explanation:'Regular Sunnah of the Prophet ﷺ.',points:8 },
+                    { id:'dhuhr',label:'Dhuhr prayer',ref:'Quran 17:78',refLink:'',explanation:'Midday obligation — establishes rhythm of worship.',points:15 },
+                    { id:'dhuhr-sunnah-after',label:'2 Sunnah after Dhuhr',ref:'Tirmidhi 428',refLink:'https://sunnah.com/tirmidhi:428',explanation:'Twelve daily Sunnah rakahs earn a house in Jannah.',points:8 },
+                    { id:'asr',label:'Asr prayer',ref:'Bukhari 553',refLink:'https://sunnah.com/bukhari:553',explanation:'Guarding Asr is specifically emphasised — missing it nullifies deeds.',points:15 }
+                ]
+            },
+            {
+                name:'🌇 Maghrib & Evening',
+                items:[
+                    { id:'dua-iftar',label:'Dua at iftar',ref:'Abu Dawud 2357',refLink:'https://sunnah.com/abudawud:2357',explanation:'The dua of the fasting person at iftar is not rejected.',points:5 },
+                    { id:'maghrib',label:'Maghrib prayer',ref:'Bukhari 560',refLink:'https://sunnah.com/bukhari:560',explanation:'Marks the breaking of fast — a moment of answered dua.',points:15 },
+                    { id:'maghrib-sunnah',label:'2 Sunnah after Maghrib',ref:'Bukhari 1183',refLink:'https://sunnah.com/bukhari:1183',explanation:'Prayed regularly by the Prophet ﷺ.',points:8 },
+                    { id:'evening-adhkar',label:'Evening adhkar',ref:'Abu Dawud 5068',refLink:'https://sunnah.com/abudawud:5068',explanation:'Prophetic protection until morning.',points:5 }
+                ]
+            },
+            {
+                name:'🌙 Isha & Night',
+                items:[
+                    { id:'isha',label:'Isha prayer',ref:'Muslim 656',refLink:'https://sunnah.com/muslim:656',explanation:'Praying Isha and Fajr in congregation equals standing the whole night.',points:15 },
+                    { id:'isha-sunnah',label:'2 Sunnah after Isha',ref:'Muslim 728',refLink:'https://sunnah.com/muslim:728',explanation:'Established Sunnah — completes the night prayers.',points:8 },
+                    { id:'tarawih',label:'Tarawih',ref:'Bukhari 2009',refLink:'https://sunnah.com/bukhari:2009',explanation:'Forgiveness of past sins — unique to Ramadan.',points:10,streak:'night' },
+                    { id:'witr',label:'Witr (1 or 3 rakahs)',ref:'Bukhari 998',refLink:'https://sunnah.com/bukhari:998',explanation:'Make it your last prayer of the night.',points:8 },
+                    { id:'night-adhkar',label:'Night adhkar before sleep',ref:'Bukhari 6320',refLink:'https://sunnah.com/bukhari:6320',explanation:'Protection through the night — Ayatul Kursi, last 2 ayat of Baqarah.',points:5 },
+                    { id:'tahajjud',label:'Tahajjud (last third of night)',ref:'Bukhari 1145',refLink:'https://sunnah.com/bukhari:1145',explanation:'Allah descends and asks: "Who calls upon Me that I may answer?" The honour of the believer.',points:10,streak:'night' },
+                    { id:'dua-night',label:'Dua in last third of night',ref:'Bukhari 1145',refLink:'https://sunnah.com/bukhari:1145',explanation:'The most blessed time for supplication — Allah answers.',points:5 }
+                ]
+            }
+        ]
+    },
+    {
+        id:'quran',
+        title:'2. QURAN — UNDERSTAND & IMPLEMENT',
+        hadithNote:'"The Quran and fasting will intercede for a servant on the Day of Resurrection. The fast will say: O Lord, I prevented him from food and desires. The Quran will say: I prevented him from sleep at night. Both will intercede." — Ahmad 6626',
+        items:[
+            { id:'quran-recitation',label:'Quran recitation (daily portion)',ref:'Quran 2:185',refLink:'',explanation:'Ramadan is the month of Quran — recite your daily pages.',points:10,streak:'quran' },
+            { id:'quran-reflection',label:'Reflected on meaning (tadabbur)',ref:'Quran 38:29',refLink:'',explanation:'The purpose of revelation — pondering deeply transforms the heart and guides action.',points:10,streak:'quran' },
+            { id:'quran-implementation',label:'Applied a lesson from today\'s reading',ref:'Quran 2:44',refLink:'',explanation:'Knowledge without action is incomplete. Implement what you learn — even one ayah.',points:10 },
+            { id:'quran-listening',label:'Listened to Quran recitation',ref:'Quran 7:204',refLink:'',explanation:'When the Quran is recited, listen to it and be silent so that you may receive mercy.',points:5,streak:'quran' },
+            { id:'quran-memorization',label:'Memorised new ayah(s)',ref:'Bukhari 5027',refLink:'https://sunnah.com/bukhari:5027',explanation:'The best of you are those who learn the Quran and teach it.',points:10 }
+        ]
+    },
+    {
+        id:'character',
+        title:'3. INTENTION, HEART & CHARACTER',
+        hadithNote:'"Actions are judged by intentions, and every person will get what they intended." — Bukhari 1',
+        items:[
+            { id:'intention',label:'Renewed intention (ikhlas)',ref:'Bukhari 1',refLink:'https://sunnah.com/bukhari:1',explanation:'Every action takes its value from the heart. Sincerity outweighs the size of deeds.',points:7 },
+            { id:'riya',label:'Checked and corrected riya (showing off)',ref:'Muslim 2985',refLink:'https://sunnah.com/muslim:2985',explanation:'Riya quietly voids reward. This check trains private sincerity over public approval.',points:7 },
+            { id:'tongue',label:'Guarded the tongue (no backbiting/lies)',ref:'Bukhari 1903',refLink:'https://sunnah.com/bukhari:1903',explanation:'Fasting disciplines speech as much as hunger.',points:7 },
+            { id:'arguments',label:'Avoided arguments while fasting',ref:'Bukhari 1894',refLink:'https://sunnah.com/bukhari:1894',explanation:'If insulted, say "I am fasting." This protects the fast and trains restraint.',points:7 },
+            { id:'gaze',label:'Lowered the gaze',ref:'Quran 24:30',refLink:'',explanation:'What the eyes consume shapes the heart. Modesty is a gateway to inner purity.',points:7 },
+            { id:'anger',label:'Controlled anger',ref:'Bukhari 6114',refLink:'https://sunnah.com/bukhari:6114',explanation:'The strong one is not the wrestler — but the one who controls himself when angry.',points:7 },
+            { id:'gentleness',label:'Chose gentleness in interactions',ref:'Tirmidhi 2003',refLink:'https://sunnah.com/tirmidhi:2003',explanation:'Nothing is heavier on the Scale than good character.',points:7 },
+            { id:'mercy',label:'Showed mercy to others',ref:'Tirmidhi 1924',refLink:'https://sunnah.com/tirmidhi:1924',explanation:'The Merciful shows mercy to those who show mercy. Mercy attracts divine mercy.',points:7 },
+            { id:'humility',label:'Practised humility',ref:'Muslim 2588',refLink:'https://sunnah.com/muslim:2588',explanation:'Whoever humbles himself for Allah, Allah will raise him.',points:7 },
+            { id:'forgave',label:'Forgave someone',ref:'Quran 42:43',refLink:'',explanation:'Whoever pardons and reconciles, his reward is with Allah.',points:7 },
+            { id:'dua-absence',label:'Made dua for someone in their absence',ref:'Muslim 2733',refLink:'https://sunnah.com/muslim:2733',explanation:'An angel says: "Amin, and for you the same." A private dua instantly answered.',points:7 },
+            { id:'made-happy',label:'Made someone happy for Allah\'s sake',ref:'Tabarani (Mu\'jam al-Awsat)',refLink:'',explanation:'The most beloved deeds to Allah include bringing joy to a believer.',points:7 }
+        ]
+    },
+    {
+        id:'charity',
+        title:'4. CHARITY & SERVICE',
+        hadithNote:'"The Prophet ﷺ was the most generous of people, and he was most generous in Ramadan when Jibreel would meet him." — Bukhari 6',
+        items:[
+            { id:'charity-given',label:'Gave charity (any amount)',ref:'Muslim 2588',refLink:'https://sunnah.com/muslim:2588',explanation:'Charity does not decrease wealth. Value lies in sincerity, not size.',points:10,streak:'charity' },
+            { id:'fed-fasting',label:'Fed someone who was fasting',ref:'Tirmidhi 807',refLink:'https://sunnah.com/tirmidhi:807',explanation:'You receive the same reward as the fasting person — without reducing theirs.',points:10,streak:'charity' },
+            { id:'helped-family',label:'Served or helped parents/family',ref:'Bukhari 5970',refLink:'https://sunnah.com/bukhari:5970',explanation:'The best of deeds after prayer is kindness to parents. Family service takes priority.',points:10 },
+            { id:'maintained-ties',label:'Maintained ties of kinship',ref:'Muslim 2557',refLink:'https://sunnah.com/muslim:2557',explanation:'Whoever maintains family ties, Allah maintains ties with him. A call or message counts.',points:7 },
+            { id:'visited-sick',label:'Visited or supported the sick',ref:'Muslim 2568',refLink:'https://sunnah.com/muslim:2568',explanation:'Whoever visits a sick person remains in the harvest of Paradise until he returns.',points:10 },
+            { id:'dua-others',label:'Made dua for others privately',ref:'Muslim 2733',refLink:'https://sunnah.com/muslim:2733',explanation:'An angel says: "Amin, and for you the same."',points:7 },
+            { id:'combined-deeds',label:'Combined multiple good deeds today',ref:'Muslim 1028',refLink:'https://sunnah.com/muslim:1028',explanation:'Those who combine fasting, charity, visiting the sick — the path of Abu Bakr.',points:10 }
+        ]
+    },
+    {
+        id:'lastTen',
+        title:'5. LAST TEN NIGHTS',
+        lastTen:true,
+        hadithNote:'"Seek Laylatul Qadr in the odd nights of the last ten days of Ramadan." — Bukhari 2017. "Whoever stands in prayer on Laylatul Qadr out of faith and seeking reward, his past sins will be forgiven." — Bukhari 1901',
+        items:[
+            { id:'laylat-qadr',label:'Sought Laylat al-Qadr',ref:'Quran 97:3',refLink:'',explanation:'Better than 1,000 months — approximately 83 years of worship.',points:15 },
+            { id:'extra-dua',label:'Extra dua (Allahumma innaka \'afuwwun…)',ref:'Tirmidhi 3513',refLink:'https://sunnah.com/tirmidhi:3513',explanation:'Aishah asked what to say if she found Laylatul Qadr. The Prophet ﷺ taught this dua.',points:10 },
+            { id:'extra-quran',label:'Extra Quran recitation',ref:'Bukhari 4997',refLink:'https://sunnah.com/bukhari:4997',explanation:'The Prophet ﷺ intensified Quran recitation in the last ten.',points:10 },
+            { id:'night-charity',label:'Night charity (hidden sadaqah)',ref:'Bukhari 1423',refLink:'https://sunnah.com/bukhari:1423',explanation:'Seven shaded on the Day of Judgement — one who gives charity so secretly his left hand does not know.',points:10 },
+            { id:'long-sujood',label:'Made extra long sujood',ref:'Muslim 482',refLink:'https://sunnah.com/muslim:482',explanation:'The closest a servant is to Allah is in sujood — increase your dua there.',points:10 },
+            { id:'dua-list',label:'Made personal dua list & recited',ref:'',refLink:'',explanation:'Prepare your requests for these blessed nights.',points:5 },
+            { id:'itikaf',label:'Observed I\'tikaf (even partial)',ref:'Bukhari 2025',refLink:'https://sunnah.com/bukhari:2025',explanation:'The Prophet ﷺ observed I\'tikaf in the last ten days every Ramadan.',points:15 }
+        ]
+    },
+    {
+        id:'endOfDay',
+        title:'6. END-OF-DAY REVIEW',
+        items:[
+            { id:'istighfar-sleep',label:'Istighfar before sleep',ref:'Bukhari 6307',refLink:'https://sunnah.com/bukhari:6307',explanation:'End the day with a clean slate — sins forgiven.',points:5 },
+            { id:'accountability',label:'Self-accountability (muhasaba)',ref:'Quran 59:18',refLink:'',explanation:'"Let every soul look to what it has sent forth for tomorrow." Practice of the Sahabah.',points:5 },
+            { id:'renew-tomorrow',label:'Renewed intention for tomorrow',ref:'Bukhari 6464',refLink:'https://sunnah.com/bukhari:6464',explanation:'The most beloved deeds to Allah are the most consistent, even if small.',points:5 },
+            { id:'sleep-early',label:'Slept early for Fajr',ref:'Abu Dawud 4723',refLink:'https://sunnah.com/abudawud:4723',explanation:'The Prophet ﷺ disliked sleeping before Isha and talking after it. Protect your Fajr.',points:5 }
+        ]
+    },
+    {
+        id:'avoidance',
+        title:'7. DAILY AVOIDANCE CHECK',
+        hadithNote:'"Whoever does not give up false speech and acting upon it, Allah has no need of him giving up his food and drink." — Bukhari 1903',
+        items:[
+            { id:'no-lying',label:'No lying',ref:'Bukhari 1903',refLink:'https://sunnah.com/bukhari:1903',explanation:'False speech nullifies the spiritual reward of fasting.',points:5 },
+            { id:'no-backbiting',label:'No backbiting (gheebah)',ref:'Quran 49:12',refLink:'',explanation:'Like eating the flesh of your dead brother — it consumes good deeds.',points:5 },
+            { id:'no-riya',label:'No showing off (riya)',ref:'Muslim 2985',refLink:'https://sunnah.com/muslim:2985',explanation:'Deeds done for show are rejected — the lesser shirk.',points:5 },
+            { id:'no-excess-media',label:'No excessive social media',ref:'Quran 23:3',refLink:'',explanation:'The believers turn away from ill speech — protect your time and heart.',points:5 },
+            { id:'no-useless-scrolling',label:'No useless scrolling',ref:'Tirmidhi 2416',refLink:'https://sunnah.com/tirmidhi:2416',explanation:'You will be asked about your time — how did you spend it?',points:5 },
+            { id:'no-haram-content',label:'No music/inappropriate content',ref:'Quran 17:36',refLink:'',explanation:'Guard your ears and eyes — the hearing, sight and heart will all be questioned.',points:5 },
+            { id:'no-overeating',label:'No overeating at iftar',ref:'Tirmidhi 2380',refLink:'https://sunnah.com/tirmidhi:2380',explanation:'One-third food, one-third water, one-third air. Overeating defeats the purpose.',points:5 },
+            { id:'no-wasting-food',label:'No wasting food',ref:'Quran 7:31',refLink:'',explanation:'Eat and drink but do not be excessive — Allah does not love the wasteful.',points:5 },
+            { id:'no-neglect-salah',label:'No neglecting prayers',ref:'Quran 19:59',refLink:'',explanation:'There came after them successors who neglected prayer and pursued desires.',points:5 }
+        ]
+    },
+    {
+        id:'abuBakr',
+        title:'8. ABU BAKR CHALLENGE ⭐',
+        hadithNote:'The Prophet ﷺ asked: "Who among you is fasting today?" Abu Bakr said: I am. "Who attended a funeral?" Abu Bakr said: I did. "Who fed a poor person?" Abu Bakr said: I did. "Who visited a sick person?" Abu Bakr said: I did. The Prophet ﷺ said: "Whoever combines these will enter Jannah." — Muslim 1028',
+        items:[
+            { id:'abu-bakr-fasting',label:'"Who among you is fasting today?" — I am.',ref:'Muslim 1028',refLink:'https://sunnah.com/muslim:1028',explanation:'',points:10,abuBakr:true },
+            { id:'abu-bakr-funeral',label:'"Who attended a funeral?" — I did.',ref:'Muslim 1028',refLink:'https://sunnah.com/muslim:1028',explanation:'Praying janazah or making dua for the deceased fulfils this.',points:10,abuBakr:true },
+            { id:'abu-bakr-fed',label:'"Who fed a poor person?" — I did.',ref:'Muslim 1028',refLink:'https://sunnah.com/muslim:1028',explanation:'Even a small meal, snack, or date counts.',points:10,abuBakr:true },
+            { id:'abu-bakr-sick',label:'"Who visited a sick person?" — I did.',ref:'Muslim 1028',refLink:'https://sunnah.com/muslim:1028',explanation:'A visit, call, or message of support counts.',points:10,abuBakr:true }
+        ]
+    }
+];
+
+// ==================== STATE ====================
+let APP_STATE = { currentDay:1, theme:'dark', activeTab:'today' };
+let quranPages = {};
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded',()=>{
+    loadSettings();
+    renderChecklist();
+    loadTodayData();
+    updateUI();
+    updateQuranTracker();
+    renderCalendar();
+    renderBadges();
+    updateStats();
+    registerSW();
+});
+
+// ==================== SETTINGS ====================
+function loadSettings(){
+    const s=localStorage.getItem('rs-settings');
+    if(s){const p=JSON.parse(s);APP_STATE={...APP_STATE,...p};}
+    document.documentElement.setAttribute('data-theme',APP_STATE.theme);
+    updateThemeUI();
+    const qp=localStorage.getItem('rs-quran-pages');
+    if(qp)quranPages=JSON.parse(qp);
+}
+function saveSettings(){
+    localStorage.setItem('rs-settings',JSON.stringify({currentDay:APP_STATE.currentDay,theme:APP_STATE.theme}));
+}
+
+// ==================== DAY NAVIGATION ====================
+function changeDay(delta){
+    const newDay=APP_STATE.currentDay+delta;
+    if(newDay>=1&&newDay<=30){
+        saveTodayData();
+        APP_STATE.currentDay=newDay;
+        saveSettings();
+        renderChecklist();
+        loadTodayData();
+        updateUI();
+        updateQuranTracker();
+    }
+}
+
+// ==================== THEME ====================
+function toggleTheme(){
+    APP_STATE.theme=APP_STATE.theme==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',APP_STATE.theme);
+    updateThemeUI();saveSettings();
+}
+function updateThemeUI(){
+    document.getElementById('themeIcon').textContent=APP_STATE.theme==='dark'?'☀️':'🌙';
+    const t=document.getElementById('darkModeToggle');
+    if(t)t.classList.toggle('active',APP_STATE.theme==='dark');
+}
+
+// ==================== NAVIGATION ====================
+function switchTab(tab){
+    APP_STATE.activeTab=tab;
+    document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+    if(tab==='stats'){updateStats();checkWeeklySummary();}
+    if(tab==='calendar')renderCalendar();
+}
+
+// ==================== UI UPDATES ====================
+function isLastTenNights(){return APP_STATE.currentDay>=21;}
+function isOddNight(){return isLastTenNights()&&[21,23,25,27,29].includes(APP_STATE.currentDay);}
+
+function updateUI(){
+    document.getElementById('currentDay').textContent=APP_STATE.currentDay;
+    document.getElementById('dayDisplay').textContent=`Day ${APP_STATE.currentDay} / 30`;
+    const banner=document.getElementById('dayBanner');
+    banner.classList.toggle('last-ten',isLastTenNights());
+    const h=DAILY_HADITHS[APP_STATE.currentDay-1];
+    const hl=h.link?`<a href="${h.link}" target="_blank" rel="noopener" style="color:inherit">${h.source}</a>`:h.source;
+    document.getElementById('dailyHadith').innerHTML=`"${h.text}" — <em>${hl}</em>`;
+    const ob=document.getElementById('oddNightBadge');
+    ob.innerHTML=isOddNight()?'<div class="odd-night-badge">🌙 Seek Laylatul Qadr Tonight!</div>':'';
+    const lts=document.querySelector('[data-section="lastTen"]');
+    if(lts){lts.style.display=isLastTenNights()?'block':'none';if(isLastTenNights())lts.classList.add('last-ten-section');}
+}
+
+// ==================== QURAN TRACKER ====================
+function logQuranPages(){
+    const input=document.getElementById('quranPagesInput');
+    const val=parseInt(input.value);
+    if(isNaN(val)||val<0){showToast('Please enter a valid number');return;}
+    quranPages[APP_STATE.currentDay]=val;
+    localStorage.setItem('rs-quran-pages',JSON.stringify(quranPages));
+    input.value='';
+    showToast(`${val} pages logged for Day ${APP_STATE.currentDay}! 📖`);
+    updateQuranTracker();
+    // auto-check quran recitation
+    const cb=document.getElementById('quran-recitation');
+    if(cb&&!cb.checked&&val>0){cb.checked=true;handleCheckboxChange();}
+}
+
+function updateQuranTracker(){
+    let totalRead=0;
+    for(let d=1;d<=30;d++){if(quranPages[d])totalRead+=quranPages[d];}
+    const pagesLeft=Math.max(0,TOTAL_QURAN_PAGES-totalRead);
+    const daysLeft=Math.max(1,30-APP_STATE.currentDay+1);
+    const perDay=pagesLeft>0?Math.ceil(pagesLeft/daysLeft):0;
+    const pct=Math.min(100,Math.round((totalRead/TOTAL_QURAN_PAGES)*100));
+
+    document.getElementById('quranPagesRead').textContent=totalRead;
+    document.getElementById('quranPagesLeft').textContent=pagesLeft;
+    document.getElementById('quranDaysLeft').textContent=daysLeft;
+    document.getElementById('quranPagesPerDay').textContent=pagesLeft===0?'✅ Done!':`~${perDay}`;
+    document.getElementById('quranProgressFill').style.width=pct+'%';
+
+    const el=document.getElementById('quranMessage');
+    if(totalRead===0) el.textContent='The Quran was revealed in Ramadan — read it, understand it, and live by it.';
+    else if(pct>=100) el.textContent='Alhamdulillah! You have completed the Quran this Ramadan. Now revisit, reflect, and implement.';
+    else if(pct>=75) el.textContent=`Almost there! ${pagesLeft} pages left. Don't just read — reflect on the meanings and apply them.`;
+    else if(pct>=50) el.textContent=`Over halfway! ${pagesLeft} pages remaining. ${perDay} pages/day will get you there. Understand each ayah.`;
+    else el.textContent=`${pagesLeft} pages remaining. About ${perDay} pages/day needed. Read with tadabbur — ponder and implement.`;
+
+    const sq=document.getElementById('statQuranTotal');
+    if(sq)sq.textContent=`${totalRead} / 604`;
+
+    // Pre-fill today's pages if logged
+    const inp=document.getElementById('quranPagesInput');
+    if(inp&&quranPages[APP_STATE.currentDay])inp.placeholder=`Today: ${quranPages[APP_STATE.currentDay]} pages`;
+    else if(inp)inp.placeholder='Pages read today';
+}
+
+// ==================== CHECKLIST ====================
+function getAllItems(){
+    const items=[];
+    CHECKLIST_DATA.forEach(section=>{
+        if(section.subcategories){
+            section.subcategories.forEach(sub=>{sub.items.forEach(item=>items.push(item));});
+        }
+        if(section.items){section.items.forEach(item=>items.push(item));}
+    });
+    return items;
+}
+
+function renderChecklist(){
+    const container=document.getElementById('checklistContainer');
+    container.innerHTML='';
+    CHECKLIST_DATA.forEach(section=>{
+        if(section.lastTen&&!isLastTenNights())return;
+        const sEl=document.createElement('div');
+        sEl.className='section';
+        sEl.setAttribute('data-section',section.id);
+        if(section.lastTen)sEl.classList.add('last-ten-section');
+
+        const totalItems=section.subcategories?section.subcategories.reduce((a,s)=>a+s.items.length,0):(section.items?section.items.length:0);
+
+        let html=`<div class="section-header" onclick="toggleSection('${section.id}')">
+            <h2>${section.title}</h2>
+            <div class="section-progress"><span class="section-progress-text" id="progress-${section.id}">0/${totalItems}</span><span class="toggle-icon">▼</span></div>
+        </div><div class="section-content">`;
+
+        if(section.hadithNote)html+=`<div class="hadith-note">${section.hadithNote}</div>`;
+
+        if(section.subcategories){
+            section.subcategories.forEach(sub=>{
+                html+=`<div class="subsection-title">${sub.name}</div>`;
+                sub.items.forEach(item=>{html+=renderItem(item);});
+            });
+        }
+        if(section.items){
+            section.items.forEach(item=>{html+=renderItem(item);});
+        }
+        html+=`</div>`;
+        sEl.innerHTML=html;
+        container.appendChild(sEl);
+    });
+}
+
+function renderItem(item){
+    const refLink=item.refLink?`<a href="${item.refLink}" target="_blank" rel="noopener">${item.ref}</a>`:item.ref;
+    return `<div class="checklist-item" id="item-${item.id}">
+        <input type="checkbox" id="${item.id}" onchange="handleCheckboxChange()">
+        <label for="${item.id}">
+            ${item.label} <span class="item-points">+${item.points}</span>
+            ${item.ref?`<span class="reference">${refLink}</span>`:''}
+            ${item.explanation?`<span class="explanation">${item.explanation}</span>`:''}
+        </label>
+    </div>`;
+}
+
+function toggleSection(id){document.querySelector(`[data-section="${id}"]`).classList.toggle('collapsed');}
+
+function handleCheckboxChange(){saveTodayData();updateProgress();updateStreaks();checkBadges();updateStats();}
+
+// ==================== DATA ====================
+function getTodayKey(){return `rs-day-${APP_STATE.currentDay}`;}
+
+function saveTodayData(){
+    const cbs=document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    const data={dayNumber:APP_STATE.currentDay,checklist:{},lastUpdated:Date.now()};
+    let pts=0,completed=0,total=0;
+    cbs.forEach(cb=>{
+        data.checklist[cb.id]=cb.checked;
+        if(cb.checked){const it=findItem(cb.id);if(it)pts+=it.points;completed++;}
+        total++;
+    });
+    if(isLastTenNights())pts=Math.floor(pts*(isOddNight()?3:2));
+    data.completedCount=completed;data.totalCount=total;
+    data.percentage=total>0?Math.round((completed/total)*100):0;
+    data.points=pts;
+    localStorage.setItem(getTodayKey(),JSON.stringify(data));
+    return data;
+}
+
+function loadTodayData(){
+    const s=localStorage.getItem(getTodayKey());
+    if(s){const d=JSON.parse(s);Object.keys(d.checklist).forEach(id=>{const cb=document.getElementById(id);if(cb){cb.checked=d.checklist[id];updateItemUI(id);}});}
+    updateProgress();updateStreaks();
+}
+
+function getDayData(n){const s=localStorage.getItem(`rs-day-${n}`);return s?JSON.parse(s):null;}
+
+function findItem(id){
+    for(const sec of CHECKLIST_DATA){
+        if(sec.subcategories){for(const sub of sec.subcategories){for(const it of sub.items){if(it.id===id)return it;}}}
+        if(sec.items){for(const it of sec.items){if(it.id===id)return it;}}
+    }return null;
+}
+
+function updateItemUI(id){const cb=document.getElementById(id);const el=document.getElementById(`item-${id}`);if(cb&&el)el.classList.toggle('checked',cb.checked);}
+
+// ==================== PROGRESS ====================
+function updateProgress(){
+    const cbs=document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    let completed=0,total=0,pts=0;
+    cbs.forEach(cb=>{total++;if(cb.checked){completed++;const it=findItem(cb.id);if(it)pts+=it.points;}updateItemUI(cb.id);});
+    if(isLastTenNights())pts=Math.floor(pts*(isOddNight()?3:2));
+    const pct=total>0?Math.round((completed/total)*100):0;
+    document.getElementById('progressPercent').textContent=pct+'%';
+    document.getElementById('progressBar').style.width=pct+'%';
+    document.getElementById('progressCount').textContent=`${completed} of ${total} completed`;
+    document.getElementById('todayPoints').textContent=pts;
+
+    // Section progress
+    CHECKLIST_DATA.forEach(sec=>{
+        if(sec.lastTen&&!isLastTenNights())return;
+        let sc=0,st=0;
+        if(sec.subcategories)sec.subcategories.forEach(sub=>{sub.items.forEach(it=>{st++;const cb=document.getElementById(it.id);if(cb&&cb.checked)sc++;});});
+        if(sec.items)sec.items.forEach(it=>{st++;const cb=document.getElementById(it.id);if(cb&&cb.checked)sc++;});
+        const el=document.getElementById(`progress-${sec.id}`);if(el)el.textContent=`${sc}/${st}`;
+    });
+}
+
+// ==================== STREAKS ====================
+function calculateStreak(checkFn){
+    let streak=0;
+    for(let d=APP_STATE.currentDay-1;d>=1;d--){const data=getDayData(d);if(data&&checkFn(data))streak++;else break;}
+    const td=getDayData(APP_STATE.currentDay);
+    if(td&&checkFn(td))streak++;
+    else{const live=checkFn({checklist:getCurrentChecklist()});if(live)streak++;}
+    return streak;
+}
+function getCurrentChecklist(){const c={};document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(cb=>{c[cb.id]=cb.checked;});return c;}
+
+function updateStreaks(){
+    const fs=calculateStreak(d=>d.checklist&&d.checklist['fajr']);
+    const ns=calculateStreak(d=>d.checklist&&(d.checklist['tarawih']||d.checklist['tahajjud']));
+    const qs=calculateStreak(d=>d.checklist&&(d.checklist['quran-recitation']||d.checklist['quran-reflection']||d.checklist['quran-listening']));
+    const cs=calculateStreak(d=>d.checklist&&(d.checklist['charity-given']||d.checklist['fed-fasting']));
+    document.getElementById('streakFajrCount').textContent=fs;
+    document.getElementById('streakNightCount').textContent=ns;
+    document.getElementById('streakQuranCount').textContent=qs;
+    document.getElementById('streakCharityCount').textContent=cs;
+    document.getElementById('streakFajr').classList.toggle('active',fs>0);
+    document.getElementById('streakNight').classList.toggle('active',ns>0);
+    document.getElementById('streakQuran').classList.toggle('active',qs>0);
+    document.getElementById('streakCharity').classList.toggle('active',cs>0);
+    saveBestStreaks({fajr:fs,night:ns,quran:qs,charity:cs});
+}
+
+function saveBestStreaks(c){
+    const s=JSON.parse(localStorage.getItem('rs-best-streaks')||'{}');
+    const u={fajr:Math.max(s.fajr||0,c.fajr),night:Math.max(s.night||0,c.night),quran:Math.max(s.quran||0,c.quran),charity:Math.max(s.charity||0,c.charity)};
+    localStorage.setItem('rs-best-streaks',JSON.stringify(u));
+}
+function getBestStreaks(){return JSON.parse(localStorage.getItem('rs-best-streaks')||'{"fajr":0,"night":0,"quran":0,"charity":0}');}
+
+// ==================== BADGES ====================
+function renderBadges(){
+    const grid=document.getElementById('badgesGrid');
+    const ul=getUnlockedBadges();
+    grid.innerHTML=BADGES.map(b=>`<div class="badge-item ${ul[b.id]?'unlocked':'locked'}"><div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div></div>`).join('');
+    document.getElementById('badgeCount').textContent=Object.values(ul).filter(v=>v).length;
+}
+function getUnlockedBadges(){return JSON.parse(localStorage.getItem('rs-badges')||'{}');}
+function unlockBadge(id){
+    const b=getUnlockedBadges();
+    if(!b[id]){b[id]={unlocked:true,date:new Date().toISOString()};localStorage.setItem('rs-badges',JSON.stringify(b));
+    const badge=BADGES.find(x=>x.id===id);if(badge)showToast(`${badge.icon} Badge Unlocked: ${badge.name}!`,'badge');renderBadges();}
+}
+
+function checkBadges(){
+    const td=saveTodayData();
+    if(APP_STATE.currentDay===1&&td.percentage>0)unlockBadge('firstStep');
+    let dp=0;for(let d=1;d<=7;d++){const x=getDayData(d);if(x&&x.percentage>0)dp++;}if(dp>=7)unlockBadge('weekOne');
+    dp=0;for(let d=1;d<=15;d++){const x=getDayData(d);if(x&&x.percentage>0)dp++;}if(dp>=15)unlockBadge('halfway');
+    if(calculateStreak(d=>d.checklist&&d.checklist['fajr'])>=10)unlockBadge('fajrWarrior');
+    let tc=0;for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.checklist&&x.checklist['tahajjud'])tc++;}if(tc>=10)unlockBadge('nightOwl');
+    let qd=0;for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.checklist&&(x.checklist['quran-recitation']||x.checklist['quran-reflection']))qd++;}if(qd>=20)unlockBadge('quranLover');
+    let cd=0;for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.checklist&&(x.checklist['charity-given']||x.checklist['fed-fasting']))cd++;}if(cd>=15)unlockBadge('generousHeart');
+    const abi=['abu-bakr-fasting','abu-bakr-funeral','abu-bakr-fed','abu-bakr-sick'];let abc=0;
+    for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.checklist){if(abi.every(i=>x.checklist[i])){unlockBadge('abuBakrMedal');abc++;}}}
+    if(abc>=5)unlockBadge('abuBakrGold');
+    let pd=0;for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.percentage===100)pd++;}if(pd>=3)unlockBadge('perfectionist');
+    if(APP_STATE.currentDay>=30){
+        let lt=0,ld=0;for(let d=21;d<=30;d++){const x=getDayData(d);if(x){lt+=x.percentage;ld++;}}if(ld===10&&(lt/10)>=80)unlockBadge('lastTenHero');
+        let q70=0;for(let d=1;d<=30;d++){const x=getDayData(d);if(x&&x.percentage>=70)q70++;}if(q70===30)unlockBadge('champion');
+    }
+}
+
+// ==================== CALENDAR ====================
+function renderCalendar(){
+    const grid=document.getElementById('calendarGrid');grid.innerHTML='';
+    for(let day=1;day<=30;day++){
+        const data=getDayData(day);const isToday=day===APP_STATE.currentDay;
+        const isOdd=day>=21&&[21,23,25,27,29].includes(day);
+        let cc='',pct='-';
+        if(data){pct=data.percentage+'%';if(data.percentage>=76)cc='completed-high';else if(data.percentage>=51)cc='completed-med';else if(data.percentage>0)cc='completed-low';}
+        const d=document.createElement('div');
+        d.className=`calendar-day ${cc} ${isToday?'today':''} ${isOdd?'odd-night':''}`;
+        d.innerHTML=`<div class="calendar-day-number">${day}</div><div class="calendar-day-percent">${pct}</div>`;
+        d.onclick=()=>showDayModal(day);
+        grid.appendChild(d);
+    }
+}
+
+function showDayModal(day){
+    document.getElementById('modalDayTitle').textContent=`Day ${day} of Ramadan`;
+    const data=getDayData(day);let content='';
+    if(data){
+        const qp=quranPages[day]||0;
+        content=`<div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:2.5em;font-weight:700;color:var(--accent-green);font-family:var(--font-display)">${data.percentage}%</div>
+            <div style="color:var(--text-muted)">${data.completedCount} of ${data.totalCount} completed</div>
+            <div style="color:var(--accent-gold);font-weight:600;margin-top:5px">🔥 ${data.points} points</div>
+            ${qp>0?`<div style="color:var(--accent-green);margin-top:5px">📖 ${qp} Quran pages</div>`:''}
+        </div><h4 style="margin-bottom:10px;color:var(--accent-green);font-family:var(--font-display)">Completed Items:</h4>
+        <div style="max-height:300px;overflow-y:auto">
+            ${Object.entries(data.checklist).filter(([,c])=>c).map(([id])=>{const it=findItem(id);return it?`<div style="padding:8px 0;border-bottom:1px solid var(--border-color);font-size:0.9em">✅ ${it.label}</div>`:''}).join('')||'<p style="color:var(--text-muted)">No items completed</p>'}
+        </div>`;
+    }else content='<p style="text-align:center;color:var(--text-muted)">No data recorded for this day yet.</p>';
+    document.getElementById('modalDayContent').innerHTML=content;
+    document.getElementById('dayModal').classList.add('active');
+}
+function closeModal(){document.getElementById('dayModal').classList.remove('active');}
+document.getElementById('dayModal').addEventListener('click',e=>{if(e.target.id==='dayModal')closeModal();});
+
+// ==================== STATS ====================
+function updateStats(){
+    let dc=0,tp=0,tpt=0,bd={day:0,percent:0},pd=0;
+    for(let d=1;d<=30;d++){
+        const x=getDayData(d);
+        if(x&&x.percentage>0){dc++;tp+=x.percentage;tpt+=x.points||0;if(x.percentage>bd.percent)bd={day:d,percent:x.percentage};if(x.percentage===100)pd++;}
+    }
+    const avg=dc>0?Math.round(tp/dc):0;
+    document.getElementById('statDaysCompleted').textContent=`${dc} / 30`;
+    document.getElementById('statAvgCompletion').textContent=avg+'%';
+    document.getElementById('statTotalPoints').textContent=tpt.toLocaleString();
+    document.getElementById('statBestDay').textContent=bd.day>0?`Day ${bd.day} (${bd.percent}%)`:'-';
+    document.getElementById('statPerfectDays').textContent=pd;
+    const bs=getBestStreaks();
+    document.getElementById('bestStreakFajr').textContent=bs.fajr+' days';
+    document.getElementById('bestStreakNight').textContent=bs.night+' days';
+    document.getElementById('bestStreakQuran').textContent=bs.quran+' days';
+    document.getElementById('bestStreakCharity').textContent=bs.charity+' days';
+    updateCategoryBreakdown();updateQuranTracker();
+}
+
+function updateCategoryBreakdown(){
+    const container=document.getElementById('categoryBreakdown');
+    const cats=[{id:'salah',name:'Salah & Dhikr'},{id:'quran',name:'Quran'},{id:'character',name:'Character'},{id:'charity',name:'Charity'},{id:'avoidance',name:'Avoidance'}];
+    container.innerHTML=cats.map(cat=>{
+        const sec=CHECKLIST_DATA.find(s=>s.id===cat.id);if(!sec)return'';
+        let c=0,t=0;
+        if(sec.subcategories)sec.subcategories.forEach(sub=>{sub.items.forEach(it=>{t++;const cb=document.getElementById(it.id);if(cb&&cb.checked)c++;});});
+        if(sec.items)sec.items.forEach(it=>{t++;const cb=document.getElementById(it.id);if(cb&&cb.checked)c++;});
+        const pct=t>0?Math.round((c/t)*100):0;
+        return `<div class="category-bar"><div class="category-bar-header"><span>${cat.name}</span><span>${pct}%</span></div><div class="category-bar-track"><div class="category-bar-fill" style="width:${pct}%"></div></div></div>`;
+    }).join('');
+}
+
+function checkWeeklySummary(){
+    const sd=[7,14,21,28,30];
+    if(!sd.includes(APP_STATE.currentDay)){document.getElementById('weeklySummary').style.display='none';return;}
+    const wn=Math.ceil(APP_STATE.currentDay/7),start=(wn-1)*7+1,end=Math.min(wn*7,APP_STATE.currentDay);
+    let tp=0,tpt=0,bd={day:0,percent:0},days=0;
+    for(let d=start;d<=end;d++){const x=getDayData(d);if(x){tp+=x.percentage;tpt+=x.points||0;days++;if(x.percentage>bd.percent)bd={day:d,percent:x.percentage};}}
+    const avg=days>0?Math.round(tp/days):0;
+    document.getElementById('weeklySummary').style.display='block';
+    document.getElementById('weeklyStats').innerHTML=`
+        <div class="weekly-stat"><div class="weekly-stat-value">${avg}%</div><div class="weekly-stat-label">Avg Completion</div></div>
+        <div class="weekly-stat"><div class="weekly-stat-value">${tpt}</div><div class="weekly-stat-label">Total Points</div></div>
+        <div class="weekly-stat"><div class="weekly-stat-value">Day ${bd.day||'-'}</div><div class="weekly-stat-label">Best Day</div></div>
+        <div class="weekly-stat"><div class="weekly-stat-value">${days}</div><div class="weekly-stat-label">Days Tracked</div></div>`;
+}
+
+// ==================== TOAST ====================
+function showToast(msg,type='default'){
+    const c=document.getElementById('toastContainer');const t=document.createElement('div');
+    t.className=`toast ${type==='badge'?'badge-toast':''}`;t.textContent=msg;c.appendChild(t);
+    setTimeout(()=>t.remove(),3000);
+}
+
+// ==================== DATA MANAGEMENT ====================
+function exportData(){
+    const data={settings:APP_STATE,badges:getUnlockedBadges(),bestStreaks:getBestStreaks(),quranPages,days:{}};
+    for(let d=1;d<=30;d++){const x=getDayData(d);if(x)data.days[d]=x;}
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download=`ramadan-strivers-${new Date().toISOString().split('T')[0]}.json`;a.click();
+    URL.revokeObjectURL(url);showToast('Data exported!');
+}
+
+function importData(event){
+    const file=event.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+        try{
+            const data=JSON.parse(e.target.result);
+            if(data.settings)localStorage.setItem('rs-settings',JSON.stringify(data.settings));
+            if(data.badges)localStorage.setItem('rs-badges',JSON.stringify(data.badges));
+            if(data.bestStreaks)localStorage.setItem('rs-best-streaks',JSON.stringify(data.bestStreaks));
+            if(data.quranPages)localStorage.setItem('rs-quran-pages',JSON.stringify(data.quranPages));
+            if(data.days)Object.entries(data.days).forEach(([d,dd])=>localStorage.setItem(`rs-day-${d}`,JSON.stringify(dd)));
+            showToast('Data imported! Reloading…');setTimeout(()=>location.reload(),1500);
+        }catch(err){showToast('Error importing data.');}
+    };reader.readAsText(file);
+}
+
+function confirmReset(){
+    if(confirm('Reset ALL data? This cannot be undone!')){
+        if(confirm('This deletes all progress, badges, and streaks. Continue?')){
+            const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('rs-'))keys.push(k);}
+            keys.forEach(k=>localStorage.removeItem(k));showToast('All data reset.');setTimeout(()=>location.reload(),1500);
+        }
+    }
+}
+
+// ==================== SERVICE WORKER ====================
+function registerSW(){
+    if('serviceWorker' in navigator){
+        const code=`const C='ramadan-strivers-v3';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['/'])));self.skipWaiting();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(n=>Promise.all(n.filter(x=>x!==C).map(x=>caches.delete(x)))));});`;
+        const blob=new Blob([code],{type:'application/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+    }
+}
+</script>
+</body>
+</html>
