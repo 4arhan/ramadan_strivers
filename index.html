@@ -35,6 +35,8 @@ body>*{position:relative;z-index:1}::-webkit-scrollbar{width:4px}::-webkit-scrol
 .hdr-in{display:flex;justify-content:space-between;align-items:center;max-width:540px;margin:0 auto}
 .hdr h1{font-family:var(--ff);font-size:1.25em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .hdr h1 span{color:var(--gold-l);font-style:italic;font-weight:400;font-size:.65em;letter-spacing:0;text-transform:none;display:block;margin-top:1px;opacity:.8}
+.hdr-acts{display:flex;align-items:center;gap:10px}
+.learn-link{font-size:.72em;color:var(--gold);cursor:pointer;font-weight:600;padding:5px 12px;border:1px solid var(--gold-glow);border-radius:20px;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:var(--fb)}.learn-link:active{transform:scale(.95);opacity:.8}
 .thm-btn{background:rgba(255,255,255,.06);border:1px solid rgba(251,191,36,.3);color:var(--gold-l);width:40px;height:40px;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:12px;transition:all .25s}.thm-btn:active{transform:scale(.9)}
 .day-bnr{background:linear-gradient(135deg,#0c1a12 0%,#122a1c 40%,#0f3d2a 100%);color:#fff;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden}
 .day-bnr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(251,191,36,.06),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(74,222,128,.05),transparent 50%);pointer-events:none}
@@ -167,11 +169,18 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 .toast-c{position:fixed;top:calc(70px + var(--safe-t));left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:85%}
 .toast{background:var(--green);color:#fff;padding:12px 20px;font-size:.86em;font-weight:500;border-radius:var(--rs);animation:tIn .3s ease,tOut .3s ease 2.7s;box-shadow:0 8px 30px rgba(0,0,0,.2)}.toast.bdg-t{background:linear-gradient(135deg,#fbbf24,#d97706);color:#1c1917}
 @keyframes tIn{from{transform:translateY(-16px);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes tOut{from{opacity:1}to{opacity:0}}
+.guide-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:all .2s}
+.guide-hd{padding:14px 18px;font-size:.9em;font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--fb)}
+.guide-hd:active{opacity:.7}
+.guide-chev{font-size:.65em;color:var(--text3);transition:transform .2s}
+.guide-sec.open .guide-chev{transform:rotate(90deg)}
+.guide-bd{max-height:0;overflow:hidden;padding:0 18px;font-size:.84em;color:var(--text2);line-height:1.7;transition:max-height .3s ease,padding .3s ease}
+.guide-sec.open .guide-bd{max-height:800px;padding:0 18px 16px}
 @media(max-width:400px){.hdr h1{font-size:1.05em}.streaks{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(3,1fr)}.cal-grid{grid-template-columns:repeat(5,1fr)}.heat-grid{gap:3px}.heat-c{font-size:.45em}}
 </style>
 </head>
 <body>
-<header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span>From Muslim to Mu'min</span></h1></div><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></header>
+<header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span>From Muslim to Mu'min</span></h1></div><div class="hdr-acts"><a class="learn-link" onclick="goTab('more')">How to use</a><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></div></header>
 <div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="dn">Day <span id="currentDay">1</span></div><div class="dl">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div class="bnr-hint" id="bnrHint">tap to collapse ▲</div></div>
 <div class="day-nav"><button onclick="changeDay(-1)" aria-label="Previous">◀</button><div class="dd" id="dayDisp">Day 1 / 30</div><button onclick="changeDay(1)" aria-label="Next">▶</button></div>
 <main class="wrap">
@@ -209,64 +218,112 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 </div></div>
 </div>
 <div class="tab" id="tab-more">
-<div class="scard"><h3>📘 How to Use — Complete Guide</h3><div style="font-size:.86em;color:var(--text2);line-height:1.75">
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">📋 Today Tab — Daily Checklist</strong><br>Your main hub. 7 categories with 60+ deeds covering Salah &amp; Dhikr, Quran, Character, Charity, Avoidance, Abu Bakr Challenge, and Last 10 Nights. Categories start collapsed — tap any header to expand it and start ticking off your deeds.<br><br>
-<strong>Day Banner:</strong> Shows the current day number, a daily hadith, and odd night indicators. Tap the banner to collapse it into a compact bar so you can jump straight to your checklist.<br><br>
-<strong>Progress Bar:</strong> Tracks your daily completion as a percentage. During the Last 10 Nights (Days 21–30), a "Last 10 Bonus Active" indicator appears to remind you these are the most blessed nights.<br><br>
-<strong>Detail Mode:</strong> Toggle this on to see hadith references and explanations for every single deed. Toggle off for a cleaner, faster checklist experience.<br><br>
-<strong>Day Navigation:</strong> Use the ◀ ▶ arrows to move between days. Your progress saves automatically when you switch.</div>
+<div class="scard" style="background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(251,191,36,.04));border:1px solid var(--gold-glow)">
+<h3 style="font-size:1.15em;border:none;padding-bottom:0;margin-bottom:6px">📘 How to Use This App</h3>
+<p style="font-size:.82em;color:var(--text3);margin-bottom:0">Everything you need to know — tap any section to expand it</p>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🌸 Sisters' Menstrual Cycle Toggle</strong><br>Activating this greys out all salah and fasting items for that day. Your completion percentage recalculates based on the remaining applicable items, so you can still reach 100%. The toggle saves per-day — you can activate it for specific days only.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">📋 Daily Checklist <span class="guide-chev">▶</span></div>
+<div class="guide-bd">You get 60+ daily deeds organised into 7 categories — Salah, Quran, Character, Charity, Avoidance, Abu Bakr Challenge, and Last 10 Nights. Tap any category to open it, then tick off what you've done. Your daily percentage updates as you go. Each category starts closed so you can focus on one area at a time.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">📖 Quran Tab — Dedicated Tracker</strong><br>A full Quran completion tracker separate from the daily checklist. Features include:<br><br>
-<strong>Page Logging:</strong> Enter pages read and tap "+ Add". Pages accumulate throughout the day — log 5 in the morning and 10 at night, and your total shows 15. Made a mistake? Use the "Clear" button to reset today's count.<br><br>
-<strong>Dashboard:</strong> See pages read, pages left, days remaining, and the exact pages/day you need to finish on time.<br><br>
-<strong>Juz Tracker:</strong> Automatically calculates which Juz you're in based on total pages read.<br><br>
-<strong>Progress Chart:</strong> Visual line chart comparing your actual reading pace against the target pace to complete all 604 pages by Day 30.<br><br>
-<strong>Quick Access:</strong> The Quran bar on the Today tab is tappable — tap it to jump straight to the Quran tab for logging.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">📖 Quran Tracker <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Track your journey through all 604 pages of the Quran. After each reading session, enter your pages and tap "+ Add" — pages add up throughout the day. The dashboard shows your total progress, which Juz you're on, and how many pages per day you need to complete the Quran by Day 30. A chart shows your actual pace vs the ideal pace so you know if you're on track.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">📊 Progress Tab — Analytics &amp; Achievements</strong><br>Everything about your Ramadan journey in one place, organised into three collapsible sections:<br><br>
-<strong>🔥 Streaks (always visible):</strong> Four live streak counters at the top — Fajr at Mosque, Isha at Mosque, Quran, and Sadaqah. These count consecutive days and celebrate milestones at 3, 5, 7, 10, 14, 20, 25, and 30 days with toast notifications.<br><br>
-<strong>🟩 Heatmap (always visible):</strong> A 30-day colour grid showing your consistency at a glance. Darker = higher completion.<br><br>
-<strong>📅 Calendar &amp; Analysis (collapsible):</strong> 30-day calendar with colour-coded days (green 76%+, amber 51–75%, red 1–50%). Tap any day to see a detailed breakdown. Also includes weekly comparison, Ramadan thirds comparison (Mercy / Forgiveness / Salvation), and a daily progress trend chart.<br><br>
-<strong>🔍 Deep Dive (collapsible):</strong> Category breakdown pie chart showing your balance across all areas of worship — Salah, Quran, Character, Charity, Avoidance and Abu Bakr Challenge.<br><br>
-<strong>🏆 Achievements &amp; Stats (collapsible):</strong> Overall stats (days completed, average completion, best day, perfect days, Quran pages), 12 achievement badges, and your all-time best streaks.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🔥 Streaks <span class="guide-chev">▶</span></div>
+<div class="guide-bd">The app tracks four consecutive-day streaks: Fajr at the Masjid, Isha at the Masjid, daily Quran, and giving Sadaqah. Each day you keep it up, your count grows. At milestones like 3, 7, 10, and 20 days, you'll see a congratulations message pop up. It's a simple way to build consistency in worship.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🌙 Laylatul Qadr Countdown</strong><br>From Day 15 onwards, a countdown appears at the top of the Progress tab showing how many days until the Last 10 Nights begin. Once Day 21 arrives, the countdown switches to active mode — highlighting odd nights (21, 23, 25, 27, 29) with special encouragement and reminders to seek Laylatul Qadr.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🏅 12 Badges <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Unlock achievements as you progress through Ramadan:<br><br>
+🌱 <strong>First Step</strong> — do anything on Day 1<br>
+📅 <strong>Week One</strong> — log all 7 days of the first week<br>
+🎯 <strong>Halfway</strong> — stay active for the first 15 days<br>
+☀️ <strong>Fajr Warrior</strong> — 7-day Fajr at Masjid streak<br>
+🌙 <strong>Tahajjud Master</strong> — pray Tahajjud on 7 nights<br>
+📖 <strong>Quran Lover</strong> — read Quran on 15 days<br>
+💎 <strong>Generous</strong> — give charity on 10 days<br>
+🥇 <strong>Abu Bakr</strong> — complete the full challenge in one day<br>
+🏆 <strong>Abu Bakr Gold</strong> — do it on 3 different days<br>
+🌟 <strong>Last 10 Hero</strong> — avg 70%+ across the Last 10 Nights<br>
+✨ <strong>Perfectionist</strong> — hit 100% on 3 days<br>
+👑 <strong>Champion</strong> — score 60%+ on 20 days<br><br>
+Print your PDF report on Eid and use the badges to celebrate and reward your kids!</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🌙 Last 10 Nights (Days 21–30)</strong><br>A special bonus category unlocks on Day 21 with extra deeds: I'tikaf, long sujood, extra Quran, night vigil, Laylatul Qadr dua, and charity. Odd nights are highlighted throughout the app.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🌙 Last 10 Nights & Laylatul Qadr <span class="guide-chev">▶</span></div>
+<div class="guide-bd">A countdown to the Last 10 Nights begins on Day 15. When Day 21 arrives, a bonus worship category unlocks with extra deeds like I'tikaf, long sujood, and extra Quran. Odd nights (21, 23, 25, 27, 29) are highlighted across the app to remind you — any one of them could be Laylatul Qadr.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">⭐ Abu Bakr Challenge</strong><br>Inspired by the hadith where the Prophet ﷺ asked four questions and Abu Bakr answered "I did" to all of them. Complete all 4 items in one day — fasting, attending a funeral, feeding someone, and visiting the sick — and the app celebrates your achievement. When you've done 3 of 4, you'll get a nudge to complete the set!</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">⭐ Abu Bakr Challenge <span class="guide-chev">▶</span></div>
+<div class="guide-bd">The Prophet ﷺ once asked his companions four questions: "Who among you is fasting today? Who followed a funeral? Who fed someone? Who visited someone who is sick?" Abu Bakr (RA) was the only one who said "I did" to all four. This challenge asks you to do the same in a single day. When you've completed 3 out of 4, the app encourages you to go for all four.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🏅 12 Badges — How to Unlock</strong><br>
-🌱 <strong>First Step</strong> — Complete any deed on Day 1<br>
-📅 <strong>Week One</strong> — Log progress on all 7 days of the first week<br>
-🎯 <strong>Halfway</strong> — Log progress on all 15 days of the first half<br>
-☀️ <strong>Fajr Warrior</strong> — 7-day Fajr at Mosque streak<br>
-🌙 <strong>Tahajjud Master</strong> — Pray Tahajjud on 7 different days<br>
-📖 <strong>Quran Lover</strong> — Quran recitation or reflection on 15 days<br>
-💎 <strong>Generous</strong> — Give charity or feed someone on 10 days<br>
-🥇 <strong>Abu Bakr</strong> — Complete all 4 Abu Bakr Challenge items in one day<br>
-🏆 <strong>Abu Bakr Gold</strong> — Complete the full Abu Bakr Challenge on 3 different days<br>
-🌟 <strong>Last 10 Hero</strong> — Average 70%+ completion across 5+ Last 10 Nights<br>
-✨ <strong>Perfectionist</strong> — Achieve 100% completion on 3 different days<br>
-👑 <strong>Champion</strong> — Score 60%+ on 20 or more days of Ramadan</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🌸 Sisters' Menstrual Cycle <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Activate the toggle on the Today tab during your cycle. Salah and fasting items will be greyed out and excluded from your percentage. This way, your score reflects only the deeds that apply to you — so you can still aim for 100%.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🔔 Reminders &amp; Celebrations</strong><br>The app sends in-app toast notifications (not push notifications) in two situations: when you haven't logged anything for today (a gentle reminder), and when you hit streak milestones (3, 5, 7, 10, 14, 20, 25, 30 days). These appear as brief messages at the bottom of the screen.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">📊 Progress & Charts <span class="guide-chev">▶</span></div>
+<div class="guide-bd">The Progress tab gives you a full picture of your Ramadan. You'll find a colour-coded heatmap showing your consistency across all 30 days, a calendar you can tap to see each day's details, a weekly comparison chart, a breakdown by Ramadan thirds (Mercy, Forgiveness, Salvation), a daily trend line, and a pie chart showing how your effort is split across categories. Sections are collapsible — open what interests you.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">🌗 Theme &amp; Display</strong><br>Toggle between dark and light mode using the button in the header. Your choice persists across sessions. The app is designed mobile-first and works as a Progressive Web App (PWA) — add it to your home screen for the best experience.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🕌 New to Islam or Learning? <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Every deed in the checklist has a hadith reference and a short explanation behind it. Turn on "Detail Mode" (in Settings below, or on the Today tab) and you'll see the source and meaning of each item. You don't need any prior knowledge — the app teaches you as you use it.</div>
+</div>
 
-<div style="padding:14px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--green);font-size:1.08em">📄 PDF Export</strong><br>Generate a beautifully formatted PDF summary of your entire Ramadan journey. Includes daily completion data, overall stats, Quran progress, and a day-by-day breakdown. Find the export button below in the Data section.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">📄 PDF Report <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Download a printable PDF of your entire Ramadan journey — your daily completion, Quran pages read, badges unlocked, and best streaks. It's a meaningful keepsake, and a great way to celebrate your children's achievements on Eid day.</div>
+</div>
 
-<div style="padding:14px 0"><strong style="color:var(--green);font-size:1.08em">💾 Privacy &amp; Data</strong><br>All data is stored locally on your device using localStorage. No accounts, no servers, no tracking. Your data never leaves your phone. Use Export to save a backup JSON file, and Import to restore it on a new device. Reset clears everything permanently.</div>
+<div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🔒 Privacy & Data <span class="guide-chev">▶</span></div>
+<div class="guide-bd">All your data lives on your device only. There are no accounts, no servers, and no tracking. Nothing ever leaves your phone. You can export a backup file anytime and import it on another device. The app works completely offline.</div>
+</div>
 
+<div class="scard" style="margin-top:16px"><h3>🔗 Helpful Resources</h3><div style="display:flex;flex-direction:column;gap:8px">
+<a href="https://tarteel.ai/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">📖</div><div class="app-link-txt"><strong>Tarteel AI</strong>AI-powered Quran recitation with tajweed help</div><div class="app-link-go">Open →</div></a>
+<a href="https://lifewithallah.com/app" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">🤲</div><div class="app-link-txt"><strong>Life with Allah</strong>Daily adhkar &amp; duas from the Sunnah</div><div class="app-link-go">Open →</div></a>
+<a href="https://sunnah.com/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">📚</div><div class="app-link-txt"><strong>Sunnah.com</strong>Hadith collections — Bukhari, Muslim &amp; more</div><div class="app-link-go">Open →</div></a>
+<a href="https://quran.com/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">🕋</div><div class="app-link-txt"><strong>Quran.com</strong>Read, listen &amp; study with translations</div><div class="app-link-go">Open →</div></a>
 </div></div>
-<div class="scard"><h3>🔗 Recommended Resources</h3><div style="display:flex;flex-direction:column;gap:8px"><a href="https://tarteel.ai/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">📖</div><div class="app-link-txt"><strong>Tarteel AI</strong>AI Quran recitation — tajweed correction & memorisation</div><div class="app-link-go">Open →</div></a><a href="https://lifewithallah.com/app" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">🤲</div><div class="app-link-txt"><strong>Life with Allah</strong>Authentic adhkar & duas — morning, evening & daily</div><div class="app-link-go">Open →</div></a><a href="https://sunnah.com/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">📚</div><div class="app-link-txt"><strong>Sunnah.com</strong>Hadith collections — Bukhari, Muslim, Tirmidhi & more</div><div class="app-link-go">Open →</div></a><a href="https://quran.com/" target="_blank" rel="noopener" class="app-link"><div style="font-size:1.3em">🕋</div><div class="app-link-txt"><strong>Quran.com</strong>Read, listen & study the Quran with translations</div><div class="app-link-go">Open →</div></a></div></div>
-<div class="scard"><h3>⚙️ Settings</h3><div class="set-item"><div><div class="set-lbl">Dark Mode</div><div class="set-desc">Easier on eyes at night</div></div><button class="tgl" id="dmTgl" onclick="toggleTheme()"></button></div><div class="set-item"><div><div class="set-lbl">Detail Mode</div><div class="set-desc">Show hadith references & explanations</div></div><button class="tgl" id="detTgl2" onclick="toggleDetail()"></button></div></div>
-<div class="scard"><h3>📄 Download Progress Report</h3><p style="font-size:.86em;color:var(--text2);margin-bottom:12px;line-height:1.5">PDF summary with daily breakdown, streaks, and all data.</p><button class="btn btn-gold" onclick="genPDF()">📄 Download PDF Report</button></div>
-<div class="scard"><h3>💾 Data Management</h3><button class="btn btn-ol" onclick="exportData()">📤 Export Data (JSON)</button><button class="btn btn-ol" onclick="document.getElementById('impFile').click()">📥 Import Data</button><input type="file" id="impFile" accept=".json" onchange="importData(event)" style="display:none"><button class="btn btn-red" onclick="confirmReset()">🗑️ Reset All Data</button></div>
-<div class="scard"><h3>ℹ️ About</h3><p style="color:var(--text2);line-height:1.75;font-size:.88em"><strong>Ramadan Strivers</strong><br>Your Ramadan Planner & Tracker<br>From Muslim to Mu'min — bringing out our best<br><br>Version 5.0 · Works offline · No account needed · Data stored locally</p></div></div>
+
+<div class="scard"><h3>⚙️ Settings</h3>
+<div class="set-item"><div><div class="set-lbl">Dark Mode</div><div class="set-desc">Easier on the eyes at night</div></div><button class="tgl" id="dmTgl" onclick="toggleTheme()"></button></div>
+<div class="set-item"><div><div class="set-lbl">Detail Mode</div><div class="set-desc">Show hadith references for every deed</div></div><button class="tgl" id="detTgl2" onclick="toggleDetail()"></button></div>
+</div>
+
+<div class="scard"><h3>📄 Progress Report</h3>
+<p style="font-size:.84em;color:var(--text2);margin-bottom:12px;line-height:1.5">Download a PDF with your full Ramadan breakdown — days, Quran, badges, and streaks.</p>
+<button class="btn btn-gold" onclick="genPDF()">📄 Download PDF</button>
+</div>
+
+<div class="scard"><h3>💾 Your Data</h3>
+<button class="btn btn-ol" onclick="exportData()">📤 Export Backup</button>
+<button class="btn btn-ol" onclick="document.getElementById('impFile').click()">📥 Import Backup</button>
+<input type="file" id="impFile" accept=".json" onchange="importData(event)" style="display:none">
+<button class="btn btn-red" onclick="confirmReset()">🗑️ Reset Everything</button>
+</div>
+
+<div style="text-align:center;padding:20px 0 8px;font-size:.8em;color:var(--text3);line-height:1.7">
+<strong style="color:var(--text2)">Ramadan Strivers</strong> · v6.0<br>
+From Muslim to Mu'min<br>
+Free · Offline · Private · No ads
+</div>
+
+</div>
+
 <div class="ftr"><div class="dua">May Allah accept our fasting and deeds. Ramadan Mubarak! 🌙</div><p>For corrections, suggestions & feedback<br>please reach out to <a href="mailto:m.farhan.bava@gmail.com">Farhan</a></p><p style="margin-top:6px;font-size:.75em;opacity:.5">Built with ❤️ for the Ummah</p></div>
 </main>
 <nav class="bnav"><button class="bnav-i on" data-tab="today" onclick="goTab('today')"><span class="ni">📋</span><span class="nl">Today</span></button><button class="bnav-i" data-tab="quran" onclick="goTab('quran')"><span class="ni">📖</span><span class="nl">Quran</span></button><button class="bnav-i" data-tab="progress" onclick="goTab('progress')"><span class="ni">📊</span><span class="nl">Progress</span></button><button class="bnav-i" data-tab="more" onclick="goTab('more')"><span class="ni">⚙️</span><span class="nl">More</span></button></nav>
@@ -383,7 +440,7 @@ function toggleDetail(){ST.detail=!ST.detail;applyDetail();saveSt();}
 function applyDetail(){document.body.classList.toggle('detail-off',!ST.detail);var t=document.getElementById('detTgl');if(t)t.classList.toggle('on',ST.detail);var t2=document.getElementById('detTgl2');if(t2)t2.classList.toggle('on',ST.detail);}
 function toggleHayd(){haydOn=!haydOn;applyHayd();onCK();}
 function applyHayd(){var tgl=document.getElementById('haydTgl');var sw=document.getElementById('haydSw');tgl.classList.toggle('active',haydOn);sw.classList.toggle('on',haydOn);HAYD_OFF.forEach(function(id){var el=document.getElementById('item-'+id);if(el){el.classList.toggle('hayd-off',haydOn);var cb=document.getElementById(id);if(cb){if(haydOn){cb.checked=false;cb.disabled=true;}else{cb.disabled=false;}}}});}
-function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();renderCharts();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();}if(t==='quran'){updQ();renderQLog();renderCharts();}}
+function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();setTimeout(function(){renderTrendChart();renderPieChart();},80);}if(t==='quran'){updQ();setTimeout(function(){renderQLog();renderQuranChart();},80);}}
 function isL10(){return ST.day>=21;}
 function isOdd(){return isL10()&&[21,23,25,27,29].includes(ST.day);}
 
@@ -401,8 +458,8 @@ function updUI(){
   if(ls){ls.style.display=isL10()?'block':'none';if(isL10())ls.classList.add('l10-sec');}
 }
 
-function logQuran(){var inp=document.getElementById('qInp');var v=parseInt(inp.value);if(isNaN(v)||v<0){toast('Please enter a valid number');return;}qPages[ST.day]=(qPages[ST.day]||0)+v;localStorage.setItem('rs-quran-pages',JSON.stringify(qPages));inp.value='';toast(v+' pages added for Day '+ST.day+'! (Total: '+qPages[ST.day]+') 📖');updQ();var cb=document.getElementById('quran-recitation');if(cb&&!cb.checked&&v>0){cb.checked=true;onCK();}}
-function clearQuranToday(){qPages[ST.day]=0;localStorage.setItem('rs-quran-pages',JSON.stringify(qPages));toast('Day '+ST.day+' Quran pages cleared');updQ();}
+function logQuran(){var inp=document.getElementById('qInp');var v=parseInt(inp.value);if(isNaN(v)||v<0){toast('Please enter a valid number');return;}qPages[ST.day]=(qPages[ST.day]||0)+v;localStorage.setItem('rs-quran-pages',JSON.stringify(qPages));inp.value='';toast(v+' pages added for Day '+ST.day+'! (Total: '+qPages[ST.day]+') 📖');updQ();renderQLog();renderQuranChart();var cb=document.getElementById('quran-recitation');if(cb&&!cb.checked&&v>0){cb.checked=true;onCK();}}
+function clearQuranToday(){qPages[ST.day]=0;localStorage.setItem('rs-quran-pages',JSON.stringify(qPages));toast('Day '+ST.day+' Quran pages cleared');updQ();renderQLog();renderQuranChart();}
 function updQ(){
   var tot=0;for(var d=1;d<=30;d++)if(qPages[d])tot+=qPages[d];
   var left=Math.max(0,TOTAL_Q-tot),dLeft=Math.max(1,30-ST.day+1),pace=left>0?Math.ceil(left/dLeft):0;
@@ -530,29 +587,37 @@ function renderCal(){
 function showMdl(day){
   document.getElementById('mdlTitle').textContent='Day '+day+' of Ramadan';var x=getDay(day);var h='';
   if(x){var qp=qPages[day]||0;
-    h=(x.hayd?'<div style="text-align:center;padding:8px 12px;margin-bottom:14px;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:12px;font-size:.85em;color:#f472b6">🌸 Menstrual cycle day — adjusted checklist</div>':'')+'<div style="text-align:center;margin-bottom:20px"><div style="font-size:2.8em;font-weight:800;color:var(--green);font-family:var(--ff);line-height:1">'+x.pct+'%</div><div style="color:var(--text3);margin-top:4px">'+x.done+' of '+x.tot+' completed</div><div style="color:var(--gold);font-weight:600;margin-top:6px">🔥 '+x.pts+' points</div>'+(qp?'<div style="color:var(--green);margin-top:4px">📖 '+qp+' Quran pages</div>':'')+'</div><h4 style="margin-bottom:10px;color:var(--green);font-family:var(--ff)">Completed:</h4><div style="max-height:280px;overflow-y:auto">'+Object.entries(x.ck).filter(function(e){return e[1];}).map(function(e){var it=findIt(e[0]);return it?'<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.86em">✅ '+it.label+'</div>':'';}).join('')+'</div>';
+    h=(x.hayd?'<div style="text-align:center;padding:8px 12px;margin-bottom:14px;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:12px;font-size:.85em;color:#f472b6">🌸 Menstrual cycle day — adjusted checklist</div>':'')+'<div style="text-align:center;margin-bottom:20px"><div style="font-size:2.8em;font-weight:800;color:var(--green);font-family:var(--ff);line-height:1">'+x.pct+'%</div><div style="color:var(--text3);margin-top:4px">'+x.done+' of '+x.tot+' completed</div>'+(qp?'<div style="color:var(--green);margin-top:6px">📖 '+qp+' Quran pages</div>':'')+'</div><h4 style="margin-bottom:10px;color:var(--green);font-family:var(--ff)">Completed:</h4><div style="max-height:280px;overflow-y:auto">'+Object.entries(x.ck).filter(function(e){return e[1];}).map(function(e){var it=findIt(e[0]);return it?'<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.86em">✅ '+it.label+'</div>':'';}).join('')+'</div>';
   }else h='<p style="text-align:center;color:var(--text3);padding:30px 0">No data recorded yet.</p>';
   document.getElementById('mdlBody').innerHTML=h;document.getElementById('dayModal').classList.add('on');
 }
 function closeMdl(){document.getElementById('dayModal').classList.remove('on');}
 document.getElementById('dayModal').addEventListener('click',function(e){if(e.target.id==='dayModal')closeMdl();});
 
-function renderCharts(){
-  var dk=ST.theme==='dark',gc=dk?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)',tc=dk?'#a8a29e':'#78716c';
+function renderCharts(){renderTrendChart();renderQuranChart();renderPieChart();}
+function renderTrendChart(){
+  try{var dk=ST.theme==='dark',gc=dk?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)',tc=dk?'#a8a29e':'#78716c';
   var labels=[],pcts=[];for(var d=1;d<=30;d++){labels.push(d);var x=getDay(d);pcts.push(x?x.pct:0);}
-  var tc1=document.getElementById('trendChart');if(tc1){if(tChart)tChart.destroy();
-  tChart=new Chart(tc1,{type:'line',data:{labels:labels,datasets:[{label:'Completion %',data:pcts,borderColor:dk?'#4ade80':'#15803d',backgroundColor:dk?'rgba(74,222,128,.08)':'rgba(21,128,61,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:dk?'#4ade80':'#15803d',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10}}},x:{grid:{color:gc},ticks:{color:tc,maxTicksLimit:10,font:{size:10}}}},plugins:{legend:{display:false}}}});}
-  var qc1=document.getElementById('quranChart');if(qc1){var qL=[],qC=[];var cum=0;for(var d=1;d<=30;d++){qL.push(d);cum+=(qPages[d]||0);qC.push(cum);}
+  var tc1=document.getElementById('trendChart');if(!tc1||!tc1.offsetParent)return;if(tChart)tChart.destroy();
+  tChart=new Chart(tc1,{type:'line',data:{labels:labels,datasets:[{label:'Completion %',data:pcts,borderColor:dk?'#4ade80':'#15803d',backgroundColor:dk?'rgba(74,222,128,.08)':'rgba(21,128,61,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:dk?'#4ade80':'#15803d',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10}}},x:{grid:{color:gc},ticks:{color:tc,maxTicksLimit:10,font:{size:10}}}},plugins:{legend:{display:false}}}});}catch(e){console.warn('trendChart:',e);}
+}
+function renderQuranChart(){
+  try{var dk=ST.theme==='dark',gc=dk?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)',tc=dk?'#a8a29e':'#78716c';
+  var qc1=document.getElementById('quranChart');if(!qc1||!qc1.offsetParent)return;
+  var qL=[],qC=[];var cum=0;for(var d=1;d<=30;d++){qL.push(d);cum+=(qPages[d]||0);qC.push(cum);}
   var tgt=[];for(var d=1;d<=30;d++)tgt.push(Math.round((d/30)*604));
   if(qChart)qChart.destroy();
-  qChart=new Chart(qc1,{type:'line',data:{labels:qL,datasets:[{label:'Pages Read',data:qC,borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#fbbf24',borderWidth:2},{label:'Target',data:tgt,borderColor:dk?'rgba(255,255,255,.15)':'rgba(0,0,0,.12)',borderDash:[5,5],pointRadius:0,fill:false,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:604,grid:{color:gc},ticks:{color:tc,font:{size:10}}},x:{grid:{color:gc},ticks:{color:tc,maxTicksLimit:10,font:{size:10}}}},plugins:{legend:{labels:{color:tc,boxWidth:10,font:{size:10}}}}}});}
-  var pie1=document.getElementById('pieChart');if(pie1){if(pieChart)pieChart.destroy();
+  qChart=new Chart(qc1,{type:'line',data:{labels:qL,datasets:[{label:'Pages Read',data:qC,borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#fbbf24',borderWidth:2},{label:'Target',data:tgt,borderColor:dk?'rgba(255,255,255,.15)':'rgba(0,0,0,.12)',borderDash:[5,5],pointRadius:0,fill:false,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:604,grid:{color:gc},ticks:{color:tc,font:{size:10}}},x:{grid:{color:gc},ticks:{color:tc,maxTicksLimit:10,font:{size:10}}}},plugins:{legend:{labels:{color:tc,boxWidth:10,font:{size:10}}}}}});}catch(e){console.warn('quranChart:',e);}
+}
+function renderPieChart(){
+  try{var dk=ST.theme==='dark',tc=dk?'#a8a29e':'#78716c';
+  var pie1=document.getElementById('pieChart');if(!pie1||!pie1.offsetParent)return;if(pieChart)pieChart.destroy();
   var catData=getCatData();
-  pieChart=new Chart(pie1,{type:'doughnut',data:{labels:catData.names,datasets:[{data:catData.pcts,backgroundColor:['#4ade80','#fbbf24','#f87171','#60a5fa','#c084fc','#fb923c','#2dd4bf','#e879f9','#a3e635'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,boxWidth:10,font:{size:9},padding:8}}}}});}
+  pieChart=new Chart(pie1,{type:'doughnut',data:{labels:catData.names,datasets:[{data:catData.pcts,backgroundColor:['#4ade80','#fbbf24','#f87171','#60a5fa','#c084fc','#fb923c','#2dd4bf','#e879f9','#a3e635'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,boxWidth:10,font:{size:9},padding:8}}}}});}catch(e){console.warn('pieChart:',e);}
 }
 function getCatData(){var names=[],pcts=[];for(var s=0;s<CK.length;s++){var sec=CK[s];if(sec.l10&&!isL10())continue;var done=0,tot=0;var items=sec.items||[];if(sec.subs)sec.subs.forEach(function(sub){items=items.concat(sub.items);});items.forEach(function(it){if(haydOn&&HAYD_OFF.indexOf(it.id)>=0)return;tot++;var cb=document.getElementById(it.id);if(cb&&cb.checked)done++;});if(tot>0){names.push(sec.title.replace(/^\d+\.\s*/,'').split(',')[0].trim());pcts.push(Math.round((done/tot)*100));}}return{names:names,pcts:pcts};}
 function updThirds(){var avg=function(s,e){var t=0,c=0;for(var d=s;d<=e;d++){var x=getDay(d);if(x&&x.pct>0){t+=x.pct;c++;}}return c>0?Math.round(t/c):0;};var t1=avg(1,10),t2=avg(11,20),t3=avg(21,30);document.getElementById('t1V').textContent=t1>0?t1+'%':'—';document.getElementById('t2V').textContent=t2>0?t2+'%':'—';document.getElementById('t3V').textContent=t3>0?t3+'%':'—';var vs=[t1,t2,t3];document.querySelectorAll('.third-c').forEach(function(el,i){el.style.borderColor=vs[i]>=70?'var(--green)':vs[i]>=40?'var(--warn)':vs[i]>0?'var(--error)':'var(--border)';});}
-function renderQLog(){var el=document.getElementById('qLog');if(!el)return;var h='';var total=0;for(var d=30;d>=1;d--){var p=qPages[d]||0;total+=p;if(p>0)h+='<div class="sr"><span class="sr-l">Day '+d+'</span><span class="sr-v">'+p+' pages</span></div>';}if(!h)h='<p style="color:var(--text3);font-size:.84em;text-align:center;padding:16px 0">No pages logged yet. Go to the Quran tab to start logging!</p>';el.innerHTML=h;}
+function renderQLog(){var el=document.getElementById('qLog');if(!el)return;var h='';var total=0;for(var d=30;d>=1;d--){var p=qPages[d]||0;total+=p;if(p>0)h+='<div class="sr"><span class="sr-l">Day '+d+'</span><span class="sr-v">'+p+' pages</span></div>';}if(!h)h='<p style="color:var(--text3);font-size:.84em;text-align:center;padding:16px 0">No pages logged yet. Enter your pages above and tap "+ Add" to start tracking!</p>';el.innerHTML=h;}
 function updLQCountdown(){var el=document.getElementById('lqCountdown');if(!el)return;if(ST.day<15){el.style.display='none';return;}if(ST.day>=21){el.style.display='block';var odd=[21,23,25,27,29];var isOddN=odd.indexOf(ST.day)>=0;el.innerHTML='<div class="lq-cd"><h3>🌙 The Last 10 Nights Are Here!</h3>'+(isOddN?'<p>Tonight is an <strong>odd night</strong> — it could be Laylatul Qadr!<br><span class="lq-num">Night '+ST.day+'</span>Pray as if this is the night. Seek forgiveness. Make dua with all your heart.</p>':'<p>Keep striving every night.<span class="lq-num">Night '+ST.day+' of 30</span>The Prophet ﷺ would exert himself in worship during the last ten nights more than any other time.</p>')+'</div>';return;}var daysLeft=21-ST.day;el.style.display='block';el.innerHTML='<div class="lq-cd"><h3>🌙 Laylatul Qadr is Near</h3><p><span class="lq-num">'+daysLeft+'</span>day'+(daysLeft>1?'s':'')+' until the Last 10 Nights begin.<br>Start preparing now — increase your worship, fix your intentions, and plan your nights.</p></div>';}
 
 // COMPARISON — BUG FIX: only show from week 2+
@@ -604,7 +669,7 @@ function genPDF(){
   doc.setFillColor(dk[0],dk[1],dk[2]);doc.rect(0,0,W,42,'F');
   doc.setFillColor(gd[0],gd[1],gd[2]);doc.rect(0,40,W,2,'F');
   doc.setTextColor(255,255,255);doc.setFontSize(22);doc.text('RAMADAN STRIVERS',M,22);
-  doc.setFontSize(10);doc.setTextColor(gd[0],gd[1],gd[2]);doc.text("Your Ramadan Planner & Tracker — Progress Report",M,32);
+  doc.setFontSize(10);doc.setTextColor(gd[0],gd[1],gd[2]);doc.text("From Muslim to Mu'min — Progress Report",M,32);
   doc.setTextColor(255,255,255);doc.setFontSize(9);doc.text('Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),W-M,22,{align:'right'});
   y=54;doc.setTextColor(0,0,0);
   doc.setFillColor(gr[0],gr[1],gr[2]);doc.rect(M,y-6,W-2*M,10,'F');
@@ -614,29 +679,32 @@ function genPDF(){
   for(var d=1;d<=30;d++){var x=getDay(d);if(x&&x.pct>0){dc++;tp+=x.pct;if(x.pct===100)pd++;}}
   var totalQ=0;for(var d=1;d<=30;d++)if(qPages[d])totalQ+=qPages[d];
   var avg=dc>0?Math.round(tp/dc):0;
-  var stats=[['Days Completed',dc+' / 30'],['Average Completion',avg+'%'],['Perfect Days',String(pd)],['Quran Pages',totalQ+' / 604']];
+  var bs=getBest();var bdg=Object.values(getUBdg()).filter(Boolean).length;
+  var stats=[['Days Completed',dc+' / 30'],['Average Completion',avg+'%'],['Perfect Days (100%)',String(pd)],['Quran Pages Read',totalQ+' / 604'],['Badges Unlocked',bdg+' / 12'],['Best Fajr Streak',bs.fajr+' days'],['Best Quran Streak',bs.quran+' days'],['Best Sadaqah Streak',bs.charity+' days']];
   stats.forEach(function(s){doc.setTextColor(50,50,50);doc.text(s[0],M,y);doc.setTextColor(gr[0],gr[1],gr[2]);doc.text(s[1],W-M,y,{align:'right'});y+=8;});
   y+=6;doc.setFillColor(gr[0],gr[1],gr[2]);doc.rect(M,y-6,W-2*M,10,'F');
   doc.setTextColor(255,255,255);doc.setFontSize(12);doc.text('DAILY BREAKDOWN',M+4,y+1);
   y+=12;doc.setFontSize(8);
   doc.setFillColor(240,240,240);doc.rect(M,y-4,W-2*M,8,'F');
-  doc.setTextColor(80,80,80);doc.text('Day',M+2,y+1);doc.text('Completion',M+30,y+1);doc.text('Points',M+65,y+1);doc.text('Quran',M+90,y+1);doc.text('Note',M+115,y+1);
+  doc.setTextColor(80,80,80);doc.text('Day',M+2,y+1);doc.text('Completion',M+25,y+1);doc.text('Done/Total',M+55,y+1);doc.text('Quran',M+85,y+1);doc.text('Note',M+110,y+1);
   y+=10;
   for(var d=1;d<=30;d++){if(y>270){doc.addPage();y=20;}
     var x=getDay(d);var qp=qPages[d]||0;
     if(x&&x.hayd){doc.setFillColor(253,242,248);doc.rect(M,y-4,W-2*M,7,'F');}
+    else if(d>=21&&[21,23,25,27,29].indexOf(d)>=0){doc.setFillColor(250,245,230);doc.rect(M,y-4,W-2*M,7,'F');}
     else if(x&&x.pct>0){doc.setFillColor(240,250,240);doc.rect(M,y-4,W-2*M,7,'F');}
-    doc.setTextColor(50,50,50);doc.text('Day '+d,M+2,y);doc.text(x?x.pct+'%':'—',M+30,y);doc.text(x?String(x.pts):'—',M+65,y);doc.text(qp>0?qp+'p':'—',M+90,y);doc.text(x&&x.hayd?'Cycle':'',M+115,y);y+=7;}
+    var note=[];if(x&&x.hayd)note.push('Cycle');if(d>=21&&[21,23,25,27,29].indexOf(d)>=0)note.push('Odd Night');
+    doc.setTextColor(50,50,50);doc.text('Day '+d,M+2,y);doc.text(x?x.pct+'%':'—',M+25,y);doc.text(x?(x.done+'/'+x.tot):'—',M+55,y);doc.text(qp>0?qp+'p':'—',M+85,y);doc.text(note.join(', '),M+110,y);y+=7;}
   y+=8;if(y>250){doc.addPage();y=20;}
   doc.setFillColor(gr[0],gr[1],gr[2]);doc.rect(M,y-6,W-2*M,10,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(12);doc.text('BEST STREAKS',M+4,y+1);
-  y+=12;doc.setFontSize(10);var bs=getBest();
-  [['Fajr',bs.fajr],['Night Prayer',bs.night],['Quran',bs.quran],['Sadaqah',bs.charity]].forEach(function(s){
-    doc.setTextColor(50,50,50);doc.text(s[0],M,y);doc.setTextColor(gr[0],gr[1],gr[2]);doc.text(s[1]+' days',W-M,y,{align:'right'});y+=8;});
-  y+=10;if(y>270){doc.addPage();y=20;}
+  doc.setTextColor(255,255,255);doc.setFontSize(12);doc.text('BADGES EARNED',M+4,y+1);
+  y+=12;doc.setFontSize(10);var ub=getUBdg();
+  BADGES.forEach(function(b){if(ub[b.id]){doc.setTextColor(gr[0],gr[1],gr[2]);doc.text(b.icon+' '+b.name,M,y);y+=8;}});
+  if(bdg===0){doc.setTextColor(150,150,150);doc.text('No badges unlocked yet — keep going!',M,y);y+=8;}
+  y+=6;if(y>270){doc.addPage();y=20;}
   doc.setDrawColor(gd[0],gd[1],gd[2]);doc.line(M,y,W-M,y);y+=8;
   doc.setFontSize(9);doc.setTextColor(gd[0],gd[1],gd[2]);doc.text('May Allah accept our fasting and deeds. Ramadan Mubarak!',W/2,y,{align:'center'});
-  y+=6;doc.setTextColor(150,150,150);doc.setFontSize(7);doc.text('Ramadan Strivers v4.0',W/2,y,{align:'center'});
+  y+=6;doc.setTextColor(150,150,150);doc.setFontSize(7);doc.text('Ramadan Strivers v6.0 — From Muslim to Mu\'min',W/2,y,{align:'center'});
   doc.save('Ramadan-Strivers-Report-Day-'+ST.day+'.pdf');toast('PDF report downloaded! 📄');
 }
 
