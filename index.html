@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Ramadan Strivers">
 <meta name="theme-color" content="#070b14">
 <meta name="description" content="Ramadan Strivers — Your Ramadan Planner & Tracker. From Muslim to Mu'min.">
-<!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3WDNYW5P2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -36,7 +36,8 @@ body>*{position:relative;z-index:1}::-webkit-scrollbar{width:4px}::-webkit-scrol
 .hdr h1{font-family:var(--ff);font-size:1.25em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .hdr h1 span{color:var(--gold-l);font-style:italic;font-weight:400;font-size:.65em;letter-spacing:0;text-transform:none;display:block;margin-top:1px;opacity:.8}
 .hdr-acts{display:flex;align-items:center;gap:10px}
-.learn-link{font-size:.72em;color:var(--gold);cursor:pointer;font-weight:600;padding:5px 12px;border:1px solid var(--gold-glow);border-radius:20px;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:var(--fb)}.learn-link:active{transform:scale(.95);opacity:.8}
+.learn-link{font-size:.85em;color:rgba(255,255,255,.9);cursor:pointer;font-weight:500;padding:2px 10px;border:1.5px solid rgba(255,255,255,.45);border-radius:20px;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:var(--fb);margin-left:8px;vertical-align:middle;display:inline-block;letter-spacing:.3px;position:relative;top:-1px}.learn-link:active{transform:scale(.95);opacity:.7}
+[data-theme="light"] .learn-link{color:rgba(0,0,0,.6);border-color:rgba(0,0,0,.25)}
 .thm-btn{background:rgba(255,255,255,.06);border:1px solid rgba(251,191,36,.3);color:var(--gold-l);width:40px;height:40px;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:12px;transition:all .25s}.thm-btn:active{transform:scale(.9)}
 .day-bnr{background:linear-gradient(135deg,#0c1a12 0%,#122a1c 40%,#0f3d2a 100%);color:#fff;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden}
 .day-bnr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(251,191,36,.06),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(74,222,128,.05),transparent 50%);pointer-events:none}
@@ -180,7 +181,7 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 </style>
 </head>
 <body>
-<header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span>From Muslim to Mu'min</span></h1></div><div class="hdr-acts"><a class="learn-link" onclick="goTab('more')">How to use</a><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></div></header>
+<header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span>From Muslim to Mu'min <a class="learn-link" onclick="goTab('more')">ⓘ User Guide</a></span></h1></div><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></header>
 <div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="dn">Day <span id="currentDay">1</span></div><div class="dl">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div class="bnr-hint" id="bnrHint">tap to collapse ▲</div></div>
 <div class="day-nav"><button onclick="changeDay(-1)" aria-label="Previous">◀</button><div class="dd" id="dayDisp">Day 1 / 30</div><button onclick="changeDay(1)" aria-label="Next">▶</button></div>
 <main class="wrap">
