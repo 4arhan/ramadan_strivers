@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Ramadan Strivers">
 <meta name="theme-color" content="#070b14">
 <meta name="description" content="Ramadan Strivers — Your Ramadan Planner & Tracker. From Muslim to Mu'min.">
-  <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3WDNYW5P2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -36,8 +36,8 @@ body>*{position:relative;z-index:1}::-webkit-scrollbar{width:4px}::-webkit-scrol
 .hdr h1{font-family:var(--ff);font-size:1.25em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .hdr h1 span{color:var(--gold-l);font-style:italic;font-weight:400;font-size:.65em;letter-spacing:0;text-transform:none;display:block;margin-top:1px;opacity:.8}
 .hdr-acts{display:flex;align-items:center;gap:10px}
-.learn-link{font-size:.85em;color:rgba(255,255,255,.9);cursor:pointer;font-weight:500;padding:2px 10px;border:1.5px solid rgba(255,255,255,.45);border-radius:20px;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:var(--fb);margin-left:8px;vertical-align:middle;display:inline-block;letter-spacing:.3px;position:relative;top:-1px}.learn-link:active{transform:scale(.95);opacity:.7}
-[data-theme="light"] .learn-link{color:rgba(0,0,0,.6);border-color:rgba(0,0,0,.25)}
+.learn-link{font-size:11px;color:rgba(255,255,255,.9);cursor:pointer;font-weight:600;padding:3px 10px;border:1.5px solid rgba(255,255,255,.5);border-radius:20px;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:var(--fb);margin-left:6px;vertical-align:middle;display:inline-block;letter-spacing:.3px;position:relative;top:-1px}.learn-link:active{transform:scale(.95);opacity:.7}
+[data-theme="light"] .learn-link{color:rgba(0,0,0,.6);border-color:rgba(0,0,0,.3)}
 .thm-btn{background:rgba(255,255,255,.06);border:1px solid rgba(251,191,36,.3);color:var(--gold-l);width:40px;height:40px;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:12px;transition:all .25s}.thm-btn:active{transform:scale(.9)}
 .day-bnr{background:linear-gradient(135deg,#0c1a12 0%,#122a1c 40%,#0f3d2a 100%);color:#fff;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden}
 .day-bnr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(251,191,36,.06),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(74,222,128,.05),transparent 50%);pointer-events:none}
@@ -441,7 +441,7 @@ function toggleDetail(){ST.detail=!ST.detail;applyDetail();saveSt();}
 function applyDetail(){document.body.classList.toggle('detail-off',!ST.detail);var t=document.getElementById('detTgl');if(t)t.classList.toggle('on',ST.detail);var t2=document.getElementById('detTgl2');if(t2)t2.classList.toggle('on',ST.detail);}
 function toggleHayd(){haydOn=!haydOn;applyHayd();onCK();}
 function applyHayd(){var tgl=document.getElementById('haydTgl');var sw=document.getElementById('haydSw');tgl.classList.toggle('active',haydOn);sw.classList.toggle('on',haydOn);HAYD_OFF.forEach(function(id){var el=document.getElementById('item-'+id);if(el){el.classList.toggle('hayd-off',haydOn);var cb=document.getElementById(id);if(cb){if(haydOn){cb.checked=false;cb.disabled=true;}else{cb.disabled=false;}}}});}
-function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();setTimeout(function(){renderTrendChart();renderPieChart();},80);}if(t==='quran'){updQ();setTimeout(function(){renderQLog();renderQuranChart();},80);}}
+function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();setTimeout(function(){renderTrendChart();renderPieChart();},150);}if(t==='quran'){updQ();setTimeout(function(){renderQLog();renderQuranChart();},80);}}
 function isL10(){return ST.day>=21;}
 function isOdd(){return isL10()&&[21,23,25,27,29].includes(ST.day);}
 
@@ -509,7 +509,7 @@ function mkItem(it){
   return '<div class="chk" id="item-'+it.id+'"><input type="checkbox" id="'+it.id+'" onchange="onCK()"><label for="'+it.id+'">'+it.label+' <span class="chk-pts">+'+it.pts+'</span>'+(it.ref?'<span class="chk-ref">'+rl+'</span>':'')+(it.exp?'<span class="chk-exp">'+it.exp+'</span>':'')+'</label></div>'+al;
 }
 function togSec(id){document.querySelector('[data-sec="'+id+'"]').classList.toggle('shut');}
-function togPG(el){el.parentElement.classList.toggle('shut');}
+function togPG(el){el.parentElement.classList.toggle('shut');if(!el.parentElement.classList.contains('shut')){setTimeout(function(){renderPieChart();renderTrendChart();},100);}}
 function onCK(){saveDay();updProg();updStreaks();chkBdg();updStats();chkStreakWarn();chkAbuBakr();}
 function chkAbuBakr(){var abi=['abu-bakr-fasting','abu-bakr-funeral','abu-bakr-fed','abu-bakr-sick'];var done=0;abi.forEach(function(id){var cb=document.getElementById(id);if(cb&&cb.checked)done++;});if(done===3){var missing=abi.find(function(id){var cb=document.getElementById(id);return!cb||!cb.checked;});var it=findIt(missing);toast('🥇 Almost there! Complete "'+it.label+'" for the Abu Bakr Challenge!');var sec=document.querySelector('[data-sec="abuBakr"]');if(sec)sec.classList.remove('shut');}}
 
@@ -612,7 +612,7 @@ function renderQuranChart(){
 }
 function renderPieChart(){
   try{var dk=ST.theme==='dark',tc=dk?'#a8a29e':'#78716c';
-  var pie1=document.getElementById('pieChart');if(!pie1||!pie1.offsetParent)return;if(pieChart)pieChart.destroy();
+  var pie1=document.getElementById('pieChart');if(!pie1)return;if(pieChart)pieChart.destroy();
   var catData=getCatData();
   pieChart=new Chart(pie1,{type:'doughnut',data:{labels:catData.names,datasets:[{data:catData.pcts,backgroundColor:['#4ade80','#fbbf24','#f87171','#60a5fa','#c084fc','#fb923c','#2dd4bf','#e879f9','#a3e635'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,boxWidth:10,font:{size:9},padding:8}}}}});}catch(e){console.warn('pieChart:',e);}
 }
