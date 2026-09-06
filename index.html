@@ -45,7 +45,19 @@ body>*{position:relative;z-index:1}::-webkit-scrollbar{width:4px}::-webkit-scrol
 .day-bnr .dn{font-family:var(--ff);font-size:2.6em;font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#fff 30%,#fde68a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .bnr-stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1.5px 1.5px at 18% 28%,rgba(255,255,255,.9),transparent),radial-gradient(1px 1px at 72% 18%,rgba(253,230,138,.9),transparent),radial-gradient(1.2px 1.2px at 86% 62%,rgba(255,255,255,.7),transparent),radial-gradient(1px 1px at 38% 72%,rgba(253,230,138,.8),transparent),radial-gradient(1.4px 1.4px at 56% 12%,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 8% 64%,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 63% 82%,rgba(253,230,138,.6),transparent);animation:twinkle 3.5s ease-in-out infinite alternate}
 @keyframes twinkle{from{opacity:.35}to{opacity:1}}
-.day-bnr.compact .bnr-stars{display:none}.day-bnr .dl{font-size:.8em;opacity:.6;margin-top:2px;font-weight:300;letter-spacing:2px;text-transform:uppercase}
+.day-bnr.compact .bnr-stars{display:none}
+.skyline{position:absolute;bottom:0;left:0;right:0;height:54px;pointer-events:none;opacity:.4;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='56' viewBox='0 0 400 56' fill='%23050810'%3E%3Crect x='60' y='47' width='280' height='9'/%3E%3Crect x='72' y='18' width='7' height='38'/%3E%3Ccircle cx='75.5' cy='14' r='3.5'/%3E%3Crect x='321' y='18' width='7' height='38'/%3E%3Ccircle cx='324.5' cy='14' r='3.5'/%3E%3Cpath d='M160 56 v-16 q0-8 8-13 q14-9 32-9 t32 9 q8 5 8 13 v16 z'/%3E%3Crect x='198' y='9' width='4' height='11'/%3E%3Ccircle cx='200' cy='7' r='3'/%3E%3Cpath d='M110 56 v-9 a13 11 0 0 1 26 0 v9 z'/%3E%3Cpath d='M264 56 v-9 a13 11 0 0 1 26 0 v9 z'/%3E%3C/svg%3E") bottom center repeat-x;background-size:auto 54px}
+.day-bnr.compact .skyline{display:none}
+.tab.on>*{animation:cardIn .45s cubic-bezier(.4,0,.2,1) both}
+.tab.on>*:nth-child(2){animation-delay:.05s}.tab.on>*:nth-child(3){animation-delay:.1s}.tab.on>*:nth-child(4){animation-delay:.15s}.tab.on>*:nth-child(5){animation-delay:.2s}.tab.on>*:nth-child(6){animation-delay:.25s}.tab.on>*:nth-child(n+7){animation-delay:.3s}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.sec-ic{margin-right:4px}
+.sec-pbar{height:3px;background:var(--border)}
+.sec-pfill{height:100%;width:0;background:linear-gradient(90deg,var(--green-l),var(--gold));transition:width .45s cubic-bezier(.4,0,.2,1)}
+.bdg.unlk{position:relative;overflow:hidden}
+.bdg.unlk::after{content:'';position:absolute;top:-60%;left:-80%;width:45%;height:220%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:rotate(12deg);animation:shine 4s ease-in-out infinite}
+@keyframes shine{0%,55%{left:-80%}100%{left:190%}}
+.hadith-n::before{content:'❝';color:var(--gold);margin-right:6px;font-style:normal;font-size:1.15em}.day-bnr .dl{font-size:.8em;opacity:.6;margin-top:2px;font-weight:300;letter-spacing:2px;text-transform:uppercase}
 .day-bnr .dh{font-family:var(--ff);font-style:italic;font-size:.88em;margin-top:14px;opacity:.8;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto}
 .bnr-hint{font-size:.62em;opacity:.35;margin-top:10px;letter-spacing:1px;text-transform:uppercase}
 .day-bnr.compact{padding:12px 20px;cursor:pointer}.day-bnr.compact .dn{font-size:1.4em;display:inline}.day-bnr.compact .dl{display:inline;margin-left:8px;font-size:.7em}.day-bnr.compact .dh,.day-bnr.compact .odd-badge,.day-bnr.compact .l10-msg,.day-bnr.compact .bnr-hint{display:none}
@@ -222,7 +234,7 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 </head>
 <body>
 <header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span>From Muslim to Mu'min <a class="learn-link" onclick="goTab('more')">ⓘ User Guide</a></span></h1></div><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></header>
-<div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="bnr-stars"></div><div class="dn">Day <span id="currentDay">1</span></div><div class="dl">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div class="bnr-hint" id="bnrHint">tap to collapse ▲</div></div>
+<div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="bnr-stars"></div><div class="skyline"></div><div class="dn">Day <span id="currentDay">1</span></div><div class="dl">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div class="bnr-hint" id="bnrHint">tap to collapse ▲</div></div>
 <div class="day-nav"><button onclick="changeDay(-1)" aria-label="Previous">◀</button><div class="dd" id="dayDisp">Day 1 / 30</div><button onclick="changeDay(1)" aria-label="Next">▶</button></div>
 <main class="wrap">
 <div class="inst" id="instBanner"><div style="font-size:1.6em">🌙</div><div class="it"><strong>Install Ramadan Strivers</strong>Add to your home screen for the best experience</div><button id="instBtn" onclick="installApp()">Install</button><button class="ix" onclick="dismissInst()">&times;</button></div>
@@ -554,6 +566,7 @@ function updQ(){
 
 function findIt(id){for(var s=0;s<CK.length;s++){var sec=CK[s];if(sec.subs)for(var j=0;j<sec.subs.length;j++)for(var k=0;k<sec.subs[j].items.length;k++)if(sec.subs[j].items[k].id===id)return sec.subs[j].items[k];if(sec.items)for(var j=0;j<sec.items.length;j++)if(sec.items[j].id===id)return sec.items[j];}return null;}
 
+var SEC_ICONS={salah:'🕌',quran:'📖',character:'💛',charity:'🤝',lastTen:'🌟',avoidance:'🚫',abuBakr:'⭐'};
 function renderCK(){
   var c=document.getElementById('chkContainer');c.innerHTML='';
   CK.forEach(function(sec){
@@ -562,7 +575,8 @@ function renderCK(){
     if(sec.l10)el.classList.add('l10-sec');
     if(sec.id!=='salah')el.classList.add('shut');
     var tot=sec.subs?sec.subs.reduce(function(a,s){return a+s.items.length;},0):(sec.items?sec.items.length:0);
-    var h='<div class="sec-hd" onclick="togSec(\''+sec.id+'\')"><h2>'+sec.title+'</h2><div class="sec-prog"><span id="sp-'+sec.id+'">0/'+tot+'</span><span class="sec-chev">▼</span></div></div><div class="sec-bd">';
+    var ic=SEC_ICONS[sec.id]||'';
+    var h='<div class="sec-hd" onclick="togSec(\''+sec.id+'\')"><h2>'+(ic?'<span class="sec-ic">'+ic+'</span>':'')+sec.title+'</h2><div class="sec-prog"><span id="sp-'+sec.id+'">0/'+tot+'</span><span class="sec-chev">▼</span></div></div><div class="sec-pbar"><div class="sec-pfill" id="spb-'+sec.id+'"></div></div><div class="sec-bd">';
     if(sec.hn)h+='<div class="hadith-n">'+sec.hn+'</div>';
     if(sec.subs)sec.subs.forEach(function(sub){h+='<div class="sub-t">'+sub.name+'</div>';sub.items.forEach(function(i){h+=mkItem(i);});});
     if(sec.items)sec.items.forEach(function(i){h+=mkItem(i);});
@@ -608,7 +622,8 @@ function updProg(){
   CK.forEach(function(sec){if(sec.l10&&!isL10())return;var sc=0,st=0;
     if(sec.subs)sec.subs.forEach(function(sub){sub.items.forEach(function(it){if(haydOn&&HAYD_OFF.indexOf(it.id)>=0)return;st++;var cb=document.getElementById(it.id);if(cb&&cb.checked)sc++;});});
     if(sec.items)sec.items.forEach(function(it){if(haydOn&&HAYD_OFF.indexOf(it.id)>=0)return;st++;var cb=document.getElementById(it.id);if(cb&&cb.checked)sc++;});
-    var el=document.getElementById('sp-'+sec.id);if(el)el.textContent=sc+'/'+st;});
+    var el=document.getElementById('sp-'+sec.id);if(el)el.textContent=sc+'/'+st;
+    var pb=document.getElementById('spb-'+sec.id);if(pb)pb.style.width=(st>0?Math.round(sc/st*100):0)+'%';});
 }
 
 function calcStreak(fn){var s=0;for(var d=ST.day-1;d>=1;d--){var x=getDay(d);if(x&&fn(x.ck))s++;else break;}
