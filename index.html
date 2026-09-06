@@ -176,6 +176,34 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 .guide-sec.open .guide-chev{transform:rotate(90deg)}
 .guide-bd{max-height:0;overflow:hidden;padding:0 18px;font-size:.84em;color:var(--text2);line-height:1.7;transition:max-height .3s ease,padding .3s ease}
 .guide-sec.open .guide-bd{max-height:800px;padding:0 18px 16px}
+.qz-cats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.qz-cat{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--card-glow)}.qz-cat:active{transform:scale(.95);border-color:var(--gold)}
+.qz-cat-i{font-size:1.7em;margin-bottom:4px}.qz-cat-n{font-size:.82em;font-weight:700}.qz-cat-c{font-size:.68em;color:var(--text3);margin-top:2px}.qz-cat-b{font-size:.66em;color:var(--gold);font-weight:700;margin-top:3px}
+.qz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.82em;color:var(--text2);gap:8px}.qz-top span{white-space:nowrap}
+.qz-x{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:10px;padding:5px 12px;cursor:pointer;font-size:.85em;font-family:var(--fb)}.qz-x:active{transform:scale(.95)}
+.qz-bar-out{background:var(--border);height:5px;border-radius:3px;overflow:hidden;margin-bottom:14px}.qz-bar{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:3px;transition:width .3s}
+.qz-card{perspective:1200px;margin-bottom:12px}
+.qz-in{position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.qz-card.flip .qz-in{transform:rotateY(180deg)}
+.qz-face{backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:20px 18px;box-shadow:var(--card-glow);min-height:300px;display:flex;flex-direction:column}
+.qz-front{position:relative}
+.qz-back{position:absolute;inset:0;transform:rotateY(180deg);overflow-y:auto;border-color:var(--gold)}
+.qz-cat-tag{display:inline-block;align-self:flex-start;font-size:.68em;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);background:var(--gold-glow);padding:4px 12px;border-radius:12px;margin-bottom:12px}
+.qz-tf-lbl{font-size:.68em;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:700}
+.qz-q{font-family:var(--ff);font-size:1.05em;line-height:1.65;flex:1;margin-bottom:18px}
+.qz-tf{display:flex;gap:10px;margin-top:auto}
+.qz-tf button{flex:1;padding:14px;border-radius:var(--rs);font-weight:700;font-size:.95em;cursor:pointer;transition:all .2s;font-family:var(--fb)}.qz-tf button:active{transform:scale(.95)}
+.qz-t{border:1.5px solid var(--success);background:var(--green-glow);color:var(--success)}
+.qz-f{border:1.5px solid var(--error);background:rgba(220,38,38,.08);color:var(--error)}
+.qz-res{font-family:var(--ff);font-size:1.2em;font-weight:800;margin-bottom:6px}.qz-res.ok{color:var(--success)}.qz-res.no{color:var(--error)}
+.qz-ans{font-size:.85em;color:var(--text2);margin-bottom:10px}.qz-ans strong{color:var(--gold)}
+.qz-exp{font-size:.86em;line-height:1.6;color:var(--text2);background:var(--gold-glow);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 var(--rs) var(--rs) 0;margin-bottom:8px;font-style:italic;font-family:var(--ff)}
+.qz-ref{font-size:.78em;color:var(--text3);margin-bottom:10px}.qz-ref a{color:var(--green);text-decoration:none;font-weight:600}
+.qz-done{background:var(--card);border:1.5px solid var(--gold);border-radius:var(--r);padding:28px 20px;text-align:center;box-shadow:0 0 24px var(--gold-glow);margin-bottom:12px}
+.qz-done-pct{font-size:3em;font-weight:800;font-family:var(--ff);color:var(--green);line-height:1}
+.qz-done-sub{font-size:.8em;color:var(--text3);margin-top:4px}
+.qz-done-msg{font-size:.9em;color:var(--text2);margin:12px 0 4px;line-height:1.6;font-family:var(--ff);font-style:italic}
+.qz-new-best{display:inline-block;background:linear-gradient(135deg,#fbbf24,#d97706);color:#1c1917;padding:5px 16px;border-radius:16px;font-size:.72em;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:10px}
 @media(max-width:400px){.hdr h1{font-size:1.05em}.streaks{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(3,1fr)}.cal-grid{grid-template-columns:repeat(5,1fr)}.heat-grid{gap:3px}.heat-c{font-size:.45em}}
 </style>
 </head>
@@ -216,6 +244,29 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 <div class="scard"><h3>🏅 Achievements (<span id="bdgCnt">0</span>/12)</h3><div class="badges" id="bdgGrid"></div></div>
 <div class="scard"><h3>🔥 Best Streaks</h3><div class="sr"><span class="sr-l">🕌 Fajr at Mosque</span><span class="sr-v" id="bsF">0 days</span></div><div class="sr"><span class="sr-l">🕌 Isha at Mosque</span><span class="sr-v" id="bsN">0 days</span></div><div class="sr"><span class="sr-l">📖 Quran</span><span class="sr-v" id="bsQ">0 days</span></div><div class="sr"><span class="sr-l">💝 Sadaqah</span><span class="sr-v" id="bsC">0 days</span></div></div>
 </div></div>
+</div>
+<div class="tab" id="tab-quiz">
+<div id="qzHomeV">
+<div class="scard" style="background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(251,191,36,.04));border:1px solid var(--gold-glow)">
+<h3 style="font-size:1.15em;border:none;padding-bottom:0;margin-bottom:6px">🧠 Flash Quiz</h3>
+<p style="font-size:.82em;color:var(--text3);margin-bottom:0">True or false? Test yourself on the hadith &amp; ayat behind every deed in this app. Pick a category — each round is 10 quick flashcards. Answer, flip the card, and learn the source.</p>
+</div>
+<div class="qz-cats" id="qzCats"></div>
+<div class="scard"><h3>📊 Your Quiz Stats</h3>
+<div class="sr"><span class="sr-l">Questions Answered</span><span class="sr-v" id="qzAns">0</span></div>
+<div class="sr"><span class="sr-l">Accuracy</span><span class="sr-v" id="qzAcc">—</span></div>
+</div>
+</div>
+<div id="qzPlayV" style="display:none">
+<div class="qz-top"><span id="qzNum">Question 1 / 10</span><span id="qzScore">Score: 0</span><button class="qz-x" onclick="qzHome()">✕ Exit</button></div>
+<div class="qz-bar-out"><div class="qz-bar" id="qzPBar" style="width:0%"></div></div>
+<div class="qz-card" id="qzCard"><div class="qz-in">
+<div class="qz-face qz-front"><div class="qz-cat-tag" id="qzCatTag"></div><div class="qz-tf-lbl">True or False?</div><div class="qz-q" id="qzQ"></div><div class="qz-tf"><button class="qz-t" onclick="qzAnswer(true)">✓ True</button><button class="qz-f" onclick="qzAnswer(false)">✗ False</button></div></div>
+<div class="qz-face qz-back" id="qzBack"></div>
+</div></div>
+<p style="text-align:center;font-size:.72em;color:var(--text3)">Tap True or False — the card flips to reveal the answer &amp; source</p>
+</div>
+<div id="qzDoneV" style="display:none"></div>
 </div>
 <div class="tab" id="tab-more">
 
@@ -278,6 +329,11 @@ Print your PDF report on Eid and use the badges to celebrate and reward your kid
 </div>
 
 <div class="guide-sec" onclick="this.classList.toggle('open')">
+<div class="guide-hd">🧠 Flash Quiz <span class="guide-chev">▶</span></div>
+<div class="guide-bd">Test what you've learned! The Quiz tab turns every hadith and ayah in this app into true-or-false flashcards, organised into six categories — Fasting, Salah &amp; Dhikr, Quran, Character, Charity, and the Last 10 Nights. Each round is 10 shuffled cards: answer, watch the card flip, and see the correct answer with its source on sunnah.com or quran.com. Your accuracy and best score per category are saved, so keep playing until you master them all.</div>
+</div>
+
+<div class="guide-sec" onclick="this.classList.toggle('open')">
 <div class="guide-hd">🕌 New to Islam or Learning? <span class="guide-chev">▶</span></div>
 <div class="guide-bd">Every deed in the checklist has a hadith reference and a short explanation behind it. Turn on "Detail Mode" (in Settings below, or on the Today tab) and you'll see the source and meaning of each item. You don't need any prior knowledge — the app teaches you as you use it.</div>
 </div>
@@ -326,7 +382,7 @@ Free · Offline · Private · No ads
 
 <div class="ftr"><div class="dua">May Allah accept our fasting and deeds. Ramadan Mubarak! 🌙</div><p>For corrections, suggestions & feedback<br>please reach out to <a href="mailto:m.farhan.bava@gmail.com">Farhan</a></p><p style="margin-top:6px;font-size:.75em;opacity:.5">Built with ❤️ for the Ummah</p></div>
 </main>
-<nav class="bnav"><button class="bnav-i on" data-tab="today" onclick="goTab('today')"><span class="ni">📋</span><span class="nl">Today</span></button><button class="bnav-i" data-tab="quran" onclick="goTab('quran')"><span class="ni">📖</span><span class="nl">Quran</span></button><button class="bnav-i" data-tab="progress" onclick="goTab('progress')"><span class="ni">📊</span><span class="nl">Progress</span></button><button class="bnav-i" data-tab="more" onclick="goTab('more')"><span class="ni">⚙️</span><span class="nl">More</span></button></nav>
+<nav class="bnav"><button class="bnav-i on" data-tab="today" onclick="goTab('today')"><span class="ni">📋</span><span class="nl">Today</span></button><button class="bnav-i" data-tab="quran" onclick="goTab('quran')"><span class="ni">📖</span><span class="nl">Quran</span></button><button class="bnav-i" data-tab="progress" onclick="goTab('progress')"><span class="ni">📊</span><span class="nl">Progress</span></button><button class="bnav-i" data-tab="quiz" onclick="goTab('quiz')"><span class="ni">🧠</span><span class="nl">Quiz</span></button><button class="bnav-i" data-tab="more" onclick="goTab('more')"><span class="ni">⚙️</span><span class="nl">More</span></button></nav>
 <div class="mdl-o" id="dayModal"><div class="mdl"><div class="mdl-hd"><h3 id="mdlTitle">Day 1</h3><button class="mdl-x" onclick="closeMdl()">&times;</button></div><div class="mdl-bd" id="mdlBody"></div></div></div>
 <div class="toast-c" id="toastC"></div>
 <script>
@@ -429,7 +485,7 @@ const CK=[
 let ST={day:1,theme:'dark',tab:'today',detail:false},qPages={},tChart=null,qChart=null,pieChart=null,deferPr=null;
 var haydOn=false;
 const HAYD_OFF=['fajr-sunnah','fajr','duha','dhuhr-sunnah-before','dhuhr','dhuhr-sunnah-after','asr','dua-iftar','maghrib','maghrib-sunnah','isha','isha-sunnah','tarawih','witr','tahajjud','long-sujood','abu-bakr-fasting','itikaf'];
-document.addEventListener('DOMContentLoaded',()=>{loadSt();renderCK();loadDay();updUI();updQ();renderCal();renderHeat();renderBdg();updStats();regSW();chkInst();chkDailyReminder();});
+document.addEventListener('DOMContentLoaded',()=>{loadSt();renderCK();loadDay();updUI();updQ();renderCal();renderHeat();renderBdg();updStats();qzHome();regSW();chkInst();chkDailyReminder();});
 
 function loadSt(){const s=localStorage.getItem('rs-settings');if(s)ST={...ST,...JSON.parse(s)};document.documentElement.setAttribute('data-theme',ST.theme);updThm();applyDetail();const q=localStorage.getItem('rs-quran-pages');if(q)qPages=JSON.parse(q);}
 function saveSt(){localStorage.setItem('rs-settings',JSON.stringify({day:ST.day,theme:ST.theme,detail:ST.detail}));}
@@ -440,7 +496,7 @@ function toggleDetail(){ST.detail=!ST.detail;applyDetail();saveSt();}
 function applyDetail(){document.body.classList.toggle('detail-off',!ST.detail);var t=document.getElementById('detTgl');if(t)t.classList.toggle('on',ST.detail);var t2=document.getElementById('detTgl2');if(t2)t2.classList.toggle('on',ST.detail);}
 function toggleHayd(){haydOn=!haydOn;applyHayd();onCK();}
 function applyHayd(){var tgl=document.getElementById('haydTgl');var sw=document.getElementById('haydSw');tgl.classList.toggle('active',haydOn);sw.classList.toggle('on',haydOn);HAYD_OFF.forEach(function(id){var el=document.getElementById('item-'+id);if(el){el.classList.toggle('hayd-off',haydOn);var cb=document.getElementById(id);if(cb){if(haydOn){cb.checked=false;cb.disabled=true;}else{cb.disabled=false;}}}});}
-function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();setTimeout(function(){renderTrendChart();renderPieChart();},150);}if(t==='quran'){updQ();setTimeout(function(){renderQLog();renderQuranChart();},80);}}
+function goTab(t){ST.tab=t;document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('tab-'+t).classList.add('on');document.querySelectorAll('.bnav-i').forEach(e=>e.classList.remove('on'));document.querySelector('[data-tab="'+t+'"]').classList.add('on');if(t==='progress'){updStats();updComp();renderCal();renderHeat();updThirds();updLQCountdown();updStreaks();setTimeout(function(){renderTrendChart();renderPieChart();},150);}if(t==='quran'){updQ();setTimeout(function(){renderQLog();renderQuranChart();},80);}if(t==='quiz'&&document.getElementById('qzPlayV').style.display==='none'){qzHome();}}
 function isL10(){return ST.day>=21;}
 function isOdd(){return isL10()&&[21,23,25,27,29].includes(ST.day);}
 
@@ -719,6 +775,110 @@ function confirmReset(){if(confirm('Reset ALL data? This cannot be undone!')){if
 function chkDailyReminder(){var x=getDay(ST.day);if(!x||x.done===0){setTimeout(function(){toast("You haven't logged today's progress yet — every deed counts! 🌙");},800);}}
 var prevStreaks={fajr:0,night:0,quran:0,charity:0};
 function chkStreakWarn(){var cur={fajr:calcStreak(function(c){return c&&c['fajr'];}),night:calcStreak(function(c){return c&&c['isha'];}),quran:calcStreak(function(c){return c&&(c['quran-recitation']||c['quran-reflection']||c['quran-listening']);}),charity:calcStreak(function(c){return c&&(c['charity-given']||c['fed-fasting']);})};var names={fajr:'Fajr at Mosque 🕌',night:'Isha at Mosque 🕌',quran:'Quran 📖',charity:'Sadaqah 💝'};var milestones=[3,5,7,10,14,20,25,30];['fajr','night','quran','charity'].forEach(function(k){if(cur[k]>prevStreaks[k]&&milestones.indexOf(cur[k])>=0){toast('🔥 '+names[k]+' streak: '+cur[k]+' days! Keep it going!');}});prevStreaks=cur;}
+/* ===== FLASH QUIZ ===== */
+const QCATS=[{id:'all',n:'All Mixed',i:'🎲'},{id:'fasting',n:'Fasting',i:'🌙'},{id:'salah',n:'Salah & Dhikr',i:'🕌'},{id:'quran',n:'Quran',i:'📖'},{id:'character',n:'Character',i:'💛'},{id:'charity',n:'Charity',i:'🤝'},{id:'last10',n:'Last 10 Nights',i:'🌟'}];
+const QUIZ=[
+{c:"fasting",q:"Whoever fasts Ramadan out of faith and seeking reward will have their previous sins forgiven.",a:true,x:"The Prophet ﷺ promised forgiveness of past sins for fasting Ramadan with faith and hope of reward.",r:"Bukhari 38"},
+{c:"fasting",q:"The special gate of Paradise reserved for those who fast is called Al-Firdaus.",a:false,x:"The gate is called Ar-Rayyan — only those who fast will enter through it.",r:"Bukhari 1896"},
+{c:"fasting",q:"When Ramadan begins, the gates of Paradise are opened and the gates of Hell are closed.",a:true,x:"A month where every door to good is opened wide — make the most of it.",r:"Bukhari 1899"},
+{c:"fasting",q:"Whoever gives iftar to a fasting person receives half of that person's reward.",a:false,x:"They receive the SAME reward — without reducing the fasting person's reward at all.",r:"Tirmidhi 807"},
+{c:"fasting",q:"The Prophet ﷺ described fasting as a shield.",a:true,x:"Fasting shields you — so the fasting person should not speak obscenely or act ignorantly.",r:"Bukhari 1894"},
+{c:"fasting",q:"The dua of a fasting person can be rejected like anyone else's.",a:false,x:"The supplication of the fasting person is not rejected — especially at the time of iftar.",r:"Ibn Majah 1753"},
+{c:"fasting",q:"Allah says every deed of the son of Adam is for himself, except fasting — which is for Allah, and He Himself will reward it.",a:true,x:"Fasting has a special, unlimited reward known only to Allah.",r:"Bukhari 1904"},
+{c:"fasting",q:"If you keep up false speech while fasting, Allah has no need of you giving up your food and drink.",a:true,x:"Fasting is not just from food — lying and false speech strip the fast of its spiritual reward.",r:"Bukhari 1903"},
+{c:"fasting",q:"If someone insults you while fasting, the Sunnah is to respond with a sharper insult.",a:false,x:"The Sunnah is to say: 'I am fasting' — and walk away from the argument.",r:"Bukhari 1894"},
+{c:"fasting",q:"The breath of a fasting person is sweeter to Allah than the scent of musk.",a:true,x:"What seems unpleasant to people is beloved to Allah when it comes from worship.",r:"Bukhari 1904"},
+{c:"fasting",q:"Fasting six days of Shawwal after Ramadan is like fasting the entire year.",a:true,x:"Ramadan (×10 reward) plus six days of Shawwal completes the reward of a full year of fasting.",r:"Muslim 1164"},
+{c:"fasting",q:"The Sunnah guideline for eating is one-third food, one-third drink, and one-third air.",a:true,x:"The Prophet ﷺ warned against overfilling the stomach — a lesson especially relevant at iftar.",r:"Tirmidhi 2380"},
+{c:"salah",q:"Praying Isha and Fajr in congregation carries the reward of standing the entire night in prayer.",a:true,x:"Isha in congregation = half the night; adding Fajr in congregation = the whole night.",r:"Muslim 656"},
+{c:"salah",q:"The two Sunnah rakahs before Fajr are better than the world and everything in it.",a:true,x:"Two short rakahs outweigh the entire dunya — never skip them.",r:"Muslim 724"},
+{c:"salah",q:"Whoever prays qiyam (night prayer) in Ramadan with faith and seeking reward will be forgiven their past sins.",a:true,x:"This is the promise behind Tarawih and night prayer in Ramadan.",r:"Bukhari 37"},
+{c:"salah",q:"Witr prayer must always be exactly five rakahs.",a:false,x:"Witr can be prayed as 1 or 3 rakahs — make it your last prayer of the night.",r:"Bukhari 998"},
+{c:"salah",q:"The Prophet ﷺ sought forgiveness (istighfar) more than 70 times every day.",a:true,x:"If the forgiven Prophet ﷺ did istighfar daily, how much more do we need it?",r:"Bukhari 6307"},
+{c:"salah",q:"Sending one salawat upon the Prophet ﷺ brings ten blessings from Allah.",a:true,x:"Every single salawat is multiplied ten times over.",r:"Muslim 408"},
+{c:"salah",q:"Allah descends in the FIRST third of the night asking: 'Who calls upon Me that I may answer?'",a:false,x:"It is the LAST third of the night — the most blessed time for dua and tahajjud.",r:"Bukhari 1145"},
+{c:"salah",q:"Duha prayer counts as charity for every joint in your body.",a:true,x:"A short mid-morning prayer that pays the daily sadaqah owed by your 360 joints.",r:"Muslim 720"},
+{c:"salah",q:"Praying twelve Sunnah rakahs daily earns you a house in Jannah.",a:true,x:"The regular Sunnah prayers around the five obligatory ones build you a home in Paradise.",r:"Tirmidhi 428"},
+{c:"salah",q:"The night adhkar before sleep include Ayatul Kursi and the last two ayat of Surah al-Baqarah.",a:true,x:"Prophetic protection through the night until you wake.",r:"Bukhari 6320"},
+{c:"salah",q:"The Prophet ﷺ enjoyed long conversations after Isha.",a:false,x:"He disliked talking after Isha — sleep early and protect your Fajr.",r:"Abu Dawud 4723"},
+{c:"salah",q:"The most beloved deeds to Allah are grand one-time gestures rather than small consistent ones.",a:false,x:"The most beloved deeds to Allah are the most CONSISTENT, even if small.",r:"Bukhari 6464"},
+{c:"quran",q:"The Quran was revealed in the month of Ramadan as guidance for mankind.",a:true,x:"That is why Ramadan is called the month of the Quran.",r:"Quran 2:185"},
+{c:"quran",q:"On the Day of Resurrection, fasting and the Quran will both intercede for the servant.",a:true,x:"Two companions of Ramadan standing up for you when you need them most.",r:"Ahmad 6626"},
+{c:"quran",q:"The one who recites the Quran skillfully will be with the noble scribes (angels).",a:true,x:"And the one who struggles while reciting receives DOUBLE reward — so keep reading either way.",r:"Bukhari 4937"},
+{c:"quran",q:"The standard mushaf of the Quran has 604 pages.",a:true,x:"That's why this app tracks 604 pages — about 20 pages a day completes it in 30 days.",r:""},
+{c:"quran",q:"The Prophet ﷺ said: 'The best of you are those who learn the Quran and teach it.'",a:true,x:"Memorising even one new ayah puts you on this path.",r:"Bukhari 5027"},
+{c:"quran",q:"When the Quran is recited, we are commanded to listen attentively and be silent so we may receive mercy.",a:true,x:"Even listening to recitation is a rewarded act of worship.",r:"Quran 7:204"},
+{c:"quran",q:"Tadabbur means reciting the Quran as fast as possible.",a:false,x:"Tadabbur is deep REFLECTION on the meaning — pondering transforms the heart and guides action.",r:"Quran 38:29"},
+{c:"quran",q:"Jibreel would review the Quran with the Prophet ﷺ every Ramadan.",a:true,x:"And in his final year, they reviewed it twice — revise your Quran in Ramadan.",r:"Bukhari 6"},
+{c:"quran",q:"The Quran is divided into 40 juz.",a:false,x:"The Quran has 30 juz — reading one juz a day completes it exactly in Ramadan.",r:""},
+{c:"quran",q:"The Quran criticises those who command others to righteousness while forgetting themselves.",a:true,x:"Knowledge without action is incomplete — apply a lesson from today's reading.",r:"Quran 2:44"},
+{c:"character",q:"Actions are judged by intentions, and every person will get what they intended.",a:true,x:"The very first hadith of Sahih al-Bukhari — every deed takes its value from the heart.",r:"Bukhari 1"},
+{c:"character",q:"The strong person is the one who defeats others in wrestling.",a:false,x:"The strong is the one who CONTROLS HIMSELF when angry.",r:"Bukhari 6114"},
+{c:"character",q:"Nothing is heavier on the Scale on the Day of Judgment than good character.",a:true,x:"Gentleness and good character outweigh mountains of other deeds.",r:"Tirmidhi 2003"},
+{c:"character",q:"The Quran compares backbiting to eating the flesh of your dead brother.",a:true,x:"Would one of you like to eat the flesh of his dead brother? You would detest it.",r:"Quran 49:12"},
+{c:"character",q:"Riya (showing off) only slightly reduces a deed's reward — the deed still counts.",a:false,x:"Deeds done for show are REJECTED entirely. Riya quietly voids reward.",r:"Muslim 2985"},
+{c:"character",q:"When you make dua for someone in their absence, an angel says: 'Amin, and for you the same.'",a:true,x:"The fastest way to get your own dua answered — pray for your brother or sister first.",r:"Muslim 2733"},
+{c:"character",q:"Whoever believes in Allah and the Last Day should speak good or remain silent.",a:true,x:"Guarding the tongue is half of good character.",r:"Bukhari 6018"},
+{c:"character",q:"Humbling yourself for Allah's sake lowers your status among people.",a:false,x:"Whoever humbles himself for Allah, Allah will RAISE him.",r:"Muslim 2588"},
+{c:"character",q:"The best of you are those who are best to their families.",a:true,x:"Character starts at home — with the people who see you every day.",r:"Tirmidhi 3895"},
+{c:"character",q:"Good character can bring the same reward as one who fasts all day and prays all night.",a:true,x:"A believer reaches the rank of the constant worshipper through good character alone.",r:"Abu Dawud 4798"},
+{c:"character",q:"Allah extends His hand at night to accept the repentance of those who sinned during the day.",a:true,x:"And by day for those who sinned at night — the door of tawbah never closes.",r:"Muslim 2759"},
+{c:"charity",q:"The Prophet ﷺ was at his most generous during Ramadan.",a:true,x:"He was the most generous of people — and even more so in Ramadan when Jibreel met him.",r:"Bukhari 6"},
+{c:"charity",q:"Giving charity decreases your wealth.",a:false,x:"Charity does NOT decrease wealth — Allah replaces and blesses what you give.",r:"Muslim 2588"},
+{c:"charity",q:"The best charity is that given in Ramadan.",a:true,x:"Every deed is multiplied in this month — including your sadaqah.",r:"Tirmidhi 663"},
+{c:"charity",q:"Whoever visits a sick person remains in the 'harvest of Paradise.'",a:true,x:"A visit, a call, or even a supportive message counts.",r:"Muslim 2568"},
+{c:"charity",q:"In the famous hadith of the four questions, it was Umar (RA) who answered 'I did' to all four.",a:false,x:"It was ABU BAKR (RA) — fasting, following a funeral, feeding the poor, and visiting the sick, all in one day.",r:"Muslim 1028"},
+{c:"charity",q:"Whoever combines fasting, attending a funeral, feeding the poor, and visiting the sick in a single day will enter Jannah.",a:true,x:"This is the Abu Bakr Challenge in your Today tab — try to complete all four in one day!",r:"Muslim 1028"},
+{c:"charity",q:"Whoever maintains family ties, Allah maintains ties with him.",a:true,x:"A message or a visit to reconnect kinship draws Allah's connection to you.",r:"Muslim 2557"},
+{c:"charity",q:"Islam teaches that charity is best given publicly so others can see it.",a:false,x:"Hidden charity is praised — giving so secretly that the left hand does not know what the right hand gives.",r:"Bukhari 1423"},
+{c:"charity",q:"Feeding a poor person only counts if it is a full meal.",a:false,x:"Even a small meal or a single date counts with Allah.",r:"Muslim 1028"},
+{c:"last10",q:"Laylatul Qadr is better than a thousand months.",a:true,x:"One night of worship outweighs over 83 years — a lifetime of deeds.",r:"Quran 97:3"},
+{c:"last10",q:"Laylatul Qadr is guaranteed to fall on the 27th night every year.",a:false,x:"We are told to seek it in the ODD nights of the last ten — it could be any of them, so strive every night.",r:"Bukhari 2017"},
+{c:"last10",q:"We are instructed to seek Laylatul Qadr in the odd nights of the last ten days.",a:true,x:"Nights 21, 23, 25, 27, and 29 — this app highlights them for you.",r:"Bukhari 2017"},
+{c:"last10",q:"When the last ten days began, the Prophet ﷺ would tighten his waist belt and pray all night.",a:true,x:"He exerted himself in these nights more than at any other time — and woke his family too.",r:"Bukhari 2024"},
+{c:"last10",q:"The dua the Prophet ﷺ taught Aishah (RA) for Laylatul Qadr is: 'Allahumma innaka afuwwun tuhibbul afwa fafu anni.'",a:true,x:"'O Allah, You are Pardoning and You love pardon, so pardon me.' Repeat it all night.",r:"Tirmidhi 3513"},
+{c:"last10",q:"The Prophet ﷺ observed I'tikaf only once in his life.",a:false,x:"He observed I'tikaf in the last ten days EVERY Ramadan — even partial i'tikaf carries reward.",r:"Bukhari 2025"},
+{c:"last10",q:"Standing in prayer on Laylatul Qadr with faith and hope of reward forgives past sins.",a:true,x:"One accepted night wipes the slate clean.",r:"Bukhari 1901"},
+{c:"last10",q:"The closest a servant is to Allah is while in sujood.",a:true,x:"Lengthen your sujood in the last ten nights and pour out your duas there.",r:"Muslim 482"},
+{c:"last10",q:"The three thirds of Ramadan are known as Mercy (Days 1-10), Forgiveness (Days 11-20), and Salvation (Days 21-30).",a:true,x:"You can compare your effort across all three in the Progress tab.",r:""}
+];
+var qz={deck:[],idx:0,score:0,cat:'all',lock:false};
+function qzLink(r){if(!r)return'';var m=r.match(/^(Bukhari|Muslim|Tirmidhi|Nasai|Ibn Majah|Abu Dawud) (\d+)$/);if(m){var map={'Bukhari':'bukhari','Muslim':'muslim','Tirmidhi':'tirmidhi','Nasai':'nasai','Ibn Majah':'ibnmajah','Abu Dawud':'abudawud'};return 'https://sunnah.com/'+map[m[1]]+':'+m[2];}var v=r.match(/^Quran (\d+):(\d+)$/);if(v)return 'https://quran.com/'+v[1]+'/'+v[2];return '';}
+function qzBestS(){return JSON.parse(localStorage.getItem('rs-quiz-best')||'{}');}
+function qzStatsS(){return JSON.parse(localStorage.getItem('rs-quiz-stats')||'{"ans":0,"cor":0}');}
+function qzShow(id){['qzHomeV','qzPlayV','qzDoneV'].forEach(function(v){var el=document.getElementById(v);if(el)el.style.display=v===id?'block':'none';});}
+function qzHome(){var g=document.getElementById('qzCats');if(!g)return;var best=qzBestS();
+  g.innerHTML=QCATS.map(function(c){var n=c.id==='all'?QUIZ.length:QUIZ.filter(function(q){return q.c===c.id;}).length;var b=best[c.id];
+    return '<div class="qz-cat" onclick="qzStart(\''+c.id+'\')"><div class="qz-cat-i">'+c.i+'</div><div class="qz-cat-n">'+c.n+'</div><div class="qz-cat-c">'+n+' questions</div>'+(b!=null?'<div class="qz-cat-b">🏆 Best: '+b+'%</div>':'')+'</div>';}).join('');
+  var s=qzStatsS();document.getElementById('qzAns').textContent=s.ans;document.getElementById('qzAcc').textContent=s.ans>0?Math.round(s.cor/s.ans*100)+'%':'—';
+  qzShow('qzHomeV');}
+function qzStart(cat){var pool=cat==='all'?QUIZ.slice():QUIZ.filter(function(q){return q.c===cat;});
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  qz={deck:pool.slice(0,10),idx:0,score:0,cat:cat,lock:false};qzShow('qzPlayV');qzRender();}
+function qzRender(){var q=qz.deck[qz.idx];
+  document.getElementById('qzNum').textContent='Question '+(qz.idx+1)+' / '+qz.deck.length;
+  document.getElementById('qzScore').textContent='Score: '+qz.score;
+  document.getElementById('qzPBar').style.width=(qz.idx/qz.deck.length*100)+'%';
+  document.getElementById('qzCard').classList.remove('flip');qz.lock=false;
+  var cat=QCATS.find(function(c){return c.id===q.c;});
+  document.getElementById('qzCatTag').textContent=cat.i+' '+cat.n;
+  document.getElementById('qzQ').textContent=q.q;
+  document.getElementById('qzBack').innerHTML='';}
+function qzAnswer(v){if(qz.lock)return;qz.lock=true;var q=qz.deck[qz.idx];var ok=v===q.a;if(ok)qz.score++;
+  var s=qzStatsS();s.ans++;if(ok)s.cor++;localStorage.setItem('rs-quiz-stats',JSON.stringify(s));
+  var l=qzLink(q.r);
+  document.getElementById('qzBack').innerHTML='<div class="qz-res '+(ok?'ok':'no')+'">'+(ok?'✓ Correct!':'✗ Not quite')+'</div><div class="qz-ans">The statement is <strong>'+(q.a?'TRUE':'FALSE')+'</strong></div>'+(q.x?'<div class="qz-exp">'+q.x+'</div>':'')+(q.r?'<div class="qz-ref">'+(l?'<a href="'+l+'" target="_blank" rel="noopener">— '+q.r+' ↗</a>':'— '+q.r)+'</div>':'')+'<button class="btn" onclick="qzNext()" style="margin-top:auto">'+(qz.idx+1<qz.deck.length?'Next Question →':'See Results 🏁')+'</button>';
+  document.getElementById('qzScore').textContent='Score: '+qz.score;
+  document.getElementById('qzPBar').style.width=((qz.idx+1)/qz.deck.length*100)+'%';
+  document.getElementById('qzCard').classList.add('flip');}
+function qzNext(){qz.idx++;if(qz.idx>=qz.deck.length)qzFinish();else qzRender();}
+function qzFinish(){var pct=Math.round(qz.score/qz.deck.length*100);var best=qzBestS();var nb=false;
+  if(best[qz.cat]==null||pct>best[qz.cat]){best[qz.cat]=pct;localStorage.setItem('rs-quiz-best',JSON.stringify(best));nb=true;}
+  var cat=QCATS.find(function(c){return c.id===qz.cat;});
+  var msg=pct===100?'Mashallah — a perfect score! You truly know this topic. 🌟':pct>=70?'Excellent! You are learning the deen with every card. 💪':pct>=40?'Good effort — flip through the answers again and retry to lock it in.':'Every wrong answer you review is knowledge gained. Try this category again!';
+  document.getElementById('qzDoneV').innerHTML='<div class="qz-done"><div style="font-size:2.2em;margin-bottom:6px">'+(pct===100?'🏆':pct>=70?'🎉':'📚')+'</div><div class="qz-done-pct">'+qz.score+' / '+qz.deck.length+'</div><div class="qz-done-sub">'+cat.i+' '+cat.n+' — '+pct+'%</div>'+(nb&&pct>0?'<div class="qz-new-best">🏆 New Best Score</div>':'')+'<div class="qz-done-msg">'+msg+'</div><button class="btn btn-gold" onclick="qzStart(\''+qz.cat+'\')">🔁 Retry This Category</button><button class="btn btn-ol" onclick="qzHome()">📚 All Categories</button></div>';
+  qzShow('qzDoneV');
+  if(pct===100)toast('🧠 Perfect quiz score! Mashallah!','bdg');}
 function regSW(){if('serviceWorker' in navigator){var code="var C='rs-v8';self.addEventListener('install',function(e){self.skipWaiting();});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).catch(function(){return new Response('Offline');});}));});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(n){return Promise.all(n.filter(function(x){return x!==C;}).map(function(x){return caches.delete(x);}));}));});";try{navigator.serviceWorker.register(URL.createObjectURL(new Blob([code],{type:'application/javascript'})));}catch(e){}}}
 </script>
 </body>
