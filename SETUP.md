@@ -1,0 +1,46 @@
+# Setup — Ramadan Strivers v7 on Vercel
+
+The app is a static front-end (`index.html`, `i18n.js`, `cloud.js`) plus serverless functions in `api/`.
+It works with **no configuration at all** (tracker, quiz, prayer times, languages, modes). Each cloud
+feature switches itself on when its environment variable exists. Set these in **Vercel → Project → Settings → Environment Variables**, then redeploy.
+
+| Feature | What to set | Where to get it |
+|---|---|---|
+| Accounts, cloud sync, competitions, share links | `DATABASE_URL` | Vercel → **Storage → Create Database → Postgres (Neon)** → Connect to project (it adds `DATABASE_URL`/`POSTGRES_URL` automatically). Tables are created on first request. |
+| Session signing | `AUTH_SECRET` | Any long random string (`openssl rand -hex 32`). Falls back to a hash of the DB URL if unset. |
+| Magic-link sign-in, Friday organiser digests | `RESEND_API_KEY`, optional `EMAIL_FROM` | resend.com (free tier). Verify your sending domain, e.g. `Ramadan Strivers <hello@ramadanstrivers.com>`. |
+| Web push reminders | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | `npx web-push generate-vapid-keys`. Subject is `mailto:you@example.com`. |
+| Daily cron (push + digests) | `CRON_SECRET` (recommended) | Any random string; Vercel sends it automatically to `/api/cron/daily` (schedule in `vercel.json`, 15:00 UTC daily; Hobby plan allows one run per day). |
+| AI explain / reflection prompts / quiz levels | `ANTHROPIC_API_KEY`, optional `AI_MODEL` (default `claude-sonnet-5`) | console.anthropic.com. Explanations are cached per deed/language/level, so cost is minimal. |
+| WhatsApp bot | Twilio WhatsApp sender → webhook `https://<your-domain>/api/whatsapp` (POST) | twilio.com. Commands: `JOIN CODE Name`, `PAGES n`, `STATUS`, `HADITH`. |
+| Canonical URL in emails/share links | `APP_URL` (e.g. `https://www.ramadanstrivers.com`) | Optional; defaults to the request host. |
+| Hijri offset for the server cron | `HIJRI_OFFSET` (`-1`, `0`, `1`) | Optional. |
+
+Check status any time at `/api/health` — it reports which features are on.
+
+## Deploy
+- Production branch on Vercel: **`vercel`** (Settings → Git → Production Branch). `main` stays the GitHub-Pages version.
+- Every push to `vercel` redeploys. `vercel.json` carries rewrites (`/s/:id` share pages, `/poster/:code`, `/join/:code`), cache headers and the cron.
+- The repo has no build step; Node 20+ functions are bundled by Vercel.
+
+## Re-pointing the domain later
+Nothing in the code depends on the host name — share links, invitation links, posters and the WhatsApp reply all use the request's origin (`APP_URL` if set). To move `www.ramadanstrivers.com`:
+1. Vercel → Project → Settings → **Domains** → add `www.ramadanstrivers.com` and `ramadanstrivers.com`.
+2. At your DNS provider: `www` CNAME → `cname.vercel-dns.com`; apex A record → `76.76.21.21` (Vercel shows the exact values).
+3. Set `APP_URL=https://www.ramadanstrivers.com` and, if you use push/email, re-check `VAPID_SUBJECT` / `EMAIL_FROM`.
+4. Remove the `CNAME` file only when GitHub Pages is retired.
+
+## Local development
+```bash
+npm install
+# any Postgres; e.g. a local one:
+DATABASE_URL=postgresql://user@localhost:5432/ramadan AUTH_SECRET=dev node scripts/dev-server.js 3000
+BASE=http://localhost:3000 node scripts/test-api.js      # end-to-end API tests
+```
+
+## Data model (Postgres)
+`users`, `magic_links`, `sync_data` (one JSON snapshot per user, merged server-side), `competitions`, `participants`
+(per-day points with cap + flags), `push_subs`, `shares`, `ai_cache`. See `api/_lib/db.js`.
+
+## Privacy & children
+See `PRIVACY.md`. Participants never need an email; organisers can enable **Participants under 13** which hides social sharing and keeps display names only.

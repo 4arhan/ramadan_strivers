@@ -18,7 +18,9 @@
   gtag('config', 'G-Y3WDNYW5P2');
 </script>  
 <title>Ramadan Strivers</title>
-<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ramadan%20Strivers%22%2C%22short_name%22%3A%22Ramadan%22%2C%22description%22%3A%22Track%20your%20Ramadan%20journey%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23070b14%22%2C%22theme_color%22%3A%22%23070b14%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520viewBox%3D%270%25200%2520100%2520100%27%253E%253Crect%2520fill%3D%27%2523070b14%27%2520width%3D%27100%27%2520height%3D%27100%27%2520rx%3D%2720%27%2F%253E%253Ctext%2520x%3D%2750%27%2520y%3D%2768%27%2520font-size%3D%2755%27%2520text-anchor%3D%27middle%27%253E%25F0%259F%258C%2599%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -250,21 +252,31 @@ body.detail-off .chk{padding:4px 0;min-height:0}
 html[dir=rtl] .hadith-n{border-left:none;border-right:3px solid var(--gold);border-radius:var(--rs) 0 0 var(--rs)}
 html[dir=rtl] .qz-exp{border-left:none;border-right:3px solid var(--gold);border-radius:var(--rs) 0 0 var(--rs)}
 html[dir=rtl] .lb-pts{text-align:left}html[dir=rtl] .sec-ic{margin-right:0;margin-left:4px}html[dir=rtl] .qz-front::after{right:auto;left:18px}html[dir=rtl] .pick-btn{text-align:right}
+.ai-only,.ai-x{display:none}body.has-ai .ai-only{display:inline}body.has-ai .ai-x{display:inline-block;margin-left:8px;color:var(--gold);font-weight:600;cursor:pointer;font-style:normal}
+.give-x{display:inline-block;margin-left:8px;color:#f472b6;font-weight:600;font-style:normal;text-decoration:none}
+body.lvl-kids{font-size:18px}body.lvl-kids .chk label{font-size:1em;line-height:1.5}body.lvl-kids .chk input[type="checkbox"]{width:28px;height:28px}body.lvl-kids .ni{font-size:1.5em}
+body.mode-year .day-nav{display:none}body.mode-year #dayBanner .dn{font-size:1.6em}
+.cmp-in textarea{resize:vertical}textarea.cmp-in{min-height:70px;resize:vertical}
+#shareBtn{margin:0 0 12px}
 @media(max-width:400px){.hdr h1{font-size:1.05em}.bnav-i .nl{font-size:.52em}.streaks{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(3,1fr)}.cal-grid{grid-template-columns:repeat(5,1fr)}.heat-grid{gap:3px}.heat-c{font-size:.45em}}
 </style>
 </head>
 <body>
 <header class="hdr"><div class="hdr-in"><div><h1>🌙 Ramadan Strivers <span><em data-i18n="tagline">From Muslim to Mu'min</em> <a class="learn-link" data-i18n="userGuide" onclick="goTab('more')">ⓘ User Guide</a></span></h1></div><button class="thm-btn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button></div></header>
-<div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="bnr-stars"></div><div class="skyline"></div><div class="dn">Day <span id="currentDay">1</span></div><div class="dl" data-i18n="ramadanYear">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div class="bnr-hint" id="bnrHint" data-i18n="tapCollapse">tap to collapse ▲</div></div>
+<div class="day-bnr" id="dayBanner" onclick="this.classList.toggle('compact')"><div class="bnr-stars"></div><div class="skyline"></div><div class="dn">Day <span id="currentDay">1</span></div><div class="dl" data-i18n="ramadanYear">Ramadan 1447</div><div class="dh" id="dailyHadith"></div><div id="oddBadge"></div><div id="l10Msg"></div><div id="cloudBanner"></div><div class="bnr-hint" id="bnrHint" data-i18n="tapCollapse">tap to collapse ▲</div></div>
 <div class="day-nav"><button onclick="changeDay(-1)" aria-label="Previous">◀</button><div class="dd" id="dayDisp">Day 1 / 30</div><button onclick="changeDay(1)" aria-label="Next">▶</button></div>
 <main class="wrap">
 <div class="inst" id="instBanner"><div style="font-size:1.6em">🌙</div><div class="it"><strong>Install Ramadan Strivers</strong>Add to your home screen for the best experience</div><button id="instBtn" onclick="installApp()">Install</button><button class="ix" onclick="dismissInst()">&times;</button></div>
 <div class="tab on" id="tab-today">
 <div class="prog"><div class="prog-top"><span class="prog-title" data-i18n="todaysProgress">Today's Progress</span><div class="prog-ring"><svg viewBox="0 0 80 80" width="76" height="76"><circle class="pr-bg" cx="40" cy="40" r="34"/><circle class="pr-fg" id="pRing" cx="40" cy="40" r="34"/></svg><span class="prog-pct" id="pPct">0%</span></div></div><div class="prog-bar-out"><div class="prog-bar" id="pBar" style="width:0%"></div></div><div class="prog-bot"><span id="pCnt">0 of 0 completed</span><span id="pBonus" class="prog-pts" style="display:none" data-i18n="l10Bonus">🌙 Last 10 Bonus Active</span></div></div>
+<div id="prayCard"></div>
+<div id="prepCard" style="display:none"></div>
+<div id="yearCard" style="display:none"></div>
 <div class="hayd-tgl" id="haydTgl"><div class="hayd-top" onclick="toggleHayd()"><div class="hayd-info"><div class="hayd-icon">🌸</div><div class="hayd-txt"><strong data-i18n="sistersTitle">Sisters — Menstrual Cycle</strong><span data-i18n="sistersSub">Toggle if you are on your period today</span></div></div><button class="hayd-sw" id="haydSw" type="button"></button></div><div class="hayd-banner"><div class="hayd-ayah">"Allah does not burden a soul beyond that it can bear." — Quran 2:286</div><div class="hayd-tips"><strong>🌸 Your worship continues — here's what you can focus on:</strong><ul><li>Increase dhikr, istighfar & salawat throughout the day</li><li>Make abundant dua, especially during salah times</li><li>Listen to Quran recitation & reflect on its meanings</li><li>Give charity — even a smile is sadaqah</li><li>Serve your family & community</li><li>Work on character, patience & gratitude</li><li>Morning & evening adhkar for protection</li><li>Make dua for others in their absence (the angel says "Amin, and for you the same")</li></ul></div></div></div>
 <div class="qrn-today" id="qToday" onclick="goTab('quran')" style="cursor:pointer"><span class="qt-icon">📖</span><span class="qt-text"><span data-i18n="today">Today</span>: <strong id="qTodayVal">0</strong> <span data-i18n="pagesRead">pages read</span></span><span class="qt-total" id="qTodayTotal">0 / 604 total</span><span style="color:var(--green);font-size:.82em" data-i18n="log">Log →</span></div>
 <div class="detail-bar"><span style="font-size:.82em;color:var(--text3)" data-i18n="showRefs">Show references & explanations</span><button class="tgl" id="detTgl" onclick="toggleDetail()"></button></div>
 <div id="chkContainer"></div>
+<div id="journalCard"></div>
 <div class="day-nav" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-top:12px"><button onclick="changeDay(-1)" aria-label="Previous">◀</button><div class="dd" id="dayDisp2">Day 1 / 30</div><button onclick="changeDay(1)" aria-label="Next">▶</button></div>
 </div>
 <div class="tab" id="tab-quran">
@@ -274,6 +286,7 @@ html[dir=rtl] .lb-pts{text-align:left}html[dir=rtl] .sec-ic{margin-right:0;margi
 </div>
 <div class="tab" id="tab-progress">
 <div id="lqCountdown" style="display:none"></div>
+<button class="btn btn-gold" id="shareBtn" onclick="shareProgress()" style="display:none">📤 Share my progress</button>
 <div class="streaks"><div class="strk" id="sFajr"><div class="strk-i">🕌</div><div class="strk-n" id="sFajrN">0</div><div class="strk-l" data-i18n="fajrMasjid">Fajr Masjid</div></div><div class="strk" id="sNight"><div class="strk-i">🕌</div><div class="strk-n" id="sNightN">0</div><div class="strk-l" data-i18n="ishaMasjid">Isha Masjid</div></div><div class="strk" id="sQuran"><div class="strk-i">📖</div><div class="strk-n" id="sQuranN">0</div><div class="strk-l" data-i18n="quranLbl">Quran</div></div><div class="strk" id="sCharity"><div class="strk-i">💝</div><div class="strk-n" id="sCharityN">0</div><div class="strk-l" data-i18n="sadaqah">Sadaqah</div></div></div>
 <div class="card heat"><h3 data-i18n="heatmap">🟩 Consistency Heatmap</h3><div class="heat-grid" id="heatGrid"></div><div class="heat-leg">Less <i class="h0"></i><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i> More</div></div>
 <div class="pg-group"><div class="pg-hd" onclick="togPG(this)"><span data-i18n="calendarAnalysis">📅 Calendar & Analysis</span> <span class="sec-chev">▼</span></div><div class="pg-bd">
@@ -319,7 +332,7 @@ html[dir=rtl] .lb-pts{text-align:left}html[dir=rtl] .sec-ic{margin-right:0;margi
 <h3 style="font-size:1.15em;border:none;padding-bottom:0;margin-bottom:6px" data-i18n="cmpTitle">🏆 Competition Mode</h3>
 <p style="font-size:.82em;color:var(--text3);margin-bottom:0" data-i18n="cmpIntro">Schools, universities, mosques, companies and communities can run a Ramadan competition. Organisers set the Top 10 prizes; participants join with a code and their daily progress feeds a live leaderboard.</p>
 </div>
-<div id="cmpSetupV" style="display:none"><div class="scard"><h3 data-i18n="cmpSetupTitle">⚙️ One-time setup needed</h3><p style="font-size:.84em;color:var(--text2);line-height:1.6" data-i18n="cmpSetupBody">Competition Mode syncs scores through Firebase. The site owner needs to add their Firebase project config to index.html (see README.md). Until then this feature is disabled.</p></div></div>
+<div id="cmpSetupV" style="display:none"><div class="scard"><h3 data-i18n="cmpSetupTitle">⚙️ One-time setup needed</h3><p style="font-size:.84em;color:var(--text2);line-height:1.6" data-i18n="cmpSetupBody">Competition Mode needs the server database. The site owner adds a Postgres database to the Vercel project (see SETUP.md). Until then this feature is disabled.</p></div></div>
 <div id="cmpLoadV" style="display:none"><div class="scard" style="text-align:center;color:var(--text3)" data-i18n="loading">Loading…</div></div>
 <div id="cmpHomeV" style="display:none">
 <div class="scard"><h3 data-i18n="joinTitle">🎟️ Join a Competition</h3>
@@ -332,20 +345,17 @@ html[dir=rtl] .lb-pts{text-align:left}html[dir=rtl] .sec-ic{margin-right:0;margi
 <div class="scard"><h3 data-i18n="orgTitle">🏫 Organise a Competition</h3><p style="font-size:.82em;color:var(--text3);margin-bottom:10px" data-i18n="orgIntro">For schools, universities, mosques, companies, families &amp; communities.</p>
 <input class="cmp-in" id="coName" maxlength="80" data-i18n-ph="orgName" placeholder="Organisation name">
 <select class="cmp-in" id="coType"></select>
-<input class="cmp-in" id="coEmail" type="email" data-i18n-ph="orgEmail" placeholder="Organiser email">
-<input class="cmp-in" id="coPass" type="password" data-i18n-ph="orgPassword" placeholder="Password (min 6 characters)">
+<div id="cmpOrgAuth"></div>
 <div class="sub-t" data-i18n="prizesTitle">🎁 Top 10 Prizes</div><p style="font-size:.78em;color:var(--text3);margin-bottom:8px" data-i18n="prizesHint">Describe the prize for each rank. Leave blank for none.</p>
 <div id="coPrizes"></div>
-<button class="btn" onclick="cmpCreate()" data-i18n="createBtn">Create Competition</button></div>
-<div class="scard"><h3 data-i18n="orgLoginTitle">🔑 Organiser Login</h3>
-<input class="cmp-in" id="clEmail" type="email" data-i18n-ph="orgEmail" placeholder="Organiser email">
-<input class="cmp-in" id="clPass" type="password" data-i18n-ph="orgPassword" placeholder="Password">
-<button class="btn btn-ol" onclick="cmpLogin()" data-i18n="loginBtn">Log In</button></div>
+<button class="btn" onclick="cmpCreate()" data-i18n="createBtn">Create Competition</button>
+<p style="font-size:.74em;color:var(--text3);margin-top:8px">After creating you get a join code, a printable QR poster, bulk enrolment links, a class/team leaderboard, CSV export and Eid certificates.</p></div>
 </div>
-<div id="cmpPartV" style="display:none"><div id="cmpPartHead"></div><div id="cmpMyRank"></div><div class="scard"><h3 data-i18n="leaderboard">🏆 Leaderboard</h3><div id="cmpBoard"></div></div><button class="btn btn-red" onclick="cmpLeave()" data-i18n="leave">Leave Competition</button></div>
-<div id="cmpOrgV" style="display:none"><div id="cmpOrgHead"></div><div class="scard"><h3 data-i18n="leaderboard">🏆 Leaderboard</h3><div id="cmpOrgBoard"></div></div><div class="scard"><h3 data-i18n="prizesTitle">🎁 Top 10 Prizes</h3><div id="cmpOrgPrizes"></div><button class="btn btn-ol" onclick="cmpSavePrizes()" data-i18n="savePrizes">Save Prizes</button></div><div class="scard"><button class="btn btn-ol" onclick="cmpExportCSV()" data-i18n="exportCSV">Export CSV</button><button class="btn btn-red" onclick="cmpClose()" data-i18n="closeComp">Close Competition</button><button class="btn btn-ol" onclick="cmpLogout()" data-i18n="logout">Log out</button></div></div>
+<div id="cmpPartV" style="display:none"><div id="cmpPartHead"></div><div id="cmpMyRank"></div><div id="cmpDonate"></div><div class="scard"><h3 data-i18n="leaderboard">🏆 Leaderboard</h3><div id="cmpBoard"></div></div><button class="btn btn-red" onclick="cmpLeave()" data-i18n="leave">Leave Competition</button></div>
+<div id="cmpOrgV" style="display:none"></div>
 </div>
 <div class="tab" id="tab-more">
+<div id="acctCard"></div>
 
 <div class="scard" style="background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(251,191,36,.04));border:1px solid var(--gold-glow)">
 <h3 style="font-size:1.15em;border:none;padding-bottom:0;margin-bottom:6px" data-i18n="howToUse">📘 How to Use This App</h3>
@@ -412,7 +422,7 @@ Print your PDF report on Eid and use the badges to celebrate and reward your kid
 
 <div class="guide-sec" onclick="this.classList.toggle('open')">
 <div class="guide-hd"><span data-i18n="g_compete">🏆 Competition Mode</span> <span class="guide-chev">▶</span></div>
-<div class="guide-bd">Run a Ramadan competition for your school, university, mosque, company, family or community. Organisers create a competition with Top 10 prizes and get a 6-letter join code. Participants enter the code on the Compete tab and their daily deeds, points and Quran pages feed a live leaderboard. Only a display name and scores are shared — never the checklist details. Organisers can export results as CSV and close the competition on Eid.</div>
+<div class="guide-bd">Run a Ramadan competition for your school, university, mosque, company, family or community. Organisers create a competition with Top 10 prizes and get a 6-letter join code plus a printable QR poster. Participants enter the code (or tap a personal invitation link) and their daily deeds, points and Quran pages feed a live leaderboard — individuals and classes/teams. Organisers get a roster with inactivity and integrity flags, bulk enrolment, a daily points cap, CSV export, Eid certificates for everyone, and a child-privacy mode. Only a display name and scores are shared — never the checklist details.</div>
 </div>
 
 <div class="guide-sec" onclick="this.classList.toggle('open')">
@@ -439,6 +449,7 @@ Print your PDF report on Eid and use the badges to celebrate and reward your kid
 
 <div class="scard"><h3 data-i18n="settings">⚙️ Settings</h3>
 <div class="set-item"><div><div class="set-lbl" data-i18n="language">Language</div><div class="set-desc" data-i18n="languageDesc">App language (deeds & hadith stay in English)</div></div><select class="lang-sel" id="langSel" onchange="setLang(this.value)"></select></div>
+<div id="cloudSettings"></div>
 <div class="set-item"><div><div class="set-lbl" data-i18n="darkMode">Dark Mode</div><div class="set-desc" data-i18n="darkModeDesc">Easier on the eyes at night</div></div><button class="tgl" id="dmTgl" onclick="toggleTheme()"></button></div>
 <div class="set-item"><div><div class="set-lbl" data-i18n="detailMode">Detail Mode</div><div class="set-desc" data-i18n="detailModeDesc">Show hadith references for every deed</div></div><button class="tgl" id="detTgl2" onclick="toggleDetail()"></button></div>
 </div>
@@ -456,7 +467,7 @@ Print your PDF report on Eid and use the badges to celebrate and reward your kid
 </div>
 
 <div style="text-align:center;padding:20px 0 8px;font-size:.8em;color:var(--text3);line-height:1.7">
-<strong style="color:var(--text2)">Ramadan Strivers</strong> · v6.0<br>
+<strong style="color:var(--text2)">Ramadan Strivers</strong> · v7.0<br>
 From Muslim to Mu'min<br>
 Free · Offline · Private · No ads
 </div>
@@ -568,7 +579,7 @@ const CK=[
 let ST={day:1,theme:'dark',tab:'today',detail:false},qPages={},tChart=null,qChart=null,pieChart=null,deferPr=null;
 var haydOn=false;
 const HAYD_OFF=['fajr-sunnah','fajr','duha','dhuhr-sunnah-before','dhuhr','dhuhr-sunnah-after','asr','dua-iftar','maghrib','maghrib-sunnah','isha','isha-sunnah','tarawih','witr','tahajjud','long-sujood','abu-bakr-fasting','itikaf'];
-document.addEventListener('DOMContentLoaded',()=>{loadSt();applyLangStatic();renderCK();loadDay();updUI();updQ();renderCal();renderHeat();renderBdg();updStats();qzHome();regSW();chkInst();chkDailyReminder();cmpBoot();});
+document.addEventListener('DOMContentLoaded',()=>{loadSt();cloudPre();applyLangStatic();renderCK();loadDay();updUI();updQ();renderCal();renderHeat();renderBdg();updStats();qzHome();regSW();chkInst();chkDailyReminder();cloudBoot();});
 
 function loadSt(){const s=localStorage.getItem('rs-settings');if(s)ST={...ST,...JSON.parse(s)};if(!ST.lang){var nl=(navigator.language||'en').slice(0,2).toLowerCase();ST.lang=LANGS.some(function(l){return l.c===nl;})?nl:'en';}document.documentElement.setAttribute('data-theme',ST.theme);updThm();applyDetail();const q=localStorage.getItem('rs-quran-pages');if(q)qPages=JSON.parse(q);}
 function saveSt(){localStorage.setItem('rs-settings',JSON.stringify({day:ST.day,theme:ST.theme,detail:ST.detail,lang:ST.lang}));}
@@ -624,6 +635,7 @@ function updQ(){
 
 function findIt(id){for(var s=0;s<CK.length;s++){var sec=CK[s];if(sec.subs)for(var j=0;j<sec.subs.length;j++)for(var k=0;k<sec.subs[j].items.length;k++)if(sec.subs[j].items[k].id===id)return sec.subs[j].items[k];if(sec.items)for(var j=0;j<sec.items.length;j++)if(sec.items[j].id===id)return sec.items[j];}return null;}
 
+var GIVE_IDS=['charity-given','fed-fasting','night-charity','abu-bakr-fed'];
 var SEC_ICONS={salah:'🕌',quran:'📖',character:'💛',charity:'🤝',lastTen:'🌟',avoidance:'🚫',abuBakr:'⭐'};
 function renderCK(){
   var c=document.getElementById('chkContainer');c.innerHTML='';
@@ -646,7 +658,7 @@ function mkItem(it){
   var al='';
   if(it.al==='lwa')al='<a href="https://lifewithallah.com/app" target="_blank" rel="noopener" class="ail"><span class="ail-i">🤲</span><span class="ail-t"><strong>Life with Allah</strong> — Authentic adhkar & duas app</span><span class="ail-a">→</span></a>';
   if(it.al==='trt')al='<a href="https://tarteel.ai/" target="_blank" rel="noopener" class="ail"><span class="ail-i">📖</span><span class="ail-t"><strong>Tarteel AI</strong> — AI Quran recitation & memorisation</span><span class="ail-a">→</span></a>';
-  return '<div class="chk" id="item-'+it.id+'"><input type="checkbox" id="'+it.id+'" onchange="onCK()"><label for="'+it.id+'">'+tItem(it.id,it.label)+' <span class="chk-pts">+'+it.pts+'</span>'+(it.ref?'<span class="chk-ref">'+rl+'</span>':'')+(it.exp?'<span class="chk-exp">'+it.exp+'</span>':'')+'</label></div>'+al;
+  return '<div class="chk" id="item-'+it.id+'"><input type="checkbox" id="'+it.id+'" onchange="onCK()"><label for="'+it.id+'">'+tItem(it.id,it.label)+' <span class="chk-pts">+'+it.pts+'</span>'+(it.ref?'<span class="chk-ref">'+rl+'<a class="ai-x" onclick="event.preventDefault();event.stopPropagation();aiExplain(\''+it.id+'\')">✨ Explain</a>'+(GIVE_IDS.indexOf(it.id)>=0?'<a class="give-x" href="#" onclick="event.stopPropagation();giveNow(event)">💝 Give</a>':'')+'</span>':'')+(it.exp?'<span class="chk-exp">'+it.exp+'</span>':'')+'</label></div>'+al;
 }
 function togSec(id){document.querySelector('[data-sec="'+id+'"]').classList.toggle('shut');}
 function togPG(el){el.parentElement.classList.toggle('shut');if(!el.parentElement.classList.contains('shut')){setTimeout(function(){renderPieChart();renderTrendChart();},100);}}
@@ -655,7 +667,7 @@ var _pp=null,_ppDay=0;
 function celebrate(){var colors=['#fbbf24','#4ade80','#f472b6','#60a5fa','#fde68a'];for(var i=0;i<40;i++){var d=document.createElement('div');d.className='cf';d.style.left=Math.random()*100+'vw';d.style.background=colors[i%colors.length];var sz=(6+Math.random()*6).toFixed(0)+'px';d.style.width=sz;d.style.height=sz;d.style.animationDuration=(2+Math.random()*1.6)+'s';d.style.animationDelay=(Math.random()*.5)+'s';document.body.appendChild(d);(function(el){setTimeout(function(){el.remove();},4500);})(d);}toast('🎉 100% day! Mashallah — a perfect day!','bdg');}
 function chkAbuBakr(){var abi=['abu-bakr-fasting','abu-bakr-funeral','abu-bakr-fed','abu-bakr-sick'];var done=0;abi.forEach(function(id){var cb=document.getElementById(id);if(cb&&cb.checked)done++;});if(done===3){var missing=abi.find(function(id){var cb=document.getElementById(id);return!cb||!cb.checked;});var it=findIt(missing);toast('🥇 Almost there! Complete "'+it.label+'" for the Abu Bakr Challenge!');var sec=document.querySelector('[data-sec="abuBakr"]');if(sec)sec.classList.remove('shut');}}
 
-function dayKey(){return 'rs-day-'+ST.day;}
+function dayKey(){return (typeof appMode==='function'&&appMode()==='year')?'rs-yr-'+todayISO():'rs-day-'+ST.day;}
 function saveDay(){
   var cbs=document.querySelectorAll('.chk input[type="checkbox"]');
   var d={day:ST.day,ck:{},ts:Date.now(),hayd:haydOn};var done=0,tot=0;
@@ -850,10 +862,12 @@ function genPDF(){
   y+=12;doc.setFontSize(10);var ub=getUBdg();
   BADGES.forEach(function(b){if(ub[b.id]){doc.setTextColor(gr[0],gr[1],gr[2]);doc.text(b.icon+' '+b.name,M,y);y+=8;}});
   if(bdg===0){doc.setTextColor(150,150,150);doc.text('No badges unlocked yet — keep going!',M,y);y+=8;}
+  var jr=(function(){try{return JSON.parse(localStorage.getItem('rs-extras')||'{}').journal||{};}catch(e){return {};}})();var jk=Object.keys(jr).filter(function(k){return k.charAt(0)==='r'&&jr[k].t;}).sort(function(a,b){return parseInt(a.slice(1),10)-parseInt(b.slice(1),10);});
+  if(jk.length){y+=6;if(y>250){doc.addPage();y=20;}doc.setFillColor(gr[0],gr[1],gr[2]);doc.rect(M,y-6,W-2*M,10,'F');doc.setTextColor(255,255,255);doc.setFontSize(12);doc.text('REFLECTIONS',M+4,y+1);y+=12;doc.setFontSize(9);doc.setTextColor(50,50,50);jk.forEach(function(k){var lines=doc.splitTextToSize('Day '+k.slice(1)+': '+jr[k].t,W-2*M);if(y+lines.length*5>280){doc.addPage();y=20;}doc.text(lines,M,y);y+=lines.length*5+3;});}
   y+=6;if(y>270){doc.addPage();y=20;}
   doc.setDrawColor(gd[0],gd[1],gd[2]);doc.line(M,y,W-M,y);y+=8;
   doc.setFontSize(9);doc.setTextColor(gd[0],gd[1],gd[2]);doc.text('May Allah accept our fasting and deeds. Ramadan Mubarak!',W/2,y,{align:'center'});
-  y+=6;doc.setTextColor(150,150,150);doc.setFontSize(7);doc.text('Ramadan Strivers v6.0 — From Muslim to Mu\'min',W/2,y,{align:'center'});
+  y+=6;doc.setTextColor(150,150,150);doc.setFontSize(7);doc.text('Ramadan Strivers v7.0 — From Muslim to Mu\'min',W/2,y,{align:'center'});
   doc.save('Ramadan-Strivers-Report-Day-'+ST.day+'.pdf');toast('PDF report downloaded! 📄');
 }
 
@@ -947,7 +961,7 @@ function qzHome(){var g=document.getElementById('qzCats');if(!g)return;var best=
   qzShow('qzHomeV');}
 function qzStart(cat){var pool=cat==='all'?QUIZ.slice():QUIZ.filter(function(q){return q.c===cat;});
   for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
-  qz={deck:pool.slice(0,10),idx:0,score:0,cat:cat,lock:false};qzShow('qzPlayV');qzRender();}
+  qz={deck:pool.slice(0,10),idx:0,score:0,cat:cat,lock:false};qzShow('qzPlayV');qzRender();if(typeof aiQuizTransform==='function'){var myDeck=qz.deck;aiQuizTransform(myDeck).then(function(){if(qz.deck===myDeck&&qz.idx===0&&!qz.lock)qzRender();});}}
 function qzRender(){var q=qz.deck[qz.idx];
   document.getElementById('qzNum').textContent=t('questionOf').replace('{i}',qz.idx+1).replace('{n}',qz.deck.length);
   document.getElementById('qzScore').textContent=t('scoreOf').replace('{s}',qz.score);
@@ -986,92 +1000,8 @@ function applyLangStatic(){var L=LANGS.find(function(l){return l.c===ST.lang;})|
   cmpFillTypes();}
 function setLang(c){if(!I18N[c])return;saveDay();ST.lang=c;saveSt();applyLangStatic();renderCK();loadDay();updUI();updQ();qzHome();if(document.getElementById('tab-compete').classList.contains('on'))cmpRender();}
 
-/* ===== COMPETITION MODE (Firebase) =====
-   One-time setup: create a Firebase project, enable Anonymous + Email/Password auth and Firestore,
-   paste firestore.rules, then fill in this config (see README.md). Web API keys are public by design;
-   the Firestore rules are what protect the data. */
-var FB_CONFIG={apiKey:"",authDomain:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""};
-var CMP_URL='https://www.ramadanstrivers.com/';
-var CMP_TYPES=['School','University','Mosque','Community','Company','Family','Other'];
-var cmp={db:null,auth:null,unsub:null,comp:null,rows:[],ready:false,initP:null,syncT:null};
-function fbOn(){return !!(FB_CONFIG&&FB_CONFIG.apiKey);}
-function cmpState(){try{return JSON.parse(localStorage.getItem('rs-comp')||'null');}catch(e){return null;}}
-function cmpSave(s){if(s)localStorage.setItem('rs-comp',JSON.stringify(s));else localStorage.removeItem('rs-comp');}
-function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('Could not load '+src));};document.head.appendChild(s);});}
-function fbInit(){if(cmp.ready)return Promise.resolve();if(cmp.initP)return cmp.initP;
-  var base='https://www.gstatic.com/firebasejs/10.14.1/';
-  var chain=window.firebase?Promise.resolve():loadScript(base+'firebase-app-compat.js').then(function(){return loadScript(base+'firebase-auth-compat.js');}).then(function(){return loadScript(base+'firebase-firestore-compat.js');});
-  cmp.initP=chain.then(function(){if(!firebase.apps.length)firebase.initializeApp(FB_CONFIG);cmp.auth=firebase.auth();cmp.db=firebase.firestore();cmp.ready=true;});
-  return cmp.initP;}
-function fbTs(){return (window.firebase&&firebase.firestore&&firebase.firestore.FieldValue)?firebase.firestore.FieldValue.serverTimestamp():Date.now();}
-function cmpAuthAnon(){return cmp.auth.currentUser?Promise.resolve(cmp.auth.currentUser):cmp.auth.signInAnonymously().then(function(r){return r.user;});}
-function cmpCol(code){return cmp.db.collection('competitions').doc(code).collection('participants');}
-function v(id){var e=document.getElementById(id);return e?e.value:'';}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-function cmpTypeName(tp){var k={School:'typeSchool',University:'typeUniversity',Mosque:'typeMosque',Community:'typeCommunity',Company:'typeCompany',Family:'typeFamily',Other:'typeOther'}[tp];return k?t(k):tp;}
-function cmpFillTypes(){var sel=document.getElementById('coType');if(!sel)return;var cur=sel.value;sel.innerHTML=CMP_TYPES.map(function(x){return '<option value="'+x+'">'+cmpTypeName(x)+'</option>';}).join('');if(cur)sel.value=cur;
-  var pz=document.getElementById('coPrizes');if(pz&&!pz.children.length){var h='';for(var i=1;i<=10;i++)h+='<div class="prz-row"><span>#'+i+'</span><input class="cmp-in" id="coP'+i+'" maxlength="80" placeholder="'+esc(t('prize'))+' #'+i+'"></div>';pz.innerHTML=h;}}
-function cmpShow(id){['cmpSetupV','cmpHomeV','cmpPartV','cmpOrgV','cmpLoadV'].forEach(function(x){var el=document.getElementById(x);if(el)el.style.display=x===id?'block':'none';});}
-function cmpBoot(){var m=location.search.match(/[?&]join=([A-Za-z0-9]{4,8})/);if(m&&!cmpState()){var i=document.getElementById('cjCode');if(i)i.value=m[1].toUpperCase();goTab('compete');}}
-function cmpRender(){if(!fbOn()){cmpShow('cmpSetupV');return;}var s=cmpState();if(!s){cmpShow('cmpHomeV');cmpFillTypes();return;}
-  cmpShow('cmpLoadV');
-  fbInit().then(function(){if(s.role==='participant')return cmpAuthAnon().then(function(){return cmpOpenPart(s);});return cmpOpenOrg(s);})
-  .catch(function(e){console.error(e);toast('⚠️ '+(e.message||e));cmpShow('cmpHomeV');});}
-function cmpWatch(code){if(cmp.unsub){cmp.unsub();cmp.unsub=null;}
-  cmp.unsub=cmpCol(code).orderBy('totalPts','desc').limit(500).onSnapshot(function(q){cmp.rows=[];q.forEach(function(x){cmp.rows.push(Object.assign({uid:x.id},x.data()));});cmpRenderBoard();},function(e){console.error(e);});}
-function cmpMedal(i){return i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1);}
-function cmpRenderBoard(){var s=cmpState();if(!s)return;var isOrg=s.role==='organiser';var el=document.getElementById(isOrg?'cmpOrgBoard':'cmpBoard');if(!el)return;
-  var me=cmp.auth&&cmp.auth.currentUser?cmp.auth.currentUser.uid:null;var prizes=(cmp.comp&&cmp.comp.prizes)||[];
-  if(!cmp.rows.length){el.innerHTML='<p style="color:var(--text3);font-size:.84em;text-align:center;padding:14px 0">'+t('noParticipants')+'</p>';}
-  else el.innerHTML=cmp.rows.map(function(r,i){var pr=i<10&&prizes[i]?'<span class="lb-prize">🎁 '+esc(prizes[i])+'</span>':'';
-    return '<div class="lb-row'+(r.uid===me?' me':'')+'"><div class="lb-rank'+(i<3?' top':'')+'">'+cmpMedal(i)+'</div><div class="lb-name"><strong>'+esc(r.name)+'</strong>'+(r.group?'<small>'+esc(r.group)+'</small>':'')+pr+'</div><div class="lb-pts">'+(r.totalPts||0)+' <small>'+(r.daysLogged||0)+' '+t('days')+' · '+(r.avgPct||0)+'% · 📖'+(r.quranPages||0)+'</small></div>'+(isOrg?'<button class="lb-x" onclick="cmpRemove(\''+r.uid+'\')">✕</button>':'')+'</div>';}).join('');
-  if(!isOrg){var mr=document.getElementById('cmpMyRank');var idx=cmp.rows.findIndex(function(r){return r.uid===me;});var a=cmpAgg();
-    mr.innerHTML='<div class="cmp-myrank"><div><div class="rk">'+(idx>=0?'#'+(idx+1):'—')+'</div><div class="rl">'+t('myRank')+'</div></div><div class="rp"><strong>'+a.totalPts+' '+t('points')+'</strong> · '+a.daysLogged+' '+t('days')+' · '+a.avgPct+'% · 📖 '+a.quranPages+(idx>=0&&idx<10&&prizes[idx]?'<br><span style="color:#fbbf24">🎁 '+esc(prizes[idx])+'</span>':'')+'</div></div>';}
-  else{var st=document.getElementById('cmpOrgStats');if(st){var n=cmp.rows.length,sum=0;cmp.rows.forEach(function(r){sum+=r.totalPts||0;});st.innerHTML='<div class="cmp-stat"><b>'+n+'</b><small>'+t('participants')+'</small></div><div class="cmp-stat"><b>'+(n?Math.round(sum/n):0)+'</b><small>'+t('avgPct').replace('%','')+' '+t('points')+'</small></div><div class="cmp-stat"><b>'+(cmp.rows[0]?cmp.rows[0].totalPts:0)+'</b><small>🥇 '+t('points')+'</small></div>';}}}
-function cmpHeadHTML(){var c=cmp.comp;return '<div class="scard"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="border:none;margin:0;padding:0;flex:1">'+esc(c.name)+'</h3><span class="cmp-badge">'+cmpTypeName(c.type)+'</span>'+(c.open===false?'<span class="cmp-badge" style="background:rgba(220,38,38,.12);color:var(--error)">'+t('closedLbl')+'</span>':'')+'</div>'+(c.open===false?'<div class="cmp-closed" style="margin-top:10px">'+t('cmpClosed')+'</div>':'')+'<p style="font-size:.78em;color:var(--text3);margin:8px 0 2px">'+t('shareCode')+'</p><div class="cmp-code">'+esc(c.code)+'</div><div class="cmp-row"><button class="btn btn-ol" onclick="cmpCopy()">📋 '+t('copy')+'</button><button class="btn btn-ol" onclick="cmpShare()">📤 '+t('share')+'</button></div>';}
-function cmpOpenPart(s){return cmp.db.collection('competitions').doc(s.code).get().then(function(d){if(!d.exists){cmpSave(null);toast(t('notFound'));cmpShow('cmpHomeV');return;}
-  cmp.comp=Object.assign({code:s.code},d.data());cmpShow('cmpPartV');
-  document.getElementById('cmpPartHead').innerHTML=cmpHeadHTML()+'<p class="cmp-sync" id="cmpSyncLbl" style="margin-top:8px;text-align:center">'+t('notSynced')+'</p></div>';
-  cmpWatch(s.code);cmpSync(true);});}
-function cmpOpenOrg(s){return new Promise(function(res,rej){var done=false;var un=cmp.auth.onAuthStateChanged(function(u){if(done)return;done=true;un();
-  if(!u||u.isAnonymous){cmpSave(null);cmpShow('cmpHomeV');res();return;}
-  cmp.db.collection('competitions').doc(s.code).get().then(function(d){if(!d.exists||d.data().ownerUid!==u.uid){cmpSave(null);cmpShow('cmpHomeV');res();return;}
-    cmp.comp=Object.assign({code:s.code},d.data());cmpShow('cmpOrgV');
-    document.getElementById('cmpOrgHead').innerHTML=cmpHeadHTML()+'<p class="cmp-sync" style="margin-top:8px;text-align:center">'+t('orgDash')+' · '+esc(cmp.comp.ownerEmail||'')+'</p></div><div class="cmp-stats" id="cmpOrgStats"></div>';
-    var pz=document.getElementById('cmpOrgPrizes');var pr=cmp.comp.prizes||[];var h='';for(var i=0;i<10;i++)h+='<div class="prz-row"><span>#'+(i+1)+'</span><input class="cmp-in" id="opP'+i+'" maxlength="80" value="'+esc(pr[i]||'')+'" placeholder="'+esc(t('prize'))+' #'+(i+1)+'"></div>';pz.innerHTML=h;
-    cmpWatch(s.code);res();}).catch(rej);});});}
-function cmpAgg(){var tp=0,dl=0,sp=0,qp=0,last=0;for(var d=1;d<=30;d++){var x=getDay(d);if(x&&x.done>0){dl++;tp+=x.pts||0;sp+=x.pct||0;last=d;}if(qPages[d])qp+=qPages[d];}return{totalPts:tp,daysLogged:dl,avgPct:dl?Math.round(sp/dl):0,quranPages:qp,lastDay:last};}
-function cmpSetSync(k){var el=document.getElementById('cmpSyncLbl');if(el)el.textContent=(k==='synced'?'✅ ':k==='syncing'?'⏳ ':'⚠️ ')+t(k);}
-function cmpSync(now){var s=cmpState();if(!s||s.role!=='participant'||!fbOn())return;if(cmp.comp&&cmp.comp.open===false)return;clearTimeout(cmp.syncT);
-  cmp.syncT=setTimeout(function(){cmpSetSync('syncing');fbInit().then(cmpAuthAnon).then(function(u){var a=cmpAgg();a.name=s.name;a.group=s.group||'';a.updatedAt=fbTs();return cmpCol(s.code).doc(u.uid).set(a,{merge:true});}).then(function(){cmpSetSync('synced');}).catch(function(e){console.error(e);cmpSetSync('notSynced');});},now?0:1500);}
-function cmpJoin(){var code=(v('cjCode')||'').toUpperCase().trim(),name=(v('cjName')||'').trim(),group=(v('cjGroup')||'').trim();if(!code||!name){toast(t('enterAll'));return;}
-  cmpShow('cmpLoadV');fbInit().then(cmpAuthAnon).then(function(){return cmp.db.collection('competitions').doc(code).get();}).then(function(d){if(!d.exists)throw new Error(t('notFound'));if(d.data().open===false)throw new Error(t('cmpClosed'));cmpSave({role:'participant',code:code,name:name,group:group});toast(t('joined'));cmpRender();})
-  .catch(function(e){toast('⚠️ '+(e.message||e));cmpShow('cmpHomeV');});}
-function cmpNewCode(){var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='';for(var i=0;i<6;i++)c+=A[Math.floor(Math.random()*A.length)];return cmp.db.collection('competitions').doc(c).get().then(function(d){return d.exists?cmpNewCode():c;});}
-function cmpCreate(){var name=(v('coName')||'').trim(),type=v('coType')||'Other',email=(v('coEmail')||'').trim(),pass=v('coPass')||'';if(!name||!email||pass.length<6){toast(t('enterAll'));return;}
-  var prizes=[];for(var i=1;i<=10;i++)prizes.push((v('coP'+i)||'').trim());
-  cmpShow('cmpLoadV');fbInit().then(function(){if(cmp.auth.currentUser&&cmp.auth.currentUser.isAnonymous)return cmp.auth.signOut();}).then(function(){return cmp.auth.createUserWithEmailAndPassword(email,pass).catch(function(e){if(e.code==='auth/email-already-in-use')return cmp.auth.signInWithEmailAndPassword(email,pass);throw e;});})
-  .then(function(r){var u=r.user;return cmpNewCode().then(function(code){var doc={name:name,type:type,ownerUid:u.uid,ownerEmail:email,prizes:prizes,open:true,createdAt:fbTs()};return cmp.db.collection('competitions').doc(code).set(doc).then(function(){cmpSave({role:'organiser',code:code});toast(t('created'));cmpRender();});});})
-  .catch(function(e){toast('⚠️ '+(e.message||e));cmpShow('cmpHomeV');});}
-function cmpLogin(){var email=(v('clEmail')||'').trim(),pass=v('clPass')||'';if(!email||!pass){toast(t('enterAll'));return;}
-  cmpShow('cmpLoadV');fbInit().then(function(){return cmp.auth.signInWithEmailAndPassword(email,pass);}).then(function(r){return cmp.db.collection('competitions').where('ownerUid','==',r.user.uid).get();})
-  .then(function(q){var list=[];q.forEach(function(d){list.push(Object.assign({code:d.id},d.data()));});if(!list.length){toast(t('notFound'));cmpShow('cmpHomeV');return;}if(list.length===1){cmpSave({role:'organiser',code:list[0].code});cmpRender();return;}
-    cmpShow('cmpHomeV');document.getElementById('cmpPickV').innerHTML='<div class="scard"><h3>'+t('yourCompetitions')+'</h3>'+list.map(function(c){return '<button class="pick-btn" onclick="cmpPick(\''+c.code+'\')"><strong>'+esc(c.name)+'</strong> · '+esc(c.code)+(c.open===false?' · '+t('closedLbl'):'')+'</button>';}).join('')+'</div>';})
-  .catch(function(e){toast('⚠️ '+(e.message||e));cmpShow('cmpHomeV');});}
-function cmpPick(code){cmpSave({role:'organiser',code:code});document.getElementById('cmpPickV').innerHTML='';cmpRender();}
-function cmpSavePrizes(){var prizes=[];for(var i=0;i<10;i++)prizes.push((v('opP'+i)||'').trim());cmp.db.collection('competitions').doc(cmp.comp.code).update({prizes:prizes}).then(function(){cmp.comp.prizes=prizes;cmpRenderBoard();toast('✅ '+t('savePrizes'));}).catch(function(e){toast('⚠️ '+e.message);});}
-function cmpRemove(uid){if(!confirm(t('removeConfirm')))return;cmpCol(cmp.comp.code).doc(uid).delete().catch(function(e){toast('⚠️ '+e.message);});}
-function cmpClose(){if(!confirm(t('closeConfirm')))return;cmp.db.collection('competitions').doc(cmp.comp.code).update({open:false}).then(function(){cmp.comp.open=false;cmpRender();}).catch(function(e){toast('⚠️ '+e.message);});}
-function cmpLeave(){if(!confirm(t('leaveConfirm')))return;var s=cmpState();var u=cmp.auth&&cmp.auth.currentUser;if(cmp.unsub){cmp.unsub();cmp.unsub=null;}
-  (u&&s?cmpCol(s.code).doc(u.uid).delete().catch(function(){}):Promise.resolve()).then(function(){cmpSave(null);cmp.comp=null;cmp.rows=[];cmpRender();});}
-function cmpLogout(){if(cmp.unsub){cmp.unsub();cmp.unsub=null;}cmp.auth.signOut().then(function(){cmpSave(null);cmp.comp=null;cmp.rows=[];cmpRender();});}
-function cmpInvite(){return t('inviteText').replace('{code}',cmp.comp.code).replace('{url}',CMP_URL+'?join='+cmp.comp.code);}
-function cmpCopy(){var txt=cmpInvite();(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){toast(t('copied'));}).catch(function(){prompt(t('copy'),txt);});}
-function cmpShare(){var txt=cmpInvite();if(navigator.share){navigator.share({title:'Ramadan Strivers',text:txt,url:CMP_URL+'?join='+cmp.comp.code}).catch(function(){});}else cmpCopy();}
-function cmpExportCSV(){var rows=[['Rank','Name','Group','Points','Days','Avg %','Quran pages']].concat(cmp.rows.map(function(r,i){return [i+1,r.name,r.group||'',r.totalPts||0,r.daysLogged||0,r.avgPct||0,r.quranPages||0];}));
-  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');var b=new Blob(['﻿'+csv],{type:'text/csv'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='ramadan-competition-'+cmp.comp.code+'.csv';a.click();URL.revokeObjectURL(u);}
-
-function regSW(){if('serviceWorker' in navigator){var code="var C='rs-v8';self.addEventListener('install',function(e){self.skipWaiting();});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).catch(function(){return new Response('Offline');});}));});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(n){return Promise.all(n.filter(function(x){return x!==C;}).map(function(x){return caches.delete(x);}));}));});";try{navigator.serviceWorker.register(URL.createObjectURL(new Blob([code],{type:'application/javascript'})));}catch(e){}}}
+function regSW(){if(!('serviceWorker' in navigator))return;if(location.protocol==='file:')return;navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(e){console.warn('SW registration failed',e);});}
 </script>
+<script src="cloud.js"></script>
 </body>
 </html>
