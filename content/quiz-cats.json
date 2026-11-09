@@ -40,6 +40,16 @@
   "name": "Ramadan in history"
  },
  {
+  "id": "prep",
+  "icon": "calendar-check",
+  "name": "Preparing for Ramadan"
+ },
+ {
+  "id": "duas",
+  "icon": "scroll-text",
+  "name": "Duas and dhikr"
+ },
+ {
   "id": "eid",
   "icon": "gift",
   "name": "Eid"

@@ -125,9 +125,9 @@
   "q": "Praying Isha and Fajr in congregation carries the reward of standing the entire night in prayer.",
   "a": true,
   "x": "Isha in congregation = half the night; adding Fajr in congregation = the whole night.",
-  "ref": "Muslim 656",
-  "url": "https://sunnah.com/muslim:656",
-  "grade": "Sahih (Muslim)"
+  "ref": "Abu Dawud 555",
+  "url": "https://sunnah.com/abudawud:555",
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf014",
@@ -135,8 +135,8 @@
   "q": "The two Sunnah rakahs before Fajr are better than the world and everything in it.",
   "a": true,
   "x": "Two short rakahs outweigh the entire dunya — never skip them.",
-  "ref": "Muslim 724",
-  "url": "https://sunnah.com/muslim:724",
+  "ref": "Muslim 725",
+  "url": "https://sunnah.com/muslim:725",
   "grade": "Sahih (Muslim)"
  },
  {
@@ -147,17 +147,17 @@
   "x": "This is the promise behind Tarawih and night prayer in Ramadan.",
   "ref": "Bukhari 37",
   "url": "https://sunnah.com/bukhari:37",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf016",
   "cat": "salah",
-  "q": "Witr prayer must always be exactly five rakahs.",
-  "a": false,
-  "x": "Witr can be prayed as 1 or 3 rakahs — make it your last prayer of the night.",
+  "q": "The Prophet ﷺ told us to make witr the last prayer of the night.",
+  "a": true,
+  "x": "He ﷺ said: Make witr your last prayer at night. Let it close your night of worship.",
   "ref": "Bukhari 998",
   "url": "https://sunnah.com/bukhari:998",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf017",
@@ -187,14 +187,14 @@
   "x": "It is the LAST third of the night — the most blessed time for dua and tahajjud.",
   "ref": "Bukhari 1145",
   "url": "https://sunnah.com/bukhari:1145",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf020",
   "cat": "salah",
   "q": "Duha prayer counts as charity for every joint in your body.",
   "a": true,
-  "x": "A short mid-morning prayer that pays the daily sadaqah owed by your 360 joints.",
+  "x": "Each morning charity is due on every joint of your body, and two rakahs of Duha suffice for it all.",
   "ref": "Muslim 720",
   "url": "https://sunnah.com/muslim:720",
   "grade": "Sahih (Muslim)"
@@ -204,19 +204,19 @@
   "cat": "salah",
   "q": "Praying twelve Sunnah rakahs daily earns you a house in Jannah.",
   "a": true,
-  "x": "The regular Sunnah prayers around the five obligatory ones build you a home in Paradise.",
-  "ref": "Tirmidhi 428",
-  "url": "https://sunnah.com/tirmidhi:428",
-  "grade": ""
+  "x": "Pray twelve voluntary rakahs each day besides the obligatory prayers, and Allah will build you a house in Paradise.",
+  "ref": "Muslim 728",
+  "url": "https://sunnah.com/muslim:728",
+  "grade": "Sahih (Muslim)"
  },
  {
   "id": "tf022",
   "cat": "salah",
-  "q": "The night adhkar before sleep include Ayatul Kursi and the last two ayat of Surah al-Baqarah.",
+  "q": "Reciting Ayatul Kursi when going to bed brings a guard from Allah through the night.",
   "a": true,
-  "x": "Prophetic protection through the night until you wake.",
-  "ref": "Bukhari 6320",
-  "url": "https://sunnah.com/bukhari:6320",
+  "x": "The Prophet ﷺ confirmed it: a guard from Allah stays with you, and Satan will not come near you until morning.",
+  "ref": "Bukhari 5010",
+  "url": "https://sunnah.com/bukhari:5010",
   "grade": "Sahih (Bukhari)"
  },
  {
@@ -225,9 +225,9 @@
   "q": "The Prophet ﷺ enjoyed long conversations after Isha.",
   "a": false,
   "x": "He disliked talking after Isha — sleep early and protect your Fajr.",
-  "ref": "Abu Dawud 4723",
-  "url": "https://sunnah.com/abudawud:4723",
-  "grade": ""
+  "ref": "Bukhari 568",
+  "url": "https://sunnah.com/bukhari:568",
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf024",
@@ -237,7 +237,7 @@
   "x": "The most beloved deeds to Allah are the most CONSISTENT, even if small.",
   "ref": "Bukhari 6464",
   "url": "https://sunnah.com/bukhari:6464",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf025",
@@ -247,17 +247,17 @@
   "x": "That is why Ramadan is called the month of the Quran.",
   "ref": "Quran 2:185",
   "url": "https://quran.com/2/185",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf026",
   "cat": "quran",
-  "q": "On the Day of Resurrection, fasting and the Quran will both intercede for the servant.",
+  "q": "On the Day of Resurrection, the Quran will come as an intercessor for those who recite it.",
   "a": true,
-  "x": "Two companions of Ramadan standing up for you when you need them most.",
-  "ref": "Ahmad 6626",
-  "url": "",
-  "grade": ""
+  "x": "The Prophet ﷺ said: Recite the Quran, for it will come as an intercessor for its companions. Be one of its companions this Ramadan.",
+  "ref": "Muslim 804",
+  "url": "https://sunnah.com/muslim:804",
+  "grade": "Sahih (Muslim)"
  },
  {
   "id": "tf027",
@@ -265,14 +265,14 @@
   "q": "The one who recites the Quran skillfully will be with the noble scribes (angels).",
   "a": true,
   "x": "And the one who struggles while reciting receives DOUBLE reward — so keep reading either way.",
-  "ref": "Bukhari 4937",
-  "url": "https://sunnah.com/bukhari:4937",
-  "grade": "Sahih (Bukhari)"
+  "ref": "Muslim 798",
+  "url": "https://sunnah.com/muslim:798",
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf028",
   "cat": "quran",
-  "q": "The standard mushaf of the Quran has 604 pages.",
+  "q": "The widely used Madinah mushaf of the Quran has 604 pages.",
   "a": true,
   "x": "That's why this app tracks 604 pages — about 20 pages a day completes it in 30 days.",
   "ref": "",
@@ -297,7 +297,7 @@
   "x": "Even listening to recitation is a rewarded act of worship.",
   "ref": "Quran 7:204",
   "url": "https://quran.com/7/204",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf031",
@@ -307,24 +307,24 @@
   "x": "Tadabbur is deep REFLECTION on the meaning — pondering transforms the heart and guides action.",
   "ref": "Quran 38:29",
   "url": "https://quran.com/38/29",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf032",
   "cat": "quran",
   "q": "Jibreel would review the Quran with the Prophet ﷺ every Ramadan.",
   "a": true,
-  "x": "And in his final year, they reviewed it twice — revise your Quran in Ramadan.",
+  "x": "Jibreel met him every night of Ramadan to study the Quran together — revise your Quran in Ramadan.",
   "ref": "Bukhari 6",
   "url": "https://sunnah.com/bukhari:6",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf033",
   "cat": "quran",
   "q": "The Quran is divided into 40 juz.",
   "a": false,
-  "x": "The Quran has 30 juz — reading one juz a day completes it exactly in Ramadan.",
+  "x": "The Quran has 30 juz — reading about one juz a day completes it in Ramadan.",
   "ref": "",
   "url": "",
   "grade": ""
@@ -337,7 +337,7 @@
   "x": "Knowledge without action is incomplete — apply a lesson from today's reading.",
   "ref": "Quran 2:44",
   "url": "https://quran.com/2/44",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf035",
@@ -347,7 +347,7 @@
   "x": "The very first hadith of Sahih al-Bukhari — every deed takes its value from the heart.",
   "ref": "Bukhari 1",
   "url": "https://sunnah.com/bukhari:1",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf036",
@@ -357,17 +357,17 @@
   "x": "The strong is the one who CONTROLS HIMSELF when angry.",
   "ref": "Bukhari 6114",
   "url": "https://sunnah.com/bukhari:6114",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf037",
   "cat": "character",
   "q": "Nothing is heavier on the Scale on the Day of Judgment than good character.",
   "a": true,
-  "x": "Gentleness and good character outweigh mountains of other deeds.",
-  "ref": "Tirmidhi 2003",
+  "x": "The Prophet ﷺ said this of the believer's Scale, and added that Allah hates the obscene, foul-mouthed person.",
+  "ref": "Tirmidhi 2002",
   "url": "https://sunnah.com/tirmidhi:2003",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf038",
@@ -377,7 +377,7 @@
   "x": "Would one of you like to eat the flesh of his dead brother? You would detest it.",
   "ref": "Quran 49:12",
   "url": "https://quran.com/49/12",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf039",
@@ -392,10 +392,10 @@
  {
   "id": "tf040",
   "cat": "character",
-  "q": "When you make dua for someone in their absence, an angel says: 'Amin, and for you the same.'",
+  "q": "When you make dua for your brother or sister in Islam in their absence, an angel says: 'Amin, and for you the same.'",
   "a": true,
-  "x": "The fastest way to get your own dua answered — pray for your brother or sister first.",
-  "ref": "Muslim 2733",
+  "x": "The Prophet ﷺ said such a dua is answered, and the angel appointed to the one praying says this whenever he asks good for his brother.",
+  "ref": "Muslim 2732",
   "url": "https://sunnah.com/muslim:2733",
   "grade": "Sahih (Muslim)"
  },
@@ -404,10 +404,10 @@
   "cat": "character",
   "q": "Whoever believes in Allah and the Last Day should speak good or remain silent.",
   "a": true,
-  "x": "Guarding the tongue is half of good character.",
+  "x": "In the same hadith the Prophet ﷺ told believers not to harm their neighbours and to honour their guests.",
   "ref": "Bukhari 6018",
   "url": "https://sunnah.com/bukhari:6018",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf042",
@@ -427,24 +427,24 @@
   "x": "Character starts at home — with the people who see you every day.",
   "ref": "Tirmidhi 3895",
   "url": "https://sunnah.com/tirmidhi:3895",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf044",
   "cat": "character",
-  "q": "Good character can bring the same reward as one who fasts all day and prays all night.",
+  "q": "Through good character, a believer can reach the rank of one who fasts by day and prays at night.",
   "a": true,
-  "x": "A believer reaches the rank of the constant worshipper through good character alone.",
+  "x": "The Prophet ﷺ said a believer, by his good character, attains the rank of the one who fasts and stands in prayer.",
   "ref": "Abu Dawud 4798",
   "url": "https://sunnah.com/abudawud:4798",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf045",
   "cat": "character",
   "q": "Allah extends His hand at night to accept the repentance of those who sinned during the day.",
   "a": true,
-  "x": "And by day for those who sinned at night — the door of tawbah never closes.",
+  "x": "And by day for those who sinned at night, until the sun rises from the west.",
   "ref": "Muslim 2759",
   "url": "https://sunnah.com/muslim:2759",
   "grade": "Sahih (Muslim)"
@@ -457,14 +457,14 @@
   "x": "He was the most generous of people — and even more so in Ramadan when Jibreel met him.",
   "ref": "Bukhari 6",
   "url": "https://sunnah.com/bukhari:6",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf047",
   "cat": "charity",
   "q": "Giving charity decreases your wealth.",
   "a": false,
-  "x": "Charity does NOT decrease wealth — Allah replaces and blesses what you give.",
+  "x": "Charity does NOT decrease wealth, and Allah says whatever you spend, He will replace it (Quran 34:39).",
   "ref": "Muslim 2588",
   "url": "https://sunnah.com/muslim:2588",
   "grade": "Sahih (Muslim)"
@@ -472,19 +472,19 @@
  {
   "id": "tf048",
   "cat": "charity",
-  "q": "The best charity is that given in Ramadan.",
+  "q": "The Prophet ﷺ said charity extinguishes sin just as water extinguishes fire.",
   "a": true,
-  "x": "Every deed is multiplied in this month — including your sadaqah.",
-  "ref": "Tirmidhi 663",
+  "x": "He listed it among the doors of good, along with fasting, which is a shield, and prayer in the depth of the night.",
+  "ref": "Tirmidhi 2616",
   "url": "https://sunnah.com/tirmidhi:663",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf049",
   "cat": "charity",
-  "q": "Whoever visits a sick person remains in the 'harvest of Paradise.'",
+  "q": "Whoever visits a sick person remains in the 'harvest of Paradise' until he returns.",
   "a": true,
-  "x": "A visit, a call, or even a supportive message counts.",
+  "x": "Asked what the harvest of Paradise is, the Prophet ﷺ said: its gathered fruit.",
   "ref": "Muslim 2568",
   "url": "https://sunnah.com/muslim:2568",
   "grade": "Sahih (Muslim)"
@@ -514,8 +514,8 @@
   "cat": "charity",
   "q": "Whoever maintains family ties, Allah maintains ties with him.",
   "a": true,
-  "x": "A message or a visit to reconnect kinship draws Allah's connection to you.",
-  "ref": "Muslim 2557",
+  "x": "The Prophet ﷺ said the tie of kinship hangs from the Throne and says: whoever joins me, Allah joins him, and whoever cuts me off, Allah cuts him off.",
+  "ref": "Muslim 2555",
   "url": "https://sunnah.com/muslim:2557",
   "grade": "Sahih (Muslim)"
  },
@@ -527,17 +527,17 @@
   "x": "Hidden charity is praised — giving so secretly that the left hand does not know what the right hand gives.",
   "ref": "Bukhari 1423",
   "url": "https://sunnah.com/bukhari:1423",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf054",
   "cat": "charity",
-  "q": "Feeding a poor person only counts if it is a full meal.",
+  "q": "Giving food in charity only counts if it is a full meal.",
   "a": false,
-  "x": "Even a small meal or a single date counts with Allah.",
-  "ref": "Muslim 1028",
+  "x": "The Prophet ﷺ said: Save yourselves from the Fire, even by giving half a date in charity.",
+  "ref": "Bukhari 1417",
   "url": "https://sunnah.com/muslim:1028",
-  "grade": "Sahih (Muslim)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf055",
@@ -1078,16 +1078,6 @@
   "ref": "Quran 47:24",
   "url": "https://quran.com/47/24",
   "grade": "Quran"
- },
- {
-  "id": "tf-give-01",
-  "cat": "charity",
-  "q": "Ibn Abbas (RA) said that in Ramadan the Prophet ﷺ was more generous with good than the free-blowing wind.",
-  "a": true,
-  "x": "Ibn Abbas (RA) said the Prophet ﷺ was the most generous of people, and in Ramadan, when Jibreel met him every night to study the Quran, he was more generous with good than the free-blowing wind (Sahih al-Bukhari).",
-  "ref": "Bukhari 6",
-  "url": "https://sunnah.com/bukhari:6",
-  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf-give-02",

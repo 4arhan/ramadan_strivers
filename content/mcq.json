@@ -510,5 +510,485 @@
   "ref": "Bukhari 2029",
   "url": "https://sunnah.com/bukhari:2029",
   "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-01",
+  "cat": "charity",
+  "q": "Complete the hadith: 'Save yourself from the Fire, even by giving half of a ... in charity.'",
+  "o": [
+   "loaf of bread",
+   "date",
+   "cup of milk",
+   "silver coin"
+  ],
+  "correct": 1,
+  "x": "Adi ibn Hatim heard the Prophet ﷺ say this. No charity is too small: even half a date given in charity can help protect you from the Fire.",
+  "ref": "Bukhari 1417",
+  "url": "https://sunnah.com/bukhari:1417",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-02",
+  "cat": "charity",
+  "q": "The Prophet ﷺ said: 'The upper hand is better than the lower hand.' Which is the upper hand?",
+  "o": [
+   "The hand that asks",
+   "The right hand",
+   "The hand that gives",
+   "The hand raised in dua"
+  ],
+  "correct": 2,
+  "x": "Ibn Umar heard him say this on the pulpit while speaking about charity and not begging: the upper hand is the one that gives, and the lower hand is the one that asks.",
+  "ref": "Bukhari 1429",
+  "url": "https://sunnah.com/bukhari:1429",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-03",
+  "cat": "charity",
+  "q": "A man asked the Prophet ﷺ which charity carries the greatest reward. What did he answer?",
+  "o": [
+   "Giving while healthy and fearing poverty",
+   "A large gift left in a will at death",
+   "Giving only once you are rich",
+   "Giving only in public"
+  ],
+  "correct": 0,
+  "x": "Give while you are healthy, keen to keep your wealth, fearing poverty and hoping to be rich. Do not delay until death approaches and then say: give this much to so-and-so.",
+  "ref": "Bukhari 1419",
+  "url": "https://sunnah.com/bukhari:1419",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-04",
+  "cat": "charity",
+  "q": "Of a dinar spent in Allah's path, on freeing a slave, on a needy person or on your family, which did the Prophet ﷺ say has the greatest reward?",
+  "o": [
+   "The one spent in Allah's path",
+   "The one spent freeing a slave",
+   "The one given to a needy person",
+   "The one spent on your family"
+  ],
+  "correct": 3,
+  "x": "Abu Hurairah reported that of these four, the dinar with the greatest reward is the one you spend on your family. Providing for your family is itself a rewarded deed.",
+  "ref": "Muslim 995",
+  "url": "https://sunnah.com/muslim:995",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-b-05",
+  "cat": "charity",
+  "q": "When 'Never will you attain righteousness until you spend from that which you love' (3:92) was revealed, what did Abu Talhah give in charity?",
+  "o": [
+   "His herd of camels",
+   "His best horse",
+   "His garden Bayruha",
+   "His sword and shield"
+  ],
+  "correct": 2,
+  "x": "Bayruha, facing the Prophet's mosque, was the property Abu Talhah loved most. He gave it for Allah's sake, and on the advice of the Prophet ﷺ he divided it among his relatives.",
+  "ref": "Bukhari 1461",
+  "url": "https://sunnah.com/bukhari:1461",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-06",
+  "cat": "eid",
+  "q": "Nu'man ibn Bashir reported which two surahs the Prophet ﷺ recited in the two Eid prayers and the Friday prayer. Which were they?",
+  "o": [
+   "Al-Kahf and Maryam",
+   "Yasin and ar-Rahman",
+   "Al-Mulk and al-Waqi'ah",
+   "Al-A'la and al-Ghashiyah"
+  ],
+  "correct": 3,
+  "x": "He recited al-A'la and al-Ghashiyah in both Eid prayers and in the Friday prayer. Abu Waqid al-Laythi also reported him reciting Qaf and al-Qamar on Eid (Muslim 891).",
+  "ref": "Muslim 878",
+  "url": "https://sunnah.com/muslim:878",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-b-07",
+  "cat": "eid",
+  "q": "Umm Atiyyah said women, even those menstruating, were told to come out on Eid day. What did they do there?",
+  "o": [
+   "Said takbir and made dua with the people",
+   "Led their own separate prayer",
+   "Cooked the Eid meal for everyone",
+   "Collected the zakat al-fitr"
+  ],
+  "correct": 0,
+  "x": "They stayed behind the people, saying takbir and supplicating with them, hoping for the blessing and purification of that day. Menstruating women kept away from the prayer area (Bukhari 974).",
+  "ref": "Bukhari 971",
+  "url": "https://sunnah.com/bukhari:971",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-08",
+  "cat": "eid",
+  "q": "After the Eid al-Fitr prayer, the Prophet ﷺ went to the women with Bilal and told them to give charity. What did they give?",
+  "o": [
+   "Sacks of dates and barley",
+   "Their new Eid clothes",
+   "Their earrings and necklaces",
+   "Camels and sheep"
+  ],
+  "correct": 2,
+  "x": "Ibn Abbas reports that after praying two rak'ahs on the day of Fitr, the Prophet ﷺ went to the women with Bilal and ordered charity, and they began giving their earrings and necklaces.",
+  "ref": "Bukhari 964",
+  "url": "https://sunnah.com/bukhari:964",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-09",
+  "cat": "eid",
+  "q": "On Eid al-Adha, what did the Prophet ﷺ say is the first thing we do on this day?",
+  "o": [
+   "Slaughter the sacrifice",
+   "Pray, then return and sacrifice",
+   "Eat dates before going out",
+   "Visit relatives"
+  ],
+  "correct": 1,
+  "x": "Al-Bara heard him say in his khutbah: the first thing we do on this day is pray, then we return and sacrifice; whoever does that has followed our Sunnah. Eating dates before going out is for Eid al-Fitr (Bukhari 953).",
+  "ref": "Bukhari 951",
+  "url": "https://sunnah.com/bukhari:951",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-10",
+  "cat": "eid",
+  "q": "How much zakat al-fitr in dates or barley did the Prophet ﷺ make due for each Muslim?",
+  "o": [
+   "One sa'",
+   "One mudd",
+   "A handful",
+   "Ten dates"
+  ],
+  "correct": 0,
+  "x": "Ibn Umar reports he made it one sa' (a measure of volume) of dates or barley for every Muslim, slave or free, male or female, young or old, paid before the Eid prayer.",
+  "ref": "Bukhari 1503",
+  "url": "https://sunnah.com/bukhari:1503",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-11",
+  "cat": "history",
+  "q": "After the first revelation in the cave of Hira, the Prophet ﷺ came home with his heart trembling. Who comforted him, saying Allah would never disgrace him?",
+  "o": [
+   "Abu Bakr",
+   "Aishah",
+   "Khadijah",
+   "Abu Talib"
+  ],
+  "correct": 2,
+  "x": "Aishah narrates that Khadijah told him Allah would never disgrace him, for he kept ties with his relatives, helped the weak and the poor, honoured guests and helped people in hardship.",
+  "ref": "Bukhari 3",
+  "url": "https://sunnah.com/bukhari:3",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-12",
+  "cat": "history",
+  "q": "Before fasting Ramadan was prescribed, the Prophet ﷺ fasted and told others to fast on which day?",
+  "o": [
+   "The Day of Arafah",
+   "The day of Ashura",
+   "Every Monday",
+   "The first day of Rajab"
+  ],
+  "correct": 1,
+  "x": "Aishah said he fasted Ashura and, in Madinah, ordered others to fast it too. When fasting the month of Ramadan was prescribed, fasting Ashura became optional.",
+  "ref": "Bukhari 2002",
+  "url": "https://sunnah.com/bukhari:2002",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-13",
+  "cat": "history",
+  "q": "In the early days of fasting, what happened if a Companion fell asleep at night before eating?",
+  "o": [
+   "He had to make up the fast",
+   "He could eat once he woke up",
+   "He had to feed a poor person",
+   "He could not eat until the next sunset"
+  ],
+  "correct": 3,
+  "x": "Al-Bara reported that Qais ibn Sirmah fell asleep before eating and fainted the next day. Then Allah revealed part of 2:187, allowing them to eat and drink through the night.",
+  "ref": "Bukhari 1915",
+  "url": "https://sunnah.com/bukhari:1915",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-14",
+  "cat": "history",
+  "q": "In which month did the Prophet ﷺ set out on the campaign of the Conquest of Makkah?",
+  "o": [
+   "Ramadan",
+   "Dhul-Hijjah",
+   "Muharram",
+   "Shawwal"
+  ],
+  "correct": 0,
+  "x": "Ibn Abbas said the Prophet ﷺ went on the Conquest campaign in Ramadan. He fasted until he reached al-Kadid, a watering place on the way, and then broke his fast.",
+  "ref": "Bukhari 4275",
+  "url": "https://sunnah.com/bukhari:4275",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-15",
+  "cat": "history",
+  "q": "Umar (RA) saw people praying at night in Ramadan in scattered groups. Behind which reciter did he gather them?",
+  "o": [
+   "Bilal ibn Rabah",
+   "Abdullah ibn Mas'ud",
+   "Mu'adh ibn Jabal",
+   "Ubayy ibn Ka'b"
+  ],
+  "correct": 3,
+  "x": "Abdur-Rahman ibn Abd al-Qari reports that Umar decided to unite them behind one reciter, Ubayy ibn Ka'b. On a later night he saw them praying together behind their reciter.",
+  "ref": "Bukhari 2010",
+  "url": "https://sunnah.com/bukhari:2010",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-16",
+  "cat": "prep",
+  "q": "Outside Ramadan, in which month did Aishah (RA) see the Prophet ﷺ fast the most?",
+  "o": [
+   "Muharram",
+   "Rajab",
+   "Sha'ban",
+   "Shawwal"
+  ],
+  "correct": 2,
+  "x": "Aishah said she never saw him fast a complete month except Ramadan, and never saw him fast more in any month than in Sha'ban, the month before Ramadan.",
+  "ref": "Bukhari 1969",
+  "url": "https://sunnah.com/bukhari:1969",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-17",
+  "cat": "prep",
+  "q": "Aishah (RA) said she could only make up her missed Ramadan fasts in Sha'ban. What reason did the narrator Yahya give?",
+  "o": [
+   "Fasting was not allowed earlier",
+   "She was busy with the Prophet ﷺ",
+   "She waited for cooler weather",
+   "She travelled most of the year"
+  ],
+  "correct": 1,
+  "x": "Aishah sometimes owed days from Ramadan and made them up in Sha'ban; the narrator Yahya explained she was occupied with the Prophet ﷺ. A reminder to plan any make-up fasts before Ramadan.",
+  "ref": "Bukhari 1950",
+  "url": "https://sunnah.com/bukhari:1950",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-18",
+  "cat": "prep",
+  "q": "The Prophet ﷺ said none of you should fast a day or two just before Ramadan, except whom?",
+  "o": [
+   "People fasting to welcome Ramadan",
+   "Those who feel strong and healthy",
+   "Anyone seeking extra reward",
+   "Someone keeping their regular fast"
+  ],
+  "correct": 3,
+  "x": "Abu Hurairah reported: do not fast a day or two before Ramadan, unless it is a fast that a person regularly keeps; then he may fast that day.",
+  "ref": "Bukhari 1914",
+  "url": "https://sunnah.com/bukhari:1914",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-19",
+  "cat": "prep",
+  "q": "In Quran 2:185, among the verses on fasting Ramadan, what does Allah say He intends for you?",
+  "o": [
+   "Ease, not hardship",
+   "Hardship and difficulty",
+   "Wealth and riches",
+   "Fame among people"
+  ],
+  "correct": 0,
+  "x": "'Allah intends for you ease and does not intend for you hardship.' In the same verse, whoever is ill or on a journey may fast an equal number of other days instead.",
+  "ref": "Quran 2:185",
+  "url": "https://quran.com/2/185",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-b-20",
+  "cat": "prep",
+  "q": "The Prophet ﷺ said that when Ramadan comes, the gates of Paradise are opened and the gates of the Fire are closed. What happens to the devils?",
+  "o": [
+   "They become stronger",
+   "They are set free",
+   "They are chained",
+   "They go to sleep"
+  ],
+  "correct": 2,
+  "x": "Abu Hurairah reported: when Ramadan comes, the gates of Paradise are opened, the gates of the Fire are closed and the devils are chained. Make the most of this blessed month.",
+  "ref": "Bukhari 3277",
+  "url": "https://sunnah.com/bukhari:3277",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-21",
+  "cat": "duas",
+  "q": "In Quran 2:186, set among the verses on fasting, what does Allah say when His servants ask about Him?",
+  "o": [
+   "Ask only through the scholars",
+   "Indeed, I am near",
+   "Wait for Laylatul Qadr",
+   "I answer only the Prophets"
+  ],
+  "correct": 1,
+  "x": "'Indeed I am near. I respond to the invocation of the supplicant when he calls upon Me. So let them respond to Me and believe in Me, that they may be rightly guided.'",
+  "ref": "Quran 2:186",
+  "url": "https://quran.com/2/186",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-b-22",
+  "cat": "duas",
+  "q": "The Prophet ﷺ said: 'Dua is ...' What completes this short hadith?",
+  "o": [
+   "a last resort",
+   "for grown-ups only",
+   "a sign of weakness",
+   "worship"
+  ],
+  "correct": 3,
+  "x": "An-Nu'man ibn Bashir reported that the Prophet ﷺ said: 'Dua is worship,' and then recited: 'And your Lord says: Call upon Me; I will respond to you' (Quran 40:60).",
+  "ref": "Abu Dawud 1479",
+  "url": "https://sunnah.com/abudawud:1479",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "mcq-b-23",
+  "cat": "duas",
+  "q": "According to Anas, which dua did the Prophet ﷺ make most often?",
+  "o": [
+   "Our Lord, give us good in this world and the next",
+   "My Lord, increase me in knowledge",
+   "Allah is sufficient for us",
+   "My Lord, forgive me and my parents"
+  ],
+  "correct": 0,
+  "x": "His most frequent dua was: 'O Allah, our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire' (also Quran 2:201).",
+  "ref": "Bukhari 6389",
+  "url": "https://sunnah.com/bukhari:6389",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-24",
+  "cat": "duas",
+  "q": "Which Prophet called out from the belly of the whale: 'There is no god but You, glory be to You; I have been among the wrongdoers'?",
+  "o": [
+   "Musa",
+   "Nuh",
+   "Yunus",
+   "Ibrahim"
+  ],
+  "correct": 2,
+  "x": "This is the dua of Dhun-Nun, Prophet Yunus. The Prophet ﷺ said no Muslim calls on Allah with it for anything except that Allah responds to him.",
+  "ref": "Tirmidhi 3505",
+  "url": "https://sunnah.com/tirmidhi:3505",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "mcq-b-25",
+  "cat": "duas",
+  "q": "The Prophet ﷺ said your dua will be answered as long as you do not do what?",
+  "o": [
+   "Ask Allah for too much",
+   "Say impatiently: 'I made dua but got no answer'",
+   "Ask for worldly things",
+   "Repeat the same dua"
+  ],
+  "correct": 1,
+  "x": "Abu Hurairah reported: the dua of any of you is answered as long as he is not hasty, saying, 'I called upon Allah but was not answered.' Keep asking with patience.",
+  "ref": "Bukhari 6340",
+  "url": "https://sunnah.com/bukhari:6340",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-26",
+  "cat": "character",
+  "q": "A man said to the Prophet ﷺ, 'Advise me!' and repeated it several times. What did the Prophet ﷺ say each time?",
+  "o": [
+   "Pray at night",
+   "Give charity",
+   "Fast often",
+   "Do not become angry"
+  ],
+  "correct": 3,
+  "x": "Abu Hurairah reported that each time the man asked again, the Prophet ﷺ gave the same answer: 'Do not become angry.'",
+  "ref": "Bukhari 6116",
+  "url": "https://sunnah.com/bukhari:6116",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-27",
+  "cat": "character",
+  "q": "The Prophet ﷺ tied three manners to belief in Allah and the Last Day: speaking good or keeping silent, honouring guests, and what else?",
+  "o": [
+   "Not harming one's neighbour",
+   "Fasting on Mondays",
+   "Praying the night prayer",
+   "Visiting the graves"
+  ],
+  "correct": 0,
+  "x": "Whoever believes in Allah and the Last Day should not harm his neighbour, should honour his guest, and should speak good or keep quiet.",
+  "ref": "Bukhari 6018",
+  "url": "https://sunnah.com/bukhari:6018",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-28",
+  "cat": "character",
+  "q": "Quran 3:134 praises those who spend in ease and hardship and who restrain their anger. What else do they do?",
+  "o": [
+   "Speak only when spoken to",
+   "Keep away from people",
+   "Pardon people",
+   "Remember every wrong done to them"
+  ],
+  "correct": 2,
+  "x": "'Who spend in ease and hardship, who restrain anger and who pardon the people, and Allah loves the doers of good.' Holding back anger and forgiving go together.",
+  "ref": "Quran 3:134",
+  "url": "https://quran.com/3/134",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-b-29",
+  "cat": "character",
+  "q": "Complete the hadith: 'None of you truly believes until he loves for his brother what he ...'",
+  "o": [
+   "has asked for",
+   "loves for himself",
+   "can afford to give",
+   "has earned by his work"
+  ],
+  "correct": 1,
+  "x": "Anas reported this hadith. Complete faith means wanting good for others just as you want it for yourself.",
+  "ref": "Bukhari 13",
+  "url": "https://sunnah.com/bukhari:13",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-b-30",
+  "cat": "character",
+  "q": "The Prophet ﷺ said truthfulness leads to righteousness. What did he say righteousness leads to?",
+  "o": [
+   "Wealth",
+   "Fame",
+   "Power",
+   "Paradise"
+  ],
+  "correct": 3,
+  "x": "Abdullah ibn Mas'ud reported: truthfulness leads to righteousness and righteousness leads to Paradise; a person keeps telling the truth until he becomes truthful. Lying leads to wickedness, and wickedness to the Fire.",
+  "ref": "Bukhari 6094",
+  "url": "https://sunnah.com/bukhari:6094",
+  "grade": "Sahih (Bukhari)"
  }
 ]
