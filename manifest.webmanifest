@@ -1,14 +1,14 @@
 {
   "name": "Ramadan Strivers",
   "short_name": "Ramadan",
-  "description": "Your Ramadan planner & tracker — deeds, Quran, quiz and competitions. From Muslim to Mu'min.",
+  "description": "Your Ramadan planner and tracker: daily deeds, Quran, learning and competitions. From Muslim to Mu'min.",
   "id": "/",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#070b14",
-  "theme_color": "#070b14",
+  "background_color": "#F2F5F3",
+  "theme_color": "#F2F5F3",
   "lang": "en",
   "dir": "auto",
   "categories": ["lifestyle", "education", "productivity"],
@@ -20,6 +20,7 @@
   "shortcuts": [
     { "name": "Today's checklist", "url": "/?tab=today", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Quran tracker", "url": "/?tab=quran", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Learn", "url": "/?tab=learn", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Competition", "url": "/?tab=compete", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

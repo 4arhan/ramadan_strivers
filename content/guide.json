@@ -1,0 +1,80 @@
+[
+  {
+    "id": "guide1",
+    "icon": "list-checks",
+    "title": "Daily Checklist",
+    "body": "You get 60+ daily deeds organised into 7 categories — Salah, Quran, Character, Charity, Avoidance, Abu Bakr Challenge, and Last 10 Nights. Tap any category to open it, then tick off what you've done. Your daily percentage updates as you go. Each category starts closed so you can focus on one area at a time."
+  },
+  {
+    "id": "guide2",
+    "icon": "book-open",
+    "title": "Quran Tracker",
+    "body": "Track your journey through all 604 pages of the Quran. After each reading session, tap \"Log reading\" and add your pages — they add up throughout the day. The dashboard shows your total progress, which Juz you're on, and how many pages per day you need to complete the Quran by Day 30. A chart shows your actual pace vs the ideal pace so you know if you're on track."
+  },
+  {
+    "id": "guide3",
+    "icon": "flame",
+    "title": "Streaks",
+    "body": "The app tracks four consecutive-day streaks: Fajr at the Masjid, Isha at the Masjid, daily Quran, and giving Sadaqah. Each day you keep it up, your count grows. At milestones like 3, 7, 10, and 20 days, you'll see a congratulations message pop up. It's a simple way to build consistency in worship."
+  },
+  {
+    "id": "guide4",
+    "icon": "award",
+    "title": "12 Badges",
+    "body": "Unlock achievements as you progress through Ramadan:\nFirst Step — do anything on Day 1\nWeek One — log all 7 days of the first week\nHalfway — stay active for the first 15 days\nFajr Warrior — 7-day Fajr at Masjid streak\nTahajjud Master — pray Tahajjud on 7 nights\nQuran Lover — read Quran on 15 days\nGenerous — give charity on 10 days\nAbu Bakr — complete the full challenge in one day\nAbu Bakr Gold — do it on 3 different days\nLast 10 Hero — avg 70%+ across the Last 10 Nights\nPerfectionist — hit 100% on 3 days\nChampion — score 60%+ on 20 days\n\nPrint your PDF report on Eid and use the badges to celebrate and reward your kids!"
+  },
+  {
+    "id": "guide5",
+    "icon": "moon-star",
+    "title": "Last 10 Nights & Laylatul Qadr",
+    "body": "A countdown to the Last 10 Nights begins on Day 15. When Day 21 arrives, a bonus worship category unlocks with extra deeds like I'tikaf, long sujood, and extra Quran. Odd nights (21, 23, 25, 27, 29) are highlighted across the app to remind you — any one of them could be Laylatul Qadr."
+  },
+  {
+    "id": "guide6",
+    "icon": "medal",
+    "title": "Abu Bakr Challenge",
+    "body": "The Prophet ﷺ once asked his companions four questions: \"Who among you is fasting today? Who followed a funeral? Who fed someone? Who visited someone who is sick?\" Abu Bakr (RA) was the only one who said \"I did\" to all four. This challenge asks you to do the same in a single day. When you've completed 3 out of 4, the app encourages you to go for all four."
+  },
+  {
+    "id": "guide7",
+    "icon": "flower-2",
+    "title": "Sisters' Menstrual Cycle",
+    "body": "Activate the toggle on the Today tab during your cycle. Salah and fasting items will be greyed out and excluded from your percentage. This way, your score reflects only the deeds that apply to you — so you can still aim for 100%."
+  },
+  {
+    "id": "guide8",
+    "icon": "chart-column",
+    "title": "Progress & Charts",
+    "body": "The Me tab gives you a full picture of your Ramadan: your average completion, a heatmap of all 30 days, a comparison of the three thirds of Ramadan (Mercy, Forgiveness, Salvation), a daily trend line, and a breakdown of your effort by category."
+  },
+  {
+    "id": "guide9",
+    "icon": "graduation-cap",
+    "title": "Learn",
+    "body": "Test what you have learned. The Learn tab turns the hadith and ayat behind the deeds in this app into short quizzes: true-or-false cards in six categories (Fasting, Salah & Dhikr, Quran, Character, Charity and the Last 10 Nights), multiple-choice questions, and flashcards that come back when they are due for review. Every answer shows its source on sunnah.com or quran.com, and your accuracy and best scores are saved, so keep going until you master them all."
+  },
+  {
+    "id": "guide10",
+    "icon": "trophy",
+    "title": "Competition Mode",
+    "body": "Run a Ramadan competition for your school, university, mosque, company, family or community. Organisers create a competition with Top 10 prizes and get a 6-letter join code plus a printable QR poster. Participants enter the code (or tap a personal invitation link) and their daily deeds, points and Quran pages feed a live leaderboard — individuals and classes/teams. Organisers get a roster with inactivity and integrity flags, bulk enrolment, a daily points cap, CSV export, Eid certificates for everyone, and a child-privacy mode. Only a display name and scores are shared — never the checklist details."
+  },
+  {
+    "id": "guide11",
+    "icon": "compass",
+    "title": "New to Islam or Learning?",
+    "body": "Every deed in the checklist has a hadith reference and a short explanation behind it. Turn on \"Detail Mode\" (in Me, under Settings) and you'll see the source and meaning of each item. You don't need any prior knowledge — the app teaches you as you use it."
+  },
+  {
+    "id": "guide12",
+    "icon": "file-text",
+    "title": "PDF Report",
+    "body": "Download a printable PDF of your entire Ramadan journey — your daily completion, Quran pages read, badges unlocked, and best streaks. It's a meaningful keepsake, and a great way to celebrate your children's achievements on Eid day."
+  },
+  {
+    "id": "guide13",
+    "icon": "lock",
+    "title": "Privacy & Data",
+    "body": "By default everything stays on your device: deeds, Quran pages, badges, journal and settings are stored in this browser, and no account is needed. If you choose to create an account, a copy of your tracker data is kept so it can sync between your devices, and you can delete it at any time. In a competition only your display name, an optional class or team, and your total scores are shared — never which deeds you ticked. You can export a backup file at any time and import it on another device, and the app works offline."
+  }
+]

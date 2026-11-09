@@ -1,0 +1,37 @@
+[
+  {
+    "id": "all",
+    "icon": "shuffle",
+    "name": "All mixed"
+  },
+  {
+    "id": "fasting",
+    "icon": "moon",
+    "name": "Fasting"
+  },
+  {
+    "id": "salah",
+    "icon": "clock",
+    "name": "Salah & Dhikr"
+  },
+  {
+    "id": "quran",
+    "icon": "book-open",
+    "name": "Quran"
+  },
+  {
+    "id": "character",
+    "icon": "heart",
+    "name": "Character"
+  },
+  {
+    "id": "charity",
+    "icon": "hand-helping",
+    "name": "Charity"
+  },
+  {
+    "id": "last10",
+    "icon": "moon-star",
+    "name": "Last 10 Nights"
+  }
+]
