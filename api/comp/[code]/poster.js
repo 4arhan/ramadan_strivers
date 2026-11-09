@@ -1,0 +1,14 @@
+// Printable A4 poster with QR code for the join link (public — the code is meant to be shared).
+const { handler, html, query, esc, origin } = require('../../_lib/util'); const C = require('../../_lib/comp'); const QR = require('qrcode');
+module.exports = handler(async (req, res) => {
+  const c = await C.getComp(query(req).code); const link = origin(req) + '/?join=' + c.code;
+  const svg = await QR.toString(link, { type: 'svg', margin: 1, color: { dark: '#0c2618', light: '#ffffff' } });
+  html(res, 200, `<!doctype html><html><head><meta charset="utf-8"><title>Join ${esc(c.name)} — Ramadan Strivers</title>
+<style>@page{size:A4;margin:14mm}body{margin:0;font-family:Georgia,'Playfair Display',serif;color:#1c1917;background:#fff}.p{max-width:720px;margin:0 auto;padding:30px;text-align:center}.top{background:linear-gradient(135deg,#0c1a12,#0f3d2a);color:#fff;border-radius:24px;padding:32px 24px}.top h1{margin:0;font-size:42px;letter-spacing:1px}.top .s{color:#fbbf24;font-style:italic;margin-top:6px}.org{font-size:30px;margin:30px 0 6px;color:#15803d}.sub{color:#57534e;font-family:-apple-system,Segoe UI,sans-serif}.qr{width:300px;margin:26px auto}.qr svg{width:100%;height:auto;border:10px solid #fff;box-shadow:0 10px 40px rgba(0,0,0,.12);border-radius:16px}.code{font-size:56px;letter-spacing:12px;color:#b8860b;font-weight:800;margin:10px 0}.steps{text-align:left;display:inline-block;font-family:-apple-system,Segoe UI,sans-serif;color:#44403c;line-height:1.8;margin-top:12px}.pr{margin-top:22px;font-family:-apple-system,Segoe UI,sans-serif;font-size:14px;color:#57534e}.pr b{color:#b8860b}.foot{margin-top:26px;color:#a8a29e;font-size:12px;font-family:-apple-system,Segoe UI,sans-serif}@media print{.np{display:none}}</style></head><body><div class="p">
+<div class="top"><h1>🌙 RAMADAN STRIVERS</h1><div class="s">From Muslim to Mu'min</div></div>
+<div class="org">${esc(c.name)}</div><div class="sub">${esc(c.type)} Ramadan Competition${(c.settings && c.settings.sponsor) ? ' · Sponsored by ' + esc(c.settings.sponsor) : ''}</div>
+<div class="qr">${svg}</div><div class="sub">Scan to join, or enter the code at <b>${esc(origin(req).replace(/^https?:\/\//, ''))}</b></div><div class="code">${esc(c.code)}</div>
+<div class="steps">1. Open the app and tap <b>🏆 Compete</b><br>2. Enter the code and your name<br>3. Tick your daily deeds — your points count on the live leaderboard</div>
+${(c.prizes || []).filter(Boolean).length ? '<div class="pr">🎁 Prizes: ' + (c.prizes || []).map((p, i) => p ? '<b>#' + (i + 1) + '</b> ' + esc(p) : '').filter(Boolean).join(' · ') + '</div>' : ''}
+<div class="foot">Free · Private · Works offline · 10 languages</div><p class="np"><button onclick="print()" style="padding:10px 22px;border-radius:10px;border:1px solid #15803d;background:#15803d;color:#fff;font-size:15px;cursor:pointer">🖨️ Print poster</button></p></div></body></html>`, 'public, max-age=300');
+}, ['GET']);

@@ -1,0 +1,18 @@
+{
+  "name": "ramadan-strivers",
+  "version": "7.0.0",
+  "private": true,
+  "description": "Ramadan Strivers — planner, tracker, quiz and competitions. Static front-end + Vercel serverless API.",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "test": "node scripts/test-api.js"
+  },
+  "dependencies": {
+    "@vercel/og": "^1.0.3",
+    "adhan": "^4.4.6",
+    "pg": "^8.23.1",
+    "qrcode": "^1.5.4",
+    "web-push": "^4.0.0"
+  },
+  "engines": { "node": ">=20" }
+}

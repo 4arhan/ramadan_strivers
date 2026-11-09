@@ -6,7 +6,8 @@ Live at **[www.ramadanstrivers.com](https://www.ramadanstrivers.com)**.
 - 60+ daily deeds in 7 categories, each backed by a hadith or ayah
 - Quran completion tracker, streaks, heatmap, badges, PDF report
 - 🧠 Flash Quiz — 63 true/false cards on the hadith & ayat behind every deed
-- 🏆 Competition Mode — schools, universities, mosques & communities run a Top-10 prize competition
+- 🏆 Competition Mode — schools, universities, mosques & communities run a Top-10 prize competition with team leaderboards, QR posters, bulk enrolment and Eid certificates
+- ☁️ Accounts & cloud sync, 🔔 push reminders, 📤 share cards, 🕌 prayer times & iftar countdown, 📅 Hijri auto-day, year-round & pre-Ramadan modes, 📓 journal, ✨ AI explanations
 - 🌍 10 languages: English, 中文, हिन्दी, Español, Français, العربية, বাংলা, Português, Русский, اردو
 
 All personal data stays on the device (localStorage). Only Competition Mode sends anything to a server — and only a display name and aggregate scores.
@@ -17,38 +18,19 @@ All personal data stays on the device (localStorage). Only Competition Mode send
 |---|---|
 | `index.html` | The whole app (markup, styles, logic) |
 | `i18n.js` | UI translations for the 10 languages |
-| `firestore.rules` | Security rules for Competition Mode |
+| `cloud.js` | Accounts, sync, competitions UI, prayer times, modes, AI helpers |
+| `api/` | Vercel serverless functions (Postgres) |
+| `sw.js`, `manifest.webmanifest`, `icons/` | PWA / app-store packaging |
+| `vercel.json` | Rewrites, headers, daily cron |
 | `CNAME` | Custom domain for GitHub Pages |
 
-Deploy = push to `main`; GitHub Pages serves it.
+Deploy: the `vercel` branch is Vercel production (full app); `main` is the GitHub Pages static version.
 
-## Enabling Competition Mode (one-time, ~5 minutes)
+## Cloud features (v7)
 
-Competition Mode needs a shared database. It uses **Firebase** (free Spark plan is plenty).
+The Vercel deployment adds serverless API routes (`api/`) backed by Postgres: accounts with cloud sync, competitions with team leaderboards / bulk enrolment / QR posters / certificates / CSV, share cards with Open Graph images, web push reminders, Friday organiser email digests, AI explanations (scoped to cited texts), prayer times with iftar countdown, Hijri auto-day, year-round and pre-Ramadan modes, a WhatsApp bot, and PWA/store packaging. Everything degrades gracefully: with no database the app is the same offline tracker it always was.
 
-1. Go to <https://console.firebase.google.com> → **Add project** (any name, Analytics optional).
-2. **Build → Authentication → Get started → Sign-in method**: enable **Anonymous** and **Email/Password**.
-   Then under **Settings → Authorized domains** add `www.ramadanstrivers.com` (and `ramadanstrivers.com`).
-3. **Build → Firestore Database → Create database** → *Start in production mode* → pick a region.
-4. In Firestore open the **Rules** tab, replace everything with the contents of [`firestore.rules`](firestore.rules), and **Publish**.
-5. **Project settings (gear) → Your apps → Web (`</>`)** → register the app (no hosting needed). Copy the `firebaseConfig` object.
-6. In `index.html` find `var FB_CONFIG={apiKey:"",...}` and paste your values. Commit & push.
-
-That's it — the Compete tab goes live. (A Firebase web API key is not a secret: it only identifies the project. The rules file is what protects the data.)
-
-### How it works
-
-- **Organisers** (school, university, mosque, company, family, community) create a competition with an email + password, describe prizes for ranks 1–10, and receive a 6-letter **join code**. They get a dashboard with a live leaderboard, participant count, prize editor, CSV export, "remove participant", and "close competition".
-- **Participants** enter the join code + a display name (+ optional class/team). No account needed — the app signs them in anonymously. Every time they tick a deed or log Quran pages, their totals sync: **points** (sum of deed points, ×1.5 in the last 10 nights), days logged, average %, Quran pages.
-- Sharing: `https://www.ramadanstrivers.com/?join=CODE` opens the app with the code pre-filled.
-- Leaderboard ranks by total points; ranks 1–10 show their prize.
-
-### Data model
-
-```
-competitions/{CODE}                 name, type, ownerUid, ownerEmail, prizes[10], open, createdAt
-competitions/{CODE}/participants/{uid}   name, group, totalPts, daysLogged, avgPct, quranPages, lastDay, updatedAt
-```
+**Setup:** see [SETUP.md](SETUP.md) (one env var per feature). **Privacy:** [PRIVACY.md](PRIVACY.md). **App stores:** [mobile/README.md](mobile/README.md).
 
 ## Languages
 
