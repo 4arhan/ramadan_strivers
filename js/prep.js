@@ -15,8 +15,15 @@
                       pass: the start or last restart, and the Hijri year of the Ramadan it prepares for), hy,
                       answers {qid: option}, assessment {qid: score}, assessedAt, done {promptId: ms},
                       undone {promptId: {ts}} (an untick newer than the tick wins: cloud merges done by max and
-                      undone by newer ts), reflections {n: text}, checkins {'YYYY-MM-DD': {salah: [bool x5],
-                      quran: {minutes}}}, qunit, completedAt, autoShow (prep turned settings.showPrep on), past}
+                      undone by newer ts), reflections {n: {t, ts}} (older builds stored plain text: read as ts 0),
+                      checkins {'YYYY-MM-DD': {salah: [bool x5], pray: {fajr: {v, ts}, …}, quran: {minutes, ts}}},
+                      qunit, completedAt, autoShow (prep turned settings.showPrep on), past}
+            Sync     Everything another device can edit carries its own ts, so cloud sync (cloud.js newer(): the newer
+                      ts wins per key) merges reflections one by one, Quran minutes per date and salah prayer by prayer
+                      (pray; salah [bool x5] is kept in step with it and read through it). A check-in date has no ts
+                      of its own on purpose: that would make one device's whole day replace the other's.
+                      The salah check-in follows the prayer day (Fajr to Fajr): before Fajr, ticks count for the day
+                      before, so a late Isha lands on its own day.
             Quran pages are not kept here: the check-in reads and writes the tracker's stores, so the Quran tab shows
                       the same number — rs-extras.qlog[date] = {p, ts}, or rs-quran-pages[day] in Ramadan mode.
             rs-extras goals {g1..g3: {t, ts}} · duas {t, ts} · qada {owed, done, ts}   (v7 format; read-modify-write of
@@ -42,13 +49,16 @@
   var Q_STEP = { pages: 1, minutes: 5 };
   var Q_MAX = { pages: 604, minutes: 1440 };
   // The generated content has no track on assessment questions yet (build-content.js emits {id, scores}). A `track`
-  // on a question always wins. This table is only a fallback for the exact question set it was written for (ids
-  // a1..a7); any other set of questions gets no area mapping rather than a wrong one.
+  // on a question always wins. This table is only a fallback for the question set it was written for (ids a1..a7,
+  // all present; questions added later need their own track); otherwise no area mapping rather than a wrong one.
   var Q_TRACK = { a1: 'salah', a2: 'salah', a3: 'quran', a4: 'quran', a5: 'fasting', a6: 'habits', a7: 'charity' };
-  var Q_TRACK_SET = 'a1,a2,a3,a4,a5,a6,a7';
   var FOCUS_BELOW = 70;      // an area becomes a focus area when its readiness-check score is below this (%)
   var FULL_DONE = 70;        // share of the round's prompts (%) for the full "prep complete" wording
   var SALAH_WINDOW = 7;
+  var FAJR_FALLBACK = 3;     // without prayer times, the prayer day turns over at 3 am (local)
+  var CATCH_ROWS = 3;        // earlier focus days listed on the catch-up card
+  // cloud.js offers these reminder hours and reads any other stored hour as 20:00 (its push settings row)
+  var PUSH_HOURS = [6, 7, 8, 12, 17, 18, 19, 20, 21, 22];
   var TEXT_MAX = 2000;
   var GOAL_MAX = 120;
   var QADA_MAX = 9999;
@@ -58,6 +68,14 @@
   function tn(k, n, v) { return RS.tn('prep.ui.' + k, n, v); }
   function num(n) { return RS.fmt.n(n, { maximumFractionDigits: 0 }); }
   function frac(a, b) { return num(a) + '/' + num(b); }
+  // RS.fmt.pct split into the figure and the sign after it, for a hero number with a small unit: '48' + '%', or
+  // '48' + ' %' where the language puts a space before the sign (fr, es, ru). Bidi marks are dropped (the hero lays
+  // out '48%' in RTL itself). A sign before the figure (no app language does this) stays in one piece.
+  function pctParts(v) {
+    var s = RS.fmt.pct(v), n = num(Math.round(v)), i = s.indexOf(n);
+    if (i < 0 || s.slice(0, i).replace(/[‎‏؜\s]/g, '')) return { number: s, unit: '' };
+    return { number: n, unit: s.slice(i + n.length).replace(/[‎‏؜]/g, '') };
+  }
   function obj(x) { return x && typeof x === 'object' && !Array.isArray(x) ? x : {}; }
   function safeId(s) { return String(s).replace(/[^A-Za-z0-9_-]/g, '_'); }
   function ctext(key) { return RS.has(key) ? RS.t(key) : ''; }      // optional content text (no raw key on screen)
@@ -170,6 +188,13 @@
   }
 
   /* ------------------------------------------------------------------ state */
+  // A reflection {t, ts}; a plain string (older builds, CONTRACT §5 'reflections:{n:text}') reads as {t, ts: 0}.
+  function reflOf(v) {
+    if (typeof v === 'string') return { t: v, ts: 0 };
+    v = obj(v);
+    return { t: typeof v.t === 'string' ? v.t : '', ts: Number(v.ts) > 0 ? Number(v.ts) : 0 };
+  }
+  function reflText(s, n) { return reflOf(s.reflections[n]).t; }
   function state() {
     var s = obj(RS.store.get(KEY, null));
     s.answers = obj(s.answers);
@@ -177,6 +202,7 @@
     s.done = obj(s.done);
     s.undone = obj(s.undone);
     s.reflections = obj(s.reflections);
+    Object.keys(s.reflections).forEach(function (k) { s.reflections[k] = reflOf(s.reflections[k]); });
     s.checkins = obj(s.checkins);
     if (typeof s.started === 'string') s.started = Date.parse(s.started) || null;
     if (typeof s.started !== 'number' || !isFinite(s.started) || s.started <= 0) s.started = null;
@@ -239,7 +265,9 @@
     days().forEach(function (d) { if (d.n >= r.day) { all += prompts(d).length; got += dayDone(s, d, r); } });
     return all ? 100 * got / all : 0;
   }
-  function reflectionCount(s) { return Object.keys(s.reflections).filter(function (k) { return String(s.reflections[k] || '').trim(); }).length; }
+  function reflectionCount(s) { return Object.keys(s.reflections).filter(function (k) { return reflText(s, k).trim(); }).length; }
+  // Days whose prompts are all done (this round's ticks, catch-up included).
+  function fullDays(s, r) { return days().filter(function (d) { var all = prompts(d).length; return all && dayDone(s, d, r) === all; }).length; }
 
   /* ------------------------------------------------------------------ assessment + readiness */
   function answerIdx(ans, q) {
@@ -270,7 +298,8 @@
     return max ? Math.round(100 * got / max) : null;
   }
   function legacyTracks() {
-    return questions().map(function (q) { return q.id; }).sort().join(',') === Q_TRACK_SET ? Q_TRACK : null;
+    var ids = questions().map(function (q) { return q.id; });
+    return Object.keys(Q_TRACK).every(function (id) { return ids.indexOf(id) >= 0; }) ? Q_TRACK : null;
   }
   function trackOfQuestion(q, legacy) {
     if (q.track && trackById(q.track)) return q.track;
@@ -296,29 +325,39 @@
       .sort(function (a, b) { return a.pct - b.pct || a.i - b.i; })
       .slice(0, 2).map(function (x) { return x.id; });
   }
-  // Prompts due so far in this round: its days up to yesterday's plan day, plus anything ticked (today, catch-up).
+  // The last plan day of this round that is over: yesterday's plan day, or the last day once the plan is closed
+  // (Ramadan) or done (waiting for 1 Sha'ban). In Sha'ban it follows the calendar, so the day that a 29-day Sha'ban
+  // skips on the eve of Ramadan (day 29) is not counted as missed.
+  function lastElapsed(s, cur) {
+    if (inRamadan() || waiting(s)) return totalDays();
+    var h = RS.hijri(noon());
+    return (h.month === 8 ? Math.min(cur, h.day) : cur) - 1;
+  }
+  // Prompts of this round's days that are over (due), and the ticks on this round's days up to today (done, at most
+  // due: today's ticks can make up for a missed one). Catch-up ticks on days before the round began do not count.
   function promptStats(s, r) {
-    var cur = planDay(s), due = 0, done = 0;
+    var cur = planDay(s), upto = lastElapsed(s, cur), due = 0, done = 0;
     days().forEach(function (d) {
+      if (d.n < r.day || d.n > cur) return;
       prompts(d).forEach(function (p) {
-        var ok = isDone(s, p.id, r);
-        if ((d.n >= r.day && d.n < cur) || ok) { due += 1; if (ok) done += 1; }
+        if (d.n <= upto) due += 1;
+        if (isDone(s, p.id, r)) done += 1;
       });
     });
-    return { due: due, done: done };
+    return { due: due, done: Math.min(done, due) };
   }
-  // Prayers on time over the last 7 days of the programme. A day without a check-in counts as 0 of 5; today counts
-  // once checked in. In Ramadan the window ends on the last day of Sha'ban (the plan is closed).
+  // Prayers on time over the last 7 prayer days of the programme. An earlier day without a check-in counts as 0 of 5;
+  // the current prayer day counts once checked in. In Ramadan the window ends on the last day of Sha'ban.
   function salahStats(s) {
-    var end = noon(), h = RS.hijri(end), closed = h.month === 9, on = 0, of = 0, from = passStart(s);
+    var end = salahDay(), h = RS.hijri(end), closed = h.month === 9, on = 0, of = 0, from = passStart(s);
     if (closed) end = addDays(end, -h.day);               // the last day of Sha'ban
     for (var i = 0; i < SALAH_WINDOW; i++) {
-      var d = addDays(end, -i);
+      var d = addDays(end, -i), k = RS.todayISO(d);
       if (from && dayDiff(new Date(from), d) < 0) break;
-      var c = s.checkins[RS.todayISO(d)], has = c && Array.isArray(c.salah);
-      if (i === 0 && !closed && !has) continue;           // today counts once checked in
+      var has = hasSalah(s, k);
+      if (i === 0 && !closed && !has) continue;           // the current prayer day counts once checked in
       of += 5;
-      if (has) on += c.salah.slice(0, 5).filter(Boolean).length;
+      if (has) on += salahOf(s, k).filter(Boolean).length;
     }
     return { on: on, of: of };
   }
@@ -340,25 +379,46 @@
   }
 
   /* ------------------------------------------------------------------ check-ins */
-  function checkin(s, key) {
-    var c = obj(s.checkins[key || todayKey()]);
-    var salah = Array.isArray(c.salah) ? c.salah.slice(0, 5) : [];
-    while (salah.length < 5) salah.push(false);
-    c.salah = salah.map(Boolean);
-    c.quran = obj(c.quran);
-    return c;
+  // The prayer day runs from Fajr to the next Fajr: before today's Fajr (prayer times from the cloud module when a
+  // location is set, else FAJR_FALLBACK o'clock) the salah check-in is still the day before. Noon of that day.
+  function salahDay() {
+    var now = new Date(), cut = null;
+    try {
+      var pt = RS.cloud && RS.cloud.prayer && typeof RS.cloud.prayer.times === 'function' ? RS.cloud.prayer.times(now) : null;
+      if (pt && pt.fajr instanceof Date && !isNaN(pt.fajr.getTime()) && RS.todayISO(pt.fajr) === RS.todayISO(now)) cut = pt.fajr;
+    } catch (e) { cut = null; }
+    if (!cut) cut = new Date(now.getFullYear(), now.getMonth(), now.getDate(), FAJR_FALLBACK);
+    return now < cut ? addDays(noon(now), -1) : noon(now);
   }
-  function salahToday(s) { return checkin(s).salah.filter(Boolean).length; }
+  function salahKey() { return RS.todayISO(salahDay()); }
+  // The five prayers of a date as [bool x5]: each prayer's newest tick or untick (pray), else the stored salah array.
+  function salahOf(s, key) {
+    var c = obj(s.checkins[key]), arr = Array.isArray(c.salah) ? c.salah : [], pray = obj(c.pray);
+    return PRAYERS.map(function (p, i) { var e = pray[p.id]; return e && typeof e === 'object' ? !!e.v : !!arr[i]; });
+  }
+  function hasSalah(s, key) {
+    var c = s.checkins[key];
+    return !!c && typeof c === 'object' && (Array.isArray(c.salah) || Object.keys(obj(c.pray)).length > 0);
+  }
+  function salahToday(s) { return salahOf(s, salahKey()).filter(Boolean).length; }
   function minutesOn(s, key) { var v = Number(obj(obj(s.checkins[key]).quran).minutes); return isFinite(v) && v > 0 ? v : 0; }
   function quranTarget(n, unit) {
     var i = n <= 7 ? 0 : n <= 14 ? 1 : n <= 21 ? 2 : n <= 25 ? 3 : 4;
     return Q_TARGET[unit][i];
   }
-  function lastDays(count) {
-    var base = noon(), out = [];
+  // The plan day the Quran target follows. Someone who started before Sha'ban keeps the target their earlier pass
+  // reached: the plan starts again at day 1 on 1 Sha'ban, but the target never steps back.
+  function targetDay(s) {
+    var n = planDay(s), sh = shabanStart(), from = passStart(s);
+    if (!isOn(s) || sh == null || !(from > 0) || from >= sh) return n;
+    return Math.max(n, RS.clamp(dayDiff(new Date(from), new Date(sh - 1)) + 1, 1, totalDays()));
+  }
+  function daysEnding(base, count) {
+    var out = [];
     for (var i = count - 1; i >= 0; i--) out.push(addDays(base, -i));
     return out;
   }
+  function lastDays(count) { return daysEnding(noon(), count); }
 
   /* ------------------------------------------------------------------ Quran pages (the tracker's stores) */
   // Same rule as the tracker's "Log reading": rs-quran-pages[Ramadan day] in Ramadan mode, else rs-extras.qlog[date].
@@ -509,16 +569,18 @@
   }
 
   function salahCard(s) {
-    var c = checkin(s);
-    var count = c.salah.filter(Boolean).length;
+    var base = salahDay(), salah = salahOf(s, RS.todayISO(base));
+    var count = salah.filter(Boolean).length;
+    // Before Fajr the card still shows the day that is ending, and says so.
+    var late = RS.todayISO(base) !== todayKey() ? '<p class="caption prep-late">' + esc(t('salah.beforeFajr', { day: RS.fmt.date(base, { weekday: 'long' }) })) + '</p>' : '';
     var grid = '<div class="prep-salah" role="group" aria-labelledby="prep-salah-title">' + PRAYERS.map(function (p, i) {
-      var on = !!c.salah[i];
+      var on = !!salah[i];
       return '<button type="button" class="prep-pray' + (on ? ' is-on' : '') + '" role="checkbox" aria-checked="' + on + '" data-act="prep.salah" data-arg="' + i + '">' +
         '<span class="prep-pray-dot" aria-hidden="true">' + RS.icon(on ? 'check' : p.icon, { size: on ? 20 : 19 }) + '</span>' +
         '<span class="prep-pray-name">' + esc(t('salah.' + p.id)) + '</span></button>';
     }).join('') + '</div>';
-    var week = lastDays(7);
-    var vals = week.map(function (d) { var x = s.checkins[RS.todayISO(d)]; return x && Array.isArray(x.salah) ? x.salah.slice(0, 5).filter(Boolean).length : 0; });
+    var week = daysEnding(base, 7);
+    var vals = week.map(function (d) { return salahOf(s, RS.todayISO(d)).filter(Boolean).length; });
     var weekOn = vals.reduce(function (a, b) { return a + b; }, 0);
     var chart = '<div class="prep-week"><div class="spread small"><span class="muted">' + esc(t('week7')) + '</span><span class="strong">' +
       esc(t('salah.weekCount', { n: num(weekOn), total: num(35) })) + '</span></div>' +
@@ -528,12 +590,12 @@
       kicker: { icon: 'clock', text: t('salah.kicker') },
       title: t('salah.title'), titleId: 'prep-salah-title',
       cls: 'prep-salah-card',
-      body: grid + '<p class="prep-status' + (count === 5 ? ' accent' : '') + '" aria-live="polite">' + esc(count === 5 ? t('salah.all') : t('salah.count', { n: num(count), total: num(5) })) + '</p>' + chart
+      body: late + grid + '<p class="prep-status' + (count === 5 ? ' accent' : '') + '" aria-live="polite">' + esc(count === 5 ? t('salah.all') : t('salah.count', { n: num(count), total: num(5) })) + '</p>' + chart
     });
   }
 
   function quranCard(s) {
-    var unit = s.qunit, pages = unit === 'pages', n = planDay(s);
+    var unit = s.qunit, pages = unit === 'pages', n = targetDay(s);
     var v = pages ? pagesToday() : minutesOn(s, todayKey()), target = quranTarget(n, unit), step = Q_STEP[unit];
     var pct = Math.min(100, Math.round(100 * v / target));
     var left = Math.max(0, target - v);
@@ -603,9 +665,11 @@
       return RS.ui.hero({
         cls: cls, kicker: kick, number: big.number, label: big.label, text: tn('invite', perDay()),
         metrics: [{ label: t('m.plan'), value: tn('m.days', total) }, { label: t('m.daily'), value: tn('m.steps', perDay()) }],
-        // From Today the first tap opens the intro (what the plan is); on the intro it starts the readiness check.
+        // From Today the first tap opens the intro (what the plan is, with its own "Start my prep"); on the intro it
+        // starts the readiness check. A half-done check continues from both.
         cta: partial ? { eyebrow: t('cta.continueEyebrow'), text: t('cta.continue'), act: 'prep.start' } :
-          { eyebrow: t('cta.startEyebrow'), text: t('cta.start'), act: where === 'today' ? 'nav.go' : 'prep.start', arg: where === 'today' ? 'prep' : null }
+          where === 'today' ? { eyebrow: t('cta.seeEyebrow'), text: tn('cta.see', total), act: 'nav.go', arg: 'prep' } :
+            { eyebrow: t('cta.startEyebrow'), text: t('cta.start'), act: 'prep.start' }
       });
     }
     var r = round(s), done = isComplete(s), rd = readiness(s);
@@ -661,9 +725,14 @@
       attrs: isToday ? { 'aria-current': 'date' } : null
     });
   }
-  // Weeks fold away so the home stays short: the current and the next week start open, any week can be opened.
-  function weekOpen(w, cur) { if (openWeeks[w] != null) return openWeeks[w]; var c = weekOf(cur); return w === c || w === c + 1; }
-  function daysCard(s, cur, r, live) {
+  // Weeks fold away so the home stays short: the current and the next week start open, and so does an earlier week
+  // with focus prompts to catch up on (`also`: {week: true}); any week can be opened.
+  function weekOpen(w, cur, also) {
+    if (openWeeks[w] != null) return openWeeks[w];
+    var c = weekOf(cur);
+    return w === c || w === c + 1 || !!(also && also[w]);
+  }
+  function daysCard(s, cur, r, live, also) {
     var blocks = [];
     for (var w = 1; w <= weekCount(); w++) {
       var wr = weekRange(w);
@@ -672,7 +741,7 @@
       var title = ctext('prep.ms.' + w + '.title');
       var got = 0, all = 0;
       list.forEach(function (d) { got += dayDone(s, d, r); all += prompts(d).length; });
-      var open = weekOpen(w, cur), lid = 'prep-wk-list-' + w;
+      var open = weekOpen(w, cur, also), lid = 'prep-wk-list-' + w;
       blocks.push('<h3 class="prep-wk-h"><button type="button" class="prep-wk" data-act="prep.week" data-arg="' + w + '" aria-expanded="' + open + '" aria-controls="' + lid + '">' +
         '<span class="prep-wk-txt"><span class="prep-wk-n">' + esc(t('list.week', { n: num(w) })) + '</span>' + (title ? '<span class="prep-wk-t">' + esc(title) + '</span>' : '') + '</span>' +
         '<span class="prep-wk-c" aria-hidden="true">' + esc(frac(got, all)) + '</span><span class="sr-only">' + esc(tn('list.doneOf', all, { done: num(got) })) + '</span>' +
@@ -680,6 +749,39 @@
         '<ul class="list prep-wk-list" id="' + lid + '"' + (open ? '' : ' hidden') + '>' + list.map(function (d) { return '<li class="li">' + dayRow(s, d, cur, r, live) + '</li>'; }).join('') + '</ul>');
     }
     return RS.ui.card({ kicker: { icon: 'calendar-days', text: t('list.kicker') }, title: tn('list.title', totalDays()), cls: 'prep-days', body: blocks.join('') });
+  }
+
+  // Someone who started after day 1 (mid-Sha'ban, where the plan follows the calendar) skipped the first days. Those
+  // with prompts in a focus area that are not done yet, in plan order: [{day, left}].
+  function catchUp(s, r) {
+    if (!isOn(s) || inRamadan() || r.day <= 1) return [];
+    var focus = focusTracks(s);
+    if (!focus.length) return [];
+    return days().filter(function (d) { return d.n < r.day; }).map(function (d) {
+      var left = prompts(d).filter(function (p) { return focus.indexOf(p.track) >= 0 && !isDone(s, p.id, r); }).length;
+      return left ? { day: d, left: left } : null;
+    }).filter(Boolean);
+  }
+  function catchUpCard(s, r, list) {
+    if (!list.length) return '';
+    var focus = focusTracks(s), more = list.length - CATCH_ROWS;
+    var rows = list.slice(0, CATCH_ROWS).map(function (x) {
+      var d = x.day, areas = [];
+      prompts(d).forEach(function (p) { if (focus.indexOf(p.track) >= 0 && !isDone(s, p.id, r) && areas.indexOf(p.track) < 0) areas.push(p.track); });
+      return RS.ui.row({
+        lead: '<span class="prep-dn" aria-hidden="true">' + esc(num(d.n)) + '</span>',
+        titleHtml: '<span class="sr-only">' + esc(t('list.day', { n: num(d.n) })) + ' </span>' + esc(RS.t('prep.day.' + d.n + '.theme')),
+        subHtml: RS.ui.meta(areas.map(function (id) { return esc(trackName(id)); }).concat(esc(tn('catch.left', x.left)))),
+        act: 'nav.go', arg: 'prep/day?n=' + d.n, chevron: true, cls: 'prep-catch-row'
+      });
+    });
+    return RS.ui.card({
+      kicker: { icon: 'target', text: t('catch.kicker') },
+      title: t('catch.title'),
+      cls: 'prep-catch',
+      body: '<p>' + esc(t('catch.body', { n: num(r.day) })) + '</p>' + '<div class="mt-2">' + RS.ui.list(rows) + '</div>' +
+        (more > 0 ? '<p class="caption mt-3">' + esc(tn('catch.more', more)) + '</p>' : '')
+    });
   }
 
   function tracksCard(s, r) {
@@ -702,16 +804,28 @@
     return RS.ui.card({ kicker: { icon: 'compass', text: t('tracks.kicker') }, title: t('tracks.title'), body: RS.ui.list(rows), cls: 'prep-tracks' });
   }
 
+  // Prayers ticked on time since this round began (its first prayer day to the current one).
+  function prayersSince(s, r) {
+    var from = RS.todayISO(new Date(r.from)), to = salahKey(), on = 0;
+    Object.keys(s.checkins).forEach(function (k) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k >= from && k <= to) on += salahOf(s, k).filter(Boolean).length;
+    });
+    return on;
+  }
   // The completion moment (day 30): the wording follows how much of the round was done; an early pass adds that
-  // the plan starts again on 1 Sha'ban.
+  // the plan starts again on 1 Sha'ban. Its figures are the ones the hero does not show.
   function completeCard(s, r) {
     var full = roundPct(s, r) >= FULL_DONE;
     var again = early(s) ? '<p class="mt-2">' + esc(t('complete.again', { month: shaban() })) + '</p>' : '';
+    var m = [];
+    if (days().length) m.push({ label: t('m.fullDays'), value: frac(fullDays(s, r), totalDays()) });
+    m.push({ label: t('m.reflections'), value: num(reflectionCount(s)) });
+    m.push({ label: t('m.prayers'), value: num(prayersSince(s, r)) });
     return RS.ui.card({
       cls: 'prep-complete',
       body: '<div class="prep-complete-in"><span class="prep-complete-ic" aria-hidden="true">' + RS.icon('badge-check', { size: 26 }) + '</span>' +
         '<div class="stack-sm"><h2 class="card-title">' + esc(t(full ? 'complete.title' : 'complete.titlePartial')) + '</h2><p>' + esc(t(full ? 'complete.body' : 'complete.bodyPartial')) + '</p>' + again + '</div></div>' +
-        '<div class="mt-4">' + RS.ui.metrics(statsMetrics(s, r)) + '</div>'
+        '<div class="mt-4">' + RS.ui.metrics(m) + '</div>'
     });
   }
   // In Ramadan (plan closed, not completed): a read-only summary.
@@ -728,10 +842,12 @@
   function settingsCard() {
     var rows = [];
     // The cloud module owns push: its 'push.toggle' action opens the time picker or turns reminders off (rs-push).
+    // The hour is read the way its settings row reads it (an hour it does not offer, or v7's '1', means 20:00).
     if (RS.cloud && RS.cloud.feat && RS.cloud.feat.push && pushSupported()) {
-      var push = RS.store.get('rs-push', null), hour = push && typeof push === 'object' ? parseInt(push.hour, 10) : NaN;
+      var push = RS.store.get('rs-push', null), hour = push && typeof push === 'object' ? Number(push.hour) : NaN;
+      if (PUSH_HOURS.indexOf(hour) < 0) hour = 20;
       rows.push(RS.ui.row({ icon: 'bell', title: t('settings.reminder'),
-        sub: push ? (hour >= 0 && hour < 24 ? t('settings.reminderAt', { time: RS.fmt.time(new Date(2000, 0, 1, hour, 0)) }) : t('settings.reminderOn')) : t('settings.reminderSub'),
+        sub: push ? t('settings.reminderOn', { time: RS.fmt.time(new Date(2000, 0, 1, hour, 0)) }) : t('settings.reminderSub'),
         toggle: { on: !!push, act: 'push.toggle' } }));
     }
     if (questions().length) rows.push(RS.ui.row({ icon: 'list-checks', title: t('settings.retake'), sub: t('settings.retakeSub'), act: 'prep.retake', chevron: true }));
@@ -751,8 +867,11 @@
     else if (ro) h.push(summaryCard(s, r));
     if (!ro) { h.push(salahCard(s)); h.push(quranCard(s)); }
     if (days().length) {
+      var catchList = catchUp(s, r), also = {};
+      catchList.forEach(function (x) { also[weekOf(x.day.n)] = true; });
+      h.push(catchUpCard(s, r, catchList));
       if (!ro && !waiting(s) && milestones().length) h.push(milestoneCard(s, n, r));     // this week's milestone
-      h.push(daysCard(s, n, r, !ro && !waiting(s)));
+      h.push(daysCard(s, n, r, !ro && !waiting(s), also));
       h.push(tracksCard(s, r));
     } else {
       h.push(RS.ui.card({ body: RS.ui.empty({ icon: 'sprout', title: t('empty.title'), body: t('empty.body') }) }));
@@ -851,9 +970,10 @@
         '<input type="radio" class="prep-radio" name="prep-answer" id="' + id + '" value="' + k + '"' + (on ? ' checked' : '') + '>' +
         '<span class="prep-radio-dot" aria-hidden="true"></span><span class="row-txt"><span class="row-title">' + esc(RS.t('prep.a.' + q.id + '.o' + k)) + '</span></span></label></li>';
     }).join('');
+    // The question heading in the hero names the group (one announcement, not three).
     var card = RS.ui.card({
       cls: 'prep-opts-card',
-      body: '<fieldset class="prep-opts" data-act-change="prep.answer" data-arg="' + i + '"><legend class="sr-only">' + esc(RS.t('prep.a.' + q.id + '.q')) + '</legend>' +
+      body: '<fieldset class="prep-opts" aria-labelledby="prep-q-title" data-act-change="prep.answer" data-arg="' + i + '">' +
         '<ul class="list">' + opts + '</ul></fieldset>'
     });
     var nav = '<div class="btn-row prep-q-nav">' +
@@ -877,17 +997,18 @@
     var here = on && Math.abs((Number(s.assessedAt) || 0) - passStart(s)) < 5000 && dayDiff(new Date(passStart(s)), noon()) === 0;
     var metrics = [];
     if (focus.length) metrics.push({ label: t('result.focusLabel'), value: trackName(focus[0]) });
-    if (on && !ro) metrics.push({ label: t('result.startLabel'), value: t('result.startValue', { n: num(r.day) }) });
+    // Where the plan starts, only right after this check started it (a retake mid-plan: the CTA names today's day).
+    if (here && !ro) metrics.push({ label: t('result.startLabel'), value: t('result.startValue', { n: num(r.day) }) });
     var cta;
     if (ro) cta = { eyebrow: t('begun.eyebrow'), text: t('begun.cta'), act: 'prep.begin', arg: 'today' };
     else if (!on) cta = { eyebrow: t('kicker'), text: t('cta.home'), act: 'prep.begin', arg: 'prep' };
     else if (here && day && !waiting(s)) cta = { eyebrow: t('result.ctaEyebrow'), text: t('cta.today', { theme: RS.t('prep.day.' + cur + '.theme') }), act: 'prep.begin', arg: 'prep/day?n=' + cur };
     else cta = ctaFor(s, 'result', 'prep.begin') || { eyebrow: t('kicker'), text: t('cta.home'), act: 'prep.begin', arg: 'prep' };
-    var h = [];
+    var h = [], big = pctParts(A);
     h.push(RS.ui.hero({
       cls: 'prep-hero',
       kicker: { icon: 'list-checks', text: t('assess.kicker') },
-      number: num(A), unit: '%', label: t('result.label'),
+      number: big.number, unit: big.unit, label: t('result.label'),
       ring: { pct: A, sub: t('result.level.' + (A < 40 ? 'start' : A < 70 ? 'build' : 'strong')), label: t('ring.label', { pct: RS.fmt.pct(A) }) },
       metrics: metrics,
       cta: cta
@@ -957,17 +1078,19 @@
       return;
     }
     var got = dayDone(s, day, r), all = prompts(day).length, track = day.track && trackById(day.track);
-    var refl = String(s.reflections[n] || '');
+    var refl = reflText(s, n);
     var h = [stepper];
     var pctDay = all ? Math.round(100 * got / all) : 0;
+    // The day number is the hero figure and the day's theme its headline.
     h.push(RS.ui.hero({
       cls: 'prep-hero prep-day-hero' + (takeCelebrate() ? ' prep-celebrate' : ''),
       kicker: { icon: track ? track.icon : 'sprout', text: track ? trackName(day.track) : t('kicker') },
+      number: num(n), unit: t('day.of', { total: num(total) }),
       label: RS.t('prep.day.' + n + '.theme'),
       ring: all ? { pct: pctDay, text: frac(got, all), sub: t('ring.done'), label: tn('day.ringLabel', all, { done: num(got) }) } : null,
       metrics: [
         { label: t('m.week'), value: num(weekOf(n)) },
-        { label: t('m.reflection'), value: refl.trim() ? t('day.written') : t('day.notYet') }
+        { label: t('m.reflection'), value: refl.trim() ? t('day.written') : t('day.notYet'), id: 'prep-refl-m', text: true }
       ]
     }));
     if (n === total && isComplete(s)) h.push(completeCard(s, r));
@@ -994,12 +1117,15 @@
   /* ------------------------------------------------------------------ plan (v7 intentions, dua list, make-up fasts) */
   function planView(view) {
     RS.topbar({ title: t('plan.title'), sub: t('title'), back: 'prep' });
-    var g = goals(), q = qada(), dc = duaCount();
+    var g = goals(), q = qada(), dc = duaCount(), du = daysUntilRamadan();
     var written = g.filter(function (x) { return x.trim(); }).length;
     var h = [];
+    // The time left to prepare is the figure (none once Ramadan has begun or when the date is unknown).
     h.push(RS.ui.hero({
       cls: 'prep-hero',
       kicker: { icon: 'target', text: t('plan.kicker') },
+      number: du != null && du > 0 ? num(du) : null,
+      label: du != null && du > 0 ? tn('daysUntil', du) : null,
       text: t('plan.intro'),
       metrics: [
         { label: t('plan.mGoals'), value: frac(written, 3) },
@@ -1098,7 +1224,7 @@
     return true;
   }
   // Values are blanked rather than deleted so that cloud sync (which merges key by key) does not bring them back.
-  function blank(m, v) { var out = {}; Object.keys(obj(m)).forEach(function (k) { out[k] = v; }); return out; }
+  function blank(m, v) { var out = {}; Object.keys(obj(m)).forEach(function (k) { out[k] = v && typeof v === 'object' ? Object.assign({}, v) : v; }); return out; }
   function archive(s) {
     if (!s.started) return;
     var past = obj(s.past), y = passYear(s) || targetYear(s.started);
@@ -1106,7 +1232,8 @@
       reflections: s.reflections, completedAt: s.completedAt || null };
     s.past = past;
     s.started = null; s.hy = null; s.since = null; s.startDay = null; s.completedAt = null; s.assessedAt = null;
-    s.answers = blank(s.answers, null); s.assessment = blank(s.assessment, null); s.reflections = blank(s.reflections, '');
+    s.answers = blank(s.answers, null); s.assessment = blank(s.assessment, null);
+    s.reflections = blank(s.reflections, { t: '', ts: Date.now() });     // newer than any copy on another device
     s.done = {}; s.undone = {};
     autoHide(s);
   }
@@ -1160,15 +1287,20 @@
   });
   RS.act('prep.begin', function (route) { RS.router.go(route || 'prep', null, { replace: true }); });
 
+  // A tap records that one prayer with its time (pray), so syncing with another device keeps the prayers each one
+  // ticked; salah [bool x5] is updated with it.
   RS.act('prep.salah', function (i) {
     i = parseInt(i, 10);
     if (!(i >= 0 && i < 5)) return;
-    var s = state(), key = todayKey(), c = checkin(s, key);
-    c.salah[i] = !c.salah[i];
+    var s = state(), key = salahKey(), c = obj(s.checkins[key]), salah = salahOf(s, key);
+    salah[i] = !salah[i];
+    c.pray = obj(c.pray);
+    c.pray[PRAYERS[i].id] = { v: salah[i], ts: Date.now() };
+    c.salah = salah;
     s.checkins[key] = c;
     save(s);
     RS.buzz(8);
-    if (c.salah[i] && c.salah.every(Boolean)) RS.toast(t('toast.allSalah'), { tone: 'success' });
+    if (salah[i] && salah.every(Boolean)) RS.toast(t('toast.allSalah'), { tone: 'success' });
     RS.refresh();
   });
   RS.act('prep.q', function (sign) {
@@ -1178,13 +1310,13 @@
     if (v === before) return;
     if (unit === 'pages') setPagesToday(v);
     else {
-      var c = checkin(s, key);
-      c.quran.minutes = v;                // 0 is kept so a correction syncs
+      var c = obj(s.checkins[key]);
+      c.quran = { minutes: v, ts: Date.now() };     // 0 is kept (with its ts) so a correction syncs
       s.checkins[key] = c;
       save(s);
     }
     RS.buzz(6);
-    var target = quranTarget(planDay(s), unit);
+    var target = quranTarget(targetDay(s), unit);
     if (before < target && v >= target) RS.toast(t('toast.quranTarget'), { tone: 'success' });
     RS.refresh();
   });
@@ -1249,9 +1381,16 @@
     var text = String(value || '').slice(0, TEXT_MAX);
     var write = function () {
       var s = state();
-      s.reflections[n] = text.trim() ? text : '';      // '' (not deleted) so that a cleared reflection syncs
+      // {t, ts} like the journal: sync keeps the newer edit. '' (not deleted) so that a cleared reflection syncs.
+      s.reflections[n] = { t: text.trim() ? text : '', ts: Date.now() };
       save(s);
       status('prep-refl-status', t('saved'));
+      // the day hero's Reflection metric, when this day is still on screen
+      var dd = document.querySelector('#prep-refl-m dd'), cur = RS.router.current();
+      if (dd && cur && cur.route === 'prep/day' && parseInt(cur.params && cur.params.n, 10) === n) {
+        var v = text.trim() ? t('day.written') : t('day.notYet');
+        if (dd.textContent !== v) dd.textContent = v;
+      }
     };
     if (e && e.type === 'change') now('refl' + n, write); else later('refl' + n, write);
   });
@@ -1293,7 +1432,9 @@
 
   RS.act('prep.restart', function () {
     if (inRamadan()) return;
-    RS.confirm({ title: t('restart.title'), body: t('restart.body'), ok: t('restart.ok'), danger: true }).then(function (ok) {
+    // In Sha'ban the plan follows the calendar, so it carries on from today's day rather than from day 1.
+    var body = month() === 8 ? t('restart.bodyShaban', { n: num(planDay(state())) }) : t('restart.body');
+    RS.confirm({ title: t('restart.title'), body: body, ok: t('restart.ok'), danger: true }).then(function (ok) {
       if (!ok) return;
       var s = state(), at = Date.now();
       // Ticks made before `since` no longer count (they stay stored, so nothing is lost if another device syncs).
