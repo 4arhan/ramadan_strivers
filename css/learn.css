@@ -1,1 +1,240 @@
-/* learn.css — learn module styles (owned by the learn module). Reuse css/app.css components and tokens first. */
+/* ==========================================================================
+   learn.css — Learn tab (owned by the learn module): home cards, true/false and multiple-choice question
+   heroes, flashcards (3D flip, crossfade under reduced motion), results.
+   Builds on css/app.css components and tokens; logical properties only (RTL-safe). The question card and
+   the flashcard ARE the screen's one hero object (DESIGN §1), so their colours come from the --hero-* tokens
+   and the module's hero tokens below.
+   ========================================================================== */
+
+/* Module tokens for the hero surfaces. The hero looks the same in both themes, so none of these change with the
+   theme. --lrn-glass*: DESIGN §2's glass CTA (fill rgba(236,253,245,.08), border rgba(167,243,208,.22)), used by
+   the answer pills, options and grade buttons. --lrn-hero-danger: DESIGN §2's --danger in its dark value, used only
+   for the Da'if grade chip on the hero (app.css .grade-daif uses --danger, which in the light theme is dark red on
+   dark pine). Wrong answers are not red: --danger is for destructive text only, so a wrong answer is marked with an
+   x and neutral ink, a right one with a check and mint. */
+.lrn-hero {
+  --lrn-glass: rgba(236, 253, 245, .08);
+  --lrn-glass-hover: rgba(236, 253, 245, .14);
+  --lrn-glass-press: rgba(236, 253, 245, .11);
+  --lrn-glass-line: rgba(167, 243, 208, .22);
+  --lrn-mark-line: rgba(167, 243, 208, .38);
+  --lrn-hero-danger: #FDA29B;
+  --lrn-hero-danger-soft: rgba(253, 162, 155, .12);
+}
+
+/* Home ---------------------------------------------------------------------- */
+.lrn-intro { margin: -2px 0 6px; font-size: 14px; color: var(--ink-3); line-height: 1.45; }
+.lrn-qt { margin-bottom: 14px; }
+.lrn-soon .row-ic { background: var(--card-2); color: var(--ink-3); }
+
+/* Session progress (plain, above the hero) ------------------------------------ */
+.lrn-prog { display: flex; flex-direction: column; gap: 8px; padding-inline: 4px; }
+.lrn-prog-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); font-size: 13px; font-weight: 600; color: var(--ink-3); line-height: 1.3; }
+.lrn-prog-score { color: var(--accent); white-space: nowrap; }
+.view > .lrn-prog + .hero { margin-top: var(--s3); }
+
+/* Keyboard hint: only where there is a keyboard-and-pointer setup */
+.lrn-keys { padding-inline: 8px; text-align: center; font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+@media (hover: none), (pointer: coarse) { .lrn-keys { display: none; } }
+
+.lrn-focus:focus, .lrn-focus:focus-visible { outline: none; box-shadow: none; }
+
+/* Bidi: content still in English inside a right-to-left page carries lang="en" dir="ltr" (js); short UI lines
+   that mix a translated label with content take their direction from their own first letter. Metric values are
+   not in this list: they are figures without a strong direction and follow the page (core .metrics). */
+.lrn-bidi { display: block; }
+.lrn-bidi:not([dir]), .lrn-prog-row > span, .lrn-ans, .lrn-verdict > span, .lrn-keys, .lrn-intro, .lrn-rate, .lrn-ai > span,
+.lrn-grade-l, .lrn-grade-s, .lrn-hero .hero-label, .lrn-hero .hero-text, .lrn-hero .cta-eyebrow, .lrn-hero .cta-text { unicode-bidi: plaintext; }
+
+/* Question hero (true/false, multiple choice) ---------------------------------- */
+.hero.lrn-q, .hero.lrn-flash { touch-action: manipulation; }
+.hero.lrn-q .hero-extra { margin-top: 12px; }
+.lrn-stmt { font-size: 21px; font-weight: 600; line-height: 1.42; letter-spacing: -.012em; color: var(--hero-ink); overflow-wrap: anywhere; }
+@media (max-width: 360px) { .lrn-stmt { font-size: 19px; } }
+.lrn-ai { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12.5px; font-weight: 600; color: var(--hero-ink-3); }
+.lrn-ai .ic { color: var(--hero-accent); }
+.lrn-ai .spinner { width: 14px; height: 14px; border-color: var(--hero-track); border-top-color: var(--hero-accent); }
+
+/* True / False pills */
+.lrn-tf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
+.lrn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 54px;
+  padding: 10px 16px;
+  border-radius: var(--r-pill);
+  background: var(--lrn-glass);
+  border: 1px solid var(--lrn-glass-line);
+  color: var(--hero-ink);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), opacity var(--dur), transform .15s var(--ease);
+}
+.lrn-pill .ic { width: 18px; height: 18px; stroke-width: 2.2; }
+@media (hover: hover) { .lrn-pill:not(:disabled):hover { background: var(--lrn-glass-hover); } }
+.lrn-pill:active:not(:disabled) { transform: scale(.98); }
+.lrn-pill:disabled { cursor: default; }
+.lrn-pill.is-correct { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); }
+.lrn-pill.is-wrong { background: transparent; border-color: var(--hero-ink-3); color: var(--hero-ink); }
+.lrn-pill.is-wrong .ic { color: var(--hero-ink-2); }
+.lrn-pill.is-dim { opacity: .5; }
+
+/* Multiple-choice options: hairline rows with a lettered mark (role=radio) */
+.lrn-opts { margin-top: 16px; }
+.lrn-opt-w + .lrn-opt-w { border-top: 1px solid var(--hero-hairline); }
+.lrn-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: calc(100% + 16px);
+  min-height: 56px;
+  margin-inline: -8px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  color: var(--hero-ink);
+  font-size: 15.5px;
+  font-weight: 550;
+  line-height: 1.4;
+  text-align: start;
+  transition: background-color var(--dur) var(--ease), opacity var(--dur);
+}
+@media (hover: hover) { .lrn-opt:not(:disabled):hover { background: var(--lrn-glass); } }
+.lrn-opt:active:not(:disabled) { background: var(--lrn-glass-press); }
+.lrn-opt:disabled { cursor: default; }
+.lrn-opt-k {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--lrn-mark-line);
+  color: var(--hero-ink-2);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+.lrn-opt-t { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.lrn-opt-mark { flex: none; width: 20px; height: 20px; }
+.lrn-opt.is-correct .lrn-opt-k { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); }
+.lrn-opt.is-correct .lrn-opt-mark { color: var(--hero-accent); }
+.lrn-opt.is-wrong .lrn-opt-k { border-color: var(--hero-ink-2); color: var(--hero-ink); }
+.lrn-opt.is-wrong .lrn-opt-mark { color: var(--hero-ink-2); }
+.lrn-opt.is-dim { opacity: .5; }
+
+/* Reveal: verdict, correct answer, explanation, reference */
+.lrn-reveal { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hero-hairline); animation: lrn-in .24s var(--ease) both; }
+.lrn-verdict { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; letter-spacing: var(--track-tight); line-height: 1.3; }
+.lrn-verdict .ic { stroke-width: 2; }
+.lrn-verdict.is-ok { color: var(--hero-accent); }
+.lrn-verdict.is-no { color: var(--hero-ink); }
+.lrn-verdict.is-no .ic { color: var(--hero-ink-2); }
+.lrn-ans { margin-top: 6px; font-size: 15.5px; font-weight: 600; color: var(--hero-ink); line-height: 1.45; overflow-wrap: anywhere; }
+.lrn-x { margin-top: 8px; font-size: 15px; line-height: 1.55; color: var(--hero-ink-2); overflow-wrap: anywhere; }
+.lrn-src { margin-top: 10px; }
+@keyframes lrn-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Grade chips and references on the dark hero (app.css chips assume a light card) */
+.lrn-hero .grade-hasan, .lrn-hero .grade-other { background: var(--lrn-glass); border-color: var(--hero-hairline); color: var(--hero-ink-2); }
+.lrn-hero .grade-daif { background: var(--lrn-hero-danger-soft); color: var(--lrn-hero-danger); }
+
+/* Flashcard: the hero is a 3D scene, each face carries the hero surface -------------- */
+.hero.lrn-flash { padding: 0; background: none; border: 0; box-shadow: none; isolation: auto; }
+.hero.lrn-flash::before { display: none; }
+.hero.lrn-flash > .hero-extra { margin-top: 0; perspective: 1600px; }
+.lrn-flip { position: relative; display: grid; transform-style: preserve-3d; transition: transform .25s var(--ease); }
+.lrn-flip.is-flipped { transform: rotateY(180deg); }
+[dir="rtl"] .lrn-flip.is-flipped { transform: rotateY(-180deg); }
+.lrn-face {
+  grid-area: 1 / 1;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 340px;
+  padding: 20px 20px 18px;
+  border-radius: var(--r-hero);
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-edge);
+  box-shadow: var(--hero-shadow);
+  color: var(--hero-ink);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.lrn-face.is-back { transform: rotateY(180deg); }
+.lrn-face.is-front { cursor: pointer; }
+.lrn-face-bd { display: flex; flex-direction: column; margin-top: 14px; min-width: 0; }
+.lrn-face-ft { margin-top: auto; padding-top: 18px; }
+.lrn-face .cta { margin-top: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.lrn-face .ar-text { color: var(--hero-ink); font-size: 1.5em; line-height: 1.95; overflow-wrap: anywhere; }
+.lrn-translit { margin-top: 6px; font-size: 14.5px; font-style: italic; line-height: 1.5; color: var(--hero-ink-2); overflow-wrap: anywhere; }
+.lrn-front { margin-top: 12px; font-size: 19px; font-weight: 650; line-height: 1.4; letter-spacing: -.01em; color: var(--hero-ink); overflow-wrap: anywhere; }
+.lrn-face-bd > .lrn-front:first-child { margin-top: 0; }
+.lrn-face.is-short .lrn-face-bd { flex: 1 1 auto; justify-content: center; text-align: center; }
+.lrn-face.is-short .ar-text { font-size: 2.6em; line-height: 1.6; text-align: center; }
+.lrn-face.is-short .lrn-front { font-size: 22px; }
+.lrn-face.is-long .ar-text { font-size: 1.22em; line-height: 1.9; }
+.lrn-face.is-long .lrn-translit { font-size: 13.5px; }
+.lrn-back { font-size: 17px; font-weight: 500; line-height: 1.55; color: var(--hero-ink); overflow-wrap: anywhere; }
+.lrn-face .lrn-src { margin-top: 12px; }
+.lrn-rate { margin-bottom: 10px; font-size: 13px; font-weight: 600; color: var(--hero-ink-3); }
+
+/* Again / Hard / Good / Easy */
+.lrn-grades { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 359px) { .lrn-grades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.lrn-grade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 58px;
+  padding: 8px 4px;
+  border-radius: var(--r-block);
+  background: var(--lrn-glass);
+  border: 1px solid var(--lrn-glass-line);
+  color: var(--hero-ink);
+  text-align: center;
+  transition: background-color var(--dur) var(--ease), transform .15s var(--ease);
+}
+@media (hover: hover) { .lrn-grade:hover { background: var(--lrn-glass-hover); } }
+.lrn-grade:active { transform: scale(.97); }
+.lrn-grade-l { font-size: 14.5px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.lrn-grade-s { font-size: 12px; font-weight: 600; line-height: 1.2; color: var(--hero-ink-3); overflow-wrap: anywhere; }
+.lrn-grade.is-good { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); }
+.lrn-grade.is-good .lrn-grade-s { color: var(--mint-ink); opacity: .78; }
+
+/* Results ------------------------------------------------------------------- */
+.lrn-mark { display: grid; place-items: center; width: 36px; height: 36px; }
+.lrn-mark.is-ok { color: var(--accent); }
+.lrn-mark.is-no { color: var(--ink-3); }
+.lrn-res-row .row-title { font-weight: 550; }
+.lrn-after > .btn { flex: 1 1 160px; }
+
+/* A score such as 7/10 is notation: it reads left to right in every language (kept right-aligned in RTL) */
+.lrn-frac .hero-num .unit { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .lrn-frac .hero-num { flex-direction: row-reverse; justify-content: flex-end; }
+
+/* Empty states keep the screen's one hero */
+.hero.lrn-empty .hero-text { font-size: 16px; line-height: 1.5; }
+
+/* Motion -------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .lrn-reveal { animation: none; }
+  .lrn-pill:active:not(:disabled), .lrn-grade:active { transform: none; }
+  /* crossfade instead of the 3D flip */
+  .lrn-flip, .lrn-flip.is-flipped, [dir="rtl"] .lrn-flip.is-flipped { transform: none; transition: none; }
+  .lrn-face, .lrn-face.is-back { transform: none; -webkit-backface-visibility: visible; backface-visibility: visible; }
+  /* the face being shown is visible (and focusable) at once; the face being hidden fades out first */
+  .lrn-face { transition: opacity .2s linear, visibility 0s linear 0s; }
+  .lrn-face.is-back, .lrn-flip.is-flipped > .lrn-face.is-front { opacity: 0; visibility: hidden; transition: opacity .2s linear, visibility 0s linear .2s; }
+  .lrn-flip.is-flipped > .lrn-face.is-back { opacity: 1; visibility: visible; transition: opacity .2s linear, visibility 0s linear 0s; }
+}

@@ -1,1 +1,350 @@
-/* tracker.css — tracker module styles (owned by the tracker module). Reuse css/app.css components and tokens first. */
+/* ==========================================================================
+   tracker.css — Today, Quran and Me (tracker module). Builds on app.css components and tokens:
+   only what the shared components do not cover. Logical properties only (RTL-safe).
+   Sections: 1 tokens · 2 checklist sections · 3 deed rows · 4 Today cards · 5 year-round cells ·
+             6 Quran · 7 Me (heatmap, comparison, categories, badges) · 8 guide, day detail ·
+             9 kids level · 10 motion · 11 privacy page · 12 trend chart, sheets, topic heroes
+   ========================================================================== */
+
+/* 1. TOKENS (heatmap scale: accent at rising strength, both themes) ------------ */
+:root {
+  --tr-h0: var(--card-2);
+  --tr-h1: rgba(4, 120, 87, .12);
+  --tr-h2: rgba(4, 120, 87, .26);
+  --tr-h3: rgba(4, 120, 87, .45);
+  --tr-h4: #047857;
+  --tr-h4-ink: #FFFFFF;
+  --tr-pace: #5F6C66;
+}
+:root[data-theme="dark"] {
+  --tr-h1: rgba(110, 231, 183, .12);
+  --tr-h2: rgba(110, 231, 183, .24);
+  --tr-h3: rgba(110, 231, 183, .42);
+  --tr-h4: #6EE7B7;
+  --tr-h4-ink: #052E22;
+  --tr-pace: #93A69D;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tr-h1: rgba(110, 231, 183, .12);
+    --tr-h2: rgba(110, 231, 183, .24);
+    --tr-h3: rgba(110, 231, 183, .42);
+    --tr-h4: #6EE7B7;
+    --tr-h4-ink: #052E22;
+    --tr-pace: #93A69D;
+  }
+}
+
+/* 2. CHECKLIST SECTIONS (collapsible cards) ------------------------------------ */
+.tr-sec { padding: 0; }
+.tr-sec-h { margin: 0; font: inherit; letter-spacing: normal; }
+.tr-sec-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  width: 100%;
+  min-height: 68px;
+  padding: 14px 16px 10px;
+  padding-inline-start: 16px;
+  border-radius: var(--r-card);
+  color: var(--ink);
+  text-align: start;
+  transition: background-color var(--dur) var(--ease);
+}
+.tr-sec-btn[aria-expanded="true"] { border-end-start-radius: 0; border-end-end-radius: 0; }
+@media (hover: hover) { .tr-sec-btn:hover { background: var(--card-2); } }
+.tr-sec-btn:focus-visible { outline-offset: -2px; }
+.tr-sec-txt { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.tr-sec-title { font-size: 16px; font-weight: 700; letter-spacing: var(--track-tight); line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; }
+.tr-sec-n { flex: none; font-size: 15px; font-weight: 650; color: var(--ink-2); font-variant-numeric: tabular-nums; unicode-bidi: isolate; }
+.tr-sec-n > [aria-hidden] { direction: ltr; unicode-bidi: isolate; }
+/* hero metrics: values share a baseline even when a label wraps to two lines */
+#tr-hero .metric { display: flex; flex-direction: column; justify-content: space-between; }
+.tr-sec-chev { flex: none; color: var(--ink-3); transition: transform var(--dur) var(--ease); }
+.tr-sec-btn[aria-expanded="true"] .tr-sec-chev { transform: rotate(180deg); }
+.tr-sec-bar { margin: 0 16px 14px; height: 4px; }
+.tr-sec-bd { padding: 2px 20px 10px; border-top: 1px solid var(--hairline); }
+.tr-sec.is-complete .tr-sec-n { color: var(--accent); }
+.tr-sec.is-l10 { border-color: var(--hairline-2); }
+.tr-note { margin: 14px 0 6px; padding: 12px 14px; border-radius: var(--r-block); background: var(--card-2); }
+.tr-note p { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.tr-note .ref { margin-top: 6px; }
+.tr-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 2px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.tr-sub .ic { color: var(--accent); }
+
+/* 3. DEED ROWS -------------------------------------------------------------------- */
+.tr-deeds .row-wrap > .row-extra,
+.tr-deeds .row-wrap.lead-custom > .row-extra { padding-inline-start: 40px; }
+.tr-deed .row-val { font-size: 13px; font-weight: 650; color: var(--ink-3); }
+.tr-deed.is-done .row-val { color: var(--accent); }
+.tr-deed.is-done .row-title { color: var(--ink-2); }
+.tr-exp { margin: 0 0 6px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.tr-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+.tr-links .link-btn { min-height: 44px; margin-block: -8px; padding-inline: 6px; font-size: 13px; }
+.tr-links .meta { row-gap: 6px; }
+.tr-links .ref { margin-inline-end: 4px; }
+.tr-dot { display: block; width: 8px; height: 8px; margin-inline: 10px; border-radius: 50%; background: var(--accent); opacity: .55; }
+.tr-deeds .row-wrap.lead-custom > .row-extra:has(> .tr-exp:only-child) { padding-bottom: 10px; }
+.tr-dualist { margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: var(--accent-soft); color: var(--ink); }
+.tr-dualist-t { font-size: 12px; font-weight: 650; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--accent); }
+.tr-dualist ul { margin-top: 4px; padding-inline-start: 18px; list-style: disc; font-size: 14px; line-height: 1.5; }
+
+/* 4. TODAY CARDS ---------------------------------------------------------------- */
+.tr-hayd.is-tight { padding-block: 6px; }
+.tr-hayd .row-ic { background: var(--accent-soft); }
+.tr-hayd-bd { padding: 6px 0 14px; border-top: 1px solid var(--hairline); }
+.tr-hayd-bd .quote { margin-top: 12px; font-size: 15.5px; }
+.tr-hayd-bd .ref { margin-top: 6px; }
+.tr-hayd-tt { margin-top: 14px; font-size: 14px; font-weight: 650; color: var(--ink); }
+.tr-tips { margin-top: 6px; padding-inline-start: 18px; list-style: disc; font-size: 14px; line-height: 1.55; color: var(--ink-2); }
+.tr-tips li + li { margin-top: 3px; }
+.tr-tips li::marker { color: var(--accent); }
+.tr-lq.card { border-color: var(--hairline-2); }
+.tr-lq .card-bd p { color: var(--ink-2); }
+.tr-journal .textarea { min-height: 96px; }
+.tr-fast-day { margin-top: 14px; padding: 12px 14px; border-radius: var(--r-block); background: var(--accent-soft); }
+.tr-fast-day-t { font-size: 14px; font-weight: 650; color: var(--ink); }
+.tr-fast-day .quote { margin-top: 6px; font-size: 15px; }
+.tr-fast-day .ref { margin-top: 6px; }
+.tr-jprompt { margin-bottom: 10px; padding-inline-start: 12px; border-inline-start: 2px solid var(--accent); font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.5; }
+.tr-jstatus { margin-top: 8px; text-align: end; }
+.tr-jtext { white-space: pre-wrap; color: var(--ink); }
+.tr-install .card-bd p { color: var(--ink-2); }
+.tr-install .btn-row > .btn { flex: 0 1 auto; }
+.tr-h3 { margin: 18px 0 8px; font-size: 13px; font-weight: 650; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); }
+.card-bd > .tr-h3:first-child { margin-top: 2px; }
+.tr-plan .field + .field { margin-top: 10px; }
+.tr-qada { display: flex; flex-direction: column; gap: 6px; }
+.tr-qada-row { display: flex; align-items: center; gap: 6px; }
+.tr-qada-l { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+.tr-qada .icon-btn { background: var(--card-2); border: 1px solid var(--hairline); }
+.tr-qada-n { min-width: 40px; text-align: center; font-size: 20px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* 5. YEAR-ROUND CELLS (Shawwal six, Dhul Hijjah ten) ------------------------------ */
+/* every cell stays 44px+ wide: 6px gaps, and the six of Shawwal go 3 x 2 when six would be narrower than 44px */
+.tr-cells { display: grid; gap: 6px; }
+.tr-cells-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.tr-cells-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 379px) {
+  .tr-cells-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tr-cells-6 .tr-cell { aspect-ratio: auto; min-height: 52px; }
+}
+.tr-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: var(--card-2);
+  border: 1px solid var(--hairline-2);
+  color: var(--ink-2);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+/* the Day of Arafah: a dot under the number, explained by the key under the grid */
+.tr-cell-dot { display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.tr-cell .tr-cell-dot { position: absolute; inset-block-end: 7px; inset-inline-start: calc(50% - 3px); }
+.tr-cell.is-on .tr-cell-dot { background: currentColor; }
+.tr-cells-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+.tr-cell-key { display: inline-flex; align-items: center; gap: 6px; }
+.tr-cell.is-on { background: var(--tr-h4); border-color: transparent; color: var(--tr-h4-ink); }
+.tr-cell.is-today { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent); }
+.tr-fast .list { margin-inline: 0; }
+
+/* 6. QURAN ------------------------------------------------------------------------ */
+.tr-qchart .tr-pace { stroke: var(--tr-pace); stroke-width: 1.25; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.tr-legend { display: flex; align-items: center; gap: 8px; }
+.tr-key { flex: none; display: inline-block; width: 18px; height: 0; border-top: 2px dashed var(--tr-pace); }
+.tr-qlog .row { min-height: 48px; }
+.tr-qlog .row.is-current .row-title, .tr-qlog .row.is-current .row-val { color: var(--accent); }
+.tr-q-so { font-size: 15px; font-weight: 600; color: var(--ink); }
+.tr-links-card .row-ic { background: var(--accent-soft); }
+
+/* 7. ME ---------------------------------------------------------------------------- */
+/* heatmap: 6 columns at 390px, 5 at 320px; cells are 44px+ buttons */
+.tr-heat { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
+.tr-heat-c {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 44px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: var(--tr-h0);
+  border: 1px solid var(--hairline);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  transition: transform .15s var(--ease);
+}
+.tr-heat-c[data-lv="1"] { background: var(--tr-h1); border-color: transparent; color: var(--ink); }
+.tr-heat-c[data-lv="2"] { background: var(--tr-h2); border-color: transparent; color: var(--ink); }
+.tr-heat-c[data-lv="3"] { background: var(--tr-h3); border-color: transparent; color: var(--ink); }
+.tr-heat-c[data-lv="4"] { background: var(--tr-h4); border-color: transparent; color: var(--tr-h4-ink); }
+.tr-heat-c[data-hayd] { border: 1.5px dashed var(--control-line); }
+.tr-heat-c[aria-current="date"] { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--accent); }
+.tr-heat-c:active { transform: scale(.96); }
+.tr-heat-leg { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--ink-3); }
+.tr-heat-leg span { padding-inline: 4px; }
+.tr-heat-leg i { display: block; width: 14px; height: 14px; border-radius: 4px; background: var(--tr-h0); border: 1px solid var(--hairline); }
+.tr-heat-leg i[data-lv="1"] { background: var(--tr-h1); border: 0; }
+.tr-heat-leg i[data-lv="2"] { background: var(--tr-h2); border: 0; }
+.tr-heat-leg i[data-lv="3"] { background: var(--tr-h3); border: 0; }
+.tr-heat-leg i[data-lv="4"] { background: var(--tr-h4); border: 0; }
+.tr-heat-hk { display: inline-flex; align-items: center; gap: 6px; margin-inline-end: auto; }
+.tr-heat-leg i[data-hayd] { background: var(--tr-h0); border: 1.5px dashed var(--control-line); }
+.tr-streaks .row { min-height: 52px; }
+.tr-totals { padding-bottom: 14px; border-bottom: 1px solid var(--hairline); }
+.tr-cmp .tr-h3, .tr-cats .tr-h3 { margin: 0; }
+.tr-cmp .divider { margin: 16px 0; }
+.tr-delta { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: var(--card-2); font-size: 14px; font-weight: 600; color: var(--ink-2); }
+.tr-delta.is-up { background: var(--accent-soft); color: var(--ink); }
+.tr-delta.is-up .ic { color: var(--accent); }
+.tr-cat .spread { margin-bottom: 6px; font-size: 14px; }
+.tr-cat-n { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--ink); font-weight: 600; }
+.tr-cat-n .ic { flex: none; color: var(--accent); }
+.tr-cat-n span { min-width: 0; overflow-wrap: anywhere; }
+.tr-streaks .row-val { color: var(--ink); font-size: 15px; }
+/* badges */
+.tr-badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 14px 8px; }
+.tr-badge { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 4px 2px; border-radius: 14px; text-align: center; color: var(--ink-3); }
+@media (hover: hover) { .tr-badge:hover { background: var(--card-2); } }
+.tr-badge-ic {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--card-2);
+  border: 1px solid var(--hairline-2);
+  color: var(--ink-3);
+}
+.tr-badge.is-on .tr-badge-ic, .tr-badge-ic.is-on { background: var(--accent-soft); border: 1.5px solid var(--accent); color: var(--accent); }
+.tr-badge-lock { position: absolute; inset-block-end: -2px; inset-inline-end: -2px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--card); border: 1px solid var(--hairline-2); color: var(--ink-3); }
+.tr-badge-n { font-size: 12.5px; font-weight: 650; line-height: 1.25; color: var(--ink-3); overflow-wrap: anywhere; }
+.tr-badge.is-on .tr-badge-n { color: var(--ink); }
+.tr-badge-ic.sm { width: 40px; height: 40px; }
+.tr-badge-st { display: block; margin-top: 4px; font-size: 12px; font-weight: 650; color: var(--ink-3); }
+.tr-badge-st.is-on { color: var(--accent); }
+.tr-badge-list .row { align-items: flex-start; }
+.tr-badge-list .row-lead { padding-top: 2px; }
+.tr-badge-big { display: grid; place-items: center; width: 84px; height: 84px; margin: 6px auto 12px; border-radius: 50%; background: var(--card-2); border: 1px solid var(--hairline-2); color: var(--ink-3); }
+.tr-badge-big.is-on { background: var(--accent-soft); border: 2px solid var(--accent); color: var(--accent); }
+.tr-rule { text-align: center; font-size: 16px; line-height: 1.5; color: var(--ink); }
+.tr-data .tr-danger .row-title { color: var(--danger); }
+.tr-data .tr-danger .row-ic { background: var(--danger-soft); color: var(--danger); }
+.tr-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.tr-about-tag { padding: 4px 0 12px; }
+.tr-set .field + .field, .tr-set .select-wrap + .field { margin-top: var(--s4); }
+.tr-set .card-bd > .field:first-child { margin-top: 0; }
+.tr-set .field .seg { margin-top: 2px; }
+
+/* 8. GUIDE + DAY DETAIL ------------------------------------------------------------ */
+.tr-guide { scroll-margin-top: calc(76px + env(safe-area-inset-top)); }
+.tr-guide > summary { list-style: none; cursor: pointer; width: calc(100% + 20px); margin-inline: -10px; padding-inline: 10px; border-radius: 14px; }
+.tr-guide > summary::-webkit-details-marker { display: none; }
+@media (hover: hover) { .tr-guide > summary:hover { background: var(--card-2); } }
+.tr-guide[open] .tr-guide-chev { transform: rotate(180deg); }
+.tr-guide-chev { transition: transform var(--dur) var(--ease); }
+.tr-guide-bd { padding: 0 0 14px; padding-inline-start: 48px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+.tr-guide-bd p + p { margin-top: 8px; }
+.tr-compact .row { min-height: 40px; padding-block: 6px; font-size: 14px; }
+.tr-compact .row-title { font-weight: 500; font-size: 14px; }
+.tr-mini { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; }
+.tr-mini.is-done { background: var(--accent); color: var(--on-accent); }
+.tr-mini.is-missed { background: var(--card-2); border: 1px solid var(--hairline-2); color: var(--ink-3); }
+.tr-mini .ic { stroke-width: 2.4; }
+
+/* 9. KIDS LEVEL: bigger type and checks in the checklist ------------------------------ */
+.lvl-kids .tr-sec-title { font-size: 18px; }
+.lvl-kids .tr-deed .row-title { font-size: 17.5px; line-height: 1.4; }
+.lvl-kids .tr-deed .check { width: 34px; height: 34px; }
+.lvl-kids .tr-deed .check .ic { width: 19px; height: 19px; }
+.lvl-kids .tr-deeds .row-wrap > .row-extra { padding-inline-start: 46px; font-size: 14.5px; }
+.lvl-kids .tr-deed { min-height: 64px; }
+.lvl-kids .tr-exp { font-size: 15px; }
+
+/* 10. MOTION: the 100% moment (ring pulse, no confetti) -------------------------------- */
+@keyframes tr-pulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.07); }
+  70% { transform: scale(.99); }
+  100% { transform: scale(1); }
+}
+@keyframes tr-glow { 0%, 100% { opacity: 1; } 40% { opacity: .35; } }
+.ring.tr-pulse { animation: tr-pulse .9s var(--ease) 2; }
+.ring.tr-pulse::before { animation: tr-glow .9s var(--ease) 2; }
+/* a section just completed (or the day's last deed): its count and bar glow next to the row that was ticked */
+@keyframes tr-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+@keyframes tr-bar-glow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  35% { box-shadow: 0 0 0 3px var(--accent-soft), 0 0 12px 1px var(--accent-soft); }
+}
+@keyframes tr-fade-ink { 0%, 100% { opacity: 1; } 40% { opacity: .45; } }
+.tr-sec-n.tr-pop { display: inline-block; animation: tr-pop .7s var(--ease) 2; color: var(--accent); }
+.tr-sec-bar.tr-pop { animation: tr-bar-glow .7s var(--ease) 2; }
+@media (prefers-reduced-motion: reduce) {
+  .ring.tr-pulse { animation: none; }
+  .tr-sec-n.tr-pop { animation: tr-fade-ink .7s linear 2; }     /* crossfade only, no scaling */
+  .tr-sec-bar.tr-pop { animation: none; }
+  .tr-sec-chev, .tr-guide-chev { transition: none; }
+  .tr-heat-c:active { transform: none; }
+}
+
+/* 11. PRIVACY PAGE (privacy.html) ------------------------------------------------------ */
+.tr-doc { max-width: var(--col); margin-inline: auto; padding: 8px max(var(--gutter), env(safe-area-inset-right)) 48px max(var(--gutter), env(safe-area-inset-left)); }
+.tr-doc-top { display: flex; align-items: center; gap: 6px; min-height: 60px; padding-top: env(safe-area-inset-top); }
+.tr-doc-top a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding-inline: 8px 12px; border-radius: var(--r-pill); color: var(--ink); font-weight: 650; text-decoration: none; }
+@media (hover: hover) { .tr-doc-top a:hover { background: var(--hairline); } }
+.tr-doc-top .ic { width: 20px; height: 20px; }
+[dir="rtl"] .tr-doc-top .ic { transform: scaleX(-1); }
+.tr-doc h1 { margin: 8px 4px 16px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+.tr-doc .card + .card { margin-top: var(--s4); }
+.tr-doc .card h2 { font-size: 17px; font-weight: 700; color: var(--ink); }
+.tr-doc .card p { margin-top: 6px; font-size: 15.5px; line-height: 1.6; color: var(--ink-2); }
+.tr-doc .lead { margin: 0 4px 20px; font-size: 16px; line-height: 1.6; color: var(--ink-2); }
+.tr-doc-foot { margin-top: var(--s6); text-align: center; font-size: 13px; color: var(--ink-3); }
+
+/* 12. TREND CHART, SHEETS, TOPIC HEROES ------------------------------------------------------ */
+/* daily trend: y labels in their own column (12px at every width); days run left to right in both directions */
+.tr-trend { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; direction: ltr; }
+.tr-trend-y { position: relative; grid-row: 1; grid-column: 1; min-width: 32px; }
+.tr-trend-y span { position: absolute; right: 0; transform: translateY(-50%); font-size: 12px; font-weight: 600; line-height: 1; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tr-trend-svg { grid-row: 1; grid-column: 2; }
+.tr-trend-x { grid-row: 2; grid-column: 2; display: flex; justify-content: space-between; margin-top: 6px; }
+.tr-trend .tr-grid { stroke: var(--hairline-2); stroke-width: 1; stroke-dasharray: 2 4; vector-effect: non-scaling-stroke; }
+.tr-trend .tr-trend-pt { fill: var(--accent); }
+/* heatmap day sheet: one focusable summary group (keyboard scrolling when the sheet overflows) */
+.tr-daysum { border-radius: 12px; }
+.tr-daysum-list .row-val { font-size: 14px; font-weight: 650; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tr-daysum-list .row.is-full .row-val { color: var(--accent); }
+/* mode sheet: the chosen mode carries the filled check */
+.tr-modes .row { min-height: 60px; align-items: flex-start; }
+.tr-modes .row-lead { padding-top: 2px; }
+.tr-modes .row.is-current .row-title { color: var(--ink); }
+/* heroes whose one important thing is a title, not a number (guide topic, a new season) */
+.hero.tr-hero-topic .hero-label { margin-top: 0; font-size: clamp(22px, 6.4vw, 26px); font-weight: 650; letter-spacing: -.02em; line-height: 1.25; color: var(--hero-ink); }
+.hero.tr-hero-topic .hero-text { font-size: 15px; line-height: 1.55; }

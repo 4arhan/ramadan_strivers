@@ -21,6 +21,8 @@
    i18n       RS.t(key, vars) → string (lang → en → key) · RS.tn(key, n, vars) (plural via Intl.PluralRules:
               keys key.one / key.other / key.few …; {n} is filled with the formatted number) · RS.has(key)
               RS.lang() · RS.dir() · RS.setLang(code) → Promise<activeCode> · RS.LANGS · RS.I18N[code]
+              Every RS.LANGS code has a js/lang/<code>.js (an empty stub until translated: English fallback), so
+              RS.setLang('ar') always works for RTL testing. RS.startLang() (main.js, once) · RS.langDetected
    Theme      RS.setTheme('system'|'light'|'dark') · RS.applyTheme()
    Calendar   RS.hijri(date?, offset? = settings.hijriOff) → {day, month, year} · RS.hijriMonth(m) → localized name
               · RS.hijriMonthKey(m) → 'core.hijri.m9' · RS.appMode() → 'ramadan' | 'prep' | 'year'
@@ -30,11 +32,18 @@
               (body, extra, lead, trail, titleHtml, subHtml, rows) are inserted raw — escape what you put in them.
               hero card section list row metrics ring cta btn iconBtn toggle seg chip field textarea select
               check empty bar kicker gradeChip ref bars spark arabic  + helpers: stepper note loading linkAction
+              meta (a line of items with CSS-drawn separators — use it instead of joining with ' · ')
+              Links to other sites (href https://…) open in a new tab and get the "(opens in a new tab)" hint.
+              Every href passes RS.safeHref(url): javascript:/data:/vbscript: URLs become an inert '#'.
+              iconBtn, toggle and check (with act) need label or labelledby (a console warning otherwise).
               Each component's options are documented above its definition below. Live examples: #/styleguide
               (js/main.js). Classes and tokens: css/app.css.
-   Overlays   RS.toast(msg, {tone:'default'|'success'|'error', ms}) · RS.sheet.open({title, body, actions, onClose,
+   Overlays   RS.toast(msg, {tone:'default'|'success'|'error', ms}) → {close} (errors stay until closed; timers pause
+              on hover/focus) · RS.sheet.open({title, body, actions, onClose,
               focus, cls}) → sheet body element · RS.sheet.close() · RS.sheet.isOpen() ·
               RS.confirm({title, body, ok, cancel, danger}) → Promise<boolean>
+              The device/browser Back button closes an open sheet or dialog (each owns a history entry); the sheet
+              also closes when its grip/header is dragged down. RS.router.go/back close open overlays first.
    Actions    RS.act(name, fn) — delegated: <button data-act="name" data-arg="x"> → fn(arg, el, event);
               [data-act-change] / [data-act-input] → fn(value, el, event) (value = el.value, checkbox → checked);
               <form data-act-submit="name"> → fn(valuesObject, form, event) (default prevented).
@@ -43,8 +52,9 @@
    Router     RS.router.register(route, {render(rootEl, params), onShow?(params), onHide?(), title?(params),
               tab?, nav?, parent?}) · .go(route, params?, {replace}) · .back(fallbackRoute?) · .current() →
               {route, params} · .href(route, params) → '#/route?x=y' · .has(route) · .start()
-              RS.refresh() re-renders the current route (keeps scroll and focus) · RS.topbar({title, sub, back,
-              actions:[{icon, act, arg, label, href}]})
+              RS.refresh() re-renders the current route (keeps scroll and focus: the same control in #view or
+              #topbar — matched by id, or data-act + data-arg and its position — else the screen title) ·
+              RS.topbar({title, sub, back, actions:[{icon, act, arg, label, href}]})
    Misc       RS.buzz(ms) · RS.lazy(src) → Promise (script loaded once)
    ===================================================================================================== */
 (function () {
@@ -564,7 +574,20 @@
     return act ? attr('data-act', act) + (arg != null ? attr('data-arg', String(arg)) : '') : '';
   }
   function isExternal(href) { return /^https?:\/\//i.test(href || '') && String(href).indexOf(location.origin) !== 0; }
+  // Every href the components write goes through safeHref: a javascript:, data: or vbscript: URL (for example from
+  // user or server data) becomes an inert '#' (the click handler below ignores it) and is reported once.
+  // Browsers drop tabs/newlines inside URLs and leading control characters, so they are ignored by the check too.
+  function safeHref(h) {
+    h = String(h == null ? '' : h).trim();
+    if (/^(javascript|data|vbscript):/i.test(h.replace(/[\s\u0000-\u001f]/g, ''))) {
+      warnOnce('unsafe link URL blocked', h.slice(0, 48));
+      return '#';
+    }
+    return h;
+  }
+  RS.safeHref = safeHref;
   function linkAttrs(href) {
+    href = safeHref(href);
     return ' href="' + esc(href) + '"' + (isExternal(href) ? ' target="_blank" rel="noopener noreferrer"' : '');
   }
   // Screen-reader hint for links that open in a new tab (same wording as ui.ref).
@@ -675,13 +698,18 @@
     return '<' + tag + ' class="' + cls + '"' + a + '>' + inner + '</' + tag + '>';
   };
 
-  // metrics([{label, value, id?}], {onDark}) — label above value, hairline separators. data-n lets CSS turn a
-  // row of 4 into a 2×2 grid on narrow screens instead of squeezing the labels.
+  // metrics([{label, value, id?, text?}], {onDark}) — label above value, hairline separators. data-n lets CSS turn
+  // a row of 4 into a 2×2 grid on narrow screens instead of squeezing the labels. Values are never clipped: one that
+  // does not fit wraps. A value with words ("English", "30 days") is marked .is-text and set a little smaller than
+  // figures ("24/64", "2,140", "37%"); pass text:true/false to override the detection.
+  var FIGURE = /^[\d\s.,:;\/%#+\-()\u00a0\u00b7\u00d7\u2010-\u2015\u2212\u202f\u200e\u200f\u061c\u066a-\u066c]*$/;
   ui.metrics = function (items, o) {
     o = o || {};
     items = items || [];
     return '<dl class="metrics' + (o.onDark ? ' on-dark' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '" data-n="' + items.length + '">' + items.map(function (m) {
-      return '<div class="metric"' + attr('id', m.id) + '><dt>' + txt(m.label) + '</dt><dd>' + txt(m.value) + '</dd></div>';
+      var isText = m.text != null ? !!m.text : !FIGURE.test(m.value == null ? '' : String(m.value));
+      // a label like "Needed/day" may wrap after the slash (browsers do not break there by themselves)
+      return '<div class="metric' + (isText ? ' is-text' : '') + '"' + attr('id', m.id) + '><dt>' + txt(m.label).replace(/\//g, '/<wbr>') + '</dt><dd>' + txt(m.value) + '</dd></div>';
     }).join('') + '</dl>';
   };
 
@@ -735,17 +763,26 @@
     return '<button type="' + esc(o.type || 'button') + '" class="' + cls + '"' + actAttrs(o.act, o.arg) + (o.disabled ? ' disabled' : '') + attr('aria-label', o.label) + common + '>' + content + '</button>';
   };
 
-  // iconBtn(icon, {act, arg, label (required), href, id, cls})
+  // Controls whose only content is an icon or a knob need label (aria-label) or labelledby (id of visible text):
+  // without one a screen reader announces just "button" / "switch". Reported once per control in the console.
+  function needsName(o, what) {
+    if (!o.label && !o.labelledby) warnOnce('control without an accessible name (pass label or labelledby)', what);
+  }
+
+  // iconBtn(icon, {act, arg, label | labelledby (one is required), href, id, cls})
   ui.iconBtn = function (icon, o) {
     o = o || {};
+    needsName(o, 'iconBtn "' + icon + '"' + (o.act ? ' act=' + o.act : ''));
     var content = RS.icon(icon, { size: o.size || 22 });
-    if (o.href) return '<a class="' + clsx('icon-btn', o.cls) + '"' + linkAttrs(o.href) + attr('aria-label', newTabLabel(o.label, o.href)) + attr('id', o.id) + '>' + content + '</a>';
-    return '<button type="button" class="' + clsx('icon-btn', o.cls) + '"' + actAttrs(o.act, o.arg) + attr('aria-label', o.label) + attr('id', o.id) + '>' + content + '</button>';
+    var named = attr('aria-labelledby', o.labelledby) + attr('id', o.id);
+    if (o.href) return '<a class="' + clsx('icon-btn', o.cls) + '"' + linkAttrs(o.href) + attr('aria-label', newTabLabel(o.label, o.href)) + named + '>' + content + '</a>';
+    return '<button type="button" class="' + clsx('icon-btn', o.cls) + '"' + actAttrs(o.act, o.arg) + attr('aria-label', o.label) + named + '>' + content + '</button>';
   };
 
-  // toggle(on, {act, arg, label | labelledby, id}) — standalone switch
+  // toggle(on, {act, arg, label | labelledby (one is required), id}) — standalone switch
   ui.toggle = function (on, o) {
     o = o || {};
+    needsName(o, 'toggle' + (o.act ? ' act=' + o.act : '') + (o.id ? ' #' + o.id : ''));
     return '<button type="button" class="tgl' + (on ? ' is-on' : '') + '" role="switch" aria-checked="' + !!on + '"' + actAttrs(o.act, o.arg) +
       attr('aria-label', o.label) + attr('aria-labelledby', o.labelledby) + attr('id', o.id) + (o.disabled ? ' disabled' : '') + '><span class="tgl-knob"></span></button>';
   };
@@ -778,21 +815,27 @@
       control + (o.hint ? '<p class="field-hint" id="' + esc(hintId) + '">' + txt(o.hint) + '</p>' : '') + '</div>';
   }
   // field({id, label, type, value, placeholder, maxlength, hint, hideLabel, required, autocomplete, inputmode,
-  //        actInput, actChange, arg, attrs})
+  //        actInput, actChange, arg, attrs, dir})
+  // Text direction: free text follows what is typed (CSS unicode-bidi: plaintext on .input/.textarea: an Arabic
+  // dua in the English UI reads right-to-left and vice versa; an empty field keeps the UI direction).
+  // email / url / tel fields are always dir="ltr".
   ui.field = function (o) {
     o = o || {};
     var id = o.id || RS.uid('f');
-    var control = '<input class="input" id="' + esc(id) + '" name="' + esc(o.name || id) + '" type="' + esc(o.type || 'text') + '"' +
+    var type = o.type || 'text';
+    var dir = o.dir || (/^(email|url|tel)$/.test(type) ? 'ltr' : null);
+    var control = '<input class="input" id="' + esc(id) + '" name="' + esc(o.name || id) + '" type="' + esc(type) + '"' + attr('dir', dir) +
       attr('value', o.value) + attr('placeholder', o.placeholder) + attr('maxlength', o.maxlength) + attr('min', o.min) + attr('max', o.max) +
       attr('autocomplete', o.autocomplete) + attr('inputmode', o.inputmode) + (o.required ? ' required' : '') +
       (o.hint ? ' aria-describedby="' + esc(id) + '-hint"' : '') + fieldActs(o) + attrsOf(o.attrs) + '>';
     return fieldWrap(o, id, control);
   };
-  // textarea({id, label, value, placeholder, maxlength, rows, hint, hideLabel, actInput, actChange, arg, attrs})
+  // textarea({id, label, value, placeholder, maxlength, rows, hint, hideLabel, actInput, actChange, arg, attrs, dir})
+  // Each paragraph takes the direction of its own text (see field).
   ui.textarea = function (o) {
     o = o || {};
     var id = o.id || RS.uid('f');
-    var control = '<textarea class="textarea" id="' + esc(id) + '" name="' + esc(o.name || id) + '" rows="' + (parseInt(o.rows, 10) || 4) + '"' +
+    var control = '<textarea class="textarea" id="' + esc(id) + '" name="' + esc(o.name || id) + '" rows="' + (parseInt(o.rows, 10) || 4) + '"' + attr('dir', o.dir) +
       attr('placeholder', o.placeholder) + attr('maxlength', o.maxlength) + (o.hint ? ' aria-describedby="' + esc(id) + '-hint"' : '') +
       fieldActs(o) + attrsOf(o.attrs) + '>' + txt(o.value) + '</textarea>';
     return fieldWrap(o, id, control);
@@ -809,15 +852,16 @@
     return fieldWrap(o, id, control);
   };
 
-  // check(done, {act, arg, label, disabled}) — round check. Without act it is a visual (aria-hidden) mark,
-  // e.g. inside a row({check}) where the whole row is the checkbox.
+  // check(done, {act, arg, label | labelledby (one is required with act), disabled}) — round check. Without act it is
+  // a visual (aria-hidden) mark, e.g. inside a row({check}) where the whole row is the checkbox.
   ui.check = function (done, o) {
     o = o || {};
     var cls = 'check' + (done ? ' is-done' : '') + (o.cls ? ' ' + esc(o.cls) : '');
     var ic = RS.icon('check', { size: 16 });
     if (!o.act) return '<span class="' + cls + '" aria-hidden="true">' + ic + '</span>';
+    needsName(o, 'check act=' + o.act + (o.arg != null ? ' arg=' + o.arg : ''));
     return '<button type="button" class="' + cls + '" role="checkbox" aria-checked="' + !!done + '"' + actAttrs(o.act, o.arg) +
-      attr('aria-label', o.label) + attr('id', o.id) + (o.disabled ? ' disabled' : '') + '>' + ic + '</button>';
+      attr('aria-label', o.label) + attr('aria-labelledby', o.labelledby) + attr('id', o.id) + (o.disabled ? ' disabled' : '') + '>' + ic + '</button>';
   };
 
   // empty({icon, title, body, action:{text, act, arg, href, variant, icon}})
@@ -858,7 +902,8 @@
   ui.ref = function (o) {
     o = o || {};
     if (!o.ref && !o.grade) return '';
-    var url = o.url || RS.refUrl(o.ref);
+    var url = safeHref(o.url || RS.refUrl(o.ref));
+    if (url === '#') url = '';                       // a blocked URL: the reference is shown as plain text
     var r = '';
     if (o.ref) {
       r = url ? '<a' + linkAttrs(url) + '><bdi>' + txt(o.ref) + '</bdi>' + RS.icon('arrow-up-right', { size: 13 }) +
@@ -868,16 +913,18 @@
   };
 
   // bars(values[], {max, highlight: index | [indexes], labels: [..] ('' to skip), height, label (aria), onDark})
+  // Axis labels are HTML under the SVG, so they stay 12px at every width (SVG text would scale with the chart).
+  // Day order runs left to right in both directions, like the numbers on the axis.
   ui.bars = function (values, o) {
     o = o || {};
     var vals = (values || []).map(function (v) { return Math.max(0, Number(v) || 0); });
     var n = vals.length;
     if (!n) return '';
     var max = Number(o.max) || Math.max.apply(null, vals) || 1;
-    var W = 300, H = RS.clamp(o.height || 72, 24, 240), lblH = o.labels ? 14 : 0;
+    var W = 300, H = RS.clamp(o.height || 72, 24, 240);
     var slot = W / n, bw = Math.max(2, slot * (n > 20 ? 0.64 : 0.56)), rx = Math.min(bw / 2, 4);
     var hi = [].concat(o.highlight == null ? [] : o.highlight);
-    var out = '';
+    var out = '', axis = '';
     vals.forEach(function (v, i) {
       var h = v > 0 ? Math.max(3, Math.min(1, v / max) * H) : 3;
       var x = i * slot + (slot - bw) / 2;
@@ -885,11 +932,13 @@
       out += '<rect class="bars-b' + (isHi ? ' is-hi' : '') + (v > 0 ? '' : ' is-zero') + '" x="' + x.toFixed(2) + '" y="' + (H - h).toFixed(2) +
         '" width="' + bw.toFixed(2) + '" height="' + h.toFixed(2) + '" rx="' + rx.toFixed(2) + '"/>';
       if (o.labels && o.labels[i] != null && o.labels[i] !== '') {
-        out += '<text class="bars-lbl' + (isHi ? ' is-hi' : '') + '" x="' + (i * slot + slot / 2).toFixed(2) + '" y="' + (H + 11) + '" text-anchor="middle">' + txt(o.labels[i]) + '</text>';
+        axis += '<span class="bars-lbl' + (isHi ? ' is-hi' : '') + '" style="left:' + ((i + 0.5) / n * 100).toFixed(3) + '%">' + txt(o.labels[i]) + '</span>';
       }
     });
     var a11y = o.label ? ' role="img" aria-label="' + esc(o.label) + '"' : ' aria-hidden="true"';
-    return '<svg class="chart bars' + (o.onDark ? ' on-dark' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '" viewBox="0 0 ' + W + ' ' + (H + lblH) + '"' + a11y + ' focusable="false">' + out + '</svg>';
+    return '<div class="bars-wrap' + (o.onDark ? ' on-dark' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '">' +
+      '<svg class="chart bars' + (o.onDark ? ' on-dark' : '') + '" viewBox="0 0 ' + W + ' ' + H + '"' + a11y + ' focusable="false">' + out + '</svg>' +
+      (axis ? '<div class="bars-axis" aria-hidden="true">' + axis + '</div>' : '') + '</div>';
   };
 
   // spark(values[], {min, max, height, label (aria), onDark}) — smooth trend line with soft area and end dot
@@ -932,14 +981,24 @@
     return '<p class="' + clsx('ar-text', o.cls) + '" lang="ar" dir="rtl">' + txt(text) + '</p>';
   };
 
+  // meta([html, …], {cls}) — a line of small items (reference, grade, "Explain" link …) separated by dots that are
+  // drawn by CSS and never left dangling at the end or start of a wrapped line. Items are HTML (escape text).
+  ui.meta = function (items, o) {
+    o = o || {};
+    items = (items || []).filter(function (h) { return h != null && h !== ''; });
+    if (!items.length) return '';
+    return '<span class="' + clsx('meta', o.cls) + '"' + attr('id', o.id) + '>' + items.map(function (h) { return '<span class="meta-i">' + h + '</span>'; }).join('') + '</span>';
+  };
+
   // stepper({title, sub, prev:{act, arg, label, disabled}, next:{…}, id, cls}) — the "‹ Day 17 ›" switcher.
-  // Use relative args (e.g. '-1' / '+1') so RS.refresh() can put focus back on the same arrow.
+  // Use relative args (e.g. '-1' / '+1') so RS.refresh() can put focus back on the same arrow. A disabled arrow
+  // uses aria-disabled (it stays focusable, so focus is not lost when you reach the first or last day).
   ui.stepper = function (o) {
     o = o || {};
     function side(s, icon, fallback) {
       if (!s) return '<span class="stepper-gap" aria-hidden="true"></span>';
       return '<button type="button" class="icon-btn"' + actAttrs(s.act, s.arg) + ' aria-label="' + esc(s.label || fallback) + '"' +
-        (s.disabled ? ' disabled' : '') + '>' + RS.icon(icon, { size: 22 }) + '</button>';
+        (s.disabled ? ' aria-disabled="true"' : '') + '>' + RS.icon(icon, { size: 22 }) + '</button>';
     }
     return '<div class="' + clsx('stepper', o.cls) + '"' + attr('id', o.id) + '>' + side(o.prev, 'chevron-left', RS.t('core.prev')) +
       '<div class="stepper-label"><span class="stepper-title">' + txt(o.title) + '</span>' + (o.sub ? '<span class="stepper-sub">' + txt(o.sub) + '</span>' : '') + '</div>' +
@@ -969,7 +1028,16 @@
     try { return fn(arg, el || null, e || null); } catch (err) { console.error('[RS] action "' + name + '" failed', err); }
   };
   doc.addEventListener('click', function (e) {
+    // A route link inside an open sheet or dialog: close it first (giving back its history entry), then go.
+    var link = e.target && e.target.closest ? e.target.closest('a[href^="#/"]:not([data-act])') : null;
+    if (link && overlayEntries() && !e.defaultPrevented && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
+      e.preventDefault();
+      RS.router.go(link.getAttribute('href').slice(2));
+      return;
+    }
     var el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+    // an inert link (safeHref replaced an unsafe URL with '#'): following it would only reset the route
+    if (!el && e.target && e.target.closest && e.target.closest('a[href="#"]')) { e.preventDefault(); return; }
     if (!el || el.disabled || el.getAttribute('aria-disabled') === 'true') return;
     var name = el.getAttribute('data-act');
     if (el.tagName === 'A') {
@@ -1031,19 +1099,173 @@
       layer.innerHTML = '';
     }, RS.reducedMotion() ? 0 : 240);
   }
-  function restoreFocus(el) {
-    if (el && el.focus && doc.contains(el)) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
+  function focusEl(el) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
+
+  // Focus that survives a re-render. focusKey(el) names the focused control by its root (#view, #topbar or the
+  // open sheet), a selector (id, data-act + data-arg, …) and its position among the matches; focusByKey puts focus
+  // back on the same control, or on the one now in its place. When nothing fits, the open sheet or the screen
+  // title (h1, tabindex=-1) gets focus: focus is never left on <body>.
+  var FOCUS_ROOTS = ['sheet-root', 'view', 'topbar'];
+  function cssq(s) { return String(s).replace(/["\\]/g, '\\$&'); }
+  function focusSelector(el) {
+    if (el.id) return '[id="' + cssq(el.id) + '"]';
+    if (el.classList.contains('topbar-title')) return '.topbar-title';
+    var act = el.getAttribute('data-act');
+    if (act) {
+      var arg = el.getAttribute('data-arg');
+      return '[data-act="' + cssq(act) + '"]' + (arg != null ? '[data-arg="' + cssq(arg) + '"]' : ':not([data-arg])');
+    }
+    var ch = el.getAttribute('data-act-change') || el.getAttribute('data-act-input');
+    if (ch) return '[data-act-change="' + cssq(ch) + '"],[data-act-input="' + cssq(ch) + '"]';
+    if (el.getAttribute('name')) return el.tagName.toLowerCase() + '[name="' + cssq(el.getAttribute('name')) + '"]';
+    if (el.tagName === 'A' && el.getAttribute('href')) return 'a[href="' + cssq(el.getAttribute('href')) + '"]';
+    return el.matches(FOCUSABLE) ? FOCUSABLE : el.tagName.toLowerCase();
+  }
+  function focusKey(el) {
+    if (!el || el === doc.body || el === root) return null;
+    for (var i = 0; i < FOCUS_ROOTS.length; i++) {
+      var r = doc.getElementById(FOCUS_ROOTS[i]);
+      if (!r || r === el || !r.contains(el)) continue;
+      var sel = focusSelector(el);
+      return { root: FOCUS_ROOTS[i], sel: sel, idx: Math.max(0, RS.$$(sel, r).indexOf(el)) };
+    }
+    return null;
+  }
+  function canFocus(el) {
+    return !!el && !el.disabled && !(el.closest && el.closest('[inert]')) && (el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0);
+  }
+  function fallbackFocus() {
+    var el = sheetState ? sheetState.layer.querySelector('.sheet') : doc.querySelector('#topbar .topbar-title');
+    if (el) focusEl(el);
+  }
+  function focusByKey(k) {
+    var r = k && doc.getElementById(k.root);
+    var list = r ? RS.$$(k.sel, r) : [];
+    var el = list.length ? list[Math.min(k.idx, list.length - 1)] : null;
+    if (canFocus(el)) focusEl(el); else fallbackFocus();
+  }
+  // Overlays remember where focus was (the element, plus a key in case the screen is re-rendered meanwhile).
+  function rememberFocus() { var a = doc.activeElement; return { el: a, key: focusKey(a) }; }
+  function restoreFocus(m) {
+    if (m && m.el && m.el !== doc.body && doc.contains(m.el) && canFocus(m.el)) { focusEl(m.el); return; }
+    if (m && m.key) focusByKey(m.key); else fallbackFocus();
   }
 
+  // Back button: an open sheet or dialog owns one history entry with the same URL, so the device or browser Back
+  // button closes it instead of leaving the screen (or the installed app). Closing it any other way gives the
+  // entry back. History changes are queued and run one at a time (removing an entry finishes on 'popstate');
+  // RS.router.go/back called while an overlay is open close it first and navigate afterwards.
+  var hist = { ops: [], busy: false, timer: 0, guard: 0, seq: 0 };
+  function pushEntry() { try { history.pushState({ rsOverlay: ++hist.seq }, '', location.href); } catch (e) { /* ignore */ } }
+  function histKick() { if (!hist.timer && !hist.busy && hist.ops.length) hist.timer = setTimeout(histRun, 0); }
+  function histPush() {
+    var last = hist.ops[hist.ops.length - 1];
+    if (last && last.type === 'pop') { if (--last.n === 0) hist.ops.pop(); return; }   // reuse an entry being given back
+    if (!hist.busy && !hist.ops.length) { pushEntry(); return; }
+    hist.ops.push({ type: 'push' });
+  }
+  function histPop() {
+    var last = hist.ops[hist.ops.length - 1];
+    if (last && last.type === 'push') { hist.ops.pop(); return; }                         // never pushed: nothing to give back
+    if (last && last.type === 'pop') last.n += 1; else hist.ops.push({ type: 'pop', n: 1 });
+    histKick();
+  }
+  function histAfter(fn) {
+    if (!hist.busy && !hist.ops.length) { fn(); return; }
+    hist.ops.push({ type: 'run', fn: fn });
+    histKick();
+  }
+  function histRun() {
+    hist.timer = 0;
+    while (!hist.busy && hist.ops.length) {
+      var op = hist.ops.shift();
+      if (op.type === 'push') pushEntry();
+      else if (op.type === 'run') { try { op.fn(); } catch (e) { console.error('[RS] deferred navigation failed', e); } }
+      else {
+        hist.busy = true;
+        clearTimeout(hist.guard);
+        hist.guard = setTimeout(histDone, 800);        // never wait forever
+        history.go(-op.n);
+      }
+    }
+  }
+  function histDone() { hist.busy = false; clearTimeout(hist.guard); histKick(); }
+  function overlayEntries() { return (sheetState && sheetState.entry ? 1 : 0) + (dlgState && dlgState.entry ? 1 : 0); }
+  // Closes open overlays before a navigation; returns true when the navigation has to wait for history.
+  function closeOverlaysForNav() {
+    if (dlgState) dlgState.done(false);
+    if (sheetState) RS.sheet.close();
+    return hist.busy || hist.ops.length > 0;
+  }
+  window.addEventListener('popstate', function (e) {
+    var leftover = !!(e.state && e.state.rsOverlay);
+    if (hist.busy) {                                   // one of our own removals finished
+      histDone();
+      if (leftover && !overlayEntries()) histPop();    // still on an old overlay entry: remove that too
+      return;
+    }
+    if (dlgState && dlgState.entry) { dlgState.entry = false; dlgState.done(false); return; }    // Back closes the top overlay
+    if (sheetState && sheetState.entry) { sheetState.entry = false; RS.sheet.close(); return; }
+    if (leftover) histPop();                           // e.g. after a reload with a sheet open: skip the old entry
+  });
+
   /* ------------------------------------------------------------------ bottom sheet */
+  // Drag the grip or the header down to close (pointer events; the body keeps scrolling normally).
+  function bindSheetDrag(st, panel) {
+    var drag = null;
+    panel.addEventListener('pointerdown', function (e) {
+      if (drag || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      if (!e.target.closest('.sheet-grip, .sheet-hd') || e.target.closest('button, a, input, select, textarea')) return;
+      drag = { id: e.pointerId, y: e.clientY, dy: 0, t: e.timeStamp };
+      panel.classList.add('is-dragging');
+      try { panel.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    });
+    panel.addEventListener('pointermove', function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      drag.dy = Math.max(0, e.clientY - drag.y);
+      panel.style.transform = drag.dy ? 'translateY(' + drag.dy + 'px)' : '';
+    });
+    function end(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      var d = drag;
+      drag = null;
+      var fast = d.dy > 24 && d.dy / Math.max(1, e.timeStamp - d.t) > 0.5;
+      if (e.type === 'pointerup' && sheetState === st && (fast || d.dy > Math.min(140, panel.offsetHeight * 0.3))) {
+        // Reduced motion: the sheet stays where it was let go (still .is-dragging, so the CSS reset does not move it
+        // back up) and disappears in place. Otherwise it slides the rest of the way down.
+        if (!RS.reducedMotion()) { panel.classList.remove('is-dragging'); panel.style.transform = 'translateY(100%)'; }
+        RS.sheet.close();
+      } else {
+        panel.classList.remove('is-dragging');
+        panel.style.transform = '';
+      }
+    }
+    panel.addEventListener('pointerup', end);
+    panel.addEventListener('pointercancel', end);
+  }
+
   var sheetState = null;
+  function closeSheet(replacing) {
+    var st = sheetState;
+    if (!st) return;
+    sheetState = null;
+    hideLayer(st.layer, function () { return !!sheetState; });
+    if (!replacing) {
+      if (st.entry) histPop();
+      if (!dlgState) { setInert(shellParts(), false); lockScroll(false); }
+      restoreFocus(st.prev);
+    }
+    if (typeof st.onClose === 'function') { try { st.onClose(); } catch (e) { console.error('[RS] sheet onClose failed', e); } }
+  }
   RS.sheet = {
     // open({title, body(html), actions:[{text, act, arg, variant, icon, id, disabled}], onClose(), focus(selector), label, cls})
+    // Opening a sheet while one is open replaces it.
     open: function (o) {
       o = o || {};
       var layer = doc.getElementById('sheet-root');
       if (!layer) return null;
-      if (sheetState) RS.sheet.close();
+      var prevSheet = sheetState;
+      if (prevSheet) closeSheet(true);
       var tid = RS.uid('sheet-title');
       var actions = (o.actions || []).map(function (a) {
         return ui.btn(a.text, { act: a.act, arg: a.arg, variant: a.variant || 'secondary', icon: a.icon, id: a.id, disabled: a.disabled, type: a.type, attrs: a.attrs });
@@ -1054,25 +1276,19 @@
         '<div class="sheet-hd">' + (o.title ? '<h2 class="sheet-title" id="' + tid + '">' + txt(o.title) + '</h2>' : '<span class="grow"></span>') +
         ui.iconBtn('x', { act: 'sheet.close', label: RS.t('core.close') }) + '</div>' +
         '<div class="sheet-bd">' + (o.body || '') + '</div>' + (actions ? '<div class="sheet-ft">' + actions + '</div>' : '') + '</div>';
-      var st = { onClose: o.onClose, prev: doc.activeElement, layer: layer };
+      var st = { onClose: o.onClose, prev: prevSheet ? prevSheet.prev : rememberFocus(), layer: layer, entry: prevSheet ? prevSheet.entry : false };
       sheetState = st;
+      if (!st.entry) { st.entry = true; histPush(); }
       setInert(shellParts(), true);
       lockScroll(true);
       showLayer(layer);
       var panel = layer.querySelector('.sheet');
+      bindSheetDrag(st, panel);
       var target = o.focus ? layer.querySelector(o.focus) : null;
-      try { (target || panel).focus({ preventScroll: true }); } catch (e) { (target || panel).focus(); }
+      focusEl(target || panel);
       return layer.querySelector('.sheet-bd');
     },
-    close: function () {
-      var st = sheetState;
-      if (!st) return;
-      sheetState = null;
-      hideLayer(st.layer, function () { return !!sheetState; });
-      if (!dlgState) { setInert(shellParts(), false); lockScroll(false); }
-      restoreFocus(st.prev);
-      if (typeof st.onClose === 'function') { try { st.onClose(); } catch (e) { console.error('[RS] sheet onClose failed', e); } }
-    },
+    close: function () { closeSheet(false); },
     isOpen: function () { return !!sheetState; },
     body: function () { return sheetState ? sheetState.layer.querySelector('.sheet-bd') : null; }
   };
@@ -1084,7 +1300,8 @@
     return new Promise(function (resolve) {
       var layer = doc.getElementById('dialog-root');
       if (!layer) { resolve(false); return; }
-      if (dlgState) dlgState.done(false);
+      var prevDlg = dlgState;
+      if (prevDlg) prevDlg.done(false, true);
       var tid = RS.uid('dlg-title'), bid = RS.uid('dlg-body');
       layer.innerHTML = '<div class="scrim" data-act="dialog.cancel"></div>' +
         '<div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="' + tid + '"' + (o.body ? ' aria-describedby="' + bid + '"' : '') + ' tabindex="-1">' +
@@ -1092,26 +1309,30 @@
         (o.body ? '<p class="dialog-body" id="' + bid + '">' + txt(o.body) + '</p>' : '') +
         '<div class="dialog-ft">' + ui.btn(o.cancel || RS.t('core.cancel'), { act: 'dialog.cancel', variant: 'secondary' }) +
         ui.btn(o.ok || RS.t('core.ok'), { act: 'dialog.ok', variant: o.danger ? 'danger' : 'primary' }) + '</div></div>';
-      var prev = doc.activeElement;
       var others = shellParts().concat([doc.getElementById('sheet-root')]);
       var st = {
-        done: function (v) {
+        prev: prevDlg ? prevDlg.prev : rememberFocus(),
+        entry: prevDlg ? prevDlg.entry : false,
+        done: function (v, replacing) {
           if (dlgState !== st) return;
           dlgState = null;
           hideLayer(layer, function () { return !!dlgState; });
-          setInert([doc.getElementById('sheet-root')], false);
-          if (!sheetState) { setInert(shellParts(), false); lockScroll(false); }
-          restoreFocus(prev);
+          if (!replacing) {
+            if (st.entry) histPop();
+            setInert([doc.getElementById('sheet-root')], false);
+            if (!sheetState) { setInert(shellParts(), false); lockScroll(false); }
+            restoreFocus(st.prev);
+          }
           resolve(!!v);
         }
       };
       dlgState = st;
+      if (!st.entry) { st.entry = true; histPush(); }
       setInert(others, true);
       lockScroll(true);
       showLayer(layer);
       var btns = layer.querySelectorAll('.dialog-ft .btn');
-      var first = o.danger ? btns[0] : btns[btns.length - 1];   // least destructive action first for danger
-      try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); }
+      focusEl(o.danger ? btns[0] : btns[btns.length - 1]);   // least destructive action first for danger
     });
   };
 
@@ -1133,28 +1354,81 @@
   });
 
   /* ------------------------------------------------------------------ toast */
+  // toast(msg, {tone:'default'|'success'|'error', ms}) → {close()}. Inside #toast-root (aria-live=polite).
+  // - default / success: hide after o.ms, or 3–7 s depending on the length of the message;
+  // - error (role=alert): a close button, and it stays until it is closed (with o.ms: at least 8 s) — WCAG 2.2.1;
+  // - the timer pauses while the pointer is over the toast or focus is inside it; Escape or a tap closes it;
+  // - showing a message that is already on screen replaces it (announced again, never stacked twice); at most 3.
+  var TOAST_MAX = 3;
   RS.toast = function (msg, o) {
     o = o || {};
     var layer = doc.getElementById('toast-root');
     if (!layer) return { close: function () {} };
     var tone = o.tone === 'success' || o.tone === 'error' ? o.tone : 'default';
+    var text = msg == null ? '' : String(msg);
+    var key = tone + '|' + text;
+    RS.$$('.toast', layer).forEach(function (t) { if (t.rsKey === key && t.rsHide) t.rsHide(true); });
     var icon = tone === 'error' ? 'triangle-alert' : (tone === 'success' ? 'circle-check' : 'info');
+    var sticky = tone === 'error';
     var el = doc.createElement('div');
-    el.className = 'toast toast-' + tone;
+    el.className = 'toast toast-' + tone + (sticky ? ' has-x' : '');
+    el.rsKey = key;
     if (tone === 'error') el.setAttribute('role', 'alert');
-    el.innerHTML = RS.icon(icon, { size: 20 }) + '<span>' + esc(msg) + '</span>';
+    el.innerHTML = RS.icon(icon, { size: 20 }) + '<span class="toast-msg">' + esc(text) + '</span>' +
+      (sticky ? '<button type="button" class="toast-x" aria-label="' + esc(RS.t('core.close')) + '">' + RS.icon('x', { size: 18 }) + '</button>' : '');
     layer.appendChild(el);
-    while (layer.children.length > 3) layer.removeChild(layer.firstChild);
-    var gone = false;
-    function hide() {
-      if (gone) return;
-      gone = true;
-      el.classList.add('is-leaving');
-      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 200);
+    while (layer.children.length > TOAST_MAX) {        // the oldest goes first
+      var old = layer.firstChild;
+      if (old.rsHide) old.rsHide(true);
+      if (old.parentNode === layer) layer.removeChild(old);
     }
-    el.addEventListener('click', hide);
-    setTimeout(hide, o.ms || (tone === 'error' ? 4500 : 2800));
-    return { close: hide };
+
+    var left = sticky ? (o.ms ? Math.max(8000, o.ms) : 0) : (o.ms || RS.clamp(1200 + text.length * 55, 3000, 7000));
+    var timer = 0, since = 0, hovered = false, focused = false, gone = false, before = null;
+    function arm() {
+      if (gone || timer || !left || hovered || focused) return;
+      since = Date.now();
+      timer = setTimeout(function () { timer = 0; hide(); }, left);
+    }
+    function pause() {
+      if (!timer) return;
+      clearTimeout(timer);
+      timer = 0;
+      left = Math.max(1500, left - (Date.now() - since));   // resumes with what was left (at least 1.5 s)
+    }
+    function hide(now) {                              // now === true: remove at once, without the fade
+      if (gone) { if (now === true && el.parentNode) el.parentNode.removeChild(el); return; }
+      gone = true;
+      clearTimeout(timer);
+      if (el.contains(doc.activeElement)) {          // focus never stays on a toast that is going away
+        if (before && doc.contains(before) && canFocus(before)) focusEl(before); else fallbackFocus();
+      }
+      if (now === true) { if (el.parentNode) el.parentNode.removeChild(el); return; }
+      el.classList.add('is-leaving');
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, RS.reducedMotion() ? 0 : 200);
+    }
+    el.rsHide = hide;
+    el.addEventListener('pointerenter', function () { hovered = true; pause(); });
+    el.addEventListener('pointerleave', function () { hovered = false; arm(); });
+    el.addEventListener('focusin', function (e) {
+      if (!focused && e.relatedTarget && !el.contains(e.relatedTarget)) before = e.relatedTarget;
+      focused = true;
+      pause();
+    });
+    el.addEventListener('focusout', function (e) {
+      if (e.relatedTarget && el.contains(e.relatedTarget)) return;
+      focused = false;
+      arm();
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.key !== 'Esc') return;
+      e.preventDefault();
+      e.stopPropagation();                           // an open sheet stays open: Escape closes only the toast
+      hide();
+    });
+    el.addEventListener('click', function () { hide(); });
+    arm();
+    return { close: function () { hide(); } };
   };
 
   /* ------------------------------------------------------------------ topbar */
@@ -1169,7 +1443,10 @@
     var titles = '<div class="topbar-titles">' + (o.sub ? '<span class="topbar-sub">' + txt(o.sub) + '</span>' : '') +
       '<h1 class="topbar-title" tabindex="-1">' + txt(o.title || RS.t('core.app')) + '</h1></div>';
     var actions = (o.actions || []).map(function (a) { return ui.iconBtn(a.icon, a); }).join('');
+    // Outside a route render (RS.refresh restores focus itself), keep focus on the same topbar control.
+    var k = rendering ? null : focusKey(doc.activeElement);
     inner.innerHTML = back + titles + '<div class="topbar-actions">' + actions + '</div>';
+    if (k && k.root === 'topbar') focusByKey(k);
   };
 
   /* ------------------------------------------------------------------ router (hash) */
@@ -1226,18 +1503,7 @@
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     doc.body.classList.toggle('no-nav', !showNav);
-  }
-  function captureFocus(view) {
-    var a = doc.activeElement;
-    if (!a || a === doc.body || !view.contains(a)) return null;
-    var q = function (s) { return String(s).replace(/["\\]/g, '\\$&'); };
-    if (a.id) return '[id="' + q(a.id) + '"]';
-    var act = a.getAttribute('data-act');
-    if (act) {
-      var arg = a.getAttribute('data-arg');
-      return '[data-act="' + q(act) + '"]' + (arg != null ? '[data-arg="' + q(arg) + '"]' : '');
-    }
-    return null;
+    root.classList.toggle('no-nav', !showNav);         // html: scroll-padding for the floating nav (css/app.css)
   }
   var rendering = false;
   function renderInto(view, def, params) {
@@ -1272,8 +1538,10 @@
     if (!parsed.route) parsed.route = 'today';
     if (cur && curDef && curDef.onHide) { try { curDef.onHide(); } catch (e) { console.error(e); } }
     if (cur) scrollPos[cur.key] = window.pageYOffset;
-    if (dlgState) dlgState.done(false);
-    if (sheetState) RS.sheet.close();
+    // The route changed under an open overlay (a direct hash change): its history entry is now behind the new
+    // one, so close it without touching history. (The first render keeps a sheet a module opened during boot.)
+    if (renders > 0 && dlgState) { dlgState.entry = false; dlgState.done(false); }
+    if (renders > 0 && sheetState) { sheetState.entry = false; RS.sheet.close(); }
     var key = parsed.route + buildHash('', parsed.params).slice(2);
     cur = { route: parsed.route, params: parsed.params, key: key };
     curDef = routes[parsed.route] || null;
@@ -1313,7 +1581,9 @@
     href: function (route, params) { return buildHash(route, params); },
     current: function () { return cur ? { route: cur.route, params: cur.params } : parseHash(location.hash); },
     // go('learn/quiz', {cat:'fasting'}) · go('learn/quiz?cat=fasting') · go('me', null, {replace:true})
+    // An open sheet or dialog is closed first; the navigation happens once its history entry is gone.
     go: function (route, params, o) {
+      if (started && closeOverlaysForNav()) { histAfter(function () { RS.router.go(route, params, o); }); return; }
       route = String(route == null ? 'today' : route);
       if (route.indexOf('?') >= 0) {
         var p = parseHash(route);
@@ -1328,6 +1598,7 @@
       else location.hash = h;
     },
     back: function (fallback) {
+      if (started && closeOverlaysForNav()) { histAfter(function () { RS.router.back(fallback); }); return; }
       if (stack.length > 1) { history.back(); return; }
       var c = RS.router.current();
       RS.router.go(fallback || parentOf(c.route || 'today'), null, { replace: true });
@@ -1341,6 +1612,8 @@
         history.replaceState(history.state, '', location.pathname + location.search + '#/today');
       }
       stack = [location.hash];
+      // reloaded with a sheet open: drop its old entry (unless a sheet opened during boot owns the current one)
+      if (history.state && history.state.rsOverlay && !overlayEntries()) histPop();
       window.addEventListener('hashchange', onHashChange);
       window.addEventListener('scroll', function () {
         var bar = doc.getElementById('topbar');
@@ -1357,13 +1630,11 @@
     var view = doc.getElementById('view');
     if (!view) return;
     var y = window.pageYOffset;
-    var focusSel = captureFocus(view);
+    var k = focusKey(doc.activeElement);              // a control in #view or #topbar (both are re-rendered)
+    if (k && k.root === 'sheet-root') k = null;       // focus inside an open sheet is not touched
     renderInto(view, curDef, cur.params);
     window.scrollTo(0, y);
-    if (focusSel) {
-      var el = view.querySelector(focusSel);
-      if (el) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
-    }
+    if (k) focusByKey(k);
   };
 
   /* ------------------------------------------------------------------ misc */

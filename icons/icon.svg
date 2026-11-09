@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c1a12"/><stop offset=".5" stop-color="#122a1c"/><stop offset="1" stop-color="#0f3d2a"/></linearGradient><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#g)"/><circle cx="150" cy="120" r="3" fill="#fff" opacity=".8"/><circle cx="380" cy="90" r="2.5" fill="#fde68a" opacity=".9"/><circle cx="420" cy="170" r="2" fill="#fff" opacity=".6"/><circle cx="100" cy="220" r="2" fill="#fde68a" opacity=".7"/><circle cx="330" cy="60" r="2" fill="#fff" opacity=".7"/><path d="M300 120a128 128 0 1 0 92 218 150 150 0 1 1-92-218z" fill="url(#m)"/><path d="M364 182l12 32 32 12-32 12-12 32-12-32-32-12 32-12z" fill="#fde68a"/><path d="M96 440v-26q0-14 12-22 24-18 52-18t52 18q12 8 12 22v26z" fill="#050810" opacity=".55"/><path d="M224 440v-20a32 32 0 0 1 64 0v20z" fill="#050810" opacity=".55"/><rect x="310" y="372" width="10" height="68" fill="#050810" opacity=".55"/><circle cx="315" cy="366" r="5" fill="#050810" opacity=".55"/><rect x="60" y="430" width="392" height="12" fill="#050810" opacity=".55"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+<linearGradient id="bg" x1=".67" y1=".03" x2=".33" y2=".97"><stop offset="0" stop-color="#143A2D"/><stop offset=".46" stop-color="#0B2219"/><stop offset="1" stop-color="#06130F"/></linearGradient>
+<radialGradient id="tl" cx="450" cy="0" r="375" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#34D399" stop-opacity=".24"/><stop offset="1" stop-color="#34D399" stop-opacity="0"/></radialGradient>
+<radialGradient id="halo" cx="232.5" cy="278.0" r="197.6" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6EE7B7" stop-opacity=".26"/><stop offset=".55" stop-color="#6EE7B7" stop-opacity=".08"/><stop offset="1" stop-color="#6EE7B7" stop-opacity="0"/></radialGradient>
+<linearGradient id="moon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A7F3D0"/><stop offset="1" stop-color="#6EE7B7"/></linearGradient>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<rect width="512" height="512" rx="112" fill="url(#tl)"/>
+<rect width="512" height="512" rx="112" fill="url(#halo)"/>
+<path d="M432.84 276.38A156 156 0 1 1 255.1 78.99A133.12 133.12 0 1 0 432.84 276.38Z" fill="url(#moon)"/>
+</svg>

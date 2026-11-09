@@ -24,6 +24,29 @@
     if (nav) nav.setAttribute('aria-label', RS.t('nav.label'));
     var skip = RS.$('.skip-link');
     if (skip) skip.textContent = RS.t('core.skip');
+    fitNav();
+  }
+  // The active tab shows its label in the mint pill. A label that does not fit at this width and in this language
+  // (e.g. long translations at 320px) is hidden for that tab, which then shows its icon only; the link keeps its
+  // aria-label. Never an ellipsis. Measured for every tab after labelling, on resize and when fonts arrive.
+  function fitNav() {
+    var nav = document.getElementById('nav');
+    var items = RS.$$('.nav-item', nav || document);
+    if (!nav || !items.length) return;
+    var active = items.filter(function (a) { return a.classList.contains('is-active'); });
+    nav.classList.add('is-measuring');                       // no transitions while classes flip below
+    items.forEach(function (a) { a.classList.remove('is-active', 'is-iconly'); });
+    var over = items.map(function (a) {
+      a.classList.add('is-active');
+      var l = a.querySelector('.nav-label');
+      var o = !!l && l.scrollWidth - l.clientWidth >= 1;
+      a.classList.remove('is-active');
+      return o;
+    });
+    items.forEach(function (a, i) { if (over[i]) a.classList.add('is-iconly'); });
+    active.forEach(function (a) { a.classList.add('is-active'); });
+    void nav.offsetWidth;
+    nav.classList.remove('is-measuring');
   }
   // Tapping the tab you are already on scrolls back to the top (no hash change happens in that case).
   function onNavClick(e) {
@@ -84,20 +107,26 @@
       // in-memory changes a module made while loading, so boot only applies them.
       RS.applyTheme();
       RS.mountIcons();
-      var want = RS.settings.lang;
-      RS.applyLang(want);
-      var langOk = true;
-      var ready = want === 'en' ? Promise.resolve() : RS.loadLang(want).catch(function () { langOk = false; RS.applyLang('en'); });
-      ready.then(function () {
+      // Loads the saved or browser language. If it cannot be loaded the app runs in English; only a language the
+      // person chose (not one detected from the browser) is worth a message, and their choice stays saved.
+      RS.startLang().then(function (lang) {
         labelShell();
         RS.on('lang', labelShell);
         var nav = document.getElementById('nav');
         if (nav) nav.addEventListener('click', onNavClick);
+        window.addEventListener('resize', RS.debounce(fitNav, 150));
+        if (document.fonts) {
+          if (document.fonts.ready) document.fonts.ready.then(fitNav);
+          if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', RS.debounce(fitNav, 50));
+        }
         RS.emit('boot');
         registerStyleguide();
         handleParams();
         RS.router.start();
-        if (!langOk) RS.toast(RS.t('err.lang'), { tone: 'error' });
+        if (lang.failed && lang.explicit) {
+          var inUse = RS.LANGS.filter(function (l) { return l.code === RS.lang(); })[0];
+          RS.toast(RS.t('err.lang', { lang: inUse ? inUse.name : RS.lang() }), { tone: 'error' });
+        }
         registerSW();
       }).catch(fatal);
     } catch (e) { fatal(e); }
@@ -137,7 +166,7 @@
 
     h.push(ui.section(t('heroes')));
     h.push(ui.hero({
-      kicker: { icon: 'moon-star', text: t('today') + ' · ' + RS.fmt.hijri() },
+      kicker: { icon: 'moon', text: t('today') + ' · ' + RS.fmt.hijri() },
       number: '37', unit: '%', label: t('ofDeeds'),
       ring: { pct: 37, text: '24/64', sub: t('deeds') },
       metrics: [{ label: t('deeds'), value: '24/64' }, { label: t('points'), value: RS.fmt.n(186) }, { label: t('quran'), value: '12' }, { label: t('streak'), value: '5' }],
@@ -172,7 +201,7 @@
     h.push(ui.section(t('helpers')));
     h.push(ui.stepper({ title: t('stepTitle', { n: sg.day }), sub: t('stepSub', { n: Math.max(0, 21 - sg.day) }),
       prev: { act: 'sg.day', arg: '-1', label: t('prevDay'), disabled: sg.day <= 1 }, next: { act: 'sg.day', arg: '+1', label: t('nextDay'), disabled: sg.day >= 30 } }));
-    h.push(ui.card({ body: '<div class="stack">' + ui.note(t('note'), { icon: 'moon-star' }) + ui.note(t('notePlain'), { tone: 'plain', icon: 'eye' }) +
+    h.push(ui.card({ body: '<div class="stack">' + ui.note(t('note'), { icon: 'moon' }) + ui.note(t('notePlain'), { tone: 'plain', icon: 'eye' }) +
       ui.note(t('noteDanger'), { tone: 'danger', icon: 'wifi-off' }) + ui.loading() + '</div>' }));
 
     h.push(ui.section(t('cards'), { text: t('more'), act: 'sg.toast', arg: 'default' }));
@@ -185,13 +214,12 @@
 
     h.push(ui.section(t('lists')));
     h.push(ui.card({
-      kicker: { icon: 'list', text: t('lists') },
       body: ui.list([
         ui.row({ icon: 'settings', title: t('rowSettings'), sub: t('rowSettingsSub'), act: 'sg.toast', arg: 'default', chevron: true }),
         ui.row({ icon: 'flame', title: t('rowValue'), value: RS.fmt.n(186) }),
         ui.row({ icon: 'eye', title: t('rowToggle'), sub: t('rowToggleSub'), toggle: { on: sg.rowToggle, act: 'sg.flip', arg: 'rowToggle' } }),
         ui.row({ check: { on: sg.rowCheck, act: 'sg.flip', arg: 'rowCheck' }, title: t('rowCheck'), value: t('pts', { n: 15 }),
-          extra: ui.ref({ ref: 'Bukhari 555', grade: 'Sahih (Bukhari)' }) + ' · ' + ui.linkAction({ text: t('explain'), act: 'sg.toast', arg: 'default' }) }),
+          extra: ui.meta([ui.ref({ ref: 'Bukhari 555', grade: 'Sahih (Bukhari)' }), ui.linkAction({ text: t('explain'), act: 'sg.toast', arg: 'default' })]) }),
         ui.row({ check: { on: !sg.rowCheck, act: 'sg.flip', arg: 'rowCheck' }, title: t('rowCheck2'), sub: t('rowCheck2Sub'), value: t('pts', { n: 5 }) }),
         ui.row({ icon: 'external-link', title: t('rowLink'), sub: 'sunnah.com', href: 'https://sunnah.com/', chevron: true }),
         ui.row({ icon: 'wifi-off', title: t('rowDisabled'), act: 'sg.toast', disabled: true })
@@ -199,10 +227,16 @@
     }));
 
     h.push(ui.section(t('metrics')));
-    h.push(ui.card({ body: ui.metrics([{ label: t('deeds'), value: '24/64' }, { label: t('points'), value: RS.fmt.n(186) }, { label: t('quran'), value: '12' }, { label: t('streak'), value: '5' }]) }));
+    var curLang = RS.LANGS.filter(function (l) { return l.code === RS.lang(); })[0];
+    h.push(ui.card({ body:
+      ui.metrics([{ label: t('deeds'), value: '24/64' }, { label: t('points'), value: RS.fmt.n(186) }, { label: t('quran'), value: '12' }, { label: t('streak'), value: '5' }]) +
+      '<hr class="divider">' +
+      // words instead of figures (.is-text): they wrap, never cut
+      ui.metrics([{ label: t('mode'), value: RS.t('core.mode.year') }, { label: RS.t('core.lang.label'), value: curLang ? curLang.name : RS.lang() },
+        { label: RS.t('theme.label'), value: RS.t('theme.' + RS.settings.theme) }]) }));
 
     h.push(ui.section(t('rings')));
-    h.push(ui.card({ body: '<div class="hstack sg-rings">' + ui.ring(0, { text: RS.fmt.pct(0) }) + ui.ring(37, { text: RS.fmt.pct(37) }) +
+    h.push(ui.card({ body: '<div class="sg-rings">' + ui.ring(0, { text: RS.fmt.pct(0) }) + ui.ring(37, { text: RS.fmt.pct(37) }) +
       ui.ring(100, { text: RS.fmt.pct(100) }) + ui.ring(37, { size: 96, stroke: 8, text: '24', sub: t('deeds') }) + '</div>' }));
 
     h.push(ui.section(t('buttons')));
@@ -232,7 +266,7 @@
     }));
 
     h.push(ui.section(t('checks')));
-    h.push(ui.card({ body: '<div class="hstack">' + ui.check(sg.check, { act: 'sg.flip', arg: 'check', label: t('checkDone') }) +
+    h.push(ui.card({ body: '<div class="hstack sg-checks">' + ui.check(sg.check, { act: 'sg.flip', arg: 'check', label: t('checkDone') }) +
       ui.check(!sg.check, { act: 'sg.flip', arg: 'check', label: t('checkTodo') }) + ui.check(true) + ui.check(false) + '</div>' }));
 
     h.push(ui.section(t('empty')));

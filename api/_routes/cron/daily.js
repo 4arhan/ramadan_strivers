@@ -1,5 +1,16 @@
 // Daily job (Vercel Cron): push reminders (Ramadan day/odd-night/pre-Ramadan/year-round) and Friday organiser digests.
-const { handler, send, err } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const { hijri, MONTHS } = require('../../_lib/hijri'); const mail = require('../../_lib/email'); const { HADITHS } = require('../../_lib/content');
+const { handler, send, err, esc } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const { hijri, MONTHS } = require('../../_lib/hijri'); const mail = require('../../_lib/email'); const { HADITHS } = require('../../_lib/content');
+// The daily hadith is the same fact-checked text the app shows on Today for that day (content/hadith.json:
+// {n, text, ref}); the older built-in list is only a fallback if that file is missing.
+let DAILY = null;
+try { DAILY = require('../../../content/hadith.json'); } catch(e){ DAILY = null; }
+function hadithFor(day){
+  const list = Array.isArray(DAILY) ? DAILY.filter(h => h && h.text) : [];
+  const h = list.find(x => x.n === day) || list[(day - 1) % (list.length || 1)];
+  if(h) return { t: String(h.text), s: String(h.ref || '') };
+  const o = HADITHS[(day - 1) % HADITHS.length]; return { t: o.t, s: o.s };
+}
+function clip(s, n){ s = String(s); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; }
 module.exports = handler(async (req, res) => {
   if(process.env.CRON_SECRET && (req.headers.authorization || '') !== 'Bearer ' + process.env.CRON_SECRET) throw err(401, 'unauthorized');
   const out = { pushSent: 0, pushRemoved: 0, emails: 0, skipped: [] };
@@ -18,18 +29,22 @@ module.exports = handler(async (req, res) => {
     if(new Date().getUTCDay() === 5){ const comps = (await q('SELECT c.code,c.name,u.email FROM competitions c JOIN users u ON u.id=c.owner_id WHERE c.open AND u.email IS NOT NULL')).rows;
       for(const c of comps){ const rows = (await q('SELECT name,grp,total_pts,days_logged,updated_at FROM participants WHERE comp_code=$1 AND claimed AND hidden=false ORDER BY total_pts DESC', [c.code])).rows; if(!rows.length) continue;
         const inactive = rows.filter(r => Date.now() - new Date(r.updated_at).getTime() > 3 * 86400000).length;
-        const top = rows.slice(0, 10).map((r, i) => `<tr><td style="padding:4px 8px">${i + 1}</td><td style="padding:4px 8px">${r.name}${r.grp ? ' <span style="color:#a8a29e">(' + r.grp + ')</span>' : ''}</td><td style="padding:4px 8px;text-align:right"><b>${r.total_pts}</b></td></tr>`).join('');
-        await mail.sendEmail({ to: c.email, subject: `Weekly summary — ${c.name} (${rows.length} participants)`, html: mail.layout(`${c.name} — weekly summary`, `<p><b>${rows.length}</b> participants · <b>${inactive}</b> inactive for 3+ days · Hijri date: ${hj.day} ${MONTHS[hj.month - 1]} ${hj.year}</p><table style="border-collapse:collapse;width:100%">${top}</table><p style="margin-top:14px"><a href="${(process.env.APP_URL || 'https://www.ramadanstrivers.com')}/">Open the organiser dashboard</a></p>`) }); out.emails++; } }
+        const cell = 'padding:8px 10px;border-top:1px solid #E3E9E6';
+        const top = rows.slice(0, 10).map((r, i) => `<tr><td style="${cell};color:#047857;font-weight:700;width:28px">${i + 1}</td><td style="${cell};color:#101915">${esc(r.name)}${r.grp ? ' <span style="color:#5F6C66">(' + esc(r.grp) + ')</span>' : ''}</td><td style="${cell};text-align:right;color:#101915"><b>${r.total_pts}</b></td></tr>`).join('');
+        await mail.sendEmail({ to: c.email, subject: `Weekly summary — ${c.name} (${rows.length} participants)`, html: mail.layout(`${c.name} — weekly summary`, `<p><b style="color:#101915">${rows.length}</b> participants · <b style="color:#101915">${inactive}</b> inactive for 3+ days · Hijri date: ${hj.day} ${MONTHS[hj.month - 1]} ${hj.year}</p><table style="border-collapse:collapse;width:100%;font-size:14px">${top}</table><p style="margin-top:18px"><a href="${esc(process.env.APP_URL || 'https://www.ramadanstrivers.com')}/" style="color:#047857;font-weight:600">Open the organiser dashboard</a></p>`) }); out.emails++; } }
   } else out.skipped.push('email (RESEND_API_KEY not set)');
   send(res, 200, Object.assign({ hijri: hj }, out));
 }, ['GET', 'POST']);
+// Push texts: plain words, no emoji. The cron runs in the afternoon (UTC), so "tonight" is the night that begins
+// at this evening's sunset: the night before Ramadan day d + 1 (night 21 follows day 20).
 function pushMessage(hj){
-  if(hj.month === 9){ const d = hj.day; const odd = d >= 21 && d % 2 === 1; const had = HADITHS[(d - 1) % HADITHS.length];
-    if(odd) return { odd: true, title: '🌙 Tonight could be Laylatul Qadr', body: 'Night ' + d + ' — pray, seek forgiveness, make dua with all your heart. Log your deeds in Ramadan Strivers.' };
-    return { title: '🌙 Ramadan Day ' + d, body: had.t.slice(0, 110) + (had.t.length > 110 ? '…' : '') + ' — log today\'s deeds.' }; }
-  if(hj.month === 8) return { title: '🌙 ' + (30 - hj.day) + ' days to Ramadan', body: 'Set your goals, plan your qada fasts and prepare your dua list in Ramadan Strivers.' };
-  if(hj.month === 10 && hj.day <= 28) return { title: '🌙 Six days of Shawwal', body: 'Fast six days of Shawwal and it is as if you fasted the whole year (Muslim 1164). Track them in the app.' };
-  if(hj.month === 12 && hj.day <= 10) return { title: '🕋 Best days of the year', body: 'Day ' + hj.day + ' of Dhul Hijjah — no deeds are more beloved to Allah than in these ten days.' };
-  const dow = new Date().getUTCDay(); if(dow === 0 || dow === 3) return { title: '🌙 Fasting tomorrow?', body: (dow === 0 ? 'Monday' : 'Thursday') + ' is a Sunnah fasting day. Set your intention tonight.' };
-  return { title: '🌙 Ramadan Strivers', body: HADITHS[hj.day % HADITHS.length].t.slice(0, 120) };
+  if(hj.month === 9){ const d = hj.day; const night = d + 1; const odd = night >= 21 && night <= 29 && night % 2 === 1;
+    if(odd) return { odd: true, title: 'Tonight could be Laylatul Qadr', body: 'Night ' + night + ' of Ramadan: pray, seek forgiveness and make dua with all your heart. Log your deeds in Ramadan Strivers.' };
+    const h = hadithFor(d); return { title: 'Ramadan day ' + d, body: clip(h.t, 110) + (h.s ? ' (' + h.s + ')' : '') + ' Log today\'s deeds.' }; }
+  if(hj.month === 8){ const left = 30 - hj.day; return { title: left > 1 ? left + ' days to Ramadan' : 'Ramadan is almost here', body: 'Set your goals, plan your qada fasts and prepare your dua list in Ramadan Strivers.' }; }
+  if(hj.month === 10 && hj.day <= 28) return { title: 'Six days of Shawwal', body: 'Whoever fasts Ramadan and follows it with six days of Shawwal, it is as if they fasted forever (Muslim 1164). Track them in the app.' };
+  if(hj.month === 12 && hj.day <= 10) return { title: 'The best days of the year', body: 'Day ' + hj.day + ' of Dhul Hijjah: no days are dearer to Allah for good deeds than these ten (Bukhari 969).' };
+  const dow = new Date().getUTCDay(); if(dow === 0 || dow === 3) return { title: 'Fasting tomorrow?', body: (dow === 0 ? 'Monday' : 'Thursday') + ' is a Sunnah fasting day. Set your intention tonight.' };
+  const h = hadithFor(((hj.day - 1) % 30) + 1); return { title: 'Ramadan Strivers', body: clip(h.t, 120) + (h.s ? ' (' + h.s + ')' : '') };
 }
+module.exports.pushMessage = pushMessage;

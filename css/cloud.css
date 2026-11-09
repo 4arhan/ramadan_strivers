@@ -1,1 +1,181 @@
-/* cloud.css — cloud module styles (owned by the cloud module). Reuse css/app.css components and tokens first. */
+/* ==========================================================================
+   cloud.css — cloud module (compete, accounts, prayer times, push, share, AI). Owned by the cloud module.
+   Builds on css/app.css tokens and components (hero, card, list/row, metrics, ring, btn, chip, field, note).
+   Logical properties only (RTL-safe), 44px touch targets, no emoji/gold/gradient text.
+   ========================================================================== */
+
+/* Spacing helpers for cloud screens ------------------------------------------ */
+.cl-stack > * + * { margin-top: var(--s4); }
+.view > .cl-end { margin-top: 28px; }
+#cmp-mine:empty, #cl-mycomps:empty { display: none; }
+#cl-mycomps > .list { border-top: 1px solid var(--hairline); }
+.cl-sub { display: block; }
+.cl-sub > bdi { display: inline-block; max-width: 100%; }   /* each detail item wraps as a unit (keeps "5 days" together in RTL) */
+
+/* Forms ------------------------------------------------------------------- */
+.cl-form-err { margin-top: var(--s3); color: var(--danger); font-size: 14px; font-weight: 600; line-height: 1.4; }
+.cl-form-err[hidden] { display: none; }
+form[aria-busy="true"] .btn[type="submit"] { opacity: .6; }
+.cl-codefield .input {
+  direction: ltr;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .32em;
+  font-weight: 700;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.cl-codefield .input::placeholder { letter-spacing: normal; text-transform: none; font-weight: 500; font-size: 16px; }
+.cl-latlng { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s3); }
+.cl-latlng .field + .field { margin-top: 0; }
+.cl-or {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s4) 0 var(--s3);
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+}
+.cl-or::before, .cl-or::after { content: ''; flex: 1 1 auto; height: 1px; background: var(--hairline); }
+.link-btn.cl-danger-link { color: var(--danger); }
+@media (hover: hover) { .link-btn.cl-danger-link:hover { background: var(--danger-soft); } }
+
+/* Prize inputs: "#1 [ prize ]" -------------------------------------------- */
+.cl-prizes { display: grid; gap: var(--s2); }
+.cl-prize-f { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cl-prize-n { flex: none; width: 34px; font-size: 14px; font-weight: 700; color: var(--accent); text-align: center; font-variant-numeric: tabular-nums; }
+.cl-prize-f .input { flex: 1 1 auto; min-width: 0; }
+
+/* Status lines (sync) ------------------------------------------------------ */
+.cl-status { display: flex; align-items: center; gap: 8px; margin-top: var(--s3); font-size: 13px; font-weight: 600; color: var(--ink-3); line-height: 1.4; }
+.cl-status-ic { flex: none; display: inline-flex; color: var(--accent); }
+
+/* Join code display -------------------------------------------------------- */
+.cl-codebox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: var(--s4);
+  padding: 12px 16px;
+  border-radius: var(--r-block);
+  background: var(--card-2);
+}
+.cl-code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 360px) { .cl-code { font-size: 22px; letter-spacing: .16em; } }
+
+/* Hero extras -------------------------------------------------------------- */
+.cl-hero-prize { display: flex; align-items: center; gap: 8px; color: var(--hero-ink-2); font-size: 14px; font-weight: 600; line-height: 1.4; }
+.cl-hero-prize .ic { flex: none; color: var(--hero-accent); }
+.hero .loading { justify-content: flex-start; padding: 10px 0 2px; color: var(--hero-ink-2); }
+.hero .spinner { border-color: var(--hero-track); border-top-color: var(--hero-accent); }
+
+/* Leaderboard rows: rank (accent marks the top three, no medals), name, prize line, points ------------- */
+.cl-seg { margin-bottom: var(--s3); }
+.cl-rank {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.cl-rank.is-top { color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.cl-rank.is-1 { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+.row.cl-lb { align-items: center; }
+.cl-pts { flex: none; display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; text-align: end; }
+.cl-pts-n { font-size: 16px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cl-pts-u { margin-top: 2px; font-size: 11.5px; font-weight: 600; color: var(--ink-3); }
+.cl-prize { display: flex; align-items: center; gap: 5px; margin-top: 3px; color: var(--accent); font-weight: 650; }
+.cl-prize .ic { flex: none; }
+.cl-you {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 6px;
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  vertical-align: 1px;
+}
+.row.cl-me {
+  width: calc(100% + 20px);
+  margin-inline: -10px;
+  padding-inline: 10px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+}
+.cl-ellipsis { padding: 2px 0; text-align: center; color: var(--ink-3); font-weight: 700; letter-spacing: .3em; line-height: 1; }
+
+/* Organiser dashboard ---------------------------------------------------------- */
+.cl-tabs .chip { min-height: 40px; padding-inline: 14px; background: transparent; border-color: var(--hairline-2); color: var(--ink-2); }
+.cl-tabs .chip.is-active { background: var(--card); border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.cl-danger-card .kicker .ic { color: var(--danger); }
+.cl-acts { flex: none; display: flex; align-items: center; margin-inline-end: -8px; }
+.cl-acts .icon-btn { color: var(--ink-2); }
+.cl-acts .icon-btn .ic { width: 20px; height: 20px; }
+.icon-btn.cl-danger { color: var(--danger); }
+.cl-mark { display: inline-flex; vertical-align: -2px; margin-inline-start: 6px; color: var(--ink-3); }
+.cl-mark.is-warn { color: var(--danger); }
+.row.cl-ros.is-dim .row-title { color: var(--ink-3); }
+.row.cl-danger-row .row-title { color: var(--danger); }
+.row.cl-danger-row .row-ic { background: var(--danger-soft); color: var(--danger); }
+.cl-set-tgl .row-sub { max-width: 46ch; }
+
+/* Prayer times card and sheet -------------------------------------------------- */
+.cl-prayer .row.cl-pr { min-height: 52px; }
+.cl-prayer .row.cl-pr .row-val { font-size: 16px; font-weight: 650; color: var(--ink); }
+.row.cl-cur {
+  width: calc(100% + 20px);
+  margin-inline: -10px;
+  padding-inline: 10px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+}
+.row.cl-cur .row-title, .row.cl-cur .row-val { color: var(--accent); }
+.cl-now {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 8px;
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.cl-where { display: flex; align-items: center; gap: 6px; margin-top: var(--s3); }
+.cl-where .ic { flex: none; color: var(--accent); }
+.cl-where span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Dua at iftar (Arabic in Amiri via RS.ui.arabic) ------------------------------------------ */
+.cl-dua { margin-top: var(--s4); padding: 14px 16px; border-radius: var(--r-block); background: var(--card-2); }
+.cl-dua .ar-text { margin-top: 6px; color: var(--ink); }
+.cl-translit { margin-top: 2px; font-size: 14.5px; font-style: italic; color: var(--ink-2); text-align: start; }
+[dir="rtl"] .cl-translit { text-align: left; }
+.cl-dua-mean { margin-top: 6px; font-size: 14.5px; color: var(--ink); }
+
+/* AI explanation ------------------------------------------------------------------- */
+.cl-ai { color: var(--ink); font-size: 15.5px; line-height: 1.6; }
+.cl-ai p + p { margin-top: 10px; }

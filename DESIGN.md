@@ -53,7 +53,9 @@ All text/background pairs above were checked for WCAG AA (lowest 5.0:1).
 - Title: 650–700, 20–28px, `-0.02em`. Section label / kicker: 500–600, 12–13px, `0.04em`, uppercase optional.
 - Body: 400, 15–16px, line-height 1.5. Caption: 500, 12–13px.
 - Script fallbacks: Noto Sans Arabic (ar, ur), Noto Sans Bengali (bn), Noto Sans Devanagari (hi), system CJK (zh);
-  Quranic and dua text in Amiri.
+  Quranic and dua text in Amiri. The honorifics ﷺ ﷻ ﷲ come from 'RS Honorific' (`vendor/honorific.woff2`, a
+  3-glyph Noto Naskh Arabic subset, OFL), listed right after Manrope in every stack, so they never fall back to
+  whatever the device has.
 
 ## 4. Shape and space
 Radii: **28px** hero, **22px** cards, **16px** inner blocks/sheets, **12px** inputs, **999px** pills.
@@ -69,6 +71,8 @@ Minimum touch target 44px. Works from **320px** wide.
 
 ## 6. Motion and accessibility
 - 150–250ms ease-out transitions; `prefers-reduced-motion: reduce` removes transforms/flips (crossfade only).
+- A sheet being dragged still follows the finger under reduced motion (direct manipulation is not animation).
+- Toasts pause while hovered or focused; error toasts have a close button and stay until closed.
 - Visible focus ring `0 0 0 3px` accent at 35%; semantic buttons; `aria-current` on the active tab;
   icons are `aria-hidden` unless they carry meaning; `lang`/`dir` set per language (RTL for Arabic and Urdu).
 - Both themes are token-driven (`[data-theme]` plus `prefers-color-scheme` for "System").
@@ -76,3 +80,5 @@ Minimum touch target 44px. Works from **320px** wide.
 ## 7. Don'ts
 No emoji · no gold · no sparkles · no gradient text · no bright mid-green fills · no boxed stat tiles with
 corner icons · no drop shadows on ordinary cards · no more than one hero object per screen.
+Icons: no confetti/party or sparkle icons (use `gift`, `moon` or `calendar-check` to celebrate); `moon-star` is the
+one exception and is reserved for last-ten-nights / Laylat al-Qadr content — use `moon` for Ramadan kickers and nav.
