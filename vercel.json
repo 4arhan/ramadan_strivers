@@ -15,7 +15,7 @@
       "destination": "/?join=:code"
     },
     {
-      "source": "/api/:path((?!og$|router$).*)",
+      "source": "/api/:path((?!router$).*)",
       "destination": "/api/router?__p=:path"
     }
   ],

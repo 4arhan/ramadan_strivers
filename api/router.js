@@ -1,10 +1,11 @@
 // Single Node function that serves every /api/* route (Vercel Hobby allows at most 12 functions per
 // deployment). vercel.json rewrites /api/<path> here as /api/router?__p=<path>; files in api/_routes and
-// api/_lib are plain modules, not functions. api/og.js stays a separate edge function.
+// api/_lib are plain modules, not functions. The share image (api/_routes/og.js) renders here too.
 const ROUTES = [
   ['health', () => require('./_routes/health')],
   ['sync', () => require('./_routes/sync')],
   ['share', () => require('./_routes/share')],
+  ['og', () => require('./_routes/og')],
   ['whatsapp', () => require('./_routes/whatsapp')],
   ['auth/register', () => require('./_routes/auth/register')],
   ['auth/login', () => require('./_routes/auth/login')],
