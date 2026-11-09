@@ -354,7 +354,7 @@
   "me.data.exported": "Backup downloaded",
   "me.data.invalid": "This file is not a Ramadan Strivers backup.",
   "me.data.importTitle": "Import this backup?",
-  "me.data.importBody": "This backup has {days}, {pages} and {badges}. The days, Quran pages and journal entries in it replace the same days on this device; everything else on this device is kept.",
+  "me.data.importBody": "This backup has {days}, {pages} and {badges}. Each day, Quran page count, journal entry and setting in it replaces the same one on this device; everything else on this device is kept.",
   "me.data.nDays.one": "{n} day",
   "me.data.nDays.other": "{n} days",
   "me.data.nPages.one": "{n} Quran page",

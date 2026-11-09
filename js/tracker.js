@@ -10,8 +10,8 @@
             qlog (year-round Quran log by date, shared with the prep module's Quran check-in)}.
             hck (new in v8, ignored by v7): the prayer and fasting ticks set aside while sisters' mode is on; they are
             not counted and come back when sisters' mode is turned off.
-   Import   merges by key: days, dates, Quran pages and journal entries in the file replace the same ones here;
-            everything else on the device is kept (see applyImport).
+   Import   merges by key: each day, date, Quran-page day, journal entry and setting in the file replaces the same
+            one here; everything else on the device is kept (see applyImport).
    Hooks    RS.tracker (CONTRACT §8): getDay(n) · todayIndex() · totals() · streaks() · qPages()
             + saveDay() · dayPct(n) · points() · best() · renderTodayChecklist(el)
    Rules    v7 behaviour, with the fact-check corrections: each night comes before its day, so the odd nights

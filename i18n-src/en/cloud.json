@@ -162,7 +162,7 @@
   "prayer.set.title": "Prayer times and location",
   "prayer.set.off": "Not set",
   "prayer.setup.title": "Set prayer times",
-  "prayer.setup.body": "See today's prayer times, the time left until iftar and when suhoor ends. Your approximate location (to about 1 km) is saved on this device, and is included in your cloud backup when you are signed in and in daily reminders if you turn them on.",
+  "prayer.setup.body": "See today's prayer times, the time to iftar and when suhoor ends. Your approximate location (about 1 km) is saved on this device and, if you use them, in your cloud backup and with daily reminders.",
   "prayer.setup.locate": "Use my location",
   "prayer.setup.locating": "Getting your location…",
   "prayer.setup.manual": "or enter coordinates",

@@ -1222,7 +1222,8 @@
     return rows;
   }
   function joinedRow(cname, member, code, key) {
-    return ui.row({ icon: 'user', titleHtml: bdi(cname || code), subHtml: ui.meta([member ? th('compete.mine.joined', { name: member }) : '', bdi(code)]),
+    // a meta item is a flex box: text + <bdi> inside one span, or the space between them is dropped
+    return ui.row({ icon: 'user', titleHtml: bdi(cname || code), subHtml: ui.meta([member ? '<span>' + th('compete.mine.joined', { name: member }) + '</span>' : '', bdi(code)]),
       act: 'cmp.resume', arg: key, chevron: true });
   }
   // The participant entry behind a "Your competitions" row (m<i>: joined with this account, p<i>: kept on this device).
@@ -2126,11 +2127,22 @@
 
   RS.act('prayer.open', function () { openPrayer(); });
   RS.act('prayer.setup', function () { openPrayerSetup(); });
-  RS.act('prayer.retry', function () {
+  // Try again after the offline prayer-times library failed to load: the sheet opens again in its loading state; on
+  // Today the screen is redrawn once the library is there (card and hero countdown) and focus goes to the card.
+  RS.act('prayer.retry', function (arg, el) {
     adhanFailed = false;
     var b = RS.sheet.body();
     if (b && b.closest('.cl-prayer-sheet')) { openPrayer(); return; }
-    patch('cloud-prayer-card', cardHtml());           // the Today card: loading again (cardHtml starts the load)
+    btnBusy(el, true);
+    loadAdhan().then(function () {
+      RS.refresh();
+      var card = document.getElementById('cloud-prayer-card');
+      if (card) focusEl(headingOf(card));
+    }, function () {
+      adhanFailed = true;
+      btnBusy(el, false);
+      RS.toast(t('prayer.failed'), { tone: 'error' });
+    });
   });
   RS.act('prayer.locate', function (arg, el) {
     if (!navigator.geolocation) { RS.toast(t('prayer.setup.noGeo'), { tone: 'error' }); return; }
