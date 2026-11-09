@@ -1,5 +1,5 @@
-const { handler, send } = require('./_lib/util');
-const db = require('./_lib/db'); const email = require('./_lib/email'); const ai = require('./_lib/ai');
+const { handler, send } = require('../_lib/util');
+const db = require('../_lib/db'); const email = require('../_lib/email'); const ai = require('../_lib/ai');
 module.exports = handler(async (req, res) => {
   let dbOk = false, dbErr = null;
   if(db.configured()){ try { await db.q('SELECT 1'); dbOk = true; } catch(e){ dbErr = e.message; } }

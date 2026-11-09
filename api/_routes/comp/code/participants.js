@@ -1,6 +1,6 @@
 // Organiser roster: everyone (incl. hidden/unclaimed), last activity, flags. PATCH to hide/unflag/rename, DELETE to remove.
-const { handler, send, body, query, str, err } = require('../../_lib/util');
-const { q, one } = require('../../_lib/db'); const C = require('../../_lib/comp');
+const { handler, send, body, query, str, err } = require('../../../_lib/util');
+const { q, one } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const qs = query(req); const { c } = await C.requireOwner(req, qs.code);
   if(req.method === 'GET'){ const rows = (await q('SELECT id,token,name,grp,total_pts,days_logged,avg_pct,quran_pages,last_day,flagged,hidden,claimed,phone,created_at,updated_at,days FROM participants WHERE comp_code=$1 ORDER BY total_pts DESC, name', [c.code])).rows;

@@ -1,5 +1,5 @@
-const { handler, send, body, str, err } = require('../_lib/util');
-const { one } = require('../_lib/db'); const A = require('../_lib/auth');
+const { handler, send, body, str, err } = require('../../_lib/util');
+const { one } = require('../../_lib/db'); const A = require('../../_lib/auth');
 module.exports = handler(async (req, res) => {
   const b = await body(req); const email = str(b.email, 120).toLowerCase(); const pw = String(b.password || ''); const name = str(b.name, 60);
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw err(400, 'Valid email required', 'invalid_email');

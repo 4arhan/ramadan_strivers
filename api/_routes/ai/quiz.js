@@ -1,5 +1,5 @@
 // Rewrites a batch of true/false cards for an age level and language, keeping each answer unchanged. Cached per batch.
-const { handler, send, body, err } = require('../_lib/util'); const ai = require('../_lib/ai');
+const { handler, send, body, err } = require('../../_lib/util'); const ai = require('../../_lib/ai');
 const LANGS = { en: 'English', zh: 'Simplified Chinese', hi: 'Hindi', es: 'Spanish', fr: 'French', ar: 'Arabic', bn: 'Bengali', pt: 'Portuguese', ru: 'Russian', ur: 'Urdu' };
 module.exports = handler(async (req, res) => {
   if(!ai.configured()) throw err(503, 'AI features are not enabled on this server', 'ai_not_configured');

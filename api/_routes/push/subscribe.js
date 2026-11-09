@@ -1,4 +1,4 @@
-const { handler, send, body, err, str } = require('../_lib/util'); const { q } = require('../_lib/db'); const A = require('../_lib/auth');
+const { handler, send, body, err, str } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const A = require('../../_lib/auth');
 module.exports = handler(async (req, res) => {
   const b = await body(req); const u = await A.optionalUser(req);
   if(req.method === 'DELETE'){ if(!b.endpoint) throw err(400, 'endpoint required'); await q('DELETE FROM push_subs WHERE endpoint=$1', [b.endpoint]); return send(res, 200, { removed: true }); }

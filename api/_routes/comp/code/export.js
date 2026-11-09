@@ -1,4 +1,4 @@
-const { handler, query } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const C = require('../../_lib/comp');
+const { handler, query } = require('../../../_lib/util'); const { q } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const { c } = await C.requireOwner(req, query(req).code);
   const rows = (await q('SELECT name,grp,total_pts,days_logged,avg_pct,quran_pages,last_day,flagged,hidden,claimed,created_at,updated_at FROM participants WHERE comp_code=$1 ORDER BY total_pts DESC', [c.code])).rows;

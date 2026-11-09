@@ -1,5 +1,5 @@
 // Share cards: POST creates a short id; GET /s/:id (rewritten here) serves a page with Open Graph image + "Open app".
-const { handler, send, html, body, query, esc, rand, origin, clampInt, str } = require('./_lib/util'); const { one, q } = require('./_lib/db');
+const { handler, send, html, body, query, esc, rand, origin, clampInt, str } = require('../_lib/util'); const { one, q } = require('../_lib/db');
 module.exports = handler(async (req, res) => {
   if(req.method === 'POST'){ const b = await body(req); const d = { d: clampInt(b.d, 1, 30, 1), p: clampInt(b.p, 0, 100, 0), s: clampInt(b.s, 0, 30, 0), q: clampInt(b.q, 0, 604, 0), n: str(b.n, 24), b: clampInt(b.b, 0, 12, 0) };
     let id; for(let i = 0; i < 5; i++){ id = rand(7, 'abcdefghijkmnpqrstuvwxyz23456789'); if(!(await one('SELECT 1 FROM shares WHERE id=$1', [id]))) break; }

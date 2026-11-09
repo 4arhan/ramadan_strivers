@@ -1,6 +1,6 @@
 // Bulk enrolment: organiser submits names (optionally with group); each gets a personal invitation link.
-const { handler, send, body, query, str, err, token, origin } = require('../../_lib/util');
-const { q } = require('../../_lib/db'); const C = require('../../_lib/comp');
+const { handler, send, body, query, str, err, token, origin } = require('../../../_lib/util');
+const { q } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const { c } = await C.requireOwner(req, query(req).code); const b = await body(req);
   let list = Array.isArray(b.names) ? b.names : String(b.text || '').split(/\r?\n/).map(l => { const parts = l.split(/[,\t;]/); return { name: parts[0], grp: parts[1] || b.grp || '' }; });

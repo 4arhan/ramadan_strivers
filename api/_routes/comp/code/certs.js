@@ -1,5 +1,5 @@
 // Printable certificates (one page each) for every claimed participant, or ?p=ID for one. Organiser auth via header or ?auth=.
-const { handler, html, query, esc } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const C = require('../../_lib/comp');
+const { handler, html, query, esc } = require('../../../_lib/util'); const { q } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const qs = query(req); const { c } = await C.requireOwner(req, qs.code);
   let rows = (await q('SELECT id,name,grp,total_pts,days_logged,avg_pct,quran_pages FROM participants WHERE comp_code=$1 AND claimed AND hidden=false ORDER BY total_pts DESC', [c.code])).rows;

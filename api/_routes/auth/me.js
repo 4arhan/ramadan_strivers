@@ -1,5 +1,5 @@
-const { handler, send, body, str } = require('../_lib/util');
-const { q, one } = require('../_lib/db'); const A = require('../_lib/auth');
+const { handler, send, body, str } = require('../../_lib/util');
+const { q, one } = require('../../_lib/db'); const A = require('../../_lib/auth');
 module.exports = handler(async (req, res) => {
   const u = await A.requireUser(req);
   if(req.method === 'PATCH'){ const b = await body(req); const name = b.name !== undefined ? str(b.name, 60) : u.name; const settings = Object.assign({}, u.settings || {}, b.settings || {});

@@ -2,17 +2,92 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/s/:id", "destination": "/api/share?id=:id" },
-    { "source": "/poster/:code", "destination": "/api/comp/:code/poster" },
-    { "source": "/join/:code", "destination": "/?join=:code" }
+    {
+      "source": "/s/:id",
+      "destination": "/api/router?__p=share&id=:id"
+    },
+    {
+      "source": "/poster/:code",
+      "destination": "/api/router?__p=comp/:code/poster"
+    },
+    {
+      "source": "/join/:code",
+      "destination": "/?join=:code"
+    },
+    {
+      "source": "/api/:path((?!og$|router$).*)",
+      "destination": "/api/router?__p=:path"
+    }
   ],
   "headers": [
-    { "source": "/index.html", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] },
-    { "source": "/(i18n|cloud)\\.js", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] },
-    { "source": "/sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }, { "key": "Service-Worker-Allowed", "value": "/" }] },
-    { "source": "/manifest.webmanifest", "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }] },
-    { "source": "/icons/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
-    { "source": "/.well-known/assetlinks.json", "headers": [{ "key": "Content-Type", "value": "application/json" }] }
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(i18n|cloud)\\.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
+      ]
+    },
+    {
+      "source": "/icons/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/assetlinks.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    }
   ],
-  "crons": [{ "path": "/api/cron/daily", "schedule": "0 15 * * *" }]
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "0 15 * * *"
+    }
+  ],
+  "functions": {
+    "api/router.js": {
+      "maxDuration": 30
+    }
+  }
 }

@@ -3,7 +3,9 @@
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..'); const PORT = parseInt(process.argv[2] || process.env.PORT || '3000', 10);
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.css': 'text/css', '.ico': 'image/x-icon', '.txt': 'text/plain' };
-const REWRITES = [[/^\/s\/([^/?]+)/, (m) => '/api/share?id=' + m[1]], [/^\/poster\/([^/?]+)/, (m) => '/api/comp/' + m[1] + '/poster'], [/^\/join\/([^/?]+)/, (m) => '/?join=' + m[1]]];
+// Mirrors vercel.json: every /api/* path except og and router goes to the single router function.
+const REWRITES = [[/^\/s\/([^/?]+)/, (m) => '/api/router?__p=share&id=' + m[1]], [/^\/poster\/([^/?]+)/, (m) => '/api/router?__p=comp/' + m[1] + '/poster'], [/^\/join\/([^/?]+)/, (m) => '/?join=' + m[1]],
+  [/^\/api\/(?!og(?:[/?]|$)|router(?:[/?]|$))([^?]*)(\?.*)?$/, (m) => '/api/router?__p=' + m[1] + (m[2] ? '&' + m[2].slice(1) : '')]];
 function resolveApi(pathname){
   const segs = pathname.replace(/^\/api\/?/, '').split('/').filter(Boolean); const params = {};
   let dir = path.join(ROOT, 'api');
@@ -16,7 +18,7 @@ function resolveApi(pathname){
   if(fs.existsSync(path.join(dir, 'index.js'))) return { file: path.join(dir, 'index.js'), params }; return null;
 }
 const server = http.createServer(async (req, res) => {
-  let url = req.url; for(const [re, fn] of REWRITES){ const m = url.match(re); if(m){ url = fn(m) + (url.includes('?') && !fn(m).includes('?') ? url.slice(url.indexOf('?')) : ''); break; } }
+  let url = req.url; for(const [re, fn] of REWRITES){ const m = url.match(re); if(m){ const base = fn(m); url = base + (url.includes('?') && !base.includes('?') ? url.slice(url.indexOf('?')) : (url.includes('?') && base.includes('?') && !/^\/api\//.test(url) ? '&' + url.slice(url.indexOf('?') + 1) : '')); break; } }
   const u = new URL(url, 'http://localhost');
   if(u.pathname.startsWith('/api/')){ const r = resolveApi(u.pathname); if(!r){ res.statusCode = 404; return res.end('{"error":"not_found"}'); }
     if(process.env.DEV_RELOAD) delete require.cache[require.resolve(r.file)];

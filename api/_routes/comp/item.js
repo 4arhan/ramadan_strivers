@@ -1,5 +1,5 @@
-const { handler, send, body, query, str } = require('../_lib/util');
-const { one, q } = require('../_lib/db'); const C = require('../_lib/comp'); const { sanitizeSettings } = require('./index');
+const { handler, send, body, query, str } = require('../../_lib/util');
+const { one, q } = require('../../_lib/db'); const C = require('../../_lib/comp'); const { sanitizeSettings } = require('./index');
 module.exports = handler(async (req, res) => {
   const code = String(query(req).code || '').toUpperCase();
   if(req.method === 'GET'){ const c = await C.getComp(code); const n = await one('SELECT count(*) AS n FROM participants WHERE comp_code=$1 AND claimed AND hidden=false', [c.code]); return send(res, 200, { competition: Object.assign(C.publicComp(c), { participants: parseInt(n.n, 10) }) }); }

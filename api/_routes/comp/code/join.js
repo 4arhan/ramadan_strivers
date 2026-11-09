@@ -1,6 +1,6 @@
 // Join (anonymous or signed-in), claim a pre-enrolled place (?t=), or update name/group with an existing token.
-const { handler, send, body, query, str, err, token } = require('../../_lib/util');
-const { one, q } = require('../../_lib/db'); const A = require('../../_lib/auth'); const C = require('../../_lib/comp');
+const { handler, send, body, query, str, err, token } = require('../../../_lib/util');
+const { one, q } = require('../../../_lib/db'); const A = require('../../../_lib/auth'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const c = await C.getComp(query(req).code); const b = await body(req); const u = await A.optionalUser(req);
   const name = str(b.name, 40), grp = str(b.grp, 40);

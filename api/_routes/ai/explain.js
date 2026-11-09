@@ -1,5 +1,5 @@
 // "Explain this deed / hadith": short, cited, non-ruling explanation at the reader's level, in their language. Cached.
-const { handler, send, body, str, err } = require('../_lib/util'); const ai = require('../_lib/ai');
+const { handler, send, body, str, err } = require('../../_lib/util'); const ai = require('../../_lib/ai');
 const LANGS = { en: 'English', zh: 'Simplified Chinese', hi: 'Hindi', es: 'Spanish', fr: 'French', ar: 'Arabic', bn: 'Bengali', pt: 'Portuguese', ru: 'Russian', ur: 'Urdu' };
 module.exports = handler(async (req, res) => {
   if(!ai.configured()) throw err(503, 'AI features are not enabled on this server', 'ai_not_configured');

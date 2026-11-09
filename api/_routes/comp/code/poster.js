@@ -1,5 +1,5 @@
 // Printable A4 poster with QR code for the join link (public — the code is meant to be shared).
-const { handler, html, query, esc, origin } = require('../../_lib/util'); const C = require('../../_lib/comp'); const QR = require('qrcode');
+const { handler, html, query, esc, origin } = require('../../../_lib/util'); const C = require('../../../_lib/comp'); const QR = require('qrcode');
 module.exports = handler(async (req, res) => {
   const c = await C.getComp(query(req).code); const link = origin(req) + '/?join=' + c.code;
   const svg = await QR.toString(link, { type: 'svg', margin: 1, color: { dark: '#0c2618', light: '#ffffff' } });

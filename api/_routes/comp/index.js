@@ -1,5 +1,5 @@
-const { handler, send, body, str } = require('../_lib/util');
-const { q, one } = require('../_lib/db'); const A = require('../_lib/auth'); const C = require('../_lib/comp');
+const { handler, send, body, str } = require('../../_lib/util');
+const { q, one } = require('../../_lib/db'); const A = require('../../_lib/auth'); const C = require('../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const u = await A.requireUser(req);
   if(req.method === 'GET'){ const rows = (await q('SELECT c.*, (SELECT count(*) FROM participants p WHERE p.comp_code=c.code AND p.claimed) AS participants FROM competitions c WHERE owner_id=$1 ORDER BY created_at DESC', [u.id])).rows;

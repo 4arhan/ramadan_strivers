@@ -1,6 +1,6 @@
 // Participant pushes their per-day summary; the server recomputes totals with the organiser's cap and anomaly flags.
-const { handler, send, body, query, err } = require('../../_lib/util');
-const { one } = require('../../_lib/db'); const C = require('../../_lib/comp');
+const { handler, send, body, query, err } = require('../../../_lib/util');
+const { one } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
   const c = await C.getComp(query(req).code); const b = await body(req);
   if(!b.token) throw err(400, 'token required'); if(!c.open) throw err(403, 'This competition has been closed by the organiser.', 'closed');

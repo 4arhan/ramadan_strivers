@@ -1,6 +1,6 @@
 // Passwordless sign-in: POST {email} sends a link; GET ?token= exchanges it for a session.
-const { handler, send, body, query, str, err, token, origin } = require('../_lib/util');
-const { one, q } = require('../_lib/db'); const A = require('../_lib/auth'); const mail = require('../_lib/email');
+const { handler, send, body, query, str, err, token, origin } = require('../../_lib/util');
+const { one, q } = require('../../_lib/db'); const A = require('../../_lib/auth'); const mail = require('../../_lib/email');
 module.exports = handler(async (req, res) => {
   if(req.method === 'POST'){
     if(!mail.configured()) throw err(503, 'Email sign-in is not enabled on this server (RESEND_API_KEY). Use email + password instead.', 'email_not_configured');

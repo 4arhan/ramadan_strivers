@@ -1,5 +1,5 @@
 // Daily job (Vercel Cron): push reminders (Ramadan day/odd-night/pre-Ramadan/year-round) and Friday organiser digests.
-const { handler, send, err } = require('../_lib/util'); const { q } = require('../_lib/db'); const { hijri, MONTHS } = require('../_lib/hijri'); const mail = require('../_lib/email'); const { HADITHS } = require('../_lib/content');
+const { handler, send, err } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const { hijri, MONTHS } = require('../../_lib/hijri'); const mail = require('../../_lib/email'); const { HADITHS } = require('../../_lib/content');
 module.exports = handler(async (req, res) => {
   if(process.env.CRON_SECRET && (req.headers.authorization || '') !== 'Bearer ' + process.env.CRON_SECRET) throw err(401, 'unauthorized');
   const out = { pushSent: 0, pushRemoved: 0, emails: 0, skipped: [] };

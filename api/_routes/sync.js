@@ -1,6 +1,6 @@
 // Cloud sync of the whole local state. GET returns the server snapshot; PUT merges the client's snapshot in and returns the merged result.
-const { handler, send, body, err } = require('./_lib/util');
-const { one, q } = require('./_lib/db'); const A = require('./_lib/auth'); const { mergeSnapshots } = require('./_lib/merge');
+const { handler, send, body, err } = require('../_lib/util');
+const { one, q } = require('../_lib/db'); const A = require('../_lib/auth'); const { mergeSnapshots } = require('../_lib/merge');
 module.exports = handler(async (req, res) => {
   const u = await A.requireUser(req);
   const row = await one('SELECT data, updated_at FROM sync_data WHERE user_id=$1', [u.id]);
