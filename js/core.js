@@ -251,13 +251,16 @@
     hijriOff: 0, prayer: null, quizLevel: 'standard', showPrep: false
   };
   RS.settings = RS.settings || {};
+  RS.langDetected = false;         // true when settings.lang came from the browser, not from a saved choice
+  var langFallbackFrom = null;     // a saved language that failed to load at start (kept for the next start)
   RS.loadSettings = function () {
     var saved = RS.store.get('rs-settings', null);
     var s = RS.settings;
     Object.keys(s).forEach(function (k) { delete s[k]; });          // keep the object identity
     Object.keys(RS.DEFAULTS).forEach(function (k) { s[k] = RS.DEFAULTS[k]; });
     if (saved && typeof saved === 'object') Object.keys(saved).forEach(function (k) { s[k] = saved[k]; });
-    if (!langByCode(s.lang)) s.lang = detectLang();
+    RS.langDetected = !langByCode(s.lang);
+    if (RS.langDetected) s.lang = detectLang();
     if (s.theme !== 'light' && s.theme !== 'dark') s.theme = 'system';
     s.day = RS.clamp(parseInt(s.day, 10) || 1, 1, 30);
     if (s.mode !== 'ramadan' && s.mode !== 'prep' && s.mode !== 'year') s.mode = null;
@@ -266,7 +269,16 @@
     s.autoDay = s.autoDay !== false;
     return s;
   };
-  RS.saveSettings = function () { return RS.store.set('rs-settings', RS.settings); };
+  RS.saveSettings = function () {
+    var s = RS.settings;
+    if (langFallbackFrom && s.lang === curLang) {    // English stands in for a saved language that did not load:
+      var copy = {};                                   // keep the saved choice so the next start tries it again
+      Object.keys(s).forEach(function (k) { copy[k] = s[k]; });
+      copy.lang = langFallbackFrom;
+      return RS.store.set('rs-settings', copy);
+    }
+    return RS.store.set('rs-settings', s);
+  };
 
   /* ------------------------------------------------------------------ i18n */
   var curLang = 'en';
@@ -350,17 +362,40 @@
     }
     return langLoads[code];
   };
+  function langName(code) { var l = langByCode(code); return l ? l.name : code; }
   RS.setLang = function (code) {
     if (!langByCode(code)) return Promise.resolve(curLang);
     return RS.loadLang(code).then(function () {
       RS.applyLang(code);
-      if (RS.settings.lang !== code) { RS.settings.lang = code; RS.saveSettings(); }
+      langFallbackFrom = null;                 // an explicit choice replaces any pending start-up fallback
+      RS.langDetected = false;
+      RS.settings.lang = code;
+      RS.saveSettings();
       RS.emit('lang', code);
       RS.refresh();
       return code;
     }, function () {
-      RS.toast(RS.t('err.lang'), { tone: 'error' });
+      RS.toast(RS.t('err.lang', { lang: langName(curLang) }), { tone: 'error' });
+      RS.refresh();                            // language pickers show the language actually in use again
       return curLang;
+    });
+  };
+  // Used once by main.js at start: applies and loads settings.lang. When the file cannot be loaded the app
+  // runs in English, RS.settings.lang says 'en' (the language in use) and a SAVED choice is kept in storage
+  // so the next start tries it again. Resolves to {lang, failed, wanted, explicit} (explicit: the failed
+  // language was the person's saved choice, not one detected from the browser — only then is it worth a toast).
+  RS.startLang = function () {
+    var want = RS.settings.lang;
+    RS.applyLang(want);
+    if (curLang === 'en') return Promise.resolve({ lang: 'en', failed: false });
+    return RS.loadLang(curLang).then(function () {
+      return { lang: curLang, failed: false };
+    }, function () {
+      var explicit = !RS.langDetected;
+      RS.applyLang('en');
+      if (explicit) langFallbackFrom = want;
+      RS.settings.lang = 'en';
+      return { lang: 'en', failed: true, wanted: want, explicit: explicit };
     });
   };
 
@@ -497,8 +532,14 @@
     doc.body.insertAdjacentHTML('afterbegin',
       '<svg xmlns="http://www.w3.org/2000/svg" id="rs-sprite" class="sprite" aria-hidden="true" focusable="false"><defs>' + parts.join('') + '</defs></svg>');
   };
+  // Icons removed from the set by the design rules (no confetti, no sparkles) map to an allowed one.
+  var ICON_ALIAS = { 'party-popper': 'gift', 'sparkle': 'star', 'sparkles': 'star' };
   RS.icon = function (name, o) {
     o = o || {};
+    if (RS.icons && !hasOwn.call(RS.icons, name) && ICON_ALIAS[name]) {
+      warnOnce('icon not in the design system (using "' + ICON_ALIAS[name] + '")', name);
+      name = ICON_ALIAS[name];
+    }
     if (!RS.icons || !hasOwn.call(RS.icons, name)) { warnOnce('unknown icon', name); return ''; }
     var size = o.size || 20;
     var cls = 'ic' + (FLIP_RTL[name] ? ' flip-rtl' : '') + (o.cls ? ' ' + esc(o.cls) : '');
@@ -526,18 +567,25 @@
   function linkAttrs(href) {
     return ' href="' + esc(href) + '"' + (isExternal(href) ? ' target="_blank" rel="noopener noreferrer"' : '');
   }
+  // Screen-reader hint for links that open in a new tab (same wording as ui.ref).
+  function newTabHint(href) { return isExternal(href) ? '<span class="sr-only"> ' + txt(RS.t('core.opensNew')) + '</span>' : ''; }
+  function newTabLabel(label, href) { return label && isExternal(href) ? label + ' ' + RS.t('core.opensNew') : label; }
   function clsx(base, extra) { return base + (extra ? ' ' + esc(extra) : ''); }
   function txt(v) { return v == null ? '' : esc(v); }
   function linkAction(a) {   // {text, act, arg, href, icon, label}
-    var ic = a.icon ? RS.icon(a.icon, { size: 16 }) : '';
-    if (a.href) return '<a class="link-btn"' + linkAttrs(a.href) + attr('aria-label', a.label) + '>' + txt(a.text) + ic + '</a>';
+    var ext = a.href && isExternal(a.href);
+    var ic = a.icon || ext ? RS.icon(a.icon || 'arrow-up-right', { size: 16 }) : '';
+    if (a.href) return '<a class="link-btn"' + linkAttrs(a.href) + attr('aria-label', newTabLabel(a.label, a.href)) + attr('id', a.id) + '>' + txt(a.text) + ic + newTabHint(a.href) + '</a>';
     return '<button type="button" class="link-btn"' + actAttrs(a.act, a.arg) + attr('aria-label', a.label) + attr('id', a.id) + '>' + txt(a.text) + ic + '</button>';
   }
   ui.linkAction = linkAction;
 
-  // kicker('moon-star', 'Today') — small icon + uppercase label
-  ui.kicker = function (icon, text) {
-    return '<p class="kicker">' + (icon ? RS.icon(icon, { size: 16 }) : '') + '<span>' + txt(text) + '</span></p>';
+  // kicker('moon', 'Today', {tag:'p'|'h2'|'h3', id}) — small icon + uppercase label. ui.hero and ui.card render it
+  // as an h2 when it is the only heading of the object, so moving by headings reaches it.
+  ui.kicker = function (icon, text, o) {
+    o = o || {};
+    var tag = /^h[2-4]$/.test(o.tag || '') ? o.tag : 'p';
+    return '<' + tag + ' class="kicker"' + attr('id', o.id) + '>' + (icon ? RS.icon(icon, { size: 16 }) : '') + '<span>' + txt(text) + '</span></' + tag + '>';
   };
 
   // The ONE dark pine hero object of a screen.
@@ -545,9 +593,11 @@
   //       cta:{eyebrow, text, act, arg, href, id}, extra(html), id, cls})
   ui.hero = function (o) {
     o = o || {};
-    var kick = o.kicker ? ui.kicker(o.kicker.icon, o.kicker.text) : '';
+    var kid = o.kicker ? RS.uid('hero-k') : null;
+    var kick = o.kicker ? ui.kicker(o.kicker.icon, o.kicker.text, { tag: 'h2', id: kid }) : '';
     var hasNum = o.number != null && o.number !== '';
-    var num = hasNum ? '<div class="hero-num"><span class="num">' + txt(o.number) + '</span>' +
+    var tight = o.unit != null && /^[%٪‰/]/.test(String(o.unit));     // '37%', '3/5': no gap before the unit
+    var num = hasNum ? '<div class="hero-num' + (tight ? ' unit-tight' : '') + '"><span class="num">' + txt(o.number) + '</span>' +
       (o.unit ? '<span class="unit">' + txt(o.unit) + '</span>' : '') + '</div>' : '';
     var label = o.label ? '<p class="hero-label">' + txt(o.label) + '</p>' : '';
     var para = o.text ? '<p class="hero-text">' + txt(o.text) + '</p>' : '';
@@ -561,13 +611,14 @@
     var metrics = o.metrics && o.metrics.length ? ui.metrics(o.metrics, { onDark: true }) : '';
     var cta = o.cta ? ui.cta(o.cta) : '';
     var extra = o.extra ? '<div class="hero-extra">' + o.extra + '</div>' : '';
-    return '<section class="' + clsx('hero', o.cls) + '"' + attr('id', o.id) + '>' + kick + main + metrics + cta + extra + '</section>';
+    return '<section class="' + clsx('hero', o.cls) + '"' + attr('id', o.id) + attr('aria-labelledby', kid) + '>' + kick + main + metrics + cta + extra + '</section>';
   };
 
   // card({kicker:{icon,text}, title, action:{text, act, arg, href, icon}, body(html), cls, id})
+  // The title is the card's h2; without a title the kicker becomes the h2.
   ui.card = function (o) {
     o = o || {};
-    var kick = o.kicker ? ui.kicker(o.kicker.icon, o.kicker.text) : '';
+    var kick = o.kicker ? ui.kicker(o.kicker.icon, o.kicker.text, { tag: o.title ? 'p' : 'h2' }) : '';
     var title = o.title ? '<h2 class="card-title"' + attr('id', o.titleId) + '>' + txt(o.title) + '</h2>' : '';
     var action = o.action ? linkAction(o.action) : '';
     var hd = (kick || title || action) ? '<div class="card-hd"><div class="card-hd-txt">' + kick + title + '</div>' + action + '</div>' : '';
@@ -599,12 +650,13 @@
     if (o.lead) { lead = '<span class="row-lead">' + o.lead + '</span>'; leadKind = 'custom'; }
     else if (o.check) { lead = '<span class="row-lead">' + ui.check(!!o.check.on) + '</span>'; leadKind = 'check'; }
     else if (o.icon) { lead = '<span class="row-ic" aria-hidden="true">' + RS.icon(o.icon, { size: 19 }) + '</span>'; leadKind = 'icon'; }
-    var title = o.titleHtml != null ? o.titleHtml : txt(o.title);
+    var ext = !o.toggle && !o.check && o.href && isExternal(o.href);    // opens in a new tab: arrow + hint
+    var title = (o.titleHtml != null ? o.titleHtml : txt(o.title)) + (ext ? newTabHint(o.href) : '');
     var sub = o.subHtml != null ? o.subHtml : (o.sub != null && o.sub !== '' ? txt(o.sub) : '');
     var body = '<span class="row-txt"><span class="row-title">' + title + '</span>' + (sub ? '<span class="row-sub">' + sub + '</span>' : '') + '</span>';
     var val = o.value != null && o.value !== '' ? '<span class="row-val">' + txt(o.value) + '</span>' : '';
     var tgl = o.toggle ? '<span class="' + (o.toggle.on ? 'tgl is-on' : 'tgl') + '" aria-hidden="true"><span class="tgl-knob"></span></span>' : '';
-    var chev = o.chevron ? RS.icon('chevron-right', { size: 18, cls: 'row-chev' }) : '';
+    var chev = ext ? RS.icon('arrow-up-right', { size: 18, cls: 'row-chev' }) : (o.chevron ? RS.icon('chevron-right', { size: 18, cls: 'row-chev' }) : '');
     var inner = lead + body + val + (o.trail || '') + tgl + chev;
 
     var tag = 'div', a = '';
@@ -623,10 +675,12 @@
     return '<' + tag + ' class="' + cls + '"' + a + '>' + inner + '</' + tag + '>';
   };
 
-  // metrics([{label, value, id?}], {onDark}) — label above value, hairline separators
+  // metrics([{label, value, id?}], {onDark}) — label above value, hairline separators. data-n lets CSS turn a
+  // row of 4 into a 2×2 grid on narrow screens instead of squeezing the labels.
   ui.metrics = function (items, o) {
     o = o || {};
-    return '<dl class="metrics' + (o.onDark ? ' on-dark' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '">' + (items || []).map(function (m) {
+    items = items || [];
+    return '<dl class="metrics' + (o.onDark ? ' on-dark' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '" data-n="' + items.length + '">' + items.map(function (m) {
       return '<div class="metric"' + attr('id', m.id) + '><dt>' + txt(m.label) + '</dt><dd>' + txt(m.value) + '</dd></div>';
     }).join('') + '</dl>';
   };
@@ -644,25 +698,30 @@
     var style = o.size ? ' style="--ring-size:' + RS.clamp(o.size, 24, 400) + 'px"' : '';
     var label2 = hasTxt ? '<span class="ring-txt" aria-hidden="true">' + (o.text != null && o.text !== '' ? '<span class="ring-val">' + txt(o.text) + '</span>' : '') +
       (o.sub ? '<span class="ring-sub">' + txt(o.sub) + '</span>' : '') + '</span>' : '';
+    // Below 100% the round caps would add half a stroke at each end (at 95–99% they touch at 12 o'clock), so the
+    // dash is shortened by one stroke and shifted forward by half a stroke: the visible arc runs from 0 to p%.
+    var bar = '';
+    if (p >= 100) bar = ' stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="0"';
+    else if (p > 0) bar = ' stroke-dasharray="' + Math.max(0.01, c * p / 100 - stroke).toFixed(2) + ' ' + c.toFixed(2) + '" stroke-dashoffset="' + (-stroke / 2).toFixed(2) + '"';
     return '<div class="ring' + (o.onDark ? ' on-dark' : '') + (p === 0 ? ' is-empty' : '') + (o.cls ? ' ' + esc(o.cls) : '') + '"' + style +
       ' role="img" aria-label="' + esc(label) + '"' + attr('id', o.id) + '>' +
       '<svg class="ring-svg" viewBox="0 0 120 120" aria-hidden="true" focusable="false">' +
       '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="stop-a"/><stop offset="1" class="stop-b"/></linearGradient></defs>' +
       '<circle class="ring-track" cx="60" cy="60" r="' + r + '" stroke-width="' + stroke + '"/>' +
-      (p > 0 ? '<circle class="ring-bar" cx="60" cy="60" r="' + r + '" stroke-width="' + stroke + '" stroke="url(#' + gid + ')" stroke-dasharray="' +
-        c.toFixed(2) + '" stroke-dashoffset="' + (c * (1 - p / 100)).toFixed(2) + '"/>' : '') +
+      (bar ? '<circle class="ring-bar" cx="60" cy="60" r="' + r + '" stroke-width="' + stroke + '" stroke="url(#' + gid + ')"' + bar + '/>' : '') +
       '</svg>' + label2 + '</div>';
   };
 
-  // cta({eyebrow, text, act, arg, href, id}) — glass pill with a round mint arrow (inside the hero)
+  // cta({eyebrow, text, act, arg, href, id}) — glass pill with a round mint arrow (inside the hero). The text
+  // wraps (up to 3 lines) instead of being cut. Without act/href it renders as plain hero text (nothing to tap).
   ui.cta = function (o) {
     o = o || {};
     var inner = '<span class="cta-txt">' + (o.eyebrow ? '<span class="cta-eyebrow">' + txt(o.eyebrow) + '</span>' : '') +
       '<span class="cta-text">' + txt(o.text) + '</span></span>';
     var arrow = '<span class="cta-arrow" aria-hidden="true">' + RS.icon('arrow-right', { size: 20 }) + '</span>';
-    if (o.href) return '<a class="cta"' + linkAttrs(o.href) + attr('id', o.id) + '>' + inner + arrow + '</a>';
+    if (o.href) return '<a class="cta"' + linkAttrs(o.href) + attr('id', o.id) + '>' + inner + arrow + newTabHint(o.href) + '</a>';
     if (o.act) return '<button type="button" class="cta"' + actAttrs(o.act, o.arg) + attr('id', o.id) + '>' + inner + arrow + '</button>';
-    return '<div class="cta is-static"' + attr('id', o.id) + '>' + inner + '</div>';
+    return '<p class="cta is-static"' + attr('id', o.id) + '>' + inner + '</p>';
   };
 
   // btn(text, {act, arg, variant:'primary'|'secondary'|'ghost'|'danger', icon, block, type, size:'sm', href, id,
@@ -671,16 +730,16 @@
     o = o || {};
     var cls = 'btn btn-' + (o.variant || 'primary') + (o.block ? ' btn-block' : '') + (o.size === 'sm' ? ' btn-sm' : '') + (o.cls ? ' ' + esc(o.cls) : '');
     var content = (o.icon ? RS.icon(o.icon, { size: 18 }) : '') + (text != null && text !== '' ? '<span>' + txt(text) + '</span>' : '');
-    var common = attr('id', o.id) + attr('aria-label', o.label) + attrsOf(o.attrs);
-    if (o.href) return '<a class="' + cls + '"' + linkAttrs(o.href) + attr('download', o.download) + common + '>' + content + '</a>';
-    return '<button type="' + esc(o.type || 'button') + '" class="' + cls + '"' + actAttrs(o.act, o.arg) + (o.disabled ? ' disabled' : '') + common + '>' + content + '</button>';
+    var common = attr('id', o.id) + attrsOf(o.attrs);
+    if (o.href) return '<a class="' + cls + '"' + linkAttrs(o.href) + attr('download', o.download) + attr('aria-label', newTabLabel(o.label, o.href)) + common + '>' + content + newTabHint(o.href) + '</a>';
+    return '<button type="' + esc(o.type || 'button') + '" class="' + cls + '"' + actAttrs(o.act, o.arg) + (o.disabled ? ' disabled' : '') + attr('aria-label', o.label) + common + '>' + content + '</button>';
   };
 
   // iconBtn(icon, {act, arg, label (required), href, id, cls})
   ui.iconBtn = function (icon, o) {
     o = o || {};
     var content = RS.icon(icon, { size: o.size || 22 });
-    if (o.href) return '<a class="' + clsx('icon-btn', o.cls) + '"' + linkAttrs(o.href) + attr('aria-label', o.label) + attr('id', o.id) + '>' + content + '</a>';
+    if (o.href) return '<a class="' + clsx('icon-btn', o.cls) + '"' + linkAttrs(o.href) + attr('aria-label', newTabLabel(o.label, o.href)) + attr('id', o.id) + '>' + content + '</a>';
     return '<button type="button" class="' + clsx('icon-btn', o.cls) + '"' + actAttrs(o.act, o.arg) + attr('aria-label', o.label) + attr('id', o.id) + '>' + content + '</button>';
   };
 

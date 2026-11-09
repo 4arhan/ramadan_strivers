@@ -1338,5 +1338,155 @@
   "ref": "Muslim 1118",
   "url": "https://sunnah.com/muslim:1118",
   "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-prep-01",
+  "cat": "prep",
+  "q": "Outside Ramadan, Sha'ban was the month the Prophet ﷺ fasted the least, to save his strength for Ramadan.",
+  "a": false,
+  "x": "Aisha (RA) said she never saw him fast a whole month except Ramadan, and never saw him fast more in any month than in Sha'ban (Bukhari 1969, Muslim 1156).",
+  "ref": "Bukhari 1969",
+  "url": "https://sunnah.com/bukhari:1969",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-02",
+  "cat": "duas",
+  "q": "When breaking his fast, the Prophet ﷺ would say: 'Thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills.'",
+  "a": true,
+  "x": "Ibn Umar (RA) reported that he ﷺ said this when he broke his fast: Dhahaba al-zama'u wabtallat al-'uruqu wa thabata al-ajru in sha' Allah (Abu Dawud 2357).",
+  "ref": "Abu Dawud 2357",
+  "url": "https://sunnah.com/abudawud:2357",
+  "grade": "Hasan (al-Albani)"
+ },
+ {
+  "id": "tf-prep-03",
+  "cat": "prep",
+  "q": "The Prophet ﷺ said Sha'ban is a month people neglect, in which deeds are raised to Allah, and he loved to be fasting when his deeds were raised.",
+  "a": true,
+  "x": "When Usamah ibn Zayd (RA) noted how much he fasted in Sha'ban, he ﷺ called it a neglected month between Rajab and Ramadan in which deeds are raised to the Lord of the worlds (Nasa'i 2357).",
+  "ref": "Nasa'i 2357",
+  "url": "https://sunnah.com/nasai:2357",
+  "grade": "Hasan (al-Albani)"
+ },
+ {
+  "id": "tf-prep-04",
+  "cat": "duas",
+  "q": "The Quran's verses about fasting in Surah al-Baqarah do not mention dua at all.",
+  "a": false,
+  "x": "Among the fasting verses (2:183-187), Allah says: 'Indeed I am near. I respond to the invocation of the supplicant when he calls upon Me' (Quran 2:186).",
+  "ref": "Quran 2:186",
+  "url": "https://quran.com/2/186",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-prep-05",
+  "cat": "prep",
+  "q": "Aisha (RA) said there were times she could only make up her missed Ramadan fasts in Sha'ban.",
+  "a": true,
+  "x": "Aisha (RA) said she would owe fasts from Ramadan and could not make them up except in the month of Sha'ban (Bukhari 1950, Muslim 1146).",
+  "ref": "Bukhari 1950",
+  "url": "https://sunnah.com/bukhari:1950",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-06",
+  "cat": "duas",
+  "q": "Sayyid al-Istighfar, the 'master' supplication for forgiveness, is simply the word 'Astaghfirullah'.",
+  "a": false,
+  "x": "It is a longer dua the Prophet ﷺ taught, beginning: 'Allahumma anta Rabbi, la ilaha illa anta, khalaqtani wa ana 'abduka...' (O Allah, You are my Lord...) (Bukhari 6306).",
+  "ref": "Bukhari 6306",
+  "url": "https://sunnah.com/bukhari:6306",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-prep-07",
+  "cat": "prep",
+  "q": "The Prophet ﷺ encouraged fasting a day or two just before Ramadan to get ready for it.",
+  "a": false,
+  "x": "He said none of you should fast a day or two before Ramadan, unless it is a fast that person regularly keeps, in which case he may fast that day (Bukhari 1914, Muslim 1082).",
+  "ref": "Bukhari 1914",
+  "url": "https://sunnah.com/bukhari:1914",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-08",
+  "cat": "duas",
+  "q": "The Prophet ﷺ said whoever says Sayyid al-Istighfar, the master dua for forgiveness, by day with firm faith and dies before evening is among the people of Paradise.",
+  "a": true,
+  "x": "He said whoever says it with firm faith during the day and dies before evening, or at night and dies before morning, will be among the people of Paradise (Bukhari 6306).",
+  "ref": "Bukhari 6306",
+  "url": "https://sunnah.com/bukhari:6306",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-prep-09",
+  "cat": "prep",
+  "q": "When people asked the Prophet ﷺ about the crescent moons, Allah told him to say they are measurements of time for people and for Hajj.",
+  "a": true,
+  "x": "Allah says: 'They ask you about the crescent moons. Say: They are measurements of time for the people and for Hajj' (Quran 2:189). Islamic months, including Ramadan, follow the moon.",
+  "ref": "Quran 2:189",
+  "url": "https://quran.com/2/189",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-prep-10",
+  "cat": "duas",
+  "q": "The dua the Prophet ﷺ made most often asked only for good in the Hereafter, not in this world.",
+  "a": false,
+  "x": "Anas (RA) said his most frequent dua was: 'O Allah, our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire' (Bukhari 6389, Muslim 2690).",
+  "ref": "Bukhari 6389",
+  "url": "https://sunnah.com/bukhari:6389",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-11",
+  "cat": "prep",
+  "q": "Ramadan always lasts exactly 30 days.",
+  "a": false,
+  "x": "The Prophet ﷺ indicated with his hands that a month is sometimes 29 days and sometimes 30 (Bukhari 1913, Muslim 1080), so Ramadan can also be 29 days.",
+  "ref": "Bukhari 1913",
+  "url": "https://sunnah.com/bukhari:1913",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-12",
+  "cat": "duas",
+  "q": "The Prophet ﷺ said a person's dua is answered as long as they do not become impatient and say, 'I made dua but was not answered.'",
+  "a": true,
+  "x": "He said the dua of any of you is answered as long as he is not hasty, saying 'I made dua but was not answered' (Bukhari 6340). A version in Muslim adds: as long as he does not ask for sin or cutting family ties (Muslim 2735).",
+  "ref": "Bukhari 6340",
+  "url": "https://sunnah.com/bukhari:6340",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-13",
+  "cat": "prep",
+  "q": "The Prophet ﷺ told people to take on only as many good deeds as they are able to do.",
+  "a": true,
+  "x": "Asked which deeds Allah loves most, he said the most regular ones, even if few, and added: take on only the deeds that are within your ability (Bukhari 6465, Muslim 782).",
+  "ref": "Bukhari 6465",
+  "url": "https://sunnah.com/bukhari:6465",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-14",
+  "cat": "duas",
+  "q": "The Prophet ﷺ encouraged saying 'O Allah, forgive me if You wish' to show humility in dua.",
+  "a": false,
+  "x": "He said none of you should say 'O Allah, forgive me if You wish'. Ask with firm resolve, for no one can force Allah (Bukhari 6339, Muslim 2679).",
+  "ref": "Bukhari 6339",
+  "url": "https://sunnah.com/bukhari:6339",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-prep-15",
+  "cat": "prep",
+  "q": "Whenever the Prophet's ﷺ household began a good deed, they would keep it up.",
+  "a": true,
+  "x": "Aisha (RA) reported that whenever the family of Muhammad ﷺ did a deed, they would keep it up regularly (Muslim 782).",
+  "ref": "Muslim 782",
+  "url": "https://sunnah.com/muslim:782",
+  "grade": "Sahih (Muslim)"
  }
 ]

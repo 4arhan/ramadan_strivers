@@ -28,5 +28,17 @@
   "icon": "landmark",
   "name": "Ramadan in history",
   "desc": "Well-attested events that took place in Ramadan."
+ },
+ {
+  "id": "quranfacts",
+  "icon": "layers",
+  "name": "Quran facts",
+  "desc": "Surahs, juz and the verses behind well-known virtues."
+ },
+ {
+  "id": "prep",
+  "icon": "sunrise",
+  "name": "Preparing for Ramadan",
+  "desc": "Sha’ban and getting ready for the month."
  }
 ]
