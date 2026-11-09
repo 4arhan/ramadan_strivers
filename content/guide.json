@@ -1,80 +1,98 @@
 [
-  {
-    "id": "guide1",
-    "icon": "list-checks",
-    "title": "Daily Checklist",
-    "body": "You get 60+ daily deeds organised into 7 categories — Salah, Quran, Character, Charity, Avoidance, Abu Bakr Challenge, and Last 10 Nights. Tap any category to open it, then tick off what you've done. Your daily percentage updates as you go. Each category starts closed so you can focus on one area at a time."
-  },
-  {
-    "id": "guide2",
-    "icon": "book-open",
-    "title": "Quran Tracker",
-    "body": "Track your journey through all 604 pages of the Quran. After each reading session, tap \"Log reading\" and add your pages — they add up throughout the day. The dashboard shows your total progress, which Juz you're on, and how many pages per day you need to complete the Quran by Day 30. A chart shows your actual pace vs the ideal pace so you know if you're on track."
-  },
-  {
-    "id": "guide3",
-    "icon": "flame",
-    "title": "Streaks",
-    "body": "The app tracks four consecutive-day streaks: Fajr at the Masjid, Isha at the Masjid, daily Quran, and giving Sadaqah. Each day you keep it up, your count grows. At milestones like 3, 7, 10, and 20 days, you'll see a congratulations message pop up. It's a simple way to build consistency in worship."
-  },
-  {
-    "id": "guide4",
-    "icon": "award",
-    "title": "12 Badges",
-    "body": "Unlock achievements as you progress through Ramadan:\nFirst Step — do anything on Day 1\nWeek One — log all 7 days of the first week\nHalfway — stay active for the first 15 days\nFajr Warrior — 7-day Fajr at Masjid streak\nTahajjud Master — pray Tahajjud on 7 nights\nQuran Lover — read Quran on 15 days\nGenerous — give charity on 10 days\nAbu Bakr — complete the full challenge in one day\nAbu Bakr Gold — do it on 3 different days\nLast 10 Hero — avg 70%+ across the Last 10 Nights\nPerfectionist — hit 100% on 3 days\nChampion — score 60%+ on 20 days\n\nPrint your PDF report on Eid and use the badges to celebrate and reward your kids!"
-  },
-  {
-    "id": "guide5",
-    "icon": "moon-star",
-    "title": "Last 10 Nights & Laylatul Qadr",
-    "body": "A countdown to the Last 10 Nights begins on Day 15. When Day 21 arrives, a bonus worship category unlocks with extra deeds like I'tikaf, long sujood, and extra Quran. Odd nights (21, 23, 25, 27, 29) are highlighted across the app to remind you — any one of them could be Laylatul Qadr."
-  },
-  {
-    "id": "guide6",
-    "icon": "medal",
-    "title": "Abu Bakr Challenge",
-    "body": "The Prophet ﷺ once asked his companions four questions: \"Who among you is fasting today? Who followed a funeral? Who fed someone? Who visited someone who is sick?\" Abu Bakr (RA) was the only one who said \"I did\" to all four. This challenge asks you to do the same in a single day. When you've completed 3 out of 4, the app encourages you to go for all four."
-  },
-  {
-    "id": "guide7",
-    "icon": "flower-2",
-    "title": "Sisters' Menstrual Cycle",
-    "body": "Activate the toggle on the Today tab during your cycle. Salah and fasting items will be greyed out and excluded from your percentage. This way, your score reflects only the deeds that apply to you — so you can still aim for 100%."
-  },
-  {
-    "id": "guide8",
-    "icon": "chart-column",
-    "title": "Progress & Charts",
-    "body": "The Me tab gives you a full picture of your Ramadan: your average completion, a heatmap of all 30 days, a comparison of the three thirds of Ramadan (Mercy, Forgiveness, Salvation), a daily trend line, and a breakdown of your effort by category."
-  },
-  {
-    "id": "guide9",
-    "icon": "graduation-cap",
-    "title": "Learn",
-    "body": "Test what you have learned. The Learn tab turns the hadith and ayat behind the deeds in this app into short quizzes: true-or-false cards in six categories (Fasting, Salah & Dhikr, Quran, Character, Charity and the Last 10 Nights), multiple-choice questions, and flashcards that come back when they are due for review. Every answer shows its source on sunnah.com or quran.com, and your accuracy and best scores are saved, so keep going until you master them all."
-  },
-  {
-    "id": "guide10",
-    "icon": "trophy",
-    "title": "Competition Mode",
-    "body": "Run a Ramadan competition for your school, university, mosque, company, family or community. Organisers create a competition with Top 10 prizes and get a 6-letter join code plus a printable QR poster. Participants enter the code (or tap a personal invitation link) and their daily deeds, points and Quran pages feed a live leaderboard — individuals and classes/teams. Organisers get a roster with inactivity and integrity flags, bulk enrolment, a daily points cap, CSV export, Eid certificates for everyone, and a child-privacy mode. Only a display name and scores are shared — never the checklist details."
-  },
-  {
-    "id": "guide11",
-    "icon": "compass",
-    "title": "New to Islam or Learning?",
-    "body": "Every deed in the checklist has a hadith reference and a short explanation behind it. Turn on \"Detail Mode\" (in Me, under Settings) and you'll see the source and meaning of each item. You don't need any prior knowledge — the app teaches you as you use it."
-  },
-  {
-    "id": "guide12",
-    "icon": "file-text",
-    "title": "PDF Report",
-    "body": "Download a printable PDF of your entire Ramadan journey — your daily completion, Quran pages read, badges unlocked, and best streaks. It's a meaningful keepsake, and a great way to celebrate your children's achievements on Eid day."
-  },
-  {
-    "id": "guide13",
-    "icon": "lock",
-    "title": "Privacy & Data",
-    "body": "By default everything stays on your device: deeds, Quran pages, badges, journal and settings are stored in this browser, and no account is needed. If you choose to create an account, a copy of your tracker data is kept so it can sync between your devices, and you can delete it at any time. In a competition only your display name, an optional class or team, and your total scores are shared — never which deeds you ticked. You can export a backup file at any time and import it on another device, and the app works offline."
-  }
+ {
+  "id": "today",
+  "icon": "list",
+  "title": "Today and the daily checklist",
+  "body": "Today shows your progress for the current day of Ramadan, your next prayer or iftar time, the hadith of the day and the checklist of deeds in seven groups: salah and dhikr, Quran, character, charity, the last ten nights (from day 21), things to avoid, and the Abu Bakr challenge. Tick a deed when you have done it. Turn on detail mode to see each deed's source, a short explanation and its authenticity grade."
+ },
+ {
+  "id": "points",
+  "icon": "target",
+  "title": "Points and progress",
+  "body": "Each deed is worth a few points, shown next to it. Your daily percentage is the share of today's deeds you ticked. Points earned on days 21 to 30 count one and a half times, because the Prophet ﷺ strove hardest in the last ten nights (Muslim 1175)."
+ },
+ {
+  "id": "quran",
+  "icon": "book-open",
+  "title": "Quran tracker",
+  "body": "Log the pages you read after each session. The standard Madani mushaf has 604 pages in 30 juz, so about 20 pages a day completes it in Ramadan. The tracker shows your juz, the pace you need for the days left, and a chart of your reading."
+ },
+ {
+  "id": "learn",
+  "icon": "graduation-cap",
+  "title": "Learn: quiz and flashcards",
+  "body": "Learn turns the hadith and verses behind every deed into true-or-false cards, multiple-choice questions and flashcard decks (Ramadan words, duas, verses about fasting, Sunnahs of fasting, Ramadan in history, Quran facts and preparing for Ramadan). Flashcards use spaced repetition: cards you know come back less often, cards you miss come back sooner. Today's 5 is a short daily mix that builds a learning streak. Every answer shows its source."
+ },
+ {
+  "id": "prep",
+  "icon": "sunrise",
+  "title": "Ramadan Prep",
+  "body": "A 30-day programme to get ready before Ramadan begins. It starts with a short self-check, then gives three small actions each day: first fixing your salah (praying on time, Fajr, the Sunnah prayers, understanding what you recite), then building a daily connection with the Quran, then fasting practice and habits, and finally the heart, family and charity. Daily salah and Quran check-ins show your readiness. During Sha'ban the plan follows the Hijri date, so it ends as Ramadan begins; you can also start it at any time from the Me tab."
+ },
+ {
+  "id": "compete",
+  "icon": "trophy",
+  "title": "Competitions",
+  "body": "Schools, universities, mosques, companies, families and communities can run a Ramadan competition. An organiser creates one with up to ten prizes and shares the six-letter join code, a QR poster or personal invitation links. Participants join with the code and a display name; their points, days logged and Quran pages update a live leaderboard for individuals and for classes or teams. Only a display name and totals are shared, never which deeds you ticked. Organisers can set a daily points cap, review flagged entries, export results and print certificates for everyone at Eid."
+ },
+ {
+  "id": "prayer",
+  "icon": "clock",
+  "title": "Prayer times and iftar",
+  "body": "Allow your location (or enter coordinates) to see today's prayer times and a countdown to iftar and to the end of suhoor. Choose the calculation method your community follows in settings. Your location stays on your device unless you turn on reminders."
+ },
+ {
+  "id": "streaks",
+  "icon": "flame",
+  "title": "Streaks",
+  "body": "Four streaks count consecutive days on which you ticked Fajr, Isha, any Quran deed (recitation, reflection or listening) and charity (giving charity or feeding a fasting person). The Prophet ﷺ said the most beloved deeds to Allah are the most consistent, even if small (Bukhari 6464)."
+ },
+ {
+  "id": "badges",
+  "icon": "award",
+  "title": "The 12 badges",
+  "body": "First Step: tick anything on day 1. Week One: log something on each of days 1 to 7. Halfway: log something on each of days 1 to 15. Fajr Warrior: a 7-day Fajr streak. Tahajjud Master: Tahajjud on 7 nights. Quran Lover: recitation or reflection on 15 days. Generous: charity on 10 days. Abu Bakr: all four Abu Bakr deeds in one day. Abu Bakr Gold: that on 3 different days. Last 10 Hero: at least 5 of the last ten days logged with an average of 70% or more. Perfectionist: 100% on 3 days. Champion: 60% or more on 20 days."
+ },
+ {
+  "id": "last10",
+  "icon": "moon-star",
+  "title": "The last ten nights",
+  "body": "In the Islamic calendar each night comes before its day, so the 21st night begins at sunset on day 20. From that evening the app marks the odd nights (21, 23, 25, 27 and 29) on the evenings they begin, and from day 21 the checklist adds a section for the last ten days and nights. The Prophet ﷺ told us to seek Laylat al-Qadr in the odd nights of the last ten (Bukhari 2017), so make the most of each of them."
+ },
+ {
+  "id": "sisters",
+  "icon": "heart",
+  "title": "Sisters' mode",
+  "body": "Turn this on during your period. Prayer and fasting deeds are set aside and left out of your percentage, so your score reflects the worship that applies to you: dhikr, dua, listening to the Quran, charity, service and character."
+ },
+ {
+  "id": "modes",
+  "icon": "calendar",
+  "title": "Modes and the Hijri date",
+  "body": "The app follows the Hijri calendar (Umm al-Qura). In Ramadan it sets the day automatically, in Sha'ban it suggests Ramadan Prep, and the rest of the year it tracks Sunnah fasts (Mondays, Thursdays and the 13th to 15th of each month), the six days of Shawwal and the first ten days of Dhul Hijjah. If your community sighted the moon a day earlier or later, adjust it by one day in settings. You can also choose the mode yourself."
+ },
+ {
+  "id": "journal",
+  "icon": "notebook-pen",
+  "title": "Reflection journal and Eid report",
+  "body": "Write a line each day about what you learned or want to improve. On Eid, download a PDF report with your days, Quran pages, streaks, badges and reflections — a keepsake, and a way to celebrate children's effort."
+ },
+ {
+  "id": "account",
+  "icon": "cloud",
+  "title": "Account and sync",
+  "body": "Everything works without an account and stays on your device. Create one if you want a backup and to sync between phone, tablet and computer. You can delete the account and its cloud data at any time."
+ },
+ {
+  "id": "languages",
+  "icon": "languages",
+  "title": "Languages",
+  "body": "The app is available in English, Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian and Urdu, with right-to-left layout for Arabic and Urdu. Translations of hadith and verse meanings are for understanding; follow the source link for the authoritative text."
+ },
+ {
+  "id": "privacy",
+  "icon": "lock",
+  "title": "Privacy and your data",
+  "body": "Your tracker data lives on your device. Nothing is sent anywhere unless you join a competition (display name and totals), create an account (for sync), turn on reminders, share your progress, or use the explain feature. Export a backup file or reset everything from the data section."
+ }
 ]

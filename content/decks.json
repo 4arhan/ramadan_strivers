@@ -1,1 +1,32 @@
-[]
+[
+ {
+  "id": "vocab",
+  "icon": "languages",
+  "name": "Ramadan words",
+  "desc": "Key Arabic terms of fasting, prayer and the Quran."
+ },
+ {
+  "id": "duas",
+  "icon": "scroll-text",
+  "name": "Duas",
+  "desc": "Authentic supplications with Arabic, transliteration and meaning."
+ },
+ {
+  "id": "ayat",
+  "icon": "book-open",
+  "name": "Verses on fasting",
+  "desc": "The Quran’s passage on fasting and Surat al-Qadr."
+ },
+ {
+  "id": "sunnah",
+  "icon": "utensils",
+  "name": "Sunnahs of fasting",
+  "desc": "How the Prophet ﷺ fasted, ate suhoor and broke his fast."
+ },
+ {
+  "id": "history",
+  "icon": "landmark",
+  "name": "Ramadan in history",
+  "desc": "Well-attested events that took place in Ramadan."
+ }
+]

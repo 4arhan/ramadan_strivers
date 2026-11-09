@@ -1,10 +1,1082 @@
 {
-  "intro": {
-    "title": "Ramadan Prep",
-    "body": ""
+ "intro": {
+  "title": "Ramadan Prep: 30 Days to Get Ready",
+  "body": "Ramadan is coming, and a beautiful way to welcome it is to arrive ready. Over the next 30 days you will steady your salah, build a daily bond with the Quran, and prepare your body, heart and home, one small step at a time. Go gently, keep going, and make every step for Allah."
+ },
+ "tracks": [
+  {
+   "id": "salah",
+   "icon": "sunrise",
+   "name": "Salah",
+   "desc": "All five on time, Fajr, careful wudu, understanding what you recite, and Sunnah prayers"
   },
-  "tracks": [],
-  "assessment": [],
-  "days": [],
-  "milestones": []
+  {
+   "id": "quran",
+   "icon": "book-open",
+   "name": "Quran",
+   "desc": "A fixed daily Quran time, growing toward about 20 pages a day, with understanding"
+  },
+  {
+   "id": "fasting",
+   "icon": "moon",
+   "name": "Fasting",
+   "desc": "Sunnah fasts, making up missed days, and planning suhoor and iftar"
+  },
+  {
+   "id": "heart",
+   "icon": "heart",
+   "name": "Heart",
+   "desc": "Tawbah, sincere intentions, dua, and mending ties with family and friends"
+  },
+  {
+   "id": "habits",
+   "icon": "clock",
+   "name": "Habits",
+   "desc": "Sleep, food, caffeine and screen time shaped to support your worship"
+  },
+  {
+   "id": "charity",
+   "icon": "hand-heart",
+   "name": "Charity",
+   "desc": "Regular giving, a Ramadan charity plan, and zakat al-fitr ready on time"
+  }
+ ],
+ "assessment": [
+  {
+   "id": "a1",
+   "q": "How many of the five daily prayers do you usually pray on time?",
+   "options": [
+    "One or none, for now",
+    "Two or three",
+    "Four",
+    "All five"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "a2",
+   "q": "How often do you pray Fajr on time?",
+   "options": [
+    "Rarely, for now",
+    "Once or twice a week",
+    "Most days",
+    "Every day"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "a3",
+   "q": "How often do you read the Quran at the moment?",
+   "options": [
+    "Rarely, mostly in Ramadan",
+    "A few times a month",
+    "A few times a week",
+    "Every day"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "a4",
+   "q": "How comfortable are you reading the Quran in the Arabic script?",
+   "options": [
+    "I cannot read it yet",
+    "I read slowly, letter by letter",
+    "I read fairly well, with some mistakes",
+    "I read fluently, with tajweed"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "a5",
+   "q": "Do you have missed Ramadan fasts still to make up?",
+   "options": [
+    "Yes, and I am not sure how many",
+    "Yes, I know how many but have no plan yet",
+    "Yes, and I have dates planned",
+    "No, none to make up"
+   ],
+   "scores": [
+    0,
+    1,
+    3,
+    3
+   ]
+  },
+  {
+   "id": "a6",
+   "q": "How would you describe your sleep and screen habits most nights?",
+   "options": [
+    "Late nights and lots of scrolling",
+    "Often late, with screens before bed",
+    "Mostly regular, with a few late nights",
+    "Regular sleep and screens under control"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "a7",
+   "q": "How often do you give charity?",
+   "options": [
+    "Rarely, for now",
+    "Mainly in Ramadan or on special occasions",
+    "About once a month",
+    "Every week or more"
+   ],
+   "scores": [
+    0,
+    1,
+    2,
+    3
+   ]
+  }
+ ],
+ "days": [
+  {
+   "n": 1,
+   "track": "salah",
+   "theme": "All five prayers on time",
+   "reflect": "Which prayer is hardest for me to pray on time, and what usually gets in the way?",
+   "mot": "The Prophet ﷺ was asked which deed Allah loves most. He said: prayer offered at its proper time.",
+   "prompts": [
+    {
+     "id": "p1-1",
+     "track": "salah",
+     "text": "Look up today's five prayer times and set an alert a little before each one.",
+     "tip": "Use a prayer-times app or your mosque's timetable. An early alert gives you time to finish what you are doing and make wudu."
+    },
+    {
+     "id": "p1-2",
+     "track": "salah",
+     "text": "Pray all five prayers within their times today, ticking each one off as you go.",
+     "tip": "Notice which prayer is hardest to catch. That is the one to plan around this week, not a reason to feel bad."
+    },
+    {
+     "id": "p1-3",
+     "track": "heart",
+     "text": "Make a sincere intention that these 30 days are for Allah, and write down why you want to prepare.",
+     "tip": "Keep it short and honest, e.g. 'I want to meet Ramadan ready and close to Allah.' Read it again whenever your energy dips."
+    }
+   ],
+   "ref": "Bukhari 527",
+   "url": "https://sunnah.com/bukhari:527",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 2,
+   "track": "salah",
+   "theme": "Fajr: start the day with Allah",
+   "reflect": "How did praying Fajr on time feel, or what would help me catch it tomorrow?",
+   "mot": "The Prophet ﷺ said: Whoever prays Fajr is under the protection of Allah.",
+   "prompts": [
+    {
+     "id": "p2-1",
+     "track": "salah",
+     "text": "Set two alarms for Fajr and put one across the room, so you have to get up to turn it off.",
+     "tip": "Make wudu as soon as you are up; the cool water helps you wake. If you oversleep, do not give up: pray it and try again."
+    },
+    {
+     "id": "p2-2",
+     "track": "habits",
+     "text": "Go to bed a little earlier tonight so that waking for Fajr feels easier.",
+     "tip": "Count back from Fajr time to find a bedtime that gives you enough sleep, and start winding down half an hour before it."
+    },
+    {
+     "id": "p2-3",
+     "track": "heart",
+     "text": "Ask a family member or friend to be your Fajr partner, checking on each other each morning.",
+     "tip": "Agree on a quick message after the adhan. Encouraging each other makes hard mornings far easier to get through."
+    }
+   ],
+   "ref": "Muslim 657",
+   "url": "https://sunnah.com/muslim:657",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 3,
+   "track": "salah",
+   "theme": "Wudu with care",
+   "reflect": "How did taking care over wudu change the way I began my prayers today?",
+   "mot": "The Prophet ﷺ said: Whoever performs wudu and does it well, his sins leave his body, even from beneath his nails.",
+   "prompts": [
+    {
+     "id": "p3-1",
+     "track": "salah",
+     "text": "Make each wudu today slowly and completely, washing every part fully and in order.",
+     "tip": "Go slowly but use water sparingly: the Prophet ﷺ made wudu with one mudd, a small amount of water (Bukhari 201)."
+    },
+    {
+     "id": "p3-2",
+     "track": "salah",
+     "text": "Learn the dua after wudu and say it each time you finish today.",
+     "tip": "Ashhadu an la ilaha illallahu wahdahu la sharika lah, wa ashhadu anna Muhammadan 'abduhu wa rasuluh (Muslim 234)."
+    },
+    {
+     "id": "p3-3",
+     "track": "habits",
+     "text": "Plan how you will make wudu at work, school or when out, so it never makes you late.",
+     "tip": "Find the nearest washroom or prayer room in advance. Some people make wudu before leaving home and try to keep it."
+    }
+   ],
+   "ref": "Muslim 245",
+   "url": "https://sunnah.com/muslim:245",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 4,
+   "track": "salah",
+   "theme": "Understand Al-Fatiha",
+   "reflect": "Which ayah of Al-Fatiha touched me most today, and why?",
+   "mot": "Allah said: I have divided the prayer between Me and My servant. When he says 'Praise be to Allah, Lord of the worlds', Allah says: My servant has praised Me.",
+   "prompts": [
+    {
+     "id": "p4-1",
+     "track": "salah",
+     "text": "Read a simple translation of Al-Fatiha, one ayah at a time, until you know what each line means.",
+     "tip": "Write each ayah's meaning on a small card and keep it by your prayer mat. Read it before you pray today."
+    },
+    {
+     "id": "p4-2",
+     "track": "salah",
+     "text": "In at least one prayer today, recite Al-Fatiha slowly, thinking about each ayah as you say it.",
+     "tip": "Pause briefly at the end of each ayah. Slowing down a little lets your heart catch up with your tongue."
+    },
+    {
+     "id": "p4-3",
+     "track": "quran",
+     "text": "Reflect on the dua in Al-Fatiha, 'Guide us to the straight path', and the guidance you most need.",
+     "tip": "Allah says of Al-Fatiha's last ayat: This is for My servant, and My servant shall have what he asked (Muslim 395)."
+    }
+   ],
+   "ref": "Muslim 395",
+   "url": "https://sunnah.com/muslim:395",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 5,
+   "track": "salah",
+   "theme": "The words of ruku and sujood",
+   "reflect": "Which words of my prayer do I now understand that I used to say without thinking?",
+   "mot": "The Prophet ﷺ said: The nearest a servant is to his Lord is when he is in sujood, so make plenty of dua then.",
+   "prompts": [
+    {
+     "id": "p5-1",
+     "track": "salah",
+     "text": "Learn the meaning of what you say in ruku and sujood, and think of it as you pray today.",
+     "tip": "Subhana Rabbiyal 'Adhim: Glory be to my Lord, the Most Great. Subhana Rabbiyal A'la: Glory be to my Lord, the Most High."
+    },
+    {
+     "id": "p5-2",
+     "track": "salah",
+     "text": "Learn the meaning of the tashahhud (at-tahiyyat) that you recite while sitting.",
+     "tip": "Read it line by line with a translation: greetings to Allah, peace on the Prophet ﷺ and the righteous, then the testimony of faith."
+    },
+    {
+     "id": "p5-3",
+     "track": "salah",
+     "text": "Learn the sujood dua 'O Allah, forgive me all my sins' in Arabic, and say it in your sujood today.",
+     "tip": "Allahummaghfir li dhanbi kullahu, diqqahu wa jillahu, wa awwalahu wa akhirahu, wa 'alaniyatahu wa sirrahu (Muslim 483)."
+    }
+   ],
+   "ref": "Muslim 482",
+   "url": "https://sunnah.com/muslim:482",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 6,
+   "track": "salah",
+   "theme": "The Sunnah prayers",
+   "reflect": "Which Sunnah prayer can I make a lifelong habit, starting this week?",
+   "mot": "The Prophet ﷺ said: Whoever prays twelve voluntary rak'ahs each day for Allah, Allah will build for him a house in Paradise.",
+   "prompts": [
+    {
+     "id": "p6-1",
+     "track": "salah",
+     "text": "Pray the two short Sunnah rak'ahs before Fajr today, if you do not already.",
+     "tip": "The Prophet ﷺ said the two rak'ahs before Fajr are better than this world and all it contains (Muslim 725)."
+    },
+    {
+     "id": "p6-2",
+     "track": "salah",
+     "text": "Add one more Sunnah prayer to your day, such as the two rak'ahs after Maghrib.",
+     "tip": "Build toward the twelve: 2 before Fajr, 4 before Dhuhr, 2 after Dhuhr, 2 after Maghrib and 2 after Isha (Tirmidhi 415)."
+    },
+    {
+     "id": "p6-3",
+     "track": "salah",
+     "text": "Pray witr before you sleep tonight, so your night ends with prayer.",
+     "tip": "The Prophet ﷺ advised Abu Hurayrah to pray witr before sleeping (Bukhari 1981), a good habit if waking at night is hard."
+    }
+   ],
+   "ref": "Muslim 728",
+   "url": "https://sunnah.com/muslim:728",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 7,
+   "track": "salah",
+   "theme": "Calm, focused prayer",
+   "reflect": "Looking back on this week, which salah habit grew most, and which needs more care?",
+   "mot": "Successful indeed are the believers: those who are humble and attentive in their prayer.",
+   "prompts": [
+    {
+     "id": "p7-1",
+     "track": "salah",
+     "text": "Pray each prayer today without rushing, letting each position settle before you move on.",
+     "tip": "The Prophet ﷺ taught a man who prayed hastily to bow, prostrate and sit until he was at ease in each (Bukhari 757)."
+    },
+    {
+     "id": "p7-2",
+     "track": "salah",
+     "text": "Before each prayer today, take a few seconds to silence your phone and clear your mind.",
+     "tip": "Face the qiblah, breathe, and remember who you are standing before. A short pause before Allahu Akbar helps focus."
+    },
+    {
+     "id": "p7-3",
+     "track": "fasting",
+     "text": "Plan one or two voluntary fasts for the coming week, such as a Monday or Thursday.",
+     "tip": "The Prophet ﷺ used to try to fast on Mondays and Thursdays (Tirmidhi 745). Starting gently now makes Ramadan's first days easier."
+    }
+   ],
+   "ref": "Quran 23:1-2",
+   "url": "https://quran.com/23/1-2",
+   "grade": "Quran"
+  },
+  {
+   "n": 8,
+   "track": "quran",
+   "theme": "A fixed daily Quran time",
+   "reflect": "What time of day suits me best for the Quran, and what might get in its way?",
+   "mot": "The Prophet ﷺ said: Read the Quran, for on the Day of Resurrection it will come as an intercessor for its companions.",
+   "prompts": [
+    {
+     "id": "p8-1",
+     "track": "quran",
+     "text": "Choose one fixed daily time for the Quran, such as after Fajr, and read 2 pages in it today.",
+     "tip": "Tie it to something you already do, like a prayer. If you cannot read Arabic yet, listen while following a translation."
+    },
+    {
+     "id": "p8-2",
+     "track": "habits",
+     "text": "Put your mushaf or Quran app where you will see it at your chosen time.",
+     "tip": "Move distracting apps off your phone's home screen and put the Quran app there. A bookmark saves time finding your page."
+    },
+    {
+     "id": "p8-3",
+     "track": "salah",
+     "text": "Keep praying all five on time, and keep one Sunnah prayer from last week going.",
+     "tip": "Tick your prayers off each day so last week's gains are not lost while your focus moves to the Quran."
+    }
+   ],
+   "ref": "Muslim 804",
+   "url": "https://sunnah.com/muslim:804",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 9,
+   "track": "quran",
+   "theme": "Grow your pages gently",
+   "reflect": "What page goal can I truly keep every day, even on busy days?",
+   "mot": "The Prophet ﷺ said: The most beloved deed to Allah is the one done regularly, even if it is small.",
+   "prompts": [
+    {
+     "id": "p9-1",
+     "track": "quran",
+     "text": "Write your page goals: about 5 a day by day 14, 10 a day by day 21 and 20 a day by day 29.",
+     "tip": "About 20 pages a day completes the Quran in a 30-day Ramadan. If that is too much for now, choose smaller steps you can keep."
+    },
+    {
+     "id": "p9-2",
+     "track": "quran",
+     "text": "Read 3 pages today in your fixed Quran time.",
+     "tip": "Each letter you read brings a good deed, multiplied by ten (Tirmidhi 2910). Short daily reading builds the stamina Ramadan needs."
+    },
+    {
+     "id": "p9-3",
+     "track": "fasting",
+     "text": "If you have Ramadan fasts to make up, count them today so there is time to fit them in.",
+     "tip": "Allah says whoever was ill or travelling makes up an equal number of other days (Quran 2:184). Starting early leaves room."
+    }
+   ],
+   "ref": "Bukhari 6464",
+   "url": "https://sunnah.com/bukhari:6464",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 10,
+   "track": "quran",
+   "theme": "Check your recitation",
+   "reflect": "Which recitation mistake will I work on first, and who can help me with it?",
+   "mot": "The Prophet ﷺ said: The one skilled in the Quran is with the noble, righteous angels, and the one who stumbles over it, finding it hard, has two rewards.",
+   "prompts": [
+    {
+     "id": "p10-1",
+     "track": "quran",
+     "text": "Find a Quran teacher, class or recitation app that can check your reading regularly.",
+     "tip": "Ask your mosque about Quran classes, or use an app that listens and corrects. Work on one or two rules at a time."
+    },
+    {
+     "id": "p10-2",
+     "track": "quran",
+     "text": "Listen to a skilled reciter read today's pages before you read them yourself.",
+     "tip": "Follow the text with your eyes or finger as you listen, then read it yourself, copying the pronunciation and pace."
+    },
+    {
+     "id": "p10-3",
+     "track": "salah",
+     "text": "Recite the surahs you use in salah to someone who can check your pronunciation.",
+     "tip": "Start with Al-Fatiha, the heart of every prayer. Small corrections here improve every prayer you pray."
+    }
+   ],
+   "ref": "Muslim 798",
+   "url": "https://sunnah.com/muslim:798",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 11,
+   "track": "quran",
+   "theme": "Understand a short surah",
+   "reflect": "What is Allah telling me in the surah I studied today, and how will I live it?",
+   "mot": "A blessed Book which We have revealed to you, so that they may reflect upon its verses and people of understanding may take heed.",
+   "prompts": [
+    {
+     "id": "p11-1",
+     "track": "quran",
+     "text": "Read a simple tafsir of one short surah, such as Al-'Asr or Al-Kawthar.",
+     "tip": "Use a trusted tafsir in your language. Read the surah, then its explanation, then the surah again with fresh eyes."
+    },
+    {
+     "id": "p11-2",
+     "track": "quran",
+     "text": "Write down one lesson from that surah and one way you will act on it this week.",
+     "tip": "Keep a small Quran journal. One line is enough: what Allah is saying, and one thing you will change because of it."
+    },
+    {
+     "id": "p11-3",
+     "track": "salah",
+     "text": "Recite that surah in one of your prayers today with its meaning in mind.",
+     "tip": "Reciting what you understand helps your heart stay present. If you do not know it by heart yet, use a surah you do know."
+    }
+   ],
+   "ref": "Quran 38:29",
+   "url": "https://quran.com/38/29",
+   "grade": "Quran"
+  },
+  {
+   "n": 12,
+   "track": "quran",
+   "theme": "Memorise a little",
+   "reflect": "Which ayat do I want to carry in my heart this Ramadan, and why?",
+   "mot": "And We have certainly made the Quran easy for remembrance, so is there anyone who will remember?",
+   "prompts": [
+    {
+     "id": "p12-1",
+     "track": "quran",
+     "text": "Memorise one to three new ayat today, repeating each until you can say it without looking.",
+     "tip": "Listen to the ayat first, then repeat each one many times before joining them. Revise them after each prayer today."
+    },
+    {
+     "id": "p12-2",
+     "track": "salah",
+     "text": "Recite the ayat you memorised today in one of your prayers.",
+     "tip": "Using new ayat in salah helps them stick. If you feel unsure, read them over once more just before you pray."
+    },
+    {
+     "id": "p12-3",
+     "track": "quran",
+     "text": "Teach a child or friend one short surah, or the meaning of one you know.",
+     "tip": "The Prophet ﷺ said the best of you are those who learn the Quran and teach it (Bukhari 5027)."
+    }
+   ],
+   "ref": "Quran 54:17",
+   "url": "https://quran.com/54/17",
+   "grade": "Quran"
+  },
+  {
+   "n": 13,
+   "track": "quran",
+   "theme": "Revise what you know",
+   "reflect": "Which surah I once knew has slipped away, and how can I bring it back?",
+   "mot": "The Prophet ﷺ said: Keep revising the Quran, for by Him in whose hand is my soul, it slips away faster than a camel from its rope.",
+   "prompts": [
+    {
+     "id": "p13-1",
+     "track": "quran",
+     "text": "Revise the surahs you already know by reciting them from memory, slowly and carefully.",
+     "tip": "Recite to a family member or into a voice note, then check it against the mushaf. Mark any spots that need more work."
+    },
+    {
+     "id": "p13-2",
+     "track": "quran",
+     "text": "Read 5 pages today in your fixed Quran time.",
+     "tip": "If this feels like a jump, split it: some pages after Fajr and the rest after another prayer."
+    },
+    {
+     "id": "p13-3",
+     "track": "charity",
+     "text": "Start a small daily charity habit: set aside a coin or a small amount each day until Ramadan.",
+     "tip": "Use a jar at home or a donation app. Regular giving, even a little, builds a habit you will carry into Ramadan."
+    }
+   ],
+   "ref": "Bukhari 5033",
+   "url": "https://sunnah.com/bukhari:5033",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 14,
+   "track": "quran",
+   "theme": "Your Ramadan Quran plan",
+   "reflect": "Where will the Quran fit in my Ramadan day, and what will I move to make room for it?",
+   "mot": "The Prophet ﷺ told Abdullah ibn Amr: Recite the whole Quran in one month.",
+   "prompts": [
+    {
+     "id": "p14-1",
+     "track": "quran",
+     "text": "Make your Ramadan reading plan: how many pages a day, and at which times.",
+     "tip": "One juz a day completes the Quran in 30 days. In the 604-page Madinah mushaf that is about 20 pages, or 4 after each prayer."
+    },
+    {
+     "id": "p14-2",
+     "track": "quran",
+     "text": "Ask a friend or family member to be your Quran partner in Ramadan, to read with or check in with.",
+     "tip": "Each night of Ramadan Jibreel met the Prophet ﷺ, who recited the Quran to him (Bukhari 1902). A partner helps on tired days."
+    },
+    {
+     "id": "p14-3",
+     "track": "charity",
+     "text": "Support Quran learning: give to a Quran class or school, or gift someone a translation.",
+     "tip": "Ask your mosque or a local Quran school what they need. A mushaf with translation can be a lasting gift for a new reader."
+    }
+   ],
+   "ref": "Bukhari 5054",
+   "url": "https://sunnah.com/bukhari:5054",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 15,
+   "track": "fasting",
+   "theme": "The Sunnah fasts of Sha'ban",
+   "reflect": "What do I hope fasting before Ramadan will teach me about myself?",
+   "mot": "Aisha said: I never saw the Prophet ﷺ fast a whole month except Ramadan, nor fast more in any month than in Sha'ban.",
+   "prompts": [
+    {
+     "id": "p15-1",
+     "track": "fasting",
+     "text": "Check your fasting plan for late Sha'ban: scholars differ on starting new voluntary fasts after mid-Sha'ban.",
+     "tip": "The Prophet ﷺ said not to fast a day or two before Ramadan unless it is a fast you usually keep (Bukhari 1914). Unsure? Ask a local scholar."
+    },
+    {
+     "id": "p15-2",
+     "track": "fasting",
+     "text": "On your next fast day, note how your body and mood cope, to guide your Ramadan plans.",
+     "tip": "Jot down energy dips, hunger times or headaches. These notes will shape your suhoor, iftar and sleep plans this week."
+    },
+    {
+     "id": "p15-3",
+     "track": "quran",
+     "text": "Read 6 pages today in your fixed Quran time.",
+     "tip": "If you are fasting, the quiet hour before iftar is a lovely time to read and make dua."
+    }
+   ],
+   "ref": "Bukhari 1969",
+   "url": "https://sunnah.com/bukhari:1969",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 16,
+   "track": "fasting",
+   "theme": "Make up missed fasts",
+   "reflect": "What helps me keep commitments to Allah that no one else sees?",
+   "mot": "Aisha said: I would have Ramadan fasts to make up, and I could only make them up in Sha'ban.",
+   "prompts": [
+    {
+     "id": "p16-1",
+     "track": "fasting",
+     "text": "If you owe any fasts, book a date for each one before Ramadan and put them in your calendar.",
+     "tip": "Spread them out if that is easier. If you are unsure what you owe or how to make it up, ask a trusted local scholar."
+    },
+    {
+     "id": "p16-2",
+     "track": "fasting",
+     "text": "Support anyone at home who is making up fasts: wake them for suhoor or help prepare their iftar.",
+     "tip": "Many people have days to make up. Ask what would help, then do it quietly and kindly."
+    },
+    {
+     "id": "p16-3",
+     "track": "salah",
+     "text": "After each of the five prayers today, say SubhanAllah, Alhamdulillah and Allahu Akbar 33 times each.",
+     "tip": "Complete 100 with 'La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir' (Muslim 597)."
+    }
+   ],
+   "ref": "Bukhari 1950",
+   "url": "https://sunnah.com/bukhari:1950",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 17,
+   "track": "habits",
+   "theme": "Reset your sleep",
+   "reflect": "What keeps me up late, and what am I willing to let go of to sleep earlier?",
+   "mot": "The Prophet ﷺ told Abdullah ibn Amr: Pray at night and also sleep, for your body has a right over you.",
+   "prompts": [
+    {
+     "id": "p17-1",
+     "track": "habits",
+     "text": "Choose a regular bedtime that gives you enough sleep before Fajr, and start it tonight.",
+     "tip": "The Prophet ﷺ disliked sleeping before Isha and chatting after it (Bukhari 568). Count back from Fajr to set your bedtime."
+    },
+    {
+     "id": "p17-2",
+     "track": "habits",
+     "text": "Try the Sunnah bedtime routine tonight: wudu, lie on your right side and say the bedtime dua.",
+     "tip": "The Prophet ﷺ taught al-Bara this routine with a dua beginning 'Allahumma aslamtu wajhi ilayk' (Bukhari 6311)."
+    },
+    {
+     "id": "p17-3",
+     "track": "salah",
+     "text": "Pray Isha on time tonight, then keep the rest of the evening calm so you can sleep early.",
+     "tip": "Dim the lights, put screens away and lay out what you need for the morning. A calm evening makes Fajr easier."
+    }
+   ],
+   "ref": "Bukhari 1975",
+   "url": "https://sunnah.com/bukhari:1975",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 18,
+   "track": "fasting",
+   "theme": "Plan your suhoor",
+   "reflect": "What would a calm, unhurried suhoor look like in my home?",
+   "mot": "The Prophet ﷺ said: Eat suhoor, for there is blessing in suhoor.",
+   "prompts": [
+    {
+     "id": "p18-1",
+     "track": "fasting",
+     "text": "Plan three or four simple suhoor meals you can rotate through Ramadan.",
+     "tip": "Choose foods that keep you going, such as oats, eggs, yoghurt, dates and fruit, with plenty of water. Prep the night before."
+    },
+    {
+     "id": "p18-2",
+     "track": "fasting",
+     "text": "On your next fast day, wake early enough to eat suhoor calmly before Fajr.",
+     "tip": "Eating close to Fajr follows the Sunnah: the gap between the Prophet's suhoor and the adhan was about fifty ayat (Bukhari 1921)."
+    },
+    {
+     "id": "p18-3",
+     "track": "quran",
+     "text": "Read 8 pages today in your fixed Quran time.",
+     "tip": "Try reading part of it in the quiet time after suhoor or Fajr, when the house is still and the mind is fresh."
+    }
+   ],
+   "ref": "Bukhari 1923",
+   "url": "https://sunnah.com/bukhari:1923",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 19,
+   "track": "fasting",
+   "theme": "Plan a simple iftar",
+   "reflect": "How can my iftar table become a place of gratitude and sharing, not just eating?",
+   "mot": "The Prophet ﷺ would break his fast before praying with fresh dates; if there were none, dried dates; and if none, a few sips of water.",
+   "prompts": [
+    {
+     "id": "p19-1",
+     "track": "fasting",
+     "text": "Plan iftars that begin simply with dates and water, followed later by a moderate meal.",
+     "tip": "Keep dates and water ready before sunset so you can break your fast on time. Batch-cook a few meals ahead to save time."
+    },
+    {
+     "id": "p19-2",
+     "track": "salah",
+     "text": "Plan how you will pray Maghrib on time after breaking your fast, at home or at the mosque.",
+     "tip": "Break the fast lightly, pray, then sit down to eat. Agree this routine with your household so no one feels rushed."
+    },
+    {
+     "id": "p19-3",
+     "track": "charity",
+     "text": "Choose a night in Ramadan to share iftar with a neighbour, a relative or your local mosque.",
+     "tip": "Whoever gives a fasting person food to break their fast gets the same reward, without reducing theirs (Tirmidhi 807)."
+    }
+   ],
+   "ref": "Tirmidhi 696",
+   "url": "https://sunnah.com/tirmidhi:696",
+   "grade": "Sahih (al-Albani)"
+  },
+  {
+   "n": 20,
+   "track": "habits",
+   "theme": "Ease off caffeine and sugar",
+   "reflect": "Which food or drink habit has a hold on me, and how will I loosen it before Ramadan?",
+   "mot": "O children of Adam... eat and drink, but do not be excessive. Indeed, He does not like those who are excessive.",
+   "prompts": [
+    {
+     "id": "p20-1",
+     "track": "habits",
+     "text": "If you drink tea or coffee, have one cup less today and keep easing off until Ramadan.",
+     "tip": "Swap that cup for water or a caffeine-free drink. Cutting down slowly now can make the first days of fasting easier."
+    },
+    {
+     "id": "p20-2",
+     "track": "habits",
+     "text": "Swap one sugary snack or drink today for fruit, dates, nuts or water.",
+     "tip": "Notice when you reach for sugar out of habit or boredom, and keep a better option in your bag or kitchen."
+    },
+    {
+     "id": "p20-3",
+     "track": "quran",
+     "text": "Read 9 pages today, using an old coffee or snack break for some of them.",
+     "tip": "Replacing a habit with a better one is easier than just stopping. Keep your mushaf or Quran app near your usual break spot."
+    }
+   ],
+   "ref": "Quran 7:31",
+   "url": "https://quran.com/7/31",
+   "grade": "Quran"
+  },
+  {
+   "n": 21,
+   "track": "fasting",
+   "theme": "Your Ramadan day plan",
+   "reflect": "What do I want fasting to change in me this Ramadan, beyond going without food?",
+   "mot": "O you who believe, fasting is prescribed for you as it was prescribed for those before you, so that you may become righteous.",
+   "prompts": [
+    {
+     "id": "p21-1",
+     "track": "fasting",
+     "text": "Draft your Ramadan daily timetable from suhoor to sleep, built around the fast and the five prayers.",
+     "tip": "Block out suhoor, prayers, Quran, work or school, a rest, iftar and night prayer. Leave some gaps; a realistic plan lasts."
+    },
+    {
+     "id": "p21-2",
+     "track": "salah",
+     "text": "Decide where you will pray the night prayers of Ramadan, and check your mosque's timings.",
+     "tip": "If you will pray at home, set up a space and choose what you will recite. A plan made now is easier to keep."
+    },
+    {
+     "id": "p21-3",
+     "track": "quran",
+     "text": "Read 10 pages today: try 2 pages after each of the five prayers.",
+     "tip": "That is half a Ramadan day's reading. Notice how it fits around your prayers; next week you will build on it."
+    }
+   ],
+   "ref": "Quran 2:183",
+   "url": "https://quran.com/2/183",
+   "grade": "Quran"
+  },
+  {
+   "n": 22,
+   "track": "heart",
+   "theme": "Turn back to Allah",
+   "reflect": "How does Allah's promise of mercy change the way I see my mistakes, and what will I change?",
+   "mot": "Say: O My servants who have wronged themselves, do not despair of the mercy of Allah. Indeed, Allah forgives all sins.",
+   "prompts": [
+    {
+     "id": "p22-1",
+     "track": "heart",
+     "text": "Sit alone for a few minutes, think of the sins you want to leave, and sincerely ask Allah to forgive you.",
+     "tip": "Tawbah means stopping the sin, regretting it, resolving not to return, and putting right any wrong done to others."
+    },
+    {
+     "id": "p22-2",
+     "track": "heart",
+     "text": "Choose one habit you want to leave before Ramadan and take one step away from it today.",
+     "tip": "Remove the trigger: delete the app, avoid the place, or tell a trusted friend. Put something good in its place."
+    },
+    {
+     "id": "p22-3",
+     "track": "salah",
+     "text": "Pray two rak'ahs today, then sincerely ask Allah for forgiveness.",
+     "tip": "Whoever sins, then makes wudu well, prays two rak'ahs and asks Allah's forgiveness, Allah forgives him (Abu Dawud 1521)."
+    }
+   ],
+   "ref": "Quran 39:53",
+   "url": "https://quran.com/39/53",
+   "grade": "Quran"
+  },
+  {
+   "n": 23,
+   "track": "heart",
+   "theme": "Set your intentions",
+   "reflect": "Why do I really want this Ramadan to be different, and who am I doing it for?",
+   "mot": "The Prophet ﷺ said: Whoever intends a good deed but does not do it, Allah records one full good deed; if he does it, ten good deeds, up to seven hundred times or more.",
+   "prompts": [
+    {
+     "id": "p23-1",
+     "track": "heart",
+     "text": "Write three intentions for Ramadan, for Allah's sake: one for worship, one for character, one for others.",
+     "tip": "Be specific, e.g. 'pray Fajr on time', 'control my anger', 'call my aunt weekly'. Keep the list where you will see it daily."
+    },
+    {
+     "id": "p23-2",
+     "track": "heart",
+     "text": "Before each good deed today, pause and renew your intention to do it for Allah alone.",
+     "tip": "A quick inner reminder is enough: 'This is for You, O Allah.' Work, study and cooking can be done with that intention too."
+    },
+    {
+     "id": "p23-3",
+     "track": "quran",
+     "text": "Read 12 pages today, renewing your intention before you open the mushaf.",
+     "tip": "Read to be guided, not only to finish. Pause at one ayah that speaks to you and note it down."
+    }
+   ],
+   "ref": "Bukhari 6491",
+   "url": "https://sunnah.com/bukhari:6491",
+   "grade": "Sahih (Bukhari & Muslim)"
+  },
+  {
+   "n": 24,
+   "track": "heart",
+   "theme": "Your Ramadan dua list",
+   "reflect": "If I could ask Allah for only three things this Ramadan, what would they be?",
+   "mot": "When My servants ask you about Me, I am near. I answer the call of the caller when he calls upon Me.",
+   "prompts": [
+    {
+     "id": "p24-1",
+     "track": "heart",
+     "text": "Start your Ramadan dua list: what you want to ask Allah for, for yourself and for others.",
+     "tip": "Include this life and the next, family, friends, the sick and the wider Ummah. Keep it on your phone so it is always with you."
+    },
+    {
+     "id": "p24-2",
+     "track": "salah",
+     "text": "Make dua from your list after one of your prayers today, asking with full hope.",
+     "tip": "Add duas from the Quran and Sunnah too. The Prophet's most frequent dua was 'Allahumma rabbana atina fid-dunya hasanah...' (Bukhari 6389)."
+    },
+    {
+     "id": "p24-3",
+     "track": "heart",
+     "text": "Ask a family member or friend what they would like you to pray for, and add it to your list.",
+     "tip": "When you pray for a fellow Muslim in their absence, the angel appointed to you says: 'Amin, and for you the same' (Muslim 2732)."
+    }
+   ],
+   "ref": "Quran 2:186",
+   "url": "https://quran.com/2/186",
+   "grade": "Quran"
+  },
+  {
+   "n": 25,
+   "track": "heart",
+   "theme": "Mend broken ties",
+   "reflect": "Whose relationship with me needs mending, and what small step can I take this week?",
+   "mot": "The Prophet ﷺ said: The one who truly keeps family ties is not the one who returns kindness, but the one who reconnects when ties are cut.",
+   "prompts": [
+    {
+     "id": "p25-1",
+     "track": "heart",
+     "text": "Reach out to one relative or friend you have drifted from, with a kind message or a call.",
+     "tip": "Keep it simple: a salam, a dua or asking after their health. You do not need to fix everything at once; just open the door."
+    },
+    {
+     "id": "p25-2",
+     "track": "heart",
+     "text": "Apologise to someone you have wronged, or quietly forgive someone who wronged you.",
+     "tip": "If a relationship is not safe, you can keep a healthy distance and still make dua for them. Forgiveness starts in the heart."
+    },
+    {
+     "id": "p25-3",
+     "track": "quran",
+     "text": "Read 15 pages today; if time is short, listen to some of them while travelling or cooking.",
+     "tip": "Listening keeps you connected on busy days. Follow along in the mushaf when you can, so your eyes learn the pages too."
+    }
+   ],
+   "ref": "Bukhari 5991",
+   "url": "https://sunnah.com/bukhari:5991",
+   "grade": "Sahih (Bukhari)"
+  },
+  {
+   "n": 26,
+   "track": "charity",
+   "theme": "Your Ramadan charity plan",
+   "reflect": "How can I make giving a joyful daily habit rather than a once-a-year duty?",
+   "mot": "The Prophet ﷺ made zakat al-fitr a purification for the fasting person from idle and indecent talk, and food for the poor.",
+   "prompts": [
+    {
+     "id": "p26-1",
+     "track": "charity",
+     "text": "Set your Ramadan charity budget and choose the causes you will support.",
+     "tip": "Split it across the month so you give something every day. Think of local needs, relatives in need and trusted charities."
+    },
+    {
+     "id": "p26-2",
+     "track": "charity",
+     "text": "Find out your mosque's zakat al-fitr amount and deadline, and note it for each person you pay it for.",
+     "tip": "The Prophet ﷺ made it due on every Muslim, young or old, and ordered it paid before the Eid prayer (Bukhari 1503)."
+    },
+    {
+     "id": "p26-3",
+     "track": "salah",
+     "text": "Check this week's prayers and fix the one that most often slips past its time.",
+     "tip": "Look at what got in the way and make one small change, like an earlier alarm or a reminder before you leave work."
+    }
+   ],
+   "ref": "Abu Dawud 1609",
+   "url": "https://sunnah.com/abudawud:1609",
+   "grade": "Hasan (al-Albani)"
+  },
+  {
+   "n": 27,
+   "track": "heart",
+   "theme": "A family Ramadan plan",
+   "reflect": "What do I want my family to remember about this Ramadan in years to come?",
+   "mot": "And enjoin prayer upon your family and be steadfast in it.",
+   "prompts": [
+    {
+     "id": "p27-1",
+     "track": "heart",
+     "text": "Hold a short family or household meeting to share Ramadan goals and share out the chores.",
+     "tip": "Let everyone, even young children, choose one goal. Shared chores mean everyone gets time to pray, read and rest."
+    },
+    {
+     "id": "p27-2",
+     "track": "salah",
+     "text": "Agree on one prayer each day in Ramadan that your household will pray together.",
+     "tip": "Maghrib after iftar or Isha before bed often suits families. Let children take turns choosing a dua to say afterwards."
+    },
+    {
+     "id": "p27-3",
+     "track": "charity",
+     "text": "Set up a family charity jar that everyone, including the children, adds to during Ramadan.",
+     "tip": "Agree together where it will go, and let the children help hand it over so they see the good it does."
+    }
+   ],
+   "ref": "Quran 20:132",
+   "url": "https://quran.com/20/132",
+   "grade": "Quran"
+  },
+  {
+   "n": 28,
+   "track": "salah",
+   "theme": "Plan the last ten nights",
+   "reflect": "What would I need to change in my routine to give the last ten nights my very best?",
+   "mot": "Aisha said: The Messenger of Allah ﷺ strove in worship in the last ten nights more than at any other time.",
+   "prompts": [
+    {
+     "id": "p28-1",
+     "track": "salah",
+     "text": "Plan your night prayers for the last ten nights: where you will pray, when and for how long.",
+     "tip": "Lighten those days if you can: book time off, cook ahead and agree family routines, so the nights get your best."
+    },
+    {
+     "id": "p28-2",
+     "track": "heart",
+     "text": "Choose a few duas to repeat in the last ten nights, and add them to your dua list.",
+     "tip": "In the last third of every night Allah says: Who is calling on Me, that I may answer him? (Bukhari 1145)."
+    },
+    {
+     "id": "p28-3",
+     "track": "habits",
+     "text": "Mark the last ten nights in your calendar, highlighting the odd ones, as nights to give your best.",
+     "tip": "The Prophet ﷺ said to seek Laylatul Qadr in the odd nights of the last ten (Bukhari 2017). Confirm the dates once Ramadan begins."
+    }
+   ],
+   "ref": "Muslim 1175",
+   "url": "https://sunnah.com/muslim:1175",
+   "grade": "Sahih (Muslim)"
+  },
+  {
+   "n": 29,
+   "track": "habits",
+   "theme": "Your screen-time plan",
+   "reflect": "How many hours did screens take from me last week, and what could those hours become in Ramadan?",
+   "mot": "The Prophet ﷺ said: There are two blessings that many people lose out on: good health and free time.",
+   "prompts": [
+    {
+     "id": "p29-1",
+     "track": "habits",
+     "text": "Check your screen-time report and set a daily limit for Ramadan.",
+     "tip": "Most phones show daily use in settings. Set app limits, mute busy group chats and turn off notifications you do not need."
+    },
+    {
+     "id": "p29-2",
+     "track": "habits",
+     "text": "Choose screen-free times for Ramadan, such as suhoor, the hour before iftar and the night prayers.",
+     "tip": "Charge your phone outside the bedroom and use a simple alarm clock. Let friends know you will reply less in Ramadan."
+    },
+    {
+     "id": "p29-3",
+     "track": "quran",
+     "text": "Read 20 pages today as a test run: 4 pages after each of the five prayers.",
+     "tip": "If you do not finish, note how far you got. That is your honest starting point, and you can build from there."
+    }
+   ],
+   "ref": "Bukhari 6412",
+   "url": "https://sunnah.com/bukhari:6412",
+   "grade": "Sahih (Bukhari)"
+  },
+  {
+   "n": 30,
+   "track": "heart",
+   "theme": "Ready for Ramadan",
+   "reflect": "Looking back on these 30 days, what has changed in me, and what will I carry into Ramadan?",
+   "mot": "The month of Ramadan is the one in which the Quran was revealed as guidance for people... Allah intends ease for you, not hardship.",
+   "prompts": [
+    {
+     "id": "p30-1",
+     "track": "salah",
+     "text": "Choose the one salah habit you will guard most closely in Ramadan, and write it down.",
+     "tip": "Look back at week one: on time, Fajr, wudu, meaning, Sunnah prayers and focus. Pick one and ask Allah to help you with it."
+    },
+    {
+     "id": "p30-2",
+     "track": "quran",
+     "text": "Set out your mushaf, bookmark and page plan so you can start reading on the first day.",
+     "tip": "Keep the mushaf where you pray and write your daily target on your bookmark. Begin on day one, even if just a few pages."
+    },
+    {
+     "id": "p30-3",
+     "track": "heart",
+     "text": "Read your intentions and dua list again, and ask Allah to help you make the most of Ramadan.",
+     "tip": "Check your suhoor food, iftar plan, bedtime, charity plan and screen limits too. Then rest: you have prepared well."
+    }
+   ],
+   "ref": "Quran 2:185",
+   "url": "https://quran.com/2/185",
+   "grade": "Quran"
+  }
+ ],
+ "milestones": [
+  {
+   "week": 1,
+   "title": "Salah foundations",
+   "goal": "Pray all five on time, guard Fajr, make wudu with care, understand what you recite and add the Sunnah prayers."
+  },
+  {
+   "week": 2,
+   "title": "Quran connection",
+   "goal": "Keep a fixed daily Quran time, grow to about 5 pages a day, check your recitation and understand a short surah."
+  },
+  {
+   "week": 3,
+   "title": "Fasting and body",
+   "goal": "Follow the Sunnah in your fasts, book any make-up days, reset your sleep, plan suhoor and iftar, and ease off caffeine and sugar."
+  },
+  {
+   "week": 4,
+   "title": "Heart and community",
+   "goal": "Turn to Allah, set intentions, write a dua list, mend ties, plan charity and the last ten nights, and build up to about 20 pages a day."
+  }
+ ]
 }

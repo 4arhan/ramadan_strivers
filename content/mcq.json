@@ -1,1 +1,514 @@
-[]
+[
+ {
+  "id": "mcq-a-01",
+  "cat": "fasting",
+  "q": "Anas (RA) described what the Prophet ﷺ broke his fast with before praying. What was his order of preference?",
+  "o": [
+   "Water, then dried dates, then fresh dates",
+   "Milk, then fresh dates, then bread",
+   "Fresh dates, then dried dates, then water",
+   "Dried dates, then milk, then water"
+  ],
+  "correct": 2,
+  "x": "He ﷺ broke his fast with fresh dates (rutab) before praying; if there were none, with dried dates; and if there were none, with a few sips of water.",
+  "ref": "Tirmidhi 696",
+  "url": "https://sunnah.com/tirmidhi:696",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "mcq-a-02",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ told Abdullah ibn Amr (RA) to fast three days each month. He said that is like fasting for how long?",
+  "o": [
+   "One week",
+   "Ten days",
+   "Forty days",
+   "The whole year"
+  ],
+  "correct": 3,
+  "x": "He ﷺ said: Fast three days a month, for a good deed is rewarded ten times over, and that is like fasting the whole year. A simple way to keep fasting after Ramadan.",
+  "ref": "Bukhari 1976",
+  "url": "https://sunnah.com/bukhari:1976",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-03",
+  "cat": "fasting",
+  "q": "Quran 2:183 tells the believers that fasting has been prescribed for them. How does the verse end: 'so that you may...'?",
+  "o": [
+   "become healthy",
+   "become wealthy",
+   "be praised by people",
+   "become righteous"
+  ],
+  "correct": 3,
+  "x": "The verse ends 'la'allakum tattaqun': so that you may become righteous, gaining taqwa (mindfulness of Allah). The Quran names this as the purpose of fasting.",
+  "ref": "Quran 2:183",
+  "url": "https://quran.com/2/183",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-04",
+  "cat": "fasting",
+  "q": "In Quran 2:187, believers may eat and drink at night until what becomes distinct to them?",
+  "o": [
+   "The first rays of the rising sun",
+   "The white thread of dawn from the black thread",
+   "The last light of the moon",
+   "The middle of the night"
+  ],
+  "correct": 1,
+  "x": "Allah says: Eat and drink until the white thread of dawn becomes distinct to you from the black thread of night. Then complete the fast until the night.",
+  "ref": "Quran 2:187",
+  "url": "https://quran.com/2/187",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-05",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said the fasting person has two joys. One is when he breaks his fast. When is the other?",
+  "o": [
+   "When Eid arrives",
+   "When he meets his Lord",
+   "When he completes the Quran",
+   "When he wakes for suhur"
+  ],
+  "correct": 1,
+  "x": "There are two joys for the fasting person: one when he breaks his fast, and one when he meets his Lord, when he will be pleased because of his fasting.",
+  "ref": "Bukhari 1904",
+  "url": "https://sunnah.com/bukhari:1904",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-06",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ spoke of gates of Paradise for the people of prayer, fasting and charity. Abu Bakr (RA) asked if anyone is called from all of them. What was the reply?",
+  "o": [
+   "No, each person has only one gate",
+   "Yes, and I hope you will be one of them",
+   "Only the prophets will be",
+   "Only those who fasted every day"
+  ],
+  "correct": 1,
+  "x": "Abu Hurairah (RA) reported that the people of fasting will be called from the gate of ar-Rayyan. When Abu Bakr (RA) asked about all the gates, he ﷺ said: Yes, and I hope you will be one of them.",
+  "ref": "Bukhari 1897",
+  "url": "https://sunnah.com/bukhari:1897",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-07",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said people will remain upon goodness as long as they do what?",
+  "o": [
+   "Hasten to break the fast",
+   "Delay iftar until the stars appear",
+   "Eat suhur before midnight",
+   "Fast every Monday"
+  ],
+  "correct": 0,
+  "x": "Sahl ibn Sa'd (RA) reported that he ﷺ said: The people will remain upon goodness as long as they hasten to break the fast. So do not delay iftar once its time has come.",
+  "ref": "Bukhari 1957",
+  "url": "https://sunnah.com/bukhari:1957",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-08",
+  "cat": "fasting",
+  "q": "Ibn Abbas (RA) said the Prophet ﷺ prescribed zakat al-fitr as a purification for the fasting person from what?",
+  "o": [
+   "Fasts missed through illness",
+   "All major sins",
+   "Idle and obscene talk",
+   "Debts owed to others"
+  ],
+  "correct": 2,
+  "x": "He ﷺ prescribed it to purify the fasting person from idle and obscene talk, and as food for the poor. Given before the Eid prayer, it is accepted as zakat.",
+  "ref": "Abu Dawud 1609",
+  "url": "https://sunnah.com/abudawud:1609",
+  "grade": "Hasan (al-Albani)"
+ },
+ {
+  "id": "mcq-a-09",
+  "cat": "salah",
+  "q": "The Prophet ﷺ said prayer in congregation is superior to praying alone by how many degrees?",
+  "o": [
+   "Twenty-seven",
+   "Ten",
+   "Seventy",
+   "Forty"
+  ],
+  "correct": 0,
+  "x": "Ibn Umar (RA) reported: Prayer in congregation is twenty-seven degrees superior to prayer offered by a person alone.",
+  "ref": "Bukhari 645",
+  "url": "https://sunnah.com/bukhari:645",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-10",
+  "cat": "salah",
+  "q": "The Prophet ﷺ asked: if a river ran by your door and you bathed in it five times a day, would any dirt remain? What was he describing?",
+  "o": [
+   "Fasting in Ramadan",
+   "Giving charity",
+   "The five daily prayers",
+   "Reciting the Quran"
+  ],
+  "correct": 2,
+  "x": "The Companions said no dirt would remain. He ﷺ said: That is the example of the five prayers, with which Allah wipes away sins.",
+  "ref": "Bukhari 528",
+  "url": "https://sunnah.com/bukhari:528",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-11",
+  "cat": "salah",
+  "q": "In Ramadan, more and more people gathered to pray behind the Prophet ﷺ at night. Why did he then stop coming out to them?",
+  "o": [
+   "He was too ill to lead them",
+   "He feared it would be made obligatory",
+   "The masjid was being rebuilt",
+   "He was away on a journey"
+  ],
+  "correct": 1,
+  "x": "Aishah (RA) reported he said: I saw what you did, and nothing stopped me from coming out to you except that I feared it would be made obligatory on you. That was in Ramadan.",
+  "ref": "Bukhari 1129",
+  "url": "https://sunnah.com/bukhari:1129",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-12",
+  "cat": "salah",
+  "q": "Rabi'ah ibn Ka'b (RA) asked the Prophet ﷺ for his company in Paradise. What did the Prophet ﷺ tell him to do to help reach it?",
+  "o": [
+   "Fast every single day",
+   "Make many prostrations (sujud)",
+   "Give away all his wealth",
+   "Memorise the whole Quran"
+  ],
+  "correct": 1,
+  "x": "Rabi'ah (RA), who brought him water for wudu at night, said: I ask for your company in Paradise. He ﷺ said: Then help me to achieve this for you by making many prostrations.",
+  "ref": "Muslim 489",
+  "url": "https://sunnah.com/muslim:489",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-a-13",
+  "cat": "salah",
+  "q": "Which prayer did the Prophet ﷺ call the best prayer after the obligatory prayers?",
+  "o": [
+   "The Duha prayer",
+   "The Eid prayer",
+   "The prayer for rain",
+   "The prayer at night"
+  ],
+  "correct": 3,
+  "x": "Abu Hurairah (RA) reported: The best fasting after Ramadan is in Allah's month, Muharram, and the best prayer after the obligatory prayer is the prayer at night.",
+  "ref": "Muslim 1163",
+  "url": "https://sunnah.com/muslim:1163",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-a-14",
+  "cat": "salah",
+  "q": "The Prophet ﷺ would stand in night prayer until his feet swelled. When asked why, what did he say?",
+  "o": [
+   "I like the quiet of the night",
+   "Should I not be a thankful servant?",
+   "I want to finish the whole Quran",
+   "The angels told me to do so"
+  ],
+  "correct": 1,
+  "x": "Al-Mughirah (RA) reported that he prayed until his feet swelled, and when asked about it he said: Should I not be a thankful servant?",
+  "ref": "Bukhari 1130",
+  "url": "https://sunnah.com/bukhari:1130",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-15",
+  "cat": "salah",
+  "q": "The first thing a person will be brought to account for is the prayer. If their obligatory prayers are lacking, what completes them?",
+  "o": [
+   "Their fasting",
+   "Their charity",
+   "Their voluntary prayers",
+   "Their good intentions"
+  ],
+  "correct": 2,
+  "x": "Allah will say: See whether My servant has any voluntary prayers. If he has, the obligatory prayers are completed with them. A strong reason to keep up the Sunnah prayers.",
+  "ref": "Nasa'i 467",
+  "url": "https://sunnah.com/nasai:467",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "mcq-a-16",
+  "cat": "salah",
+  "q": "Quran 29:45 says prayer prohibits immorality and wrongdoing. What does the verse then say is greater?",
+  "o": [
+   "The remembrance of Allah",
+   "Fasting",
+   "Charity",
+   "Patience"
+  ],
+  "correct": 0,
+  "x": "Allah says: Establish prayer. Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater. And Allah knows what you do.",
+  "ref": "Quran 29:45",
+  "url": "https://quran.com/29/45",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-17",
+  "cat": "quran",
+  "q": "Which surah did the Prophet ﷺ call the greatest surah in the Quran?",
+  "o": [
+   "Al-Baqarah",
+   "Al-Fatihah",
+   "Ya-Sin",
+   "Al-Ikhlas"
+  ],
+  "correct": 1,
+  "x": "He ﷺ told Abu Sa'id ibn al-Mu'alla (RA) that Al-Hamdu lillahi Rabbil-'alamin is the greatest surah: the seven oft-repeated verses and the Grand Quran given to him.",
+  "ref": "Bukhari 4474",
+  "url": "https://sunnah.com/bukhari:4474",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-18",
+  "cat": "quran",
+  "q": "The Prophet ﷺ asked Ubayy ibn Ka'b (RA) which verse in the Book of Allah is the greatest. Which verse did Ubayy name?",
+  "o": [
+   "The last verse of al-Baqarah",
+   "The first verse of al-Ikhlas",
+   "The Verse of Light (24:35)",
+   "Ayat al-Kursi (2:255)"
+  ],
+  "correct": 3,
+  "x": "Ubayy (RA), known as Abu al-Mundhir, answered: Allah, there is no god but He, the Ever-Living, the Self-Sustaining. The Prophet ﷺ tapped him on the chest and said: May knowledge be pleasant for you, Abu al-Mundhir.",
+  "ref": "Muslim 810",
+  "url": "https://sunnah.com/muslim:810",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-a-19",
+  "cat": "quran",
+  "q": "A man heard someone repeating Surah al-Ikhlas over and over and told the Prophet ﷺ, as if he thought it too little. What did the Prophet ﷺ say it is equal to?",
+  "o": [
+   "One-third of the Quran",
+   "A quarter of the Quran",
+   "Half of the Quran",
+   "The whole Quran"
+  ],
+  "correct": 0,
+  "x": "Abu Sa'id al-Khudri (RA) reported that he ﷺ said: By Him in Whose Hand my soul is, it is equal to one-third of the Quran.",
+  "ref": "Bukhari 5013",
+  "url": "https://sunnah.com/bukhari:5013",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-20",
+  "cat": "quran",
+  "q": "The Prophet ﷺ said whoever recites a letter of Allah's Book earns a good deed. How many times is that good deed multiplied?",
+  "o": [
+   "Twice",
+   "Seventy times",
+   "Ten times",
+   "It is not multiplied"
+  ],
+  "correct": 2,
+  "x": "Ibn Mas'ud (RA) reported: each good deed is multiplied by ten. I do not say Alif Lam Mim is one letter; Alif is a letter, Lam is a letter and Mim is a letter.",
+  "ref": "Tirmidhi 2910",
+  "url": "https://sunnah.com/tirmidhi:2910",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "mcq-a-21",
+  "cat": "quran",
+  "q": "The Prophet ﷺ likened the believer who recites the Quran to a citron (utrujjah). Why a citron?",
+  "o": [
+   "It is large and heavy",
+   "It grows only in Madinah",
+   "It tastes good and smells good",
+   "It is bitter but healing"
+  ],
+  "correct": 2,
+  "x": "Abu Musa (RA) reported that he ﷺ said: the believer who recites the Quran is like a citron, good in smell and taste; the believer who does not recite it is like a date, sweet but without smell.",
+  "ref": "Bukhari 5427",
+  "url": "https://sunnah.com/bukhari:5427",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-22",
+  "cat": "quran",
+  "q": "How long did the Prophet ﷺ first tell Abdullah ibn Amr (RA) to take to recite the whole Quran?",
+  "o": [
+   "One month",
+   "One night",
+   "Three months",
+   "One year"
+  ],
+  "correct": 0,
+  "x": "He ﷺ said: Recite the whole Quran in one month. When Abdullah said he had strength for more, he said: Then recite it in seven days.",
+  "ref": "Bukhari 5054",
+  "url": "https://sunnah.com/bukhari:5054",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-23",
+  "cat": "quran",
+  "q": "A man reciting Surah al-Kahf saw a cloud come closer and closer over him, and his horse grew restless. What did the Prophet ﷺ say it was?",
+  "o": [
+   "A storm cloud about to burst",
+   "Dust stirred up by the desert wind",
+   "Tranquility sent down with the Quran",
+   "Smoke drifting from a campfire"
+  ],
+  "correct": 2,
+  "x": "Al-Bara (RA) reported that the man told the Prophet ﷺ about it the next morning, and he said: That was the sakinah (tranquility), which came down because of the Quran.",
+  "ref": "Bukhari 5011",
+  "url": "https://sunnah.com/bukhari:5011",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-24",
+  "cat": "quran",
+  "q": "Which of these statements does Allah repeat four times in Surah al-Qamar?",
+  "o": [
+   "The Quran was sent down in Ramadan",
+   "We have made the Quran easy for remembrance",
+   "The Quran is healing for the believers",
+   "Recite the Quran with measured recitation"
+  ],
+  "correct": 1,
+  "x": "Allah says in 54:17, 22, 32 and 40: And We have certainly made the Quran easy for remembrance, so is there any who will remember?",
+  "ref": "Quran 54:17",
+  "url": "https://quran.com/54/17",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-25",
+  "cat": "last10",
+  "q": "Surah al-Qadr says the Night of Decree is peace until when?",
+  "o": [
+   "Midnight",
+   "The last third of the night",
+   "Sunrise the next day",
+   "The emergence of dawn"
+  ],
+  "correct": 3,
+  "x": "Allah says: Peace it is until the emergence of dawn (97:5). The night stays a night of peace until Fajr breaks, so keep striving until then.",
+  "ref": "Quran 97:5",
+  "url": "https://quran.com/97/5",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-26",
+  "cat": "last10",
+  "q": "According to Surah al-Qadr, who descend on the Night of Decree by permission of their Lord?",
+  "o": [
+   "The prophets and messengers",
+   "The angels and the Spirit",
+   "The souls of the departed",
+   "The righteous jinn"
+  ],
+  "correct": 1,
+  "x": "Allah says: The angels and the Spirit descend therein by permission of their Lord for every matter (97:4). The Spirit here is Jibreel.",
+  "ref": "Quran 97:4",
+  "url": "https://quran.com/97/4",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-27",
+  "cat": "last10",
+  "q": "Surah al-Qadr says the Quran was sent down on the Night of Decree. Which other surah says it was sent down 'during a blessed night'?",
+  "o": [
+   "Al-Muzzammil",
+   "Al-Alaq",
+   "Ad-Dukhan",
+   "Al-Kahf"
+  ],
+  "correct": 2,
+  "x": "Allah says in Surah ad-Dukhan: Indeed, We sent it down during a blessed night (44:3), and in Surah al-Qadr: We sent it down during the Night of Decree (97:1).",
+  "ref": "Quran 44:3",
+  "url": "https://quran.com/44/3",
+  "grade": "Quran"
+ },
+ {
+  "id": "mcq-a-28",
+  "cat": "last10",
+  "q": "The Prophet ﷺ came out to tell the people the date of Laylatul Qadr, but knowledge of it was taken away. Why?",
+  "o": [
+   "Two men were quarrelling",
+   "Heavy rain fell that night",
+   "The people had fallen asleep",
+   "He was called away on a journey"
+  ],
+  "correct": 0,
+  "x": "He ﷺ said: I came out to tell you about Laylatul Qadr, but so-and-so and so-and-so quarrelled, so it was taken away, and perhaps that is better for you.",
+  "ref": "Bukhari 2023",
+  "url": "https://sunnah.com/bukhari:2023",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-29",
+  "cat": "last10",
+  "q": "Ubayy ibn Ka'b (RA) mentioned a sign the Prophet ﷺ gave for the morning after Laylatul Qadr. What is it?",
+  "o": [
+   "The sun rises white, without rays",
+   "A red moon rises at dawn",
+   "Strong winds blow all day",
+   "The stars vanish early"
+  ],
+  "correct": 0,
+  "x": "Ubayy (RA) said the sign the Prophet ﷺ told them of is that the sun rises on the morning after it white, without rays.",
+  "ref": "Muslim 762",
+  "url": "https://sunnah.com/muslim:762",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-a-30",
+  "cat": "last10",
+  "q": "Abu Hurairah (RA) said the Prophet ﷺ used to do i'tikaf for ten days every Ramadan. How many days did he do in the year he passed away?",
+  "o": [
+   "Five",
+   "Ten",
+   "Twenty",
+   "Thirty"
+  ],
+  "correct": 2,
+  "x": "Abu Hurairah (RA) said he ﷺ used to do i'tikaf for ten days every Ramadan, and in the year he passed away he did i'tikaf for twenty days.",
+  "ref": "Bukhari 2044",
+  "url": "https://sunnah.com/bukhari:2044",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "mcq-a-31",
+  "cat": "last10",
+  "q": "Seeking Laylatul Qadr, the Prophet ﷺ did i'tikaf in the first ten days of Ramadan, then the middle ten. What was he then told?",
+  "o": [
+   "It is in the month of Shawwal",
+   "It is in the last ten nights",
+   "It is on the first night",
+   "It is on the night of Eid"
+  ],
+  "correct": 1,
+  "x": "Abu Sa'id (RA) reported he said: I did i'tikaf in the first ten seeking this night, then in the middle ten. Then I was told it is in the last ten.",
+  "ref": "Muslim 1167",
+  "url": "https://sunnah.com/muslim:1167",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "mcq-a-32",
+  "cat": "last10",
+  "q": "During i'tikaf in the masjid, the Prophet ﷺ would lean his head into the house to Aishah (RA). Why?",
+  "o": [
+   "To eat his meals there",
+   "To hear the adhan better",
+   "To see if the moon had risen",
+   "So she could comb his hair"
+  ],
+  "correct": 3,
+  "x": "Aishah (RA) said: he would put his head in to me while he was in the masjid, and I would comb his hair. In i'tikaf he would not enter the house except for a need.",
+  "ref": "Bukhari 2029",
+  "url": "https://sunnah.com/bukhari:2029",
+  "grade": "Sahih (Bukhari)"
+ }
+]

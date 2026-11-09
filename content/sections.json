@@ -1,190 +1,190 @@
 [
-  {
-    "id": "salah",
-    "icon": "clock",
-    "title": "Salah, Sunnah & Dhikr",
-    "note": {
-      "text": "Whoever attends Isha in congregation has the reward of standing half the night. And whoever prays Isha and Fajr in congregation has the reward of standing the entire night.",
-      "ref": "Muslim 656",
-      "url": "https://sunnah.com/muslim:656",
-      "grade": "Sahih (Muslim)"
-    },
-    "subs": [
-      {
-        "id": "fajr-morning",
-        "icon": "sunrise",
-        "title": "Fajr & Morning",
-        "items": [
-          "fajr-sunnah",
-          "fajr",
-          "morning-adhkar",
-          "istighfar",
-          "salawat",
-          "duha"
-        ]
-      },
-      {
-        "id": "dhuhr-asr",
-        "icon": "sun",
-        "title": "Dhuhr & Asr",
-        "items": [
-          "dhuhr-sunnah-before",
-          "dhuhr",
-          "dhuhr-sunnah-after",
-          "asr"
-        ]
-      },
-      {
-        "id": "maghrib-evening",
-        "icon": "sunset",
-        "title": "Maghrib & Evening",
-        "items": [
-          "dua-iftar",
-          "maghrib",
-          "maghrib-sunnah",
-          "evening-adhkar"
-        ]
-      },
-      {
-        "id": "isha-night",
-        "icon": "moon",
-        "title": "Isha & Night",
-        "items": [
-          "isha",
-          "isha-sunnah",
-          "tarawih",
-          "witr",
-          "night-adhkar",
-          "tahajjud",
-          "dua-night",
-          "istighfar-sleep",
-          "accountability",
-          "renew-tomorrow",
-          "sleep-early"
-        ]
-      }
-    ]
+ {
+  "id": "salah",
+  "icon": "clock",
+  "title": "Salah, Sunnah & Dhikr",
+  "note": {
+   "text": "Whoever attends Isha in congregation has the reward of standing half the night. And whoever prays Isha and Fajr in congregation has the reward of standing the entire night.",
+   "ref": "Tirmidhi 221",
+   "url": "https://sunnah.com/tirmidhi:221",
+   "grade": "Sahih (al-Albani)"
   },
-  {
-    "id": "quran",
-    "icon": "book-open",
-    "title": "Quran — Understand & Implement",
-    "note": {
-      "text": "Fasting and the Quran will intercede for a servant on the Day of Resurrection.",
-      "ref": "Ahmad 6626",
-      "url": "",
-      "grade": ""
-    },
+  "subs": [
+   {
+    "id": "fajr-morning",
+    "icon": "sunrise",
+    "title": "Fajr & Morning",
     "items": [
-      "quran-recitation",
-      "quran-reflection",
-      "quran-implementation",
-      "quran-listening",
-      "quran-memorization"
+     "fajr-sunnah",
+     "fajr",
+     "morning-adhkar",
+     "istighfar",
+     "salawat",
+     "duha"
     ]
+   },
+   {
+    "id": "dhuhr-asr",
+    "icon": "sun",
+    "title": "Dhuhr & Asr",
+    "items": [
+     "dhuhr-sunnah-before",
+     "dhuhr",
+     "dhuhr-sunnah-after",
+     "asr"
+    ]
+   },
+   {
+    "id": "maghrib-evening",
+    "icon": "sunset",
+    "title": "Maghrib & Evening",
+    "items": [
+     "dua-iftar",
+     "maghrib",
+     "maghrib-sunnah",
+     "evening-adhkar"
+    ]
+   },
+   {
+    "id": "isha-night",
+    "icon": "moon",
+    "title": "Isha & Night",
+    "items": [
+     "isha",
+     "isha-sunnah",
+     "tarawih",
+     "witr",
+     "night-adhkar",
+     "tahajjud",
+     "dua-night",
+     "istighfar-sleep",
+     "accountability",
+     "renew-tomorrow",
+     "sleep-early"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "quran",
+  "icon": "book-open",
+  "title": "Quran — Understand & Implement",
+  "note": {
+   "text": "Recite the Quran, for on the Day of Resurrection it will come as an intercessor for its companions.",
+   "ref": "Muslim 804",
+   "url": "https://sunnah.com/muslim:804",
+   "grade": "Sahih (Muslim)"
   },
-  {
-    "id": "character",
-    "icon": "heart",
-    "title": "Intention, Heart & Character",
-    "note": {
-      "text": "Actions are judged by intentions, and every person will get what they intended.",
-      "ref": "Bukhari 1",
-      "url": "https://sunnah.com/bukhari:1",
-      "grade": "Sahih (Bukhari)"
-    },
-    "items": [
-      "intention",
-      "riya",
-      "tongue",
-      "arguments",
-      "gaze",
-      "anger",
-      "gentleness",
-      "mercy",
-      "humility",
-      "forgave",
-      "dua-absence",
-      "made-happy"
-    ]
+  "items": [
+   "quran-recitation",
+   "quran-reflection",
+   "quran-implementation",
+   "quran-listening",
+   "quran-memorization"
+  ]
+ },
+ {
+  "id": "character",
+  "icon": "heart",
+  "title": "Intention, Heart & Character",
+  "note": {
+   "text": "Actions are judged by intentions, and every person will get what they intended.",
+   "ref": "Bukhari 1",
+   "url": "https://sunnah.com/bukhari:1",
+   "grade": "Sahih (Bukhari & Muslim)"
   },
-  {
-    "id": "charity",
-    "icon": "hand-heart",
-    "title": "Charity & Service",
-    "note": {
-      "text": "The Prophet was the most generous of people, and he was most generous in Ramadan.",
-      "ref": "Bukhari 6",
-      "url": "https://sunnah.com/bukhari:6",
-      "grade": "Sahih (Bukhari)"
-    },
-    "items": [
-      "charity-given",
-      "fed-fasting",
-      "helped-family",
-      "maintained-ties",
-      "visited-sick",
-      "dua-others"
-    ]
+  "items": [
+   "intention",
+   "riya",
+   "tongue",
+   "arguments",
+   "gaze",
+   "anger",
+   "gentleness",
+   "mercy",
+   "humility",
+   "forgave",
+   "dua-absence",
+   "made-happy"
+  ]
+ },
+ {
+  "id": "charity",
+  "icon": "hand-heart",
+  "title": "Charity & Service",
+  "note": {
+   "text": "The Prophet ﷺ was the most generous of people, and he was most generous in Ramadan.",
+   "ref": "Bukhari 6",
+   "url": "https://sunnah.com/bukhari:6",
+   "grade": "Sahih (Bukhari & Muslim)"
   },
-  {
-    "id": "lastTen",
-    "icon": "moon-star",
-    "l10": true,
-    "title": "Last Ten Nights — Seek Laylatul Qadr",
-    "note": {
-      "text": "\"Seek Laylatul Qadr in the odd nights of the last ten days.\" It could be any of the last ten nights — strive every single night.",
-      "ref": "Bukhari 2017",
-      "url": "https://sunnah.com/bukhari:2017",
-      "grade": "Sahih (Bukhari)"
-    },
-    "items": [
-      "laylat-qadr",
-      "extra-dua",
-      "extra-quran",
-      "night-charity",
-      "long-sujood",
-      "dua-list",
-      "itikaf"
-    ]
+  "items": [
+   "charity-given",
+   "fed-fasting",
+   "helped-family",
+   "maintained-ties",
+   "visited-sick",
+   "dua-others"
+  ]
+ },
+ {
+  "id": "lastTen",
+  "icon": "moon-star",
+  "l10": true,
+  "title": "Last Ten Nights — Seek Laylatul Qadr",
+  "note": {
+   "text": "\"Seek Laylatul Qadr in the odd nights of the last ten days.\" — Bukhari 2017. It could be ANY of the last ten nights — strive every single night.",
+   "ref": "Bukhari 2017",
+   "url": "https://sunnah.com/bukhari:2017",
+   "grade": "Sahih (Bukhari)"
   },
-  {
-    "id": "avoidance",
-    "icon": "shield",
-    "title": "Daily Avoidance Check",
-    "note": {
-      "text": "Whoever does not give up false speech and acting upon it, Allah has no need of him giving up his food and drink.",
-      "ref": "Bukhari 1903",
-      "url": "https://sunnah.com/bukhari:1903",
-      "grade": "Sahih (Bukhari)"
-    },
-    "items": [
-      "no-lying",
-      "no-backbiting",
-      "no-riya",
-      "no-excess-media",
-      "no-useless-scrolling",
-      "no-haram-content",
-      "no-overeating",
-      "no-wasting-food",
-      "no-neglect-salah"
-    ]
+  "items": [
+   "laylat-qadr",
+   "extra-dua",
+   "extra-quran",
+   "night-charity",
+   "long-sujood",
+   "dua-list",
+   "itikaf"
+  ]
+ },
+ {
+  "id": "avoidance",
+  "icon": "shield",
+  "title": "Daily Avoidance Check",
+  "note": {
+   "text": "Whoever does not give up false speech and acting upon it, Allah has no need of him giving up his food and drink.",
+   "ref": "Bukhari 1903",
+   "url": "https://sunnah.com/bukhari:1903",
+   "grade": "Sahih (Bukhari)"
   },
-  {
-    "id": "abuBakr",
-    "icon": "award",
-    "title": "Abu Bakr Challenge",
-    "note": {
-      "text": "The Prophet asked four questions. Abu Bakr answered \"I did\" to all. The Prophet said: \"Whoever combines these will enter Jannah.\"",
-      "ref": "Muslim 1028",
-      "url": "https://sunnah.com/muslim:1028",
-      "grade": "Sahih (Muslim)"
-    },
-    "items": [
-      "abu-bakr-fasting",
-      "abu-bakr-funeral",
-      "abu-bakr-fed",
-      "abu-bakr-sick"
-    ]
-  }
+  "items": [
+   "no-lying",
+   "no-backbiting",
+   "no-riya",
+   "no-excess-media",
+   "no-useless-scrolling",
+   "no-haram-content",
+   "no-overeating",
+   "no-wasting-food",
+   "no-neglect-salah"
+  ]
+ },
+ {
+  "id": "abuBakr",
+  "icon": "award",
+  "title": "Abu Bakr Challenge",
+  "note": {
+   "text": "The Prophet ﷺ asked four questions. Abu Bakr answered \"I did\" to all. The Prophet ﷺ said: \"Whoever combines these will enter Jannah.\"",
+   "ref": "Muslim 1028",
+   "url": "https://sunnah.com/muslim:1028",
+   "grade": "Sahih (Muslim)"
+  },
+  "items": [
+   "abu-bakr-fasting",
+   "abu-bakr-funeral",
+   "abu-bakr-fed",
+   "abu-bakr-sick"
+  ]
+ }
 ]

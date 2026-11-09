@@ -1,632 +1,1352 @@
 [
-  {
-    "id": "tf001",
-    "cat": "fasting",
-    "q": "Whoever fasts Ramadan out of faith and seeking reward will have their previous sins forgiven.",
-    "a": true,
-    "x": "The Prophet ﷺ promised forgiveness of past sins for fasting Ramadan with faith and hope of reward.",
-    "ref": "Bukhari 38",
-    "url": "https://sunnah.com/bukhari:38",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf002",
-    "cat": "fasting",
-    "q": "The special gate of Paradise reserved for those who fast is called Al-Firdaus.",
-    "a": false,
-    "x": "The gate is called Ar-Rayyan — only those who fast will enter through it.",
-    "ref": "Bukhari 1896",
-    "url": "https://sunnah.com/bukhari:1896",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf003",
-    "cat": "fasting",
-    "q": "When Ramadan begins, the gates of Paradise are opened and the gates of Hell are closed.",
-    "a": true,
-    "x": "A month where every door to good is opened wide — make the most of it.",
-    "ref": "Bukhari 1899",
-    "url": "https://sunnah.com/bukhari:1899",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf004",
-    "cat": "fasting",
-    "q": "Whoever gives iftar to a fasting person receives half of that person's reward.",
-    "a": false,
-    "x": "They receive the SAME reward — without reducing the fasting person's reward at all.",
-    "ref": "Tirmidhi 807",
-    "url": "https://sunnah.com/tirmidhi:807",
-    "grade": ""
-  },
-  {
-    "id": "tf005",
-    "cat": "fasting",
-    "q": "The Prophet ﷺ described fasting as a shield.",
-    "a": true,
-    "x": "Fasting shields you — so the fasting person should not speak obscenely or act ignorantly.",
-    "ref": "Bukhari 1894",
-    "url": "https://sunnah.com/bukhari:1894",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf006",
-    "cat": "fasting",
-    "q": "The dua of a fasting person can be rejected like anyone else's.",
-    "a": false,
-    "x": "The supplication of the fasting person is not rejected — especially at the time of iftar.",
-    "ref": "Ibn Majah 1753",
-    "url": "https://sunnah.com/ibnmajah:1753",
-    "grade": ""
-  },
-  {
-    "id": "tf007",
-    "cat": "fasting",
-    "q": "Allah says every deed of the son of Adam is for himself, except fasting — which is for Allah, and He Himself will reward it.",
-    "a": true,
-    "x": "Fasting has a special, unlimited reward known only to Allah.",
-    "ref": "Bukhari 1904",
-    "url": "https://sunnah.com/bukhari:1904",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf008",
-    "cat": "fasting",
-    "q": "If you keep up false speech while fasting, Allah has no need of you giving up your food and drink.",
-    "a": true,
-    "x": "Fasting is not just from food — lying and false speech strip the fast of its spiritual reward.",
-    "ref": "Bukhari 1903",
-    "url": "https://sunnah.com/bukhari:1903",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf009",
-    "cat": "fasting",
-    "q": "If someone insults you while fasting, the Sunnah is to respond with a sharper insult.",
-    "a": false,
-    "x": "The Sunnah is to say: 'I am fasting' — and walk away from the argument.",
-    "ref": "Bukhari 1894",
-    "url": "https://sunnah.com/bukhari:1894",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf010",
-    "cat": "fasting",
-    "q": "The breath of a fasting person is sweeter to Allah than the scent of musk.",
-    "a": true,
-    "x": "What seems unpleasant to people is beloved to Allah when it comes from worship.",
-    "ref": "Bukhari 1904",
-    "url": "https://sunnah.com/bukhari:1904",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf011",
-    "cat": "fasting",
-    "q": "Fasting six days of Shawwal after Ramadan is like fasting the entire year.",
-    "a": true,
-    "x": "Ramadan (×10 reward) plus six days of Shawwal completes the reward of a full year of fasting.",
-    "ref": "Muslim 1164",
-    "url": "https://sunnah.com/muslim:1164",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf012",
-    "cat": "fasting",
-    "q": "The Sunnah guideline for eating is one-third food, one-third drink, and one-third air.",
-    "a": true,
-    "x": "The Prophet ﷺ warned against overfilling the stomach — a lesson especially relevant at iftar.",
-    "ref": "Tirmidhi 2380",
-    "url": "https://sunnah.com/tirmidhi:2380",
-    "grade": ""
-  },
-  {
-    "id": "tf013",
-    "cat": "salah",
-    "q": "Praying Isha and Fajr in congregation carries the reward of standing the entire night in prayer.",
-    "a": true,
-    "x": "Isha in congregation = half the night; adding Fajr in congregation = the whole night.",
-    "ref": "Muslim 656",
-    "url": "https://sunnah.com/muslim:656",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf014",
-    "cat": "salah",
-    "q": "The two Sunnah rakahs before Fajr are better than the world and everything in it.",
-    "a": true,
-    "x": "Two short rakahs outweigh the entire dunya — never skip them.",
-    "ref": "Muslim 724",
-    "url": "https://sunnah.com/muslim:724",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf015",
-    "cat": "salah",
-    "q": "Whoever prays qiyam (night prayer) in Ramadan with faith and seeking reward will be forgiven their past sins.",
-    "a": true,
-    "x": "This is the promise behind Tarawih and night prayer in Ramadan.",
-    "ref": "Bukhari 37",
-    "url": "https://sunnah.com/bukhari:37",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf016",
-    "cat": "salah",
-    "q": "Witr prayer must always be exactly five rakahs.",
-    "a": false,
-    "x": "Witr can be prayed as 1 or 3 rakahs — make it your last prayer of the night.",
-    "ref": "Bukhari 998",
-    "url": "https://sunnah.com/bukhari:998",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf017",
-    "cat": "salah",
-    "q": "The Prophet ﷺ sought forgiveness (istighfar) more than 70 times every day.",
-    "a": true,
-    "x": "If the forgiven Prophet ﷺ did istighfar daily, how much more do we need it?",
-    "ref": "Bukhari 6307",
-    "url": "https://sunnah.com/bukhari:6307",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf018",
-    "cat": "salah",
-    "q": "Sending one salawat upon the Prophet ﷺ brings ten blessings from Allah.",
-    "a": true,
-    "x": "Every single salawat is multiplied ten times over.",
-    "ref": "Muslim 408",
-    "url": "https://sunnah.com/muslim:408",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf019",
-    "cat": "salah",
-    "q": "Allah descends in the FIRST third of the night asking: 'Who calls upon Me that I may answer?'",
-    "a": false,
-    "x": "It is the LAST third of the night — the most blessed time for dua and tahajjud.",
-    "ref": "Bukhari 1145",
-    "url": "https://sunnah.com/bukhari:1145",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf020",
-    "cat": "salah",
-    "q": "Duha prayer counts as charity for every joint in your body.",
-    "a": true,
-    "x": "A short mid-morning prayer that pays the daily sadaqah owed by your 360 joints.",
-    "ref": "Muslim 720",
-    "url": "https://sunnah.com/muslim:720",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf021",
-    "cat": "salah",
-    "q": "Praying twelve Sunnah rakahs daily earns you a house in Jannah.",
-    "a": true,
-    "x": "The regular Sunnah prayers around the five obligatory ones build you a home in Paradise.",
-    "ref": "Tirmidhi 428",
-    "url": "https://sunnah.com/tirmidhi:428",
-    "grade": ""
-  },
-  {
-    "id": "tf022",
-    "cat": "salah",
-    "q": "The night adhkar before sleep include Ayatul Kursi and the last two ayat of Surah al-Baqarah.",
-    "a": true,
-    "x": "Prophetic protection through the night until you wake.",
-    "ref": "Bukhari 6320",
-    "url": "https://sunnah.com/bukhari:6320",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf023",
-    "cat": "salah",
-    "q": "The Prophet ﷺ enjoyed long conversations after Isha.",
-    "a": false,
-    "x": "He disliked talking after Isha — sleep early and protect your Fajr.",
-    "ref": "Abu Dawud 4723",
-    "url": "https://sunnah.com/abudawud:4723",
-    "grade": ""
-  },
-  {
-    "id": "tf024",
-    "cat": "salah",
-    "q": "The most beloved deeds to Allah are grand one-time gestures rather than small consistent ones.",
-    "a": false,
-    "x": "The most beloved deeds to Allah are the most CONSISTENT, even if small.",
-    "ref": "Bukhari 6464",
-    "url": "https://sunnah.com/bukhari:6464",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf025",
-    "cat": "quran",
-    "q": "The Quran was revealed in the month of Ramadan as guidance for mankind.",
-    "a": true,
-    "x": "That is why Ramadan is called the month of the Quran.",
-    "ref": "Quran 2:185",
-    "url": "https://quran.com/2/185",
-    "grade": ""
-  },
-  {
-    "id": "tf026",
-    "cat": "quran",
-    "q": "On the Day of Resurrection, fasting and the Quran will both intercede for the servant.",
-    "a": true,
-    "x": "Two companions of Ramadan standing up for you when you need them most.",
-    "ref": "Ahmad 6626",
-    "url": "",
-    "grade": ""
-  },
-  {
-    "id": "tf027",
-    "cat": "quran",
-    "q": "The one who recites the Quran skillfully will be with the noble scribes (angels).",
-    "a": true,
-    "x": "And the one who struggles while reciting receives DOUBLE reward — so keep reading either way.",
-    "ref": "Bukhari 4937",
-    "url": "https://sunnah.com/bukhari:4937",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf028",
-    "cat": "quran",
-    "q": "The standard mushaf of the Quran has 604 pages.",
-    "a": true,
-    "x": "That's why this app tracks 604 pages — about 20 pages a day completes it in 30 days.",
-    "ref": "",
-    "url": "",
-    "grade": ""
-  },
-  {
-    "id": "tf029",
-    "cat": "quran",
-    "q": "The Prophet ﷺ said: 'The best of you are those who learn the Quran and teach it.'",
-    "a": true,
-    "x": "Memorising even one new ayah puts you on this path.",
-    "ref": "Bukhari 5027",
-    "url": "https://sunnah.com/bukhari:5027",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf030",
-    "cat": "quran",
-    "q": "When the Quran is recited, we are commanded to listen attentively and be silent so we may receive mercy.",
-    "a": true,
-    "x": "Even listening to recitation is a rewarded act of worship.",
-    "ref": "Quran 7:204",
-    "url": "https://quran.com/7/204",
-    "grade": ""
-  },
-  {
-    "id": "tf031",
-    "cat": "quran",
-    "q": "Tadabbur means reciting the Quran as fast as possible.",
-    "a": false,
-    "x": "Tadabbur is deep REFLECTION on the meaning — pondering transforms the heart and guides action.",
-    "ref": "Quran 38:29",
-    "url": "https://quran.com/38/29",
-    "grade": ""
-  },
-  {
-    "id": "tf032",
-    "cat": "quran",
-    "q": "Jibreel would review the Quran with the Prophet ﷺ every Ramadan.",
-    "a": true,
-    "x": "And in his final year, they reviewed it twice — revise your Quran in Ramadan.",
-    "ref": "Bukhari 6",
-    "url": "https://sunnah.com/bukhari:6",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf033",
-    "cat": "quran",
-    "q": "The Quran is divided into 40 juz.",
-    "a": false,
-    "x": "The Quran has 30 juz — reading one juz a day completes it exactly in Ramadan.",
-    "ref": "",
-    "url": "",
-    "grade": ""
-  },
-  {
-    "id": "tf034",
-    "cat": "quran",
-    "q": "The Quran criticises those who command others to righteousness while forgetting themselves.",
-    "a": true,
-    "x": "Knowledge without action is incomplete — apply a lesson from today's reading.",
-    "ref": "Quran 2:44",
-    "url": "https://quran.com/2/44",
-    "grade": ""
-  },
-  {
-    "id": "tf035",
-    "cat": "character",
-    "q": "Actions are judged by intentions, and every person will get what they intended.",
-    "a": true,
-    "x": "The very first hadith of Sahih al-Bukhari — every deed takes its value from the heart.",
-    "ref": "Bukhari 1",
-    "url": "https://sunnah.com/bukhari:1",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf036",
-    "cat": "character",
-    "q": "The strong person is the one who defeats others in wrestling.",
-    "a": false,
-    "x": "The strong is the one who CONTROLS HIMSELF when angry.",
-    "ref": "Bukhari 6114",
-    "url": "https://sunnah.com/bukhari:6114",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf037",
-    "cat": "character",
-    "q": "Nothing is heavier on the Scale on the Day of Judgment than good character.",
-    "a": true,
-    "x": "Gentleness and good character outweigh mountains of other deeds.",
-    "ref": "Tirmidhi 2003",
-    "url": "https://sunnah.com/tirmidhi:2003",
-    "grade": ""
-  },
-  {
-    "id": "tf038",
-    "cat": "character",
-    "q": "The Quran compares backbiting to eating the flesh of your dead brother.",
-    "a": true,
-    "x": "Would one of you like to eat the flesh of his dead brother? You would detest it.",
-    "ref": "Quran 49:12",
-    "url": "https://quran.com/49/12",
-    "grade": ""
-  },
-  {
-    "id": "tf039",
-    "cat": "character",
-    "q": "Riya (showing off) only slightly reduces a deed's reward — the deed still counts.",
-    "a": false,
-    "x": "Deeds done for show are REJECTED entirely. Riya quietly voids reward.",
-    "ref": "Muslim 2985",
-    "url": "https://sunnah.com/muslim:2985",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf040",
-    "cat": "character",
-    "q": "When you make dua for someone in their absence, an angel says: 'Amin, and for you the same.'",
-    "a": true,
-    "x": "The fastest way to get your own dua answered — pray for your brother or sister first.",
-    "ref": "Muslim 2733",
-    "url": "https://sunnah.com/muslim:2733",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf041",
-    "cat": "character",
-    "q": "Whoever believes in Allah and the Last Day should speak good or remain silent.",
-    "a": true,
-    "x": "Guarding the tongue is half of good character.",
-    "ref": "Bukhari 6018",
-    "url": "https://sunnah.com/bukhari:6018",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf042",
-    "cat": "character",
-    "q": "Humbling yourself for Allah's sake lowers your status among people.",
-    "a": false,
-    "x": "Whoever humbles himself for Allah, Allah will RAISE him.",
-    "ref": "Muslim 2588",
-    "url": "https://sunnah.com/muslim:2588",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf043",
-    "cat": "character",
-    "q": "The best of you are those who are best to their families.",
-    "a": true,
-    "x": "Character starts at home — with the people who see you every day.",
-    "ref": "Tirmidhi 3895",
-    "url": "https://sunnah.com/tirmidhi:3895",
-    "grade": ""
-  },
-  {
-    "id": "tf044",
-    "cat": "character",
-    "q": "Good character can bring the same reward as one who fasts all day and prays all night.",
-    "a": true,
-    "x": "A believer reaches the rank of the constant worshipper through good character alone.",
-    "ref": "Abu Dawud 4798",
-    "url": "https://sunnah.com/abudawud:4798",
-    "grade": ""
-  },
-  {
-    "id": "tf045",
-    "cat": "character",
-    "q": "Allah extends His hand at night to accept the repentance of those who sinned during the day.",
-    "a": true,
-    "x": "And by day for those who sinned at night — the door of tawbah never closes.",
-    "ref": "Muslim 2759",
-    "url": "https://sunnah.com/muslim:2759",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf046",
-    "cat": "charity",
-    "q": "The Prophet ﷺ was at his most generous during Ramadan.",
-    "a": true,
-    "x": "He was the most generous of people — and even more so in Ramadan when Jibreel met him.",
-    "ref": "Bukhari 6",
-    "url": "https://sunnah.com/bukhari:6",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf047",
-    "cat": "charity",
-    "q": "Giving charity decreases your wealth.",
-    "a": false,
-    "x": "Charity does NOT decrease wealth — Allah replaces and blesses what you give.",
-    "ref": "Muslim 2588",
-    "url": "https://sunnah.com/muslim:2588",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf048",
-    "cat": "charity",
-    "q": "The best charity is that given in Ramadan.",
-    "a": true,
-    "x": "Every deed is multiplied in this month — including your sadaqah.",
-    "ref": "Tirmidhi 663",
-    "url": "https://sunnah.com/tirmidhi:663",
-    "grade": ""
-  },
-  {
-    "id": "tf049",
-    "cat": "charity",
-    "q": "Whoever visits a sick person remains in the 'harvest of Paradise.'",
-    "a": true,
-    "x": "A visit, a call, or even a supportive message counts.",
-    "ref": "Muslim 2568",
-    "url": "https://sunnah.com/muslim:2568",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf050",
-    "cat": "charity",
-    "q": "In the famous hadith of the four questions, it was Umar (RA) who answered 'I did' to all four.",
-    "a": false,
-    "x": "It was ABU BAKR (RA) — fasting, following a funeral, feeding the poor, and visiting the sick, all in one day.",
-    "ref": "Muslim 1028",
-    "url": "https://sunnah.com/muslim:1028",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf051",
-    "cat": "charity",
-    "q": "Whoever combines fasting, attending a funeral, feeding the poor, and visiting the sick in a single day will enter Jannah.",
-    "a": true,
-    "x": "This is the Abu Bakr Challenge in your Today tab — try to complete all four in one day!",
-    "ref": "Muslim 1028",
-    "url": "https://sunnah.com/muslim:1028",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf052",
-    "cat": "charity",
-    "q": "Whoever maintains family ties, Allah maintains ties with him.",
-    "a": true,
-    "x": "A message or a visit to reconnect kinship draws Allah's connection to you.",
-    "ref": "Muslim 2557",
-    "url": "https://sunnah.com/muslim:2557",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf053",
-    "cat": "charity",
-    "q": "Islam teaches that charity is best given publicly so others can see it.",
-    "a": false,
-    "x": "Hidden charity is praised — giving so secretly that the left hand does not know what the right hand gives.",
-    "ref": "Bukhari 1423",
-    "url": "https://sunnah.com/bukhari:1423",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf054",
-    "cat": "charity",
-    "q": "Feeding a poor person only counts if it is a full meal.",
-    "a": false,
-    "x": "Even a small meal or a single date counts with Allah.",
-    "ref": "Muslim 1028",
-    "url": "https://sunnah.com/muslim:1028",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf055",
-    "cat": "last10",
-    "q": "Laylatul Qadr is better than a thousand months.",
-    "a": true,
-    "x": "One night of worship outweighs over 83 years — a lifetime of deeds.",
-    "ref": "Quran 97:3",
-    "url": "https://quran.com/97/3",
-    "grade": ""
-  },
-  {
-    "id": "tf056",
-    "cat": "last10",
-    "q": "Laylatul Qadr is guaranteed to fall on the 27th night every year.",
-    "a": false,
-    "x": "We are told to seek it in the ODD nights of the last ten — it could be any of them, so strive every night.",
-    "ref": "Bukhari 2017",
-    "url": "https://sunnah.com/bukhari:2017",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf057",
-    "cat": "last10",
-    "q": "We are instructed to seek Laylatul Qadr in the odd nights of the last ten days.",
-    "a": true,
-    "x": "Nights 21, 23, 25, 27, and 29 — this app highlights them for you.",
-    "ref": "Bukhari 2017",
-    "url": "https://sunnah.com/bukhari:2017",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf058",
-    "cat": "last10",
-    "q": "When the last ten days began, the Prophet ﷺ would tighten his waist belt and pray all night.",
-    "a": true,
-    "x": "He exerted himself in these nights more than at any other time — and woke his family too.",
-    "ref": "Bukhari 2024",
-    "url": "https://sunnah.com/bukhari:2024",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf059",
-    "cat": "last10",
-    "q": "The dua the Prophet ﷺ taught Aishah (RA) for Laylatul Qadr is: 'Allahumma innaka afuwwun tuhibbul afwa fafu anni.'",
-    "a": true,
-    "x": "'O Allah, You are Pardoning and You love pardon, so pardon me.' Repeat it all night.",
-    "ref": "Tirmidhi 3513",
-    "url": "https://sunnah.com/tirmidhi:3513",
-    "grade": ""
-  },
-  {
-    "id": "tf060",
-    "cat": "last10",
-    "q": "The Prophet ﷺ observed I'tikaf only once in his life.",
-    "a": false,
-    "x": "He observed I'tikaf in the last ten days EVERY Ramadan — even partial i'tikaf carries reward.",
-    "ref": "Bukhari 2025",
-    "url": "https://sunnah.com/bukhari:2025",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf061",
-    "cat": "last10",
-    "q": "Standing in prayer on Laylatul Qadr with faith and hope of reward forgives past sins.",
-    "a": true,
-    "x": "One accepted night wipes the slate clean.",
-    "ref": "Bukhari 1901",
-    "url": "https://sunnah.com/bukhari:1901",
-    "grade": "Sahih (Bukhari)"
-  },
-  {
-    "id": "tf062",
-    "cat": "last10",
-    "q": "The closest a servant is to Allah is while in sujood.",
-    "a": true,
-    "x": "Lengthen your sujood in the last ten nights and pour out your duas there.",
-    "ref": "Muslim 482",
-    "url": "https://sunnah.com/muslim:482",
-    "grade": "Sahih (Muslim)"
-  },
-  {
-    "id": "tf063",
-    "cat": "last10",
-    "q": "The three thirds of Ramadan are known as Mercy (Days 1-10), Forgiveness (Days 11-20), and Salvation (Days 21-30).",
-    "a": true,
-    "x": "You can compare your effort across all three in the Progress tab.",
-    "ref": "",
-    "url": "",
-    "grade": ""
-  }
+ {
+  "id": "tf001",
+  "cat": "fasting",
+  "q": "Whoever fasts Ramadan out of faith and seeking reward will have their previous sins forgiven.",
+  "a": true,
+  "x": "The Prophet ﷺ promised forgiveness of past sins for fasting Ramadan with faith and hope of reward.",
+  "ref": "Bukhari 38",
+  "url": "https://sunnah.com/bukhari:38",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf002",
+  "cat": "fasting",
+  "q": "The special gate of Paradise reserved for those who fast is called Al-Firdaus.",
+  "a": false,
+  "x": "The gate is called Ar-Rayyan — only those who fast will enter through it.",
+  "ref": "Bukhari 1896",
+  "url": "https://sunnah.com/bukhari:1896",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf003",
+  "cat": "fasting",
+  "q": "When Ramadan begins, the gates of Paradise are opened and the gates of Hell are closed.",
+  "a": true,
+  "x": "A month where every door to good is opened wide — make the most of it.",
+  "ref": "Bukhari 1899",
+  "url": "https://sunnah.com/bukhari:1899",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf004",
+  "cat": "fasting",
+  "q": "Whoever gives iftar to a fasting person receives half of that person's reward.",
+  "a": false,
+  "x": "They receive the SAME reward — without reducing the fasting person's reward at all.",
+  "ref": "Tirmidhi 807",
+  "url": "https://sunnah.com/tirmidhi:807",
+  "grade": ""
+ },
+ {
+  "id": "tf005",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ described fasting as a shield.",
+  "a": true,
+  "x": "Fasting shields you — so the fasting person should not speak obscenely or act ignorantly.",
+  "ref": "Bukhari 1894",
+  "url": "https://sunnah.com/bukhari:1894",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf006",
+  "cat": "fasting",
+  "q": "The dua of a fasting person can be rejected like anyone else's.",
+  "a": false,
+  "x": "The supplication of the fasting person is not rejected — especially at the time of iftar.",
+  "ref": "Ibn Majah 1753",
+  "url": "https://sunnah.com/ibnmajah:1753",
+  "grade": ""
+ },
+ {
+  "id": "tf007",
+  "cat": "fasting",
+  "q": "Allah says every deed of the son of Adam is for himself, except fasting — which is for Allah, and He Himself will reward it.",
+  "a": true,
+  "x": "Fasting has a special, unlimited reward known only to Allah.",
+  "ref": "Bukhari 1904",
+  "url": "https://sunnah.com/bukhari:1904",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf008",
+  "cat": "fasting",
+  "q": "If you keep up false speech while fasting, Allah has no need of you giving up your food and drink.",
+  "a": true,
+  "x": "Fasting is not just from food — lying and false speech strip the fast of its spiritual reward.",
+  "ref": "Bukhari 1903",
+  "url": "https://sunnah.com/bukhari:1903",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf009",
+  "cat": "fasting",
+  "q": "If someone insults you while fasting, the Sunnah is to respond with a sharper insult.",
+  "a": false,
+  "x": "The Sunnah is to say: 'I am fasting' — and walk away from the argument.",
+  "ref": "Bukhari 1894",
+  "url": "https://sunnah.com/bukhari:1894",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf010",
+  "cat": "fasting",
+  "q": "The breath of a fasting person is sweeter to Allah than the scent of musk.",
+  "a": true,
+  "x": "What seems unpleasant to people is beloved to Allah when it comes from worship.",
+  "ref": "Bukhari 1904",
+  "url": "https://sunnah.com/bukhari:1904",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf011",
+  "cat": "fasting",
+  "q": "Fasting six days of Shawwal after Ramadan is like fasting the entire year.",
+  "a": true,
+  "x": "Ramadan (×10 reward) plus six days of Shawwal completes the reward of a full year of fasting.",
+  "ref": "Muslim 1164",
+  "url": "https://sunnah.com/muslim:1164",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf012",
+  "cat": "fasting",
+  "q": "The Sunnah guideline for eating is one-third food, one-third drink, and one-third air.",
+  "a": true,
+  "x": "The Prophet ﷺ warned against overfilling the stomach — a lesson especially relevant at iftar.",
+  "ref": "Tirmidhi 2380",
+  "url": "https://sunnah.com/tirmidhi:2380",
+  "grade": ""
+ },
+ {
+  "id": "tf013",
+  "cat": "salah",
+  "q": "Praying Isha and Fajr in congregation carries the reward of standing the entire night in prayer.",
+  "a": true,
+  "x": "Isha in congregation = half the night; adding Fajr in congregation = the whole night.",
+  "ref": "Muslim 656",
+  "url": "https://sunnah.com/muslim:656",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf014",
+  "cat": "salah",
+  "q": "The two Sunnah rakahs before Fajr are better than the world and everything in it.",
+  "a": true,
+  "x": "Two short rakahs outweigh the entire dunya — never skip them.",
+  "ref": "Muslim 724",
+  "url": "https://sunnah.com/muslim:724",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf015",
+  "cat": "salah",
+  "q": "Whoever prays qiyam (night prayer) in Ramadan with faith and seeking reward will be forgiven their past sins.",
+  "a": true,
+  "x": "This is the promise behind Tarawih and night prayer in Ramadan.",
+  "ref": "Bukhari 37",
+  "url": "https://sunnah.com/bukhari:37",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf016",
+  "cat": "salah",
+  "q": "Witr prayer must always be exactly five rakahs.",
+  "a": false,
+  "x": "Witr can be prayed as 1 or 3 rakahs — make it your last prayer of the night.",
+  "ref": "Bukhari 998",
+  "url": "https://sunnah.com/bukhari:998",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf017",
+  "cat": "salah",
+  "q": "The Prophet ﷺ sought forgiveness (istighfar) more than 70 times every day.",
+  "a": true,
+  "x": "If the forgiven Prophet ﷺ did istighfar daily, how much more do we need it?",
+  "ref": "Bukhari 6307",
+  "url": "https://sunnah.com/bukhari:6307",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf018",
+  "cat": "salah",
+  "q": "Sending one salawat upon the Prophet ﷺ brings ten blessings from Allah.",
+  "a": true,
+  "x": "Every single salawat is multiplied ten times over.",
+  "ref": "Muslim 408",
+  "url": "https://sunnah.com/muslim:408",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf019",
+  "cat": "salah",
+  "q": "Allah descends in the FIRST third of the night asking: 'Who calls upon Me that I may answer?'",
+  "a": false,
+  "x": "It is the LAST third of the night — the most blessed time for dua and tahajjud.",
+  "ref": "Bukhari 1145",
+  "url": "https://sunnah.com/bukhari:1145",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf020",
+  "cat": "salah",
+  "q": "Duha prayer counts as charity for every joint in your body.",
+  "a": true,
+  "x": "A short mid-morning prayer that pays the daily sadaqah owed by your 360 joints.",
+  "ref": "Muslim 720",
+  "url": "https://sunnah.com/muslim:720",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf021",
+  "cat": "salah",
+  "q": "Praying twelve Sunnah rakahs daily earns you a house in Jannah.",
+  "a": true,
+  "x": "The regular Sunnah prayers around the five obligatory ones build you a home in Paradise.",
+  "ref": "Tirmidhi 428",
+  "url": "https://sunnah.com/tirmidhi:428",
+  "grade": ""
+ },
+ {
+  "id": "tf022",
+  "cat": "salah",
+  "q": "The night adhkar before sleep include Ayatul Kursi and the last two ayat of Surah al-Baqarah.",
+  "a": true,
+  "x": "Prophetic protection through the night until you wake.",
+  "ref": "Bukhari 6320",
+  "url": "https://sunnah.com/bukhari:6320",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf023",
+  "cat": "salah",
+  "q": "The Prophet ﷺ enjoyed long conversations after Isha.",
+  "a": false,
+  "x": "He disliked talking after Isha — sleep early and protect your Fajr.",
+  "ref": "Abu Dawud 4723",
+  "url": "https://sunnah.com/abudawud:4723",
+  "grade": ""
+ },
+ {
+  "id": "tf024",
+  "cat": "salah",
+  "q": "The most beloved deeds to Allah are grand one-time gestures rather than small consistent ones.",
+  "a": false,
+  "x": "The most beloved deeds to Allah are the most CONSISTENT, even if small.",
+  "ref": "Bukhari 6464",
+  "url": "https://sunnah.com/bukhari:6464",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf025",
+  "cat": "quran",
+  "q": "The Quran was revealed in the month of Ramadan as guidance for mankind.",
+  "a": true,
+  "x": "That is why Ramadan is called the month of the Quran.",
+  "ref": "Quran 2:185",
+  "url": "https://quran.com/2/185",
+  "grade": ""
+ },
+ {
+  "id": "tf026",
+  "cat": "quran",
+  "q": "On the Day of Resurrection, fasting and the Quran will both intercede for the servant.",
+  "a": true,
+  "x": "Two companions of Ramadan standing up for you when you need them most.",
+  "ref": "Ahmad 6626",
+  "url": "",
+  "grade": ""
+ },
+ {
+  "id": "tf027",
+  "cat": "quran",
+  "q": "The one who recites the Quran skillfully will be with the noble scribes (angels).",
+  "a": true,
+  "x": "And the one who struggles while reciting receives DOUBLE reward — so keep reading either way.",
+  "ref": "Bukhari 4937",
+  "url": "https://sunnah.com/bukhari:4937",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf028",
+  "cat": "quran",
+  "q": "The standard mushaf of the Quran has 604 pages.",
+  "a": true,
+  "x": "That's why this app tracks 604 pages — about 20 pages a day completes it in 30 days.",
+  "ref": "",
+  "url": "",
+  "grade": ""
+ },
+ {
+  "id": "tf029",
+  "cat": "quran",
+  "q": "The Prophet ﷺ said: 'The best of you are those who learn the Quran and teach it.'",
+  "a": true,
+  "x": "Memorising even one new ayah puts you on this path.",
+  "ref": "Bukhari 5027",
+  "url": "https://sunnah.com/bukhari:5027",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf030",
+  "cat": "quran",
+  "q": "When the Quran is recited, we are commanded to listen attentively and be silent so we may receive mercy.",
+  "a": true,
+  "x": "Even listening to recitation is a rewarded act of worship.",
+  "ref": "Quran 7:204",
+  "url": "https://quran.com/7/204",
+  "grade": ""
+ },
+ {
+  "id": "tf031",
+  "cat": "quran",
+  "q": "Tadabbur means reciting the Quran as fast as possible.",
+  "a": false,
+  "x": "Tadabbur is deep REFLECTION on the meaning — pondering transforms the heart and guides action.",
+  "ref": "Quran 38:29",
+  "url": "https://quran.com/38/29",
+  "grade": ""
+ },
+ {
+  "id": "tf032",
+  "cat": "quran",
+  "q": "Jibreel would review the Quran with the Prophet ﷺ every Ramadan.",
+  "a": true,
+  "x": "And in his final year, they reviewed it twice — revise your Quran in Ramadan.",
+  "ref": "Bukhari 6",
+  "url": "https://sunnah.com/bukhari:6",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf033",
+  "cat": "quran",
+  "q": "The Quran is divided into 40 juz.",
+  "a": false,
+  "x": "The Quran has 30 juz — reading one juz a day completes it exactly in Ramadan.",
+  "ref": "",
+  "url": "",
+  "grade": ""
+ },
+ {
+  "id": "tf034",
+  "cat": "quran",
+  "q": "The Quran criticises those who command others to righteousness while forgetting themselves.",
+  "a": true,
+  "x": "Knowledge without action is incomplete — apply a lesson from today's reading.",
+  "ref": "Quran 2:44",
+  "url": "https://quran.com/2/44",
+  "grade": ""
+ },
+ {
+  "id": "tf035",
+  "cat": "character",
+  "q": "Actions are judged by intentions, and every person will get what they intended.",
+  "a": true,
+  "x": "The very first hadith of Sahih al-Bukhari — every deed takes its value from the heart.",
+  "ref": "Bukhari 1",
+  "url": "https://sunnah.com/bukhari:1",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf036",
+  "cat": "character",
+  "q": "The strong person is the one who defeats others in wrestling.",
+  "a": false,
+  "x": "The strong is the one who CONTROLS HIMSELF when angry.",
+  "ref": "Bukhari 6114",
+  "url": "https://sunnah.com/bukhari:6114",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf037",
+  "cat": "character",
+  "q": "Nothing is heavier on the Scale on the Day of Judgment than good character.",
+  "a": true,
+  "x": "Gentleness and good character outweigh mountains of other deeds.",
+  "ref": "Tirmidhi 2003",
+  "url": "https://sunnah.com/tirmidhi:2003",
+  "grade": ""
+ },
+ {
+  "id": "tf038",
+  "cat": "character",
+  "q": "The Quran compares backbiting to eating the flesh of your dead brother.",
+  "a": true,
+  "x": "Would one of you like to eat the flesh of his dead brother? You would detest it.",
+  "ref": "Quran 49:12",
+  "url": "https://quran.com/49/12",
+  "grade": ""
+ },
+ {
+  "id": "tf039",
+  "cat": "character",
+  "q": "Riya (showing off) only slightly reduces a deed's reward — the deed still counts.",
+  "a": false,
+  "x": "Deeds done for show are REJECTED entirely. Riya quietly voids reward.",
+  "ref": "Muslim 2985",
+  "url": "https://sunnah.com/muslim:2985",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf040",
+  "cat": "character",
+  "q": "When you make dua for someone in their absence, an angel says: 'Amin, and for you the same.'",
+  "a": true,
+  "x": "The fastest way to get your own dua answered — pray for your brother or sister first.",
+  "ref": "Muslim 2733",
+  "url": "https://sunnah.com/muslim:2733",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf041",
+  "cat": "character",
+  "q": "Whoever believes in Allah and the Last Day should speak good or remain silent.",
+  "a": true,
+  "x": "Guarding the tongue is half of good character.",
+  "ref": "Bukhari 6018",
+  "url": "https://sunnah.com/bukhari:6018",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf042",
+  "cat": "character",
+  "q": "Humbling yourself for Allah's sake lowers your status among people.",
+  "a": false,
+  "x": "Whoever humbles himself for Allah, Allah will RAISE him.",
+  "ref": "Muslim 2588",
+  "url": "https://sunnah.com/muslim:2588",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf043",
+  "cat": "character",
+  "q": "The best of you are those who are best to their families.",
+  "a": true,
+  "x": "Character starts at home — with the people who see you every day.",
+  "ref": "Tirmidhi 3895",
+  "url": "https://sunnah.com/tirmidhi:3895",
+  "grade": ""
+ },
+ {
+  "id": "tf044",
+  "cat": "character",
+  "q": "Good character can bring the same reward as one who fasts all day and prays all night.",
+  "a": true,
+  "x": "A believer reaches the rank of the constant worshipper through good character alone.",
+  "ref": "Abu Dawud 4798",
+  "url": "https://sunnah.com/abudawud:4798",
+  "grade": ""
+ },
+ {
+  "id": "tf045",
+  "cat": "character",
+  "q": "Allah extends His hand at night to accept the repentance of those who sinned during the day.",
+  "a": true,
+  "x": "And by day for those who sinned at night — the door of tawbah never closes.",
+  "ref": "Muslim 2759",
+  "url": "https://sunnah.com/muslim:2759",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf046",
+  "cat": "charity",
+  "q": "The Prophet ﷺ was at his most generous during Ramadan.",
+  "a": true,
+  "x": "He was the most generous of people — and even more so in Ramadan when Jibreel met him.",
+  "ref": "Bukhari 6",
+  "url": "https://sunnah.com/bukhari:6",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf047",
+  "cat": "charity",
+  "q": "Giving charity decreases your wealth.",
+  "a": false,
+  "x": "Charity does NOT decrease wealth — Allah replaces and blesses what you give.",
+  "ref": "Muslim 2588",
+  "url": "https://sunnah.com/muslim:2588",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf048",
+  "cat": "charity",
+  "q": "The best charity is that given in Ramadan.",
+  "a": true,
+  "x": "Every deed is multiplied in this month — including your sadaqah.",
+  "ref": "Tirmidhi 663",
+  "url": "https://sunnah.com/tirmidhi:663",
+  "grade": ""
+ },
+ {
+  "id": "tf049",
+  "cat": "charity",
+  "q": "Whoever visits a sick person remains in the 'harvest of Paradise.'",
+  "a": true,
+  "x": "A visit, a call, or even a supportive message counts.",
+  "ref": "Muslim 2568",
+  "url": "https://sunnah.com/muslim:2568",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf050",
+  "cat": "charity",
+  "q": "In the famous hadith of the four questions, it was Umar (RA) who answered 'I did' to all four.",
+  "a": false,
+  "x": "It was ABU BAKR (RA) — fasting, following a funeral, feeding the poor, and visiting the sick, all in one day.",
+  "ref": "Muslim 1028",
+  "url": "https://sunnah.com/muslim:1028",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf051",
+  "cat": "charity",
+  "q": "Whoever combines fasting, attending a funeral, feeding the poor, and visiting the sick in a single day will enter Jannah.",
+  "a": true,
+  "x": "This is the Abu Bakr Challenge in your Today tab — try to complete all four in one day!",
+  "ref": "Muslim 1028",
+  "url": "https://sunnah.com/muslim:1028",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf052",
+  "cat": "charity",
+  "q": "Whoever maintains family ties, Allah maintains ties with him.",
+  "a": true,
+  "x": "A message or a visit to reconnect kinship draws Allah's connection to you.",
+  "ref": "Muslim 2557",
+  "url": "https://sunnah.com/muslim:2557",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf053",
+  "cat": "charity",
+  "q": "Islam teaches that charity is best given publicly so others can see it.",
+  "a": false,
+  "x": "Hidden charity is praised — giving so secretly that the left hand does not know what the right hand gives.",
+  "ref": "Bukhari 1423",
+  "url": "https://sunnah.com/bukhari:1423",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf054",
+  "cat": "charity",
+  "q": "Feeding a poor person only counts if it is a full meal.",
+  "a": false,
+  "x": "Even a small meal or a single date counts with Allah.",
+  "ref": "Muslim 1028",
+  "url": "https://sunnah.com/muslim:1028",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf055",
+  "cat": "last10",
+  "q": "Laylatul Qadr is better than a thousand months.",
+  "a": true,
+  "x": "One night of worship outweighs over 83 years — a lifetime of deeds.",
+  "ref": "Quran 97:3",
+  "url": "https://quran.com/97/3",
+  "grade": ""
+ },
+ {
+  "id": "tf056",
+  "cat": "last10",
+  "q": "Laylatul Qadr is guaranteed to fall on the 27th night every year.",
+  "a": false,
+  "x": "We are told to seek it in the ODD nights of the last ten — it could be any of them, so strive every night.",
+  "ref": "Bukhari 2017",
+  "url": "https://sunnah.com/bukhari:2017",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf057",
+  "cat": "last10",
+  "q": "We are instructed to seek Laylatul Qadr in the odd nights of the last ten days.",
+  "a": true,
+  "x": "Nights 21, 23, 25, 27, and 29 — this app highlights them for you.",
+  "ref": "Bukhari 2017",
+  "url": "https://sunnah.com/bukhari:2017",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf058",
+  "cat": "last10",
+  "q": "When the last ten days began, the Prophet ﷺ would tighten his waist belt and pray all night.",
+  "a": true,
+  "x": "He exerted himself in these nights more than at any other time — and woke his family too.",
+  "ref": "Bukhari 2024",
+  "url": "https://sunnah.com/bukhari:2024",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf059",
+  "cat": "last10",
+  "q": "The dua the Prophet ﷺ taught Aishah (RA) for Laylatul Qadr is: 'Allahumma innaka afuwwun tuhibbul afwa fafu anni.'",
+  "a": true,
+  "x": "'O Allah, You are Pardoning and You love pardon, so pardon me.' Repeat it all night.",
+  "ref": "Tirmidhi 3513",
+  "url": "https://sunnah.com/tirmidhi:3513",
+  "grade": ""
+ },
+ {
+  "id": "tf060",
+  "cat": "last10",
+  "q": "The Prophet ﷺ observed I'tikaf only once in his life.",
+  "a": false,
+  "x": "He observed I'tikaf in the last ten days EVERY Ramadan — even partial i'tikaf carries reward.",
+  "ref": "Bukhari 2025",
+  "url": "https://sunnah.com/bukhari:2025",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf061",
+  "cat": "last10",
+  "q": "Standing in prayer on Laylatul Qadr with faith and hope of reward forgives past sins.",
+  "a": true,
+  "x": "One accepted night wipes the slate clean.",
+  "ref": "Bukhari 1901",
+  "url": "https://sunnah.com/bukhari:1901",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf062",
+  "cat": "last10",
+  "q": "The closest a servant is to Allah is while in sujood.",
+  "a": true,
+  "x": "Lengthen your sujood in the last ten nights and pour out your duas there.",
+  "ref": "Muslim 482",
+  "url": "https://sunnah.com/muslim:482",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf063",
+  "cat": "last10",
+  "q": "The three thirds of Ramadan are known as Mercy (Days 1-10), Forgiveness (Days 11-20), and Salvation (Days 21-30).",
+  "a": true,
+  "x": "You can compare your effort across all three in the Progress tab.",
+  "ref": "",
+  "url": "",
+  "grade": ""
+ },
+ {
+  "id": "tf-fast-01",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said a fasting person has two moments of joy: one when breaking the fast, and one when meeting their Lord.",
+  "a": true,
+  "x": "In Bukhari and Muslim, the Prophet ﷺ said the one who fasts has two joys: joy when breaking the fast, and joy when meeting his Lord, pleased because of his fasting.",
+  "ref": "Bukhari 1904",
+  "url": "https://sunnah.com/bukhari:1904",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-02",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said that whoever fasts one day in the way of Allah, Allah will distance their face from the Fire by seventy years.",
+  "a": true,
+  "x": "Abu Sa'id al-Khudri reported this from the Prophet ﷺ in Bukhari and Muslim: a single day of fasting in the way of Allah keeps a person's face seventy years away from the Fire.",
+  "ref": "Bukhari 2840",
+  "url": "https://sunnah.com/bukhari:2840",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-03",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ discouraged eating suhoor, teaching that a fast without it earns more reward.",
+  "a": false,
+  "x": "He ﷺ encouraged it, saying: 'Take suhoor, for in suhoor there is blessing.' (Bukhari and Muslim). The pre-dawn meal is a blessed Sunnah.",
+  "ref": "Bukhari 1923",
+  "url": "https://sunnah.com/bukhari:1923",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-04",
+  "cat": "fasting",
+  "q": "When Zayd ibn Thabit ate suhoor with the Prophet ﷺ, they finished it hours before the adhan for Fajr.",
+  "a": false,
+  "x": "Zayd ibn Thabit said the gap between their suhoor with the Prophet ﷺ and the adhan was only about the time it takes to recite fifty verses (Sahih al-Bukhari). They ate suhoor close to dawn.",
+  "ref": "Bukhari 1921",
+  "url": "https://sunnah.com/bukhari:1921",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-05",
+  "cat": "fasting",
+  "q": "The Sunnah is to wait a while after sunset before breaking the fast, rather than breaking it straight away.",
+  "a": false,
+  "x": "The Prophet ﷺ said: 'People will remain upon good as long as they hasten to break the fast.' (Bukhari and Muslim). Breaking the fast promptly once the sun has set is the Sunnah.",
+  "ref": "Bukhari 1957",
+  "url": "https://sunnah.com/bukhari:1957",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-06",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ would pray Maghrib first and only break his fast after the prayer.",
+  "a": false,
+  "x": "Anas said the Prophet ﷺ broke his fast before praying, with fresh dates; if there were none, dried dates; and if none, a few sips of water (Abu Dawud, graded hasan sahih by al-Albani).",
+  "ref": "Abu Dawud 2356",
+  "url": "https://sunnah.com/abudawud:2356",
+  "grade": "Hasan Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-fast-07",
+  "cat": "fasting",
+  "q": "When breaking his fast, the Prophet ﷺ would say: 'Thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills.'",
+  "a": true,
+  "x": "Ibn Umar reported that at iftar the Prophet ﷺ would say: Dhahabaz-zama'u wabtallatil-'uruqu wa thabatal-ajru in sha Allah. Recorded by Abu Dawud and graded hasan by al-Albani.",
+  "ref": "Abu Dawud 2357",
+  "url": "https://sunnah.com/abudawud:2357",
+  "grade": "Hasan (al-Albani)"
+ },
+ {
+  "id": "tf-fast-08",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said that if a fasting person eats or drinks forgetfully, they should stop fasting for the rest of that day.",
+  "a": false,
+  "x": "He ﷺ said: 'If someone forgets and eats or drinks, let him complete his fast, for it is Allah who fed him and gave him drink.' (Bukhari and Muslim).",
+  "ref": "Bukhari 1933",
+  "url": "https://sunnah.com/bukhari:1933",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-09",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ warned that some people fast yet gain nothing from their fasting except hunger.",
+  "a": true,
+  "x": "He ﷺ said some who fast get nothing but hunger, and some who pray at night get nothing but sleeplessness (Ibn Majah). He also said Allah has no need of the fast of one who does not give up lying and acting on it (Bukhari 1903).",
+  "ref": "Ibn Majah 1690",
+  "url": "https://sunnah.com/ibnmajah:1690",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-fast-10",
+  "cat": "fasting",
+  "q": "The Quran allows a person who is ill or on a journey during Ramadan to fast an equal number of other days instead.",
+  "a": true,
+  "x": "Allah says: 'Whoever among you is ill or on a journey, then an equal number of other days.' (Quran 2:184). The same allowance is repeated in the next verse, 2:185.",
+  "ref": "Quran 2:184-185",
+  "url": "https://quran.com/2/184-185",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-fast-11",
+  "cat": "fasting",
+  "q": "In the verses on fasting Ramadan, Allah says He wants hardship for the believers rather than ease.",
+  "a": false,
+  "x": "Allah says the opposite in Quran 2:185, right after excusing the ill and the traveller: 'Allah intends for you ease and does not intend for you hardship.'",
+  "ref": "Quran 2:185",
+  "url": "https://quran.com/2/185",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-fast-12",
+  "cat": "fasting",
+  "q": "Fasting six days of Shawwal is obligatory, just like fasting the month of Ramadan.",
+  "a": false,
+  "x": "When a Bedouin asked what fasting Allah made compulsory, the Prophet ﷺ named the month of Ramadan and said anything more is voluntary (Bukhari and Muslim). So the six days of Shawwal are a voluntary fast.",
+  "ref": "Bukhari 1891",
+  "url": "https://sunnah.com/bukhari:1891",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-13",
+  "cat": "fasting",
+  "q": "The Prophet ﷺ said he hoped that fasting the Day of Arafah would expiate the sins of the year before it and the year after it.",
+  "a": true,
+  "x": "In Sahih Muslim, the Prophet ﷺ said this about fasting the Day of Arafah, and said that fasting the day of Ashura expiates the sins of the year before it.",
+  "ref": "Muslim 1162",
+  "url": "https://sunnah.com/muslim:1162",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-fast-14",
+  "cat": "fasting",
+  "q": "When the Prophet ﷺ learned that Ashura was the day Allah saved Musa (Moses) from Pharaoh, he fasted it and told the Muslims to fast it.",
+  "a": true,
+  "x": "Ibn Abbas said the Jews of Madinah fasted Ashura for this reason. The Prophet ﷺ said, 'I am closer to Musa than they,' then fasted it and ordered it to be fasted. It became optional once Ramadan was made obligatory (Bukhari 2002).",
+  "ref": "Bukhari 3397",
+  "url": "https://sunnah.com/bukhari:3397",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-fast-15",
+  "cat": "fasting",
+  "q": "Some Companions had their young children fast on Ashura and gave them wool toys to distract them from hunger until iftar.",
+  "a": true,
+  "x": "Ar-Rubayyi' bint Mu'awwidh said they made their children fast on Ashura, and when a child cried for food they gave him a wool toy until it was time to break the fast (Bukhari and Muslim).",
+  "ref": "Bukhari 1960",
+  "url": "https://sunnah.com/bukhari:1960",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-01",
+  "cat": "salah",
+  "q": "The Prophet ﷺ stopped leading the night prayer in the mosque in Ramadan because too few people came.",
+  "a": false,
+  "x": "The mosque grew so full it could not hold them. He ﷺ said their presence was not hidden from him, but he feared the night prayer would be made obligatory on them and they would be unable to do it (Bukhari 2012).",
+  "ref": "Bukhari 2012",
+  "url": "https://sunnah.com/bukhari:2012",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-02",
+  "cat": "salah",
+  "q": "Whoever prays the night prayer with the imam until he finishes is recorded as having prayed the whole night.",
+  "a": true,
+  "x": "The Prophet ﷺ said this in Ramadan, when the Companions asked him to lead them for the rest of the night (Tirmidhi 806, graded Sahih). So stay with the imam until he finishes.",
+  "ref": "Tirmidhi 806",
+  "url": "https://sunnah.com/tirmidhi:806",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-salah-03",
+  "cat": "salah",
+  "q": "The Prophet ﷺ said that Allah is Witr (One) and loves witr, meaning odd numbers.",
+  "a": true,
+  "x": "Witr means single or odd-numbered. In Bukhari 6410 the Prophet ﷺ said Allah is Witr and loves witr, and he told us to make the witr prayer the last of our prayer at night (Bukhari 998).",
+  "ref": "Bukhari 6410",
+  "url": "https://sunnah.com/bukhari:6410",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-04",
+  "cat": "salah",
+  "q": "The Prophet ﷺ only ever prayed witr in the last part of the night.",
+  "a": false,
+  "x": "Aishah said he prayed witr in the early, middle and last parts of the night (Muslim 745). He advised anyone who fears not waking up to pray witr before sleeping (Muslim 755).",
+  "ref": "Muslim 745",
+  "url": "https://sunnah.com/muslim:745",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-05",
+  "cat": "salah",
+  "q": "The Prophet ﷺ said the best prayer after the obligatory prayers is prayer at night.",
+  "a": true,
+  "x": "In Muslim 1163 he ﷺ said the most excellent prayer after the obligatory ones is prayer at night, and the most excellent fast after Ramadan is in Allah's month, Muharram.",
+  "ref": "Muslim 1163",
+  "url": "https://sunnah.com/muslim:1163",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-salah-06",
+  "cat": "salah",
+  "q": "The Prophet ﷺ said the prayer most beloved to Allah is that of Prophet Dawud, who slept half the night and prayed a third of it.",
+  "a": true,
+  "x": "In Bukhari 1131 he ﷺ said Dawud slept half the night, prayed for a third of it, then slept for a sixth. His fast, every other day, is also the fast most beloved to Allah.",
+  "ref": "Bukhari 1131",
+  "url": "https://sunnah.com/bukhari:1131",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-07",
+  "cat": "salah",
+  "q": "When Ibn Mas'ud asked which deed Allah loves most, the Prophet ﷺ first named kindness to parents.",
+  "a": false,
+  "x": "He ﷺ first named prayer offered at its proper time, then kindness to parents, then jihad in Allah's cause (Bukhari 527).",
+  "ref": "Bukhari 527",
+  "url": "https://sunnah.com/bukhari:527",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-08",
+  "cat": "salah",
+  "q": "The Prophet ﷺ said prayer in congregation is twenty-seven degrees better than praying alone.",
+  "a": true,
+  "x": "Ibn Umar narrated this in Bukhari 645. Abu Hurairah's narration says twenty-five times (Bukhari 647). Both are authentic reports of the great reward of praying together.",
+  "ref": "Bukhari 645",
+  "url": "https://sunnah.com/bukhari:645",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-09",
+  "cat": "salah",
+  "q": "Sitting in the mosque waiting for the prayer to begin earns no reward.",
+  "a": false,
+  "x": "The Prophet ﷺ said a person counts as being in prayer while he waits for it, and the angels ask Allah to forgive him and have mercy on him while he stays in his place of prayer and keeps his wudu (Bukhari 659).",
+  "ref": "Bukhari 659",
+  "url": "https://sunnah.com/bukhari:659",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-10",
+  "cat": "salah",
+  "q": "In the hadith promising a house in Paradise for twelve voluntary rak'ahs a day, all twelve are prayed after the obligatory prayers.",
+  "a": false,
+  "x": "Some come before. The Prophet ﷺ listed four rak'ahs before Dhuhr, two after it, two after Maghrib, two after Isha and two before Fajr (Tirmidhi 415).",
+  "ref": "Tirmidhi 415",
+  "url": "https://sunnah.com/tirmidhi:415",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-salah-11",
+  "cat": "salah",
+  "q": "Surah al-Mu'minun begins by describing successful believers as those who are humbly focused (khushu) in their prayer.",
+  "a": true,
+  "x": "It opens: Certainly will the believers have succeeded: they who are during their prayer humbly intent (Quran 23:1-2).",
+  "ref": "Quran 23:1-2",
+  "url": "https://quran.com/23/1-2",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-salah-12",
+  "cat": "salah",
+  "q": "The Prophet ﷺ described looking around during prayer as something Satan snatches from a person's prayer.",
+  "a": true,
+  "x": "When Aishah asked about glancing around in prayer, he ﷺ said it is a snatching by which Satan steals from the servant's prayer (Bukhari 751). Keep your focus on your prayer.",
+  "ref": "Bukhari 751",
+  "url": "https://sunnah.com/bukhari:751",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-salah-13",
+  "cat": "salah",
+  "q": "The first deed a servant will be held to account for on the Day of Judgment is fasting.",
+  "a": false,
+  "x": "It is prayer. The Prophet ﷺ said the first thing a servant is held to account for is the prayer, and the first matter judged between people is bloodshed (Nasa'i 3991).",
+  "ref": "Nasa'i 3991",
+  "url": "https://sunnah.com/nasai:3991",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-salah-14",
+  "cat": "salah",
+  "q": "The Prophet ﷺ heard Bilal's footsteps in Paradise, and Bilal said his most hopeful deed was praying after every wudu.",
+  "a": true,
+  "x": "Bilal said that whenever he made wudu, by night or day, he prayed with it whatever was written for him to pray (Bukhari 1149).",
+  "ref": "Bukhari 1149",
+  "url": "https://sunnah.com/bukhari:1149",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-salah-15",
+  "cat": "salah",
+  "q": "Wudu cleans the body, but it does not wipe away any sins.",
+  "a": false,
+  "x": "The Prophet ﷺ said whoever performs wudu well, his sins leave his body, even from under his nails (Muslim 245).",
+  "ref": "Muslim 245",
+  "url": "https://sunnah.com/muslim:245",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-quran-01",
+  "cat": "quran",
+  "q": "In Surah Ad-Dukhan, Allah describes the night in which He sent down the Quran as 'a blessed night'.",
+  "a": true,
+  "x": "Allah says: 'Indeed, We sent it down during a blessed night' (Quran 44:3). In Surah Al-Qadr He says He sent it down during the Night of Decree (97:1).",
+  "ref": "Quran 44:3",
+  "url": "https://quran.com/44/3",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-02",
+  "cat": "quran",
+  "q": "The month of Ramadan is mentioned by name many times in the Quran.",
+  "a": false,
+  "x": "Ramadan is named only once in the whole Quran: in Quran 2:185, which says the Quran was revealed in that month as guidance for the people.",
+  "ref": "Quran 2:185",
+  "url": "https://quran.com/2/185",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-03",
+  "cat": "quran",
+  "q": "The Quran was revealed to the Prophet ﷺ all at once, in a single night.",
+  "a": false,
+  "x": "Allah sent the Quran down on a blessed night (Quran 44:3), but it reached the Prophet ﷺ in stages (17:106). When disbelievers asked why it was not revealed all at once, Allah said this was to strengthen his heart (25:32).",
+  "ref": "Quran 25:32",
+  "url": "https://quran.com/25/32",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-04",
+  "cat": "quran",
+  "q": "In the cave of Hira, when the angel first said 'Read!', the Prophet ﷺ replied that he did not know how to read.",
+  "a": true,
+  "x": "He ﷺ gave that reply three times. Then the angel recited the first verses of Surah Al-Alaq: 'Read in the name of your Lord who created' (Bukhari 3).",
+  "ref": "Bukhari 3",
+  "url": "https://sunnah.com/bukhari:3",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-quran-05",
+  "cat": "quran",
+  "q": "The surahs of the Quran are arranged in the order in which they were revealed.",
+  "a": false,
+  "x": "The first verses ever revealed, 'Read in the name of your Lord who created', open Surah Al-Alaq, which is Surah 96 of 114 in the mushaf (Bukhari 4953).",
+  "ref": "Bukhari 4953",
+  "url": "https://sunnah.com/bukhari:4953",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-quran-06",
+  "cat": "quran",
+  "q": "The reward for reciting the Quran is counted per verse, not per letter.",
+  "a": false,
+  "x": "The Prophet ﷺ said whoever recites a letter of the Quran gets a good deed, multiplied by ten: 'Alif is a letter, Lam is a letter and Mim is a letter' (Tirmidhi 2910, graded Sahih).",
+  "ref": "Tirmidhi 2910",
+  "url": "https://sunnah.com/tirmidhi:2910",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-quran-07",
+  "cat": "quran",
+  "q": "The Prophet ﷺ compared a believer who recites the Quran to a citron, a fruit that tastes good and smells good.",
+  "a": true,
+  "x": "He ﷺ said the one who recites the Quran is like a citron, good in taste and scent, while a believer who does not recite it is like a date: sweet, but with no scent (Bukhari 5020).",
+  "ref": "Bukhari 5020",
+  "url": "https://sunnah.com/bukhari:5020",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-quran-08",
+  "cat": "quran",
+  "q": "The Prophet ﷺ said that Surah Al-Ikhlas is equal to the whole Quran.",
+  "a": false,
+  "x": "He ﷺ said: 'By Him in Whose Hand my life is, this surah is equal to one third of the Quran' (Bukhari 5013).",
+  "ref": "Bukhari 5013",
+  "url": "https://sunnah.com/bukhari:5013",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-quran-09",
+  "cat": "quran",
+  "q": "The Prophet ﷺ called Al-Baqarah and Al Imran 'the two bright ones' that will plead for their reciters on the Day of Resurrection.",
+  "a": true,
+  "x": "He ﷺ said: recite the Quran, for it will come as an intercessor for its companions. The two bright ones will come like two clouds, two shades or two flocks of birds, pleading for them (Muslim 804).",
+  "ref": "Muslim 804",
+  "url": "https://sunnah.com/muslim:804",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-quran-10",
+  "cat": "quran",
+  "q": "The Quran is made up of 114 surahs.",
+  "a": true,
+  "x": "The Quran has 114 surahs, from Al-Fatihah (Surah 1) to An-Nas (Surah 114), the last surah in the mushaf.",
+  "ref": "Quran 114:1-6",
+  "url": "https://quran.com/114/1-6",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-11",
+  "cat": "quran",
+  "q": "Al-Baqarah is the longest surah in the Quran, with 286 ayat.",
+  "a": true,
+  "x": "Al-Baqarah (The Cow, Surah 2) has 286 ayat in the standard mushaf, more than any other surah.",
+  "ref": "Quran 2:286",
+  "url": "https://quran.com/2/286",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-12",
+  "cat": "quran",
+  "q": "Al-Ikhlas is the shortest surah in the Quran.",
+  "a": false,
+  "x": "The shortest is Al-Kawthar (Surah 108): just ten Arabic words in three short ayat. Al-Ikhlas has four ayat.",
+  "ref": "Quran 108:1-3",
+  "url": "https://quran.com/108/1-3",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-13",
+  "cat": "quran",
+  "q": "Every surah of the Quran begins with Bismillahir Rahmanir Rahim.",
+  "a": false,
+  "x": "At-Tawbah (Surah 9) is the only surah that does not begin with the basmala; it opens directly with its first ayah (Quran 9:1). All the other 113 surahs open with it.",
+  "ref": "Quran 9:1",
+  "url": "https://quran.com/9/1",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-14",
+  "cat": "quran",
+  "q": "Bismillahir Rahmanir Rahim appears in the middle of Surah An-Naml, in the letter of Prophet Sulayman.",
+  "a": true,
+  "x": "Sulayman's letter to the Queen of Sheba began: 'In the name of Allah, the Entirely Merciful, the Especially Merciful' (Quran 27:30). It is the only basmala in the middle of a surah.",
+  "ref": "Quran 27:30",
+  "url": "https://quran.com/27/30",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-quran-15",
+  "cat": "quran",
+  "q": "The Quran asks: 'Do they not reflect upon the Quran, or are there locks upon their hearts?'",
+  "a": true,
+  "x": "Allah asks this in Quran 47:24. He also calls it a blessed Book sent down so that they might reflect upon its verses and those of understanding be reminded (38:29).",
+  "ref": "Quran 47:24",
+  "url": "https://quran.com/47/24",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-give-01",
+  "cat": "charity",
+  "q": "Ibn Abbas (RA) said that in Ramadan the Prophet ﷺ was more generous with good than the free-blowing wind.",
+  "a": true,
+  "x": "Ibn Abbas (RA) said the Prophet ﷺ was the most generous of people, and in Ramadan, when Jibreel met him every night to study the Quran, he was more generous with good than the free-blowing wind (Sahih al-Bukhari).",
+  "ref": "Bukhari 6",
+  "url": "https://sunnah.com/bukhari:6",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-give-02",
+  "cat": "eid",
+  "q": "The Prophet ﷺ would eat some dates before going out on Eid al-Fitr, and he ate them in an odd number.",
+  "a": true,
+  "x": "Anas (RA) reported in Sahih al-Bukhari that the Prophet ﷺ would not go out on the day of Eid al-Fitr until he had eaten some dates, and that he ate them in odd numbers.",
+  "ref": "Bukhari 953",
+  "url": "https://sunnah.com/bukhari:953",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-give-03",
+  "cat": "charity",
+  "q": "The Prophet ﷺ prescribed zakat al-fitr for adults only, not for young children.",
+  "a": false,
+  "x": "Ibn Umar (RA) reported in Sahih al-Bukhari that the Prophet ﷺ prescribed zakat al-fitr, a sa' (a set measure) of dates or of barley, on every Muslim: male or female, young or old.",
+  "ref": "Bukhari 1503",
+  "url": "https://sunnah.com/bukhari:1503",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-give-04",
+  "cat": "eid",
+  "q": "On Eid, the Prophet ﷺ returned from the prayer by the same route he had taken to get there.",
+  "a": false,
+  "x": "Jabir ibn Abdullah (RA) reported in Sahih al-Bukhari that on the day of Eid the Prophet ﷺ would return by a different route from the one he went by.",
+  "ref": "Bukhari 986",
+  "url": "https://sunnah.com/bukhari:986",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-give-05",
+  "cat": "charity",
+  "q": "The Prophet ﷺ ordered zakat al-fitr to be paid after the Eid prayer is over.",
+  "a": false,
+  "x": "Ibn Umar (RA) reported in Sahih al-Bukhari that the Prophet ﷺ ordered zakat al-fitr to be paid before the people go out to the Eid prayer.",
+  "ref": "Bukhari 1509",
+  "url": "https://sunnah.com/bukhari:1509",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-give-06",
+  "cat": "eid",
+  "q": "In the ayah on fasting Ramadan, Allah says He wants us to complete the count of days and proclaim His greatness for guiding us.",
+  "a": true,
+  "x": "Quran 2:185: Allah wants you 'to complete the period and to glorify Allah for that to which He has guided you; and perhaps you will be grateful.' The Arabic verb here, litukabbiru, shares its root with takbir.",
+  "ref": "Quran 2:185",
+  "url": "https://quran.com/2/185",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-give-07",
+  "cat": "charity",
+  "q": "Zakat al-fitr purifies the fasting person from idle and indecent talk, and it is food for the poor.",
+  "a": true,
+  "x": "Ibn Abbas (RA) said the Prophet ﷺ prescribed it to purify the fasting person from idle and obscene talk and to feed the needy. Paid before the Eid prayer, it is accepted as zakat (Abu Dawud, hasan).",
+  "ref": "Abu Dawud 1609",
+  "url": "https://sunnah.com/abudawud:1609",
+  "grade": "Hasan (al-Albani)"
+ },
+ {
+  "id": "tf-give-08",
+  "cat": "eid",
+  "q": "The Prophet ﷺ encouraged fasting on the day of Eid al-Fitr as a way to thank Allah for Ramadan.",
+  "a": false,
+  "x": "In Sahih al-Bukhari and Sahih Muslim, Umar (RA) said at Eid that the Prophet ﷺ forbade fasting on two days: the day you break from your fasting (Eid al-Fitr) and the day you eat from your sacrifices (Eid al-Adha).",
+  "ref": "Bukhari 1990",
+  "url": "https://sunnah.com/bukhari:1990",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-give-09",
+  "cat": "charity",
+  "q": "In Islam, only giving money or goods counts as sadaqah (charity).",
+  "a": false,
+  "x": "The Prophet ﷺ said: 'Every act of goodness is sadaqah' (Sahih Muslim). Charity is not limited to money: every good deed counts.",
+  "ref": "Muslim 1005",
+  "url": "https://sunnah.com/muslim:1005",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-give-10",
+  "cat": "eid",
+  "q": "When the Prophet ﷺ came to Madinah, he said Allah had replaced the people's two pre-Islamic days of play with better ones: Eid al-Adha and Eid al-Fitr.",
+  "a": true,
+  "x": "Anas (RA) said the people of Madinah had two days of play from before Islam. The Prophet ﷺ said Allah had given them better: the day of sacrifice and the day of breaking the fast (Abu Dawud, sahih).",
+  "ref": "Abu Dawud 1134",
+  "url": "https://sunnah.com/abudawud:1134",
+  "grade": "Sahih (al-Albani)"
+ },
+ {
+  "id": "tf-give-11",
+  "cat": "charity",
+  "q": "One of the seven kinds of people Allah will shade on the Day when there is no shade but His is someone who gives charity in secret.",
+  "a": true,
+  "x": "In Sahih al-Bukhari, the Prophet ﷺ lists seven kinds of people Allah will shade on the Day of Judgment, including one who gives charity so secretly that his left hand does not know what his right hand gives.",
+  "ref": "Bukhari 1423",
+  "url": "https://sunnah.com/bukhari:1423",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-give-12",
+  "cat": "eid",
+  "q": "The Prophet ﷺ gave the Eid sermon (khutbah) first and then led the Eid prayer.",
+  "a": false,
+  "x": "Ibn Umar (RA) reported that the Prophet ﷺ, Abu Bakr and Umar used to pray the two Eid prayers before the sermon (Sahih al-Bukhari and Sahih Muslim).",
+  "ref": "Bukhari 963",
+  "url": "https://sunnah.com/bukhari:963",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-give-13",
+  "cat": "charity",
+  "q": "Reminding people of the charity you gave them has no effect on its reward.",
+  "a": false,
+  "x": "Allah says: 'O you who have believed, do not invalidate your charities with reminders or injury' (Quran 2:264). Give for Allah's sake and do not remind people of it.",
+  "ref": "Quran 2:264",
+  "url": "https://quran.com/2/264",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-give-14",
+  "cat": "eid",
+  "q": "The Prophet ﷺ had the adhan and iqamah called for the Eid prayer, just as for the five daily prayers.",
+  "a": false,
+  "x": "Jabir ibn Samurah (RA) said he prayed the two Eid prayers with the Prophet ﷺ more than once or twice, without any adhan or iqamah (Sahih Muslim).",
+  "ref": "Muslim 887",
+  "url": "https://sunnah.com/muslim:887",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-give-15",
+  "cat": "charity",
+  "q": "The Quran likens spending in Allah's way to a seed that grows seven ears of grain, each holding a hundred grains.",
+  "a": true,
+  "x": "Quran 2:261 gives this parable for those who spend their wealth in the way of Allah, and adds that Allah multiplies the reward for whom He wills.",
+  "ref": "Quran 2:261",
+  "url": "https://quran.com/2/261",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-hist-01",
+  "cat": "history",
+  "q": "Allah says in Surah al-Qadr that He sent down the Quran on Laylatul Qadr, the Night of Decree.",
+  "a": true,
+  "x": "Surah al-Qadr begins: 'Indeed, We sent it down during the Night of Decree' (Quran 97:1). Quran 2:185 names Ramadan as the month in which the Quran was revealed.",
+  "ref": "Quran 97:1",
+  "url": "https://quran.com/97/1",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-hist-02",
+  "cat": "history",
+  "q": "The first verses revealed to the Prophet ﷺ in the Cave of Hira were from Surah al-Fatihah.",
+  "a": false,
+  "x": "In the Cave of Hira the angel brought the opening of Surah al-Alaq: 'Recite in the name of your Lord who created' (Quran 96:1), as Aishah narrates in Bukhari 3.",
+  "ref": "Bukhari 3",
+  "url": "https://sunnah.com/bukhari:3",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-hist-03",
+  "cat": "history",
+  "q": "The Battle of Badr was fought in Ramadan, and the Quran calls it 'the day of criterion'.",
+  "a": true,
+  "x": "Historians record that Badr was fought in Ramadan of 2 AH. Quran 8:41 calls it 'the day of criterion, the day when the two armies met.'",
+  "ref": "Quran 8:41",
+  "url": "https://quran.com/8/41",
+  "grade": "Quran"
+ },
+ {
+  "id": "tf-hist-04",
+  "cat": "history",
+  "q": "At the Battle of Badr, the Muslim army outnumbered the army of Quraysh.",
+  "a": false,
+  "x": "Umar reports that the polytheists numbered a thousand and the Muslims 319 (Muslim 1763). Quran 3:123 recalls that Allah gave them victory at Badr 'while you were weak'.",
+  "ref": "Muslim 1763",
+  "url": "https://sunnah.com/muslim:1763",
+  "grade": "Sahih (Muslim)"
+ },
+ {
+  "id": "tf-hist-05",
+  "cat": "history",
+  "q": "The Conquest of Makkah took place in the month of Ramadan.",
+  "a": true,
+  "x": "Ibn Abbas reports that the Prophet ﷺ made the expedition of the Conquest of Makkah in Ramadan (Bukhari 4275). This was in the year 8 AH.",
+  "ref": "Bukhari 4275",
+  "url": "https://sunnah.com/bukhari:4275",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-hist-06",
+  "cat": "history",
+  "q": "The Prophet ﷺ set out to conquer Makkah with an army of only about a thousand men.",
+  "a": false,
+  "x": "Ibn Abbas reports that the Prophet ﷺ left Madinah for Makkah in Ramadan with ten thousand people (Bukhari 4276).",
+  "ref": "Bukhari 4276",
+  "url": "https://sunnah.com/bukhari:4276",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-hist-07",
+  "cat": "history",
+  "q": "In the year he passed away, the Prophet ﷺ observed i'tikaf for twenty days instead of his usual ten.",
+  "a": true,
+  "x": "Abu Hurayrah reports that the Prophet ﷺ observed i'tikaf for ten days every Ramadan, and for twenty days in the year he passed away (Bukhari 2044).",
+  "ref": "Bukhari 2044",
+  "url": "https://sunnah.com/bukhari:2044",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-hist-08",
+  "cat": "history",
+  "q": "After the Prophet ﷺ passed away, his wives no longer observed i'tikaf.",
+  "a": false,
+  "x": "Aishah reports that he observed i'tikaf in the last ten days of Ramadan until Allah took him, and then his wives observed i'tikaf after him (Bukhari 2026).",
+  "ref": "Bukhari 2026",
+  "url": "https://sunnah.com/bukhari:2026",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-hist-09",
+  "cat": "history",
+  "q": "Every year, Jibreel reviewed the Quran with the Prophet ﷺ twice.",
+  "a": false,
+  "x": "Abu Hurayrah reports that Jibreel reviewed the Quran with the Prophet ﷺ once a year, but twice in the year he passed away (Bukhari 4998).",
+  "ref": "Bukhari 4998",
+  "url": "https://sunnah.com/bukhari:4998",
+  "grade": "Sahih (Bukhari)"
+ },
+ {
+  "id": "tf-hist-10",
+  "cat": "history",
+  "q": "When Aishah asked Fatimah what the Prophet ﷺ had told her in secret, Fatimah would not reveal it while he was alive.",
+  "a": true,
+  "x": "She refused to disclose the secret of the Messenger of Allah ﷺ. After he passed away she told Aishah: Jibreel had reviewed the Quran with him twice in his last year, which he saw as a sign his death was near (Bukhari 3624).",
+  "ref": "Bukhari 3624",
+  "url": "https://sunnah.com/bukhari:3624",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-hist-11",
+  "cat": "history",
+  "q": "On his journey to Makkah in Ramadan, the Prophet ﷺ was fasting at first and then broke his fast on the way.",
+  "a": true,
+  "x": "Ibn Abbas reports that he set out for Makkah in Ramadan fasting, then broke his fast at al-Kadid, and the people broke theirs too (Bukhari 1944). Quran 2:185 lets travellers make up the days later.",
+  "ref": "Bukhari 1944",
+  "url": "https://sunnah.com/bukhari:1944",
+  "grade": "Sahih (Bukhari & Muslim)"
+ },
+ {
+  "id": "tf-hist-12",
+  "cat": "history",
+  "q": "When the Companions travelled with the Prophet ﷺ in Ramadan, those who fasted criticised those who did not.",
+  "a": false,
+  "x": "Anas reports that when they travelled with the Prophet ﷺ in Ramadan, those fasting did not find fault with those not fasting, nor the other way round (Muslim 1118).",
+  "ref": "Muslim 1118",
+  "url": "https://sunnah.com/muslim:1118",
+  "grade": "Sahih (Muslim)"
+ }
 ]

@@ -1,74 +1,74 @@
 [
-  {
-    "id": "firstStep",
-    "icon": "sprout",
-    "name": "First Step",
-    "desc": "Do anything on Day 1"
-  },
-  {
-    "id": "weekOne",
-    "icon": "calendar-check",
-    "name": "Week One",
-    "desc": "Log all 7 days of the first week"
-  },
-  {
-    "id": "halfway",
-    "icon": "target",
-    "name": "Halfway",
-    "desc": "Stay active for the first 15 days"
-  },
-  {
-    "id": "fajrWarrior",
-    "icon": "sunrise",
-    "name": "Fajr Warrior",
-    "desc": "Keep a 7-day Fajr at the masjid streak"
-  },
-  {
-    "id": "nightOwl",
-    "icon": "moon-star",
-    "name": "Tahajjud Master",
-    "desc": "Pray Tahajjud on 7 nights"
-  },
-  {
-    "id": "quranLover",
-    "icon": "book-heart",
-    "name": "Quran Lover",
-    "desc": "Read Quran on 15 days"
-  },
-  {
-    "id": "generous",
-    "icon": "hand-heart",
-    "name": "Generous",
-    "desc": "Give charity on 10 days"
-  },
-  {
-    "id": "abuBakr",
-    "icon": "medal",
-    "name": "Abu Bakr",
-    "desc": "Complete the full Abu Bakr challenge in one day"
-  },
-  {
-    "id": "abuBakrG",
-    "icon": "trophy",
-    "name": "Abu Bakr Gold",
-    "desc": "Complete the full Abu Bakr challenge on 3 different days"
-  },
-  {
-    "id": "l10Hero",
-    "icon": "star",
-    "name": "Last 10 Hero",
-    "desc": "Average 70% or more across the Last 10 Nights"
-  },
-  {
-    "id": "perfect",
-    "icon": "badge-check",
-    "name": "Perfectionist",
-    "desc": "Reach 100% on 3 days"
-  },
-  {
-    "id": "champion",
-    "icon": "crown",
-    "name": "Champion",
-    "desc": "Score 60% or more on 20 days"
-  }
+ {
+  "id": "firstStep",
+  "icon": "sprout",
+  "name": "First Step",
+  "desc": "Tick any deed on day 1"
+ },
+ {
+  "id": "weekOne",
+  "icon": "calendar-check",
+  "name": "Week One",
+  "desc": "Log at least one deed on each of days 1 to 7"
+ },
+ {
+  "id": "halfway",
+  "icon": "target",
+  "name": "Halfway",
+  "desc": "Log at least one deed on each of days 1 to 15"
+ },
+ {
+  "id": "fajrWarrior",
+  "icon": "sunrise",
+  "name": "Fajr Warrior",
+  "desc": "Reach a 7-day Fajr streak"
+ },
+ {
+  "id": "nightOwl",
+  "icon": "moon-star",
+  "name": "Tahajjud Master",
+  "desc": "Tick Tahajjud on 7 days"
+ },
+ {
+  "id": "quranLover",
+  "icon": "book-heart",
+  "name": "Quran Lover",
+  "desc": "Tick Quran recitation or reflection on 15 days"
+ },
+ {
+  "id": "generous",
+  "icon": "hand-heart",
+  "name": "Generous",
+  "desc": "Give charity or feed a fasting person on 10 days"
+ },
+ {
+  "id": "abuBakr",
+  "icon": "medal",
+  "name": "Abu Bakr",
+  "desc": "Complete all four Abu Bakr deeds in one day"
+ },
+ {
+  "id": "abuBakrG",
+  "icon": "trophy",
+  "name": "Abu Bakr Gold",
+  "desc": "Complete all four Abu Bakr deeds on 3 different days"
+ },
+ {
+  "id": "l10Hero",
+  "icon": "star",
+  "name": "Last 10 Hero",
+  "desc": "Log at least 5 of the last ten days with an average of 70% or more"
+ },
+ {
+  "id": "perfect",
+  "icon": "badge-check",
+  "name": "Perfectionist",
+  "desc": "Reach 100% on 3 days"
+ },
+ {
+  "id": "champion",
+  "icon": "crown",
+  "name": "Champion",
+  "desc": "Reach 60% or more on 20 days"
+ }
 ]
