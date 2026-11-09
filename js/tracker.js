@@ -1165,13 +1165,19 @@
   // The hero is the topic that matters most in the current mode (how Today works in Ramadan, the prep plan in Sha'ban,
   // modes and the Hijri date the rest of the year); its CTA opens that topic in the list.
   var GUIDE_START = { ramadan: 'today', prep: 'prep', year: 'modes' };
+  // the first sentence(s) that fit in `max` characters; else a word-boundary cut with an ellipsis, never inside
+  // an open parenthesis
   function excerpt(str, max) {
     str = String(str || '').trim();
     if (str.length <= max) return str;
-    var cut = str.slice(0, max), dot = cut.lastIndexOf('. ');
-    if (dot > max * 0.4) return cut.slice(0, dot + 1);
+    var cut = str.slice(0, max), end = -1, re = /[.!?\u3002\u061F](?=\s|$)/g, m;
+    while ((m = re.exec(cut))) end = m.index;
+    if (end >= 30) return cut.slice(0, end + 1);
     var sp = cut.lastIndexOf(' ');
-    return (sp > 0 ? cut.slice(0, sp) : cut).replace(/[\s,;:\-\u2013\u2014]+$/, '') + '\u2026';
+    if (sp > 0) cut = cut.slice(0, sp);
+    var open = cut.lastIndexOf('(');
+    if (open > 30 && open > cut.lastIndexOf(')')) cut = cut.slice(0, open);
+    return cut.replace(/[\s,;:\-\u2013\u2014(]+$/, '') + '\u2026';
   }
   function renderGuide(view) {
     RS.topbar({ title: t('me.guide'), back: 'me' });

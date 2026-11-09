@@ -776,9 +776,10 @@
       // each button says when the card comes back; ahead of schedule only "Again" changes that
       var when = it.cram && cur && g !== 'again' ? ivText(daysUntil(cur.due)) : ivText(IV[nextBox(box, g) - 1]);
       var label = L('g.' + g);
-      return '<button type="button" class="lrn-grade' + (g === 'good' ? ' is-good' : '') + '" data-act="learn.grade" data-arg="' + g + '"' +
-        ' aria-label="' + esc(L('g.name', { grade: label, when: when })) + '">' +
-        '<span class="lrn-grade-l">' + esc(label) + '</span><span class="lrn-grade-s">' + esc(when) + '</span></button>';
+      // named "Again, Today" (one translatable string); the two visible lines repeat it for sighted users
+      return '<button type="button" class="lrn-grade' + (g === 'good' ? ' is-good' : '') + '" data-act="learn.grade" data-arg="' + g + '">' +
+        srOnly(L('g.name', { grade: label, when: when })) +
+        '<span class="lrn-grade-l" aria-hidden="true">' + esc(label) + '</span><span class="lrn-grade-s" aria-hidden="true">' + esc(when) + '</span></button>';
     }).join('');
   }
   function fcHtml(s, it) {
@@ -947,8 +948,8 @@
     }
     var type = s.kind === 'mcq' ? 'mcq' : 'tf';
     var map = {
-      tf: { icon: catIcon(s.cat), kicker: catName(s.cat, 'tf'), title: L('e.tfTitle'), body: L('e.tf') },
-      mcq: { icon: catIcon(s.cat), kicker: catName(s.cat, 'mcq'), title: L('e.tfTitle'), body: L('e.mcq') },
+      tf: { icon: catIcon(s.cat), kicker: catName(s.cat, 'tf'), title: L('e.tfTitle'), body: L(s.cat === 'all' ? 'e.tfAll' : 'e.tf') },
+      mcq: { icon: catIcon(s.cat), kicker: catName(s.cat, 'mcq'), title: L('e.tfTitle'), body: L(s.cat === 'all' ? 'e.mcqAll' : 'e.mcq') },
       nocat: { icon: 'circle-help', kicker: L(type + '.title'), title: L('e.notFoundTitle'), body: L('e.noTopic') },
       deck: { icon: deckIcon(s.deck), kicker: deckName(s.deck), title: L('e.deckTitle'), body: L('e.deck') },
       nodeck: { icon: 'layers', kicker: L('fc.title'), title: L('e.notFoundTitle'), body: L('e.noDeck') },
