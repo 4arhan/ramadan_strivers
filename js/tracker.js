@@ -1288,17 +1288,21 @@
     var cta = document.querySelector('[data-act="tr.pdf"]');
     if (cta) cta.setAttribute('aria-busy', 'true');
     RS.toast(t('me.pdf.loading'));
+    var cool = 0;
     RS.lazy(JSPDF).then(function () {
       if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('jsPDF did not load');
       buildPdf(new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' }));
       RS.toast(t('me.pdf.done'), { tone: 'success' });
+      cool = 1500;                                        // a double tap just after the download makes no second file
     }).catch(function (e) {
       if (window.console) console.warn('[tracker] the Eid report could not be created', e);   // handled: the user gets a toast
       RS.toast(t('me.pdf.failed'), { tone: 'error' });
     }).then(function () {
-      pdfBusy = false;
-      var el = document.querySelector('[data-act="tr.pdf"]');
-      if (el) el.removeAttribute('aria-busy');
+      setTimeout(function () {
+        pdfBusy = false;
+        var el = document.querySelector('[data-act="tr.pdf"]');
+        if (el) el.removeAttribute('aria-busy');
+      }, cool);
     });
   }
   function buildPdf(doc) {

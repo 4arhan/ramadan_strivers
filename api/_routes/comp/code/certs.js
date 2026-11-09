@@ -10,12 +10,13 @@ module.exports = handler(async (req, res) => {
   rows = rows.map((r, i) => Object.assign({ rank: i + 1, total: rows.length }, r)); if(qs.p) rows = rows.filter(r => String(r.id) === String(qs.p));
   const year = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { year: 'numeric' }).format(new Date()).replace(/\D/g, '');
   const sponsor = (c.settings && c.settings.sponsor) ? ' · Sponsored by ' + esc(c.settings.sponsor) : '';
+  const n = v => Number(v || 0).toLocaleString('en');      // 8,320 (Latin digits, grouped)
   const page = r => `<section class="c"><div class="b"><div class="in">
 <div class="h">${MOON}<span>Ramadan Strivers</span></div>
 <h1 class="t">Certificate of Achievement</h1>
 <div class="n">${esc(r.name)}</div>${r.grp ? '<div class="g">' + esc(r.grp) + '</div>' : ''}
-<p class="d">completed the Ramadan ${year} Strivers Challenge with <b>${esc(c.name)}</b>${r.rank <= 10 && (c.prizes || [])[r.rank - 1] ? ', finishing <b>#' + r.rank + '</b> and earning <b>' + esc(c.prizes[r.rank - 1]) + '</b>' : ', finishing <b>#' + r.rank + '</b> of ' + r.total}.</p>
-<dl class="s"><div><dt>Points</dt><dd>${r.total_pts}</dd></div><div><dt>Days</dt><dd>${r.days_logged}</dd></div><div><dt>Average</dt><dd>${r.avg_pct}%</dd></div><div><dt>Quran pages</dt><dd>${r.quran_pages}</dd></div></dl>
+<p class="d">completed the Ramadan ${year} Strivers Challenge with <b>${esc(c.name)}</b>${r.rank <= 10 && (c.prizes || [])[r.rank - 1] ? ', finishing <b>#' + r.rank + '</b> and earning <b>' + esc(c.prizes[r.rank - 1]) + '</b>' : ', finishing <b>#' + r.rank + '</b> of ' + n(r.total)}.</p>
+<dl class="s"><div><dt>Points</dt><dd>${n(r.total_pts)}</dd></div><div><dt>Days</dt><dd>${n(r.days_logged)}</dd></div><div><dt>Average</dt><dd>${n(r.avg_pct)}%</dd></div><div><dt>Quran pages</dt><dd>${n(r.quran_pages)}</dd></div></dl>
 <div class="f"><div>${esc(c.type)} · ${esc(c.name)}${sponsor}</div>
 <p class="q">“Whoever fasts Ramadan out of faith and seeking reward, his previous sins will be forgiven.” <span>Bukhari 38</span></p>
 <div class="sig"><span>Organiser</span><span>Date</span></div></div></div></div></section>`;
@@ -51,6 +52,9 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 .np b{color:#101915}
 .np button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 20px;border:0;border-radius:999px;background:linear-gradient(180deg,#16422F,#0B2219);color:#fff;font:inherit;font-weight:650;cursor:pointer}
 .np button:focus-visible{outline:2px solid #047857;outline-offset:3px}
+.empty{max-width:520px;margin:48px auto;padding:28px 24px;border-radius:22px;background:#fff;text-align:center;color:#45524C;font-size:15px;line-height:1.6}
+.empty h1{margin:0 0 8px;font-size:22px;font-weight:700;letter-spacing:-.02em;color:#101915}
 @media print{.np{display:none}body{background:#fff}.c{padding:0}}
-</style></head><body><div class="np"><span><b>${rows.length}</b> certificate${rows.length === 1 ? '' : 's'}</span><button type="button" onclick="print()">${PRINTER}Print / Save as PDF</button></div>${rows.map(page).join('')}</body></html>`);
+</style></head><body><main>${rows.length ? `<div class="np"><span><b>${n(rows.length)}</b> certificate${rows.length === 1 ? '' : 's'}</span><button type="button" onclick="print()">${PRINTER}Print / Save as PDF</button></div>${rows.map(page).join('')}`
+  : `<section class="empty"><h1>No certificates yet</h1><p>Certificates are made for everyone who has joined ${esc(c.name)} and is shown on the leaderboard. Share the join code, then open this page again.</p></section>`}</main></body></html>`);
 }, ['GET']);

@@ -112,7 +112,7 @@
 .tr-lq.card { border-color: var(--hairline-2); }
 .tr-lq .card-bd p { color: var(--ink-2); }
 .tr-journal .textarea { min-height: 96px; }
-.tr-fast-day { margin-top: 14px; padding: 12px 14px; border-radius: var(--r-block); background: var(--accent-soft); }
+.tr-fast-day { margin-top: 14px; padding: 12px 14px; border-radius: var(--r-block); background: var(--card-2); border-inline-start: 3px solid var(--accent); }
 .tr-fast-day-t { font-size: 14px; font-weight: 650; color: var(--ink); }
 .tr-fast-day .quote { margin-top: 6px; font-size: 15px; }
 .tr-fast-day .ref { margin-top: 6px; }

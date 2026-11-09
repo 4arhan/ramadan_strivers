@@ -80,6 +80,8 @@
   }
   function countOk(res) { var n = 0; res.forEach(function (r) { if (r.ok) n++; }); return n; }
   function srOnly(s) { return '<span class="sr-only">' + esc(s) + '</span>'; }
+  // A count such as "8 questions" keeps its own reading order inside a right-to-left page (English fallback too).
+  function bdi(s) { return '<bdi>' + esc(s) + '</bdi>'; }
   function changed() { RS.emit('data', { source: 'learn' }); }
   function routeArg(route, params) { return RS.router.href(route, params).slice(2); }    // 'learn/flash?deck=duas'
   // Every learn screen's one hero object; 'lrn-hero' scopes the module's hero tokens and tweaks in css/learn.css.
@@ -1141,8 +1143,8 @@
       : { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), href: RS.router.href('learn/quiz', { cat: 'all' }) };
   }
   function introP(key) { return '<p class="lrn-intro">' + esc(L(key)) + '</p>'; }
-  // A topic or deck the content team has announced but not filled yet shows as a plain "Coming soon" row.
-  function soonRow(icon, title) { return RS.ui.row({ icon: icon, title: title, sub: L('soon'), cls: 'lrn-soon' }); }
+  // A topic or deck the content team has announced (named) but not filled yet shows as a plain "Coming soon" row.
+  function soonRow(icon, title) { return RS.ui.row({ icon: icon, title: title, subHtml: bdi(L('soon')), cls: 'lrn-soon' }); }
   function topicRows(pool, best, type) {
     var route = type === 'tf' ? 'learn/quiz' : 'learn/mcq';
     var list = cats(), rows = [];
@@ -1150,9 +1152,9 @@
     list.forEach(function (c) {
       var n = c.id === 'all' ? pool.length : pool.filter(function (q) { return q.cat === c.id; }).length;
       var icon = c.icon || catIcon(c.id), name = catName(c.id, type);
-      if (!n) { if (c.id !== 'all') rows.push(soonRow(icon, name)); return; }
+      if (!n) { if (c.id !== 'all' && RS.has('cat.' + c.id)) rows.push(soonRow(icon, name)); return; }
       rows.push(RS.ui.row({
-        icon: icon, title: name, sub: LN('n.questions', n),
+        icon: icon, title: name, subHtml: bdi(LN('n.questions', n)),
         value: hasOwn.call(best, c.id) ? L('bestPct', { pct: RS.fmt.pct(best[c.id]) }) : '',
         href: RS.router.href(route, { cat: c.id }), chevron: true
       }));
@@ -1183,14 +1185,14 @@
     }
     head.body = introP('fc.intro') + RS.ui.list(decks.map(function (d) {
       var k = deckStats(o, d);
-      if (!k.total) return soonRow(d.icon || 'layers', deckName(d.id));
+      if (!k.total) return RS.has('deck.' + d.id + '.name') ? soonRow(d.icon || 'layers', deckName(d.id)) : '';
       var parts = [];
       if (k.due) parts.push(LN('n.due', k.due));
       if (k.newLeft) parts.push(LN('n.new', k.newLeft));
       if (!parts.length) parts.push(L('fc.caughtUp'));
       parts.push(LN('n.cards', k.total));
       return RS.ui.row({
-        icon: d.icon || 'layers', title: deckName(d.id), subHtml: RS.ui.meta(parts.map(esc)),
+        icon: d.icon || 'layers', title: deckName(d.id), subHtml: RS.ui.meta(parts.map(bdi)),
         href: RS.router.href('learn/flash', { deck: d.id }), chevron: true
       });
     }));
@@ -1199,7 +1201,7 @@
   function mistakesCard(n) {
     return RS.ui.card({
       kicker: { icon: 'rotate-ccw', text: L('mis.kicker') }, title: L('mis.title'),
-      body: RS.ui.list([RS.ui.row({ icon: 'circle-alert', title: L('mis.row'), sub: LN('n.toReview', n), href: '#/learn/review', chevron: true })])
+      body: RS.ui.list([RS.ui.row({ icon: 'circle-alert', title: L('mis.row'), subHtml: bdi(LN('n.toReview', n)), href: '#/learn/review', chevron: true })])
     });
   }
   function statsCard(st, o) {
@@ -1242,10 +1244,10 @@
       title: function (p) { return titleFor(kind, p || {}); },
       render: function (view, params) {
         var p = params || {};
-        if (!S || S.key !== sessionKey(kind, p)) S = roundFor(kind, p);
+        // a new screen arms the double-tap guard; RS.refresh() (sync, language) re-renders the same round without it
+        if (!S || S.key !== sessionKey(kind, p)) { S = roundFor(kind, p); tap.paint = Date.now(); }
         tagEntry(S);
         keep(S);
-        tap.paint = Date.now();
         topbarFor(S);
         view.innerHTML = sessionHtml(S);
       },

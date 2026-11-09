@@ -9,8 +9,9 @@
 .view > .cl-end { margin-top: 28px; }
 #cmp-mine:empty, #cl-mycomps:empty { display: none; }
 #cl-mycomps > .list { border-top: 1px solid var(--hairline); }
-.cl-sub { display: block; }
-.cl-sub > bdi { display: inline-block; max-width: 100%; }   /* each detail item wraps as a unit (keeps "5 days" together in RTL) */
+/* Programmatic focus targets after content changed (a heading, the first newly shown row): no ring of their own,
+   like the screen title (they are not controls) */
+[data-cl-focus]:focus, [data-cl-focus]:focus-visible { outline: none; box-shadow: none; }
 
 /* Forms ------------------------------------------------------------------- */
 .cl-form-err { margin-top: var(--s3); color: var(--danger); font-size: 14px; font-weight: 600; line-height: 1.4; }
@@ -126,7 +127,19 @@ form[aria-busy="true"] .btn[type="submit"] { opacity: .6; }
 .cl-ellipsis { padding: 2px 0; text-align: center; color: var(--ink-3); font-weight: 700; letter-spacing: .3em; line-height: 1; }
 
 /* Organiser dashboard ---------------------------------------------------------- */
-.cl-tabs .chip { min-height: 40px; padding-inline: 14px; background: transparent; border-color: var(--hairline-2); color: var(--ink-2); }
+/* The five tabs stay on one row and scroll sideways inside it (bleeding to the screen edges); the page itself never
+   scrolls horizontally. Vertical padding keeps the chips' enlarged tap areas inside the scroller. */
+.chips.cl-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 4px var(--gutter);
+  scroll-padding-inline: var(--gutter);
+}
+.chips.cl-tabs::-webkit-scrollbar { display: none; }
+.cl-tabs .chip { flex: none; min-height: 40px; padding-inline: 14px; background: transparent; border-color: var(--hairline-2); color: var(--ink-2); }
 .cl-tabs .chip.is-active { background: var(--card); border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
 .cl-danger-card .kicker .ic { color: var(--danger); }
 .cl-acts { flex: none; display: flex; align-items: center; margin-inline-end: -8px; }
@@ -166,8 +179,11 @@ form[aria-busy="true"] .btn[type="submit"] { opacity: .6; }
   vertical-align: 1px;
 }
 .cl-where { display: flex; align-items: center; gap: 6px; margin-top: var(--s3); }
-.cl-where .ic { flex: none; color: var(--accent); }
-.cl-where span { min-width: 0; overflow-wrap: anywhere; }
+.cl-where > .ic { flex: none; color: var(--accent); }
+.cl-where-t { flex: 1 1 auto; min-width: 0; }
+
+/* Prayer selects: long option names end with an ellipsis instead of being cut (the labels are short in English) */
+#cl-method, #cl-madhab, #cl-setup-method, #cl-setup-madhab, #cl-push-hour { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
 /* Dua at iftar (Arabic in Amiri via RS.ui.arabic) ------------------------------------------ */
 .cl-dua { margin-top: var(--s4); padding: 14px 16px; border-radius: var(--r-block); background: var(--card-2); }

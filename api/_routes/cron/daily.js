@@ -37,14 +37,15 @@ module.exports = handler(async (req, res) => {
 }, ['GET', 'POST']);
 // Push texts: plain words, no emoji. The cron runs in the afternoon (UTC), so "tonight" is the night that begins
 // at this evening's sunset: the night before Ramadan day d + 1 (night 21 follows day 20).
-function pushMessage(hj){
+// now (optional, for tests): the date whose weekday picks the Monday/Thursday fasting reminder.
+function pushMessage(hj, now){
   if(hj.month === 9){ const d = hj.day; const night = d + 1; const odd = night >= 21 && night <= 29 && night % 2 === 1;
     if(odd) return { odd: true, title: 'Tonight could be Laylatul Qadr', body: 'Night ' + night + ' of Ramadan: pray, seek forgiveness and make dua with all your heart. Log your deeds in Ramadan Strivers.' };
     const h = hadithFor(d); return { title: 'Ramadan day ' + d, body: clip(h.t, 110) + (h.s ? ' (' + h.s + ')' : '') + ' Log today\'s deeds.' }; }
   if(hj.month === 8){ const left = 30 - hj.day; return { title: left > 1 ? left + ' days to Ramadan' : 'Ramadan is almost here', body: 'Set your goals, plan your qada fasts and prepare your dua list in Ramadan Strivers.' }; }
   if(hj.month === 10 && hj.day <= 28) return { title: 'Six days of Shawwal', body: 'Whoever fasts Ramadan and follows it with six days of Shawwal, it is as if they fasted forever (Muslim 1164). Track them in the app.' };
   if(hj.month === 12 && hj.day <= 10) return { title: 'The best days of the year', body: 'Day ' + hj.day + ' of Dhul Hijjah: no days are dearer to Allah for good deeds than these ten (Bukhari 969).' };
-  const dow = new Date().getUTCDay(); if(dow === 0 || dow === 3) return { title: 'Fasting tomorrow?', body: (dow === 0 ? 'Monday' : 'Thursday') + ' is a Sunnah fasting day. Set your intention tonight.' };
+  const dow = (now instanceof Date ? now : new Date()).getUTCDay(); if(dow === 0 || dow === 3) return { title: 'Fasting tomorrow?', body: (dow === 0 ? 'Monday' : 'Thursday') + ' is a Sunnah fasting day. Set your intention tonight.' };
   const h = hadithFor(((hj.day - 1) % 30) + 1); return { title: 'Ramadan Strivers', body: clip(h.t, 120) + (h.s ? ' (' + h.s + ')' : '') };
 }
 module.exports.pushMessage = pushMessage;
