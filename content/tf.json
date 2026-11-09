@@ -7,7 +7,7 @@
   "x": "The Prophet ﷺ promised forgiveness of past sins for fasting Ramadan with faith and hope of reward.",
   "ref": "Bukhari 38",
   "url": "https://sunnah.com/bukhari:38",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf002",
@@ -17,17 +17,17 @@
   "x": "The gate is called Ar-Rayyan — only those who fast will enter through it.",
   "ref": "Bukhari 1896",
   "url": "https://sunnah.com/bukhari:1896",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf003",
   "cat": "fasting",
   "q": "When Ramadan begins, the gates of Paradise are opened and the gates of Hell are closed.",
   "a": true,
-  "x": "A month where every door to good is opened wide — make the most of it.",
-  "ref": "Bukhari 1899",
-  "url": "https://sunnah.com/bukhari:1899",
-  "grade": "Sahih (Bukhari)"
+  "x": "In the same hadith the Prophet ﷺ said the devils are chained, so make the most of this month.",
+  "ref": "Bukhari 3277",
+  "url": "https://sunnah.com/bukhari:3277",
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf004",
@@ -37,7 +37,7 @@
   "x": "They receive the SAME reward — without reducing the fasting person's reward at all.",
   "ref": "Tirmidhi 807",
   "url": "https://sunnah.com/tirmidhi:807",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf005",
@@ -47,34 +47,34 @@
   "x": "Fasting shields you — so the fasting person should not speak obscenely or act ignorantly.",
   "ref": "Bukhari 1894",
   "url": "https://sunnah.com/bukhari:1894",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf006",
   "cat": "fasting",
   "q": "The dua of a fasting person can be rejected like anyone else's.",
   "a": false,
-  "x": "The supplication of the fasting person is not rejected — especially at the time of iftar.",
-  "ref": "Ibn Majah 1753",
-  "url": "https://sunnah.com/ibnmajah:1753",
-  "grade": ""
+  "x": "The Prophet ﷺ said three supplications are not turned back: a parent's, a fasting person's and a traveller's. So make plenty of dua while fasting.",
+  "ref": "Bayhaqi (al-Sunan al-Kubra) 6392",
+  "url": "",
+  "grade": "Hasan (al-Albani)"
  },
  {
   "id": "tf007",
   "cat": "fasting",
   "q": "Allah says every deed of the son of Adam is for himself, except fasting — which is for Allah, and He Himself will reward it.",
   "a": true,
-  "x": "Fasting has a special, unlimited reward known only to Allah.",
+  "x": "Allah singles out fasting as His own and says He Himself will reward it. The same hadith says the fasting person has two joys: at iftar and when he meets his Lord.",
   "ref": "Bukhari 1904",
   "url": "https://sunnah.com/bukhari:1904",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf008",
   "cat": "fasting",
   "q": "If you keep up false speech while fasting, Allah has no need of you giving up your food and drink.",
   "a": true,
-  "x": "Fasting is not just from food — lying and false speech strip the fast of its spiritual reward.",
+  "x": "Fasting is more than leaving food and drink: the fasting person should also give up false speech and acting on it.",
   "ref": "Bukhari 1903",
   "url": "https://sunnah.com/bukhari:1903",
   "grade": "Sahih (Bukhari)"
@@ -84,40 +84,40 @@
   "cat": "fasting",
   "q": "If someone insults you while fasting, the Sunnah is to respond with a sharper insult.",
   "a": false,
-  "x": "The Sunnah is to say: 'I am fasting' — and walk away from the argument.",
+  "x": "The Prophet ﷺ said that if someone fights or insults a fasting person, he should say twice: 'I am fasting.'",
   "ref": "Bukhari 1894",
   "url": "https://sunnah.com/bukhari:1894",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf010",
   "cat": "fasting",
   "q": "The breath of a fasting person is sweeter to Allah than the scent of musk.",
   "a": true,
-  "x": "What seems unpleasant to people is beloved to Allah when it comes from worship.",
+  "x": "The changed smell of a fasting person's mouth may seem unpleasant to people, yet the Prophet ﷺ said it is better in Allah's sight than musk.",
   "ref": "Bukhari 1904",
   "url": "https://sunnah.com/bukhari:1904",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf011",
   "cat": "fasting",
-  "q": "Fasting six days of Shawwal after Ramadan is like fasting the entire year.",
+  "q": "Fasting Ramadan and then six days of Shawwal is like fasting the whole year.",
   "a": true,
-  "x": "Ramadan (×10 reward) plus six days of Shawwal completes the reward of a full year of fasting.",
-  "ref": "Muslim 1164",
-  "url": "https://sunnah.com/muslim:1164",
-  "grade": "Sahih (Muslim)"
+  "x": "The Prophet ﷺ said that fasting six days after Eid al-Fitr completes the year, because whoever does a good deed gets the reward of ten like it.",
+  "ref": "Ibn Majah 1715",
+  "url": "https://sunnah.com/ibnmajah:1715",
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf012",
   "cat": "fasting",
-  "q": "The Sunnah guideline for eating is one-third food, one-third drink, and one-third air.",
+  "q": "The Prophet ﷺ said a few bites to keep one's back straight are enough, and if one must eat more: a third for food, a third for drink, a third for breath.",
   "a": true,
   "x": "The Prophet ﷺ warned against overfilling the stomach — a lesson especially relevant at iftar.",
   "ref": "Tirmidhi 2380",
   "url": "https://sunnah.com/tirmidhi:2380",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf013",
@@ -547,7 +547,7 @@
   "x": "One night of worship outweighs over 83 years — a lifetime of deeds.",
   "ref": "Quran 97:3",
   "url": "https://quran.com/97/3",
-  "grade": ""
+  "grade": "Quran"
  },
  {
   "id": "tf056",
@@ -572,42 +572,42 @@
  {
   "id": "tf058",
   "cat": "last10",
-  "q": "When the last ten days began, the Prophet ﷺ would tighten his waist belt and pray all night.",
+  "q": "When the last ten days began, the Prophet ﷺ would tighten his waist belt and stay up the night in worship.",
   "a": true,
   "x": "He exerted himself in these nights more than at any other time — and woke his family too.",
   "ref": "Bukhari 2024",
   "url": "https://sunnah.com/bukhari:2024",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf059",
   "cat": "last10",
   "q": "The dua the Prophet ﷺ taught Aishah (RA) for Laylatul Qadr is: 'Allahumma innaka afuwwun tuhibbul afwa fafu anni.'",
   "a": true,
-  "x": "'O Allah, You are Pardoning and You love pardon, so pardon me.' Repeat it all night.",
+  "x": "'O Allah, You are Pardoning and You love pardon, so pardon me.' Aishah had asked what to say if she knew which night was Laylatul Qadr.",
   "ref": "Tirmidhi 3513",
   "url": "https://sunnah.com/tirmidhi:3513",
-  "grade": ""
+  "grade": "Sahih (al-Albani)"
  },
  {
   "id": "tf060",
   "cat": "last10",
   "q": "The Prophet ﷺ observed I'tikaf only once in his life.",
   "a": false,
-  "x": "He observed I'tikaf in the last ten days EVERY Ramadan — even partial i'tikaf carries reward.",
-  "ref": "Bukhari 2025",
-  "url": "https://sunnah.com/bukhari:2025",
-  "grade": "Sahih (Bukhari)"
+  "x": "Aishah reported that he ﷺ used to observe i'tikaf in the last ten days of Ramadan until he passed away, and his wives did so after him.",
+  "ref": "Bukhari 2026",
+  "url": "https://sunnah.com/bukhari:2026",
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf061",
   "cat": "last10",
   "q": "Standing in prayer on Laylatul Qadr with faith and hope of reward forgives past sins.",
   "a": true,
-  "x": "One accepted night wipes the slate clean.",
+  "x": "Pray in the last ten nights with faith and hope of Allah's reward, so you do not miss this forgiveness of previous sins.",
   "ref": "Bukhari 1901",
   "url": "https://sunnah.com/bukhari:1901",
-  "grade": "Sahih (Bukhari)"
+  "grade": "Sahih (Bukhari & Muslim)"
  },
  {
   "id": "tf062",
@@ -622,12 +622,12 @@
  {
   "id": "tf063",
   "cat": "last10",
-  "q": "The three thirds of Ramadan are known as Mercy (Days 1-10), Forgiveness (Days 11-20), and Salvation (Days 21-30).",
-  "a": true,
-  "x": "You can compare your effort across all three in the Progress tab.",
-  "ref": "",
-  "url": "",
-  "grade": ""
+  "q": "Allah frees people from the Fire only in the last ten nights of Ramadan.",
+  "a": false,
+  "x": "The Prophet ﷺ said that at every iftar Allah has people He frees from the Fire, and that happens every night. The popular Mercy, Forgiveness and Salvation thirds come from a weak narration.",
+  "ref": "Ibn Majah 1643",
+  "url": "https://sunnah.com/ibnmajah:1643",
+  "grade": "Hasan Sahih (al-Albani)"
  },
  {
   "id": "tf-fast-01",
