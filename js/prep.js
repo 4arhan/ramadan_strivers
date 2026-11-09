@@ -1459,13 +1459,16 @@
       return isOn(state()) && !inRamadan();
     }, false),
     todayHeroHtml: guard(function () { return heroHtml('today'); }, ''),
-    // Today tab (tracker.js composes it): the check-ins and, once started, today's prompts. The tracker shows its own
-    // editable intentions / dua list / make-up fasts card after these, so the planner is not repeated here.
+    // Today tab (tracker.js composes it): the check-ins (once the programme runs, or in Sha'ban to invite it; v7's
+    // showPrep alone means the planner card, which the tracker draws) and, once started, today's prompts and any
+    // focus days to catch up on. The tracker shows its own intentions / dua list / make-up fasts card after these.
     todayCardsHtml: guard(function () {
       if (inRamadan()) return '';            // Ramadan has its own checklist; the plan is closed
-      var s = state(), h = [salahCard(s), quranCard(s)];
-      if (!isOn(s)) return h.join('');
-      var n = planDay(s), day = dayByN(n);
+      var s = state(), on = isOn(s);
+      if (!on && RS.appMode() !== 'prep') return '';
+      var h = [salahCard(s), quranCard(s)];
+      if (!on) return h.join('');
+      var n = planDay(s), day = dayByN(n), r = round(s);
       if (!days().length) h.push(RS.ui.card({ body: RS.ui.empty({ icon: 'sprout', title: t('empty.title'), body: t('empty.body') }) }));
       else if (waiting(s)) h.push(RS.ui.card({ kicker: { icon: 'calendar-days', text: t('kicker') }, title: t('wait.title', { total: num(totalDays()) }), cls: 'prep-wait', body: '<p>' + esc(paceText(s)) + '</p>' }));
       else if (day) {
@@ -1474,6 +1477,13 @@
           title: RS.t('prep.day.' + n + '.theme'),
           after: '<div class="mt-3">' + RS.ui.btn(t('today.openDay'), { act: 'nav.go', arg: 'prep/day?n=' + n, variant: 'secondary', block: true, icon: 'notebook-pen' }) + '</div>'
         }));
+      }
+      var cu = days().length ? catchUp(s, r) : [];
+      if (cu.length) {
+        h.push(RS.ui.card({ cls: 'is-tight prep-catch-today', body: RS.ui.list([RS.ui.row({
+          icon: 'target', title: t('catch.title'), sub: tn('catch.days', cu.length, { day: num(cu[0].day.n) }),
+          act: 'nav.go', arg: 'prep/day?n=' + cu[0].day.n, chevron: true
+        })]) }));
       }
       return h.join('');
     }, ''),
@@ -1487,8 +1497,18 @@
   RS.prep.renderTodayHero = RS.prep.todayHeroHtml;
   RS.prep.renderTodayCards = RS.prep.todayCardsHtml;
 
+  // Reflections stored as plain text by earlier builds become {t, ts: 0} in storage before cloud sync reads it (the
+  // sync compares timestamps, and a bare string would always win over an edit made on another device). Written
+  // without a 'data' event: nothing the person sees changes.
+  function migrateReflections() {
+    var raw = obj(RS.store.get(KEY, null)), m = obj(raw.reflections), moved = false;
+    Object.keys(m).forEach(function (k) { if (typeof m[k] === 'string') { m[k] = reflOf(m[k]); moved = true; } });
+    if (moved) { raw.reflections = m; RS.store.set(KEY, raw); }
+  }
+
   RS.on('boot', function () {
     try {
+      migrateReflections();
       migratePages();
       var s = state();
       if (s.autoShow && isStale(s) && autoHide(s)) save(s);    // the Ramadan this prep was for has ended
