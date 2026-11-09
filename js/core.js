@@ -9,8 +9,10 @@
    Utilities  RS.VERSION · RS.$(sel, root) · RS.$$(sel, root) → Array · RS.esc(str) · RS.clamp(n, lo, hi)
               RS.todayISO(date?) · RS.debounce(fn, ms) · RS.uid(prefix?) · RS.refUrl('Bukhari 38') → URL | ''
               RS.reducedMotion() · RS.isRTL() · RS.isDark()
-   Format     RS.fmt.n(num, intlOpts?) · .pct(0..100) · .time(date) · .dur(ms) · .date(date, intlOpts?) · .hijri(date?)
-              (always Latin digits, current UI language)
+   Format     RS.fmt.n(num, intlOpts?) · .signed(num, intlOpts?) · .pct(0..100) · .time(date) · .dur(ms) ·
+              .date(date, intlOpts?) · .hijri(date?)   (always Latin digits, current UI language)
+              Gains and changes ('+5' pages, '+3' days, '-12%'): use RS.fmt.signed, never '+' + n. Intl places the
+              sign and adds the bidi mark Arabic and Urdu need, so the sign stays in front in the RTL UI.
    Storage    RS.store.get(key, fallback) · .set(key, val) → bool · .del(key) · .keys(prefix) → [keys]
               .raw(key) → string|null · .setRaw(key, string)   (get() returns non-JSON values, e.g. the v7
               'rs-auth' token, as the raw string; numeric strings such as 'rs-season' come back as numbers)
@@ -35,6 +37,9 @@
               meta (a line of items with CSS-drawn separators — use it instead of joining with ' · ')
               Links to other sites (href https://…) open in a new tab and get the "(opens in a new tab)" hint.
               Every href passes RS.safeHref(url): javascript:/data:/vbscript: URLs become an inert '#'.
+              select options are {value, text, disabled, lang, dir}: an option written in another language carries its
+              lang and dir (WCAG 3.1.2). Language pickers: RS.LANGS.map(l → {value: l.code, text: l.name, lang: l.code,
+              dir: l.dir}).
               iconBtn, toggle and check (with act) need label or labelledby (a console warning otherwise).
               Each component's options are documented above its definition below. Live examples: #/styleguide
               (js/main.js). Classes and tokens: css/app.css.
@@ -438,6 +443,20 @@
       if (!isFinite(x)) x = 0;
       return numFmt({ style: 'percent', maximumFractionDigits: 0 }).format(Math.round(x) / 100);
     },
+    // signed(5) → '+5' · signed(-3) → '-3' · signed(0) → '0' · signed(-0.12, {style:'percent'}) → '-12%'.
+    // Use it for gains and changes instead of '+' + n: Intl puts the sign where the language wants it and adds the
+    // left-to-right mark Arabic and Urdu need (U+200E), so the sign stays in front in the RTL UI.
+    signed: function (x, opts) {
+      x = Number(x);
+      if (!isFinite(x)) return '\u2013';
+      var o = {}, src = opts || { maximumFractionDigits: 1 };
+      Object.keys(src).forEach(function (k) { o[k] = src[k]; });
+      o.signDisplay = 'exceptZero';
+      var s = numFmt(o).format(x);
+      // engines without signDisplay (Safari < 14.1) print no plus sign: add it (a value that rounds to 0 gets none)
+      if (x > 0 && s.indexOf('+') < 0 && /[1-9]/.test(s)) s = (RS.isRTL() ? '\u200e' : '') + '+' + s;
+      return s;
+    },
     time: function (d) {
       d = toDate(d);
       return d ? dateFmt({ hour: 'numeric', minute: '2-digit' }).format(d) : '';
@@ -620,7 +639,9 @@
     var kick = o.kicker ? ui.kicker(o.kicker.icon, o.kicker.text, { tag: 'h2', id: kid }) : '';
     var hasNum = o.number != null && o.number !== '';
     var tight = o.unit != null && /^[%٪‰/]/.test(String(o.unit));     // '37%', '3/5': no gap before the unit
-    var num = hasNum ? '<div class="hero-num' + (tight ? ' unit-tight' : '') + '"><span class="num">' + txt(o.number) + '</span>' +
+    // '2,140' (5+ characters, or 4+ with a unit) is set smaller so it stays beside the ring at 320px (css .is-long)
+    var isLong = hasNum && String(o.number).replace(/[\u200e\u200f\u061c]/g, '').length >= (o.unit ? 4 : 5);
+    var num = hasNum ? '<div class="hero-num' + (tight ? ' unit-tight' : '') + (isLong ? ' is-long' : '') + '"><span class="num">' + txt(o.number) + '</span>' +
       (o.unit ? '<span class="unit">' + txt(o.unit) + '</span>' : '') + '</div>' : '';
     var label = o.label ? '<p class="hero-label">' + txt(o.label) + '</p>' : '';
     var para = o.text ? '<p class="hero-text">' + txt(o.text) + '</p>' : '';
@@ -630,7 +651,7 @@
       ro.onDark = true;
       ring = ui.ring(o.ring.pct, ro);
     }
-    var main = (num || label || para || ring) ? '<div class="hero-main"><div class="hero-figure">' + num + label + para + '</div>' + ring + '</div>' : '';
+    var main = (num || label || para || ring) ? '<div class="hero-main' + (isLong ? ' is-long' : '') + '"><div class="hero-figure">' + num + label + para + '</div>' + ring + '</div>' : '';
     var metrics = o.metrics && o.metrics.length ? ui.metrics(o.metrics, { onDark: true }) : '';
     var cta = o.cta ? ui.cta(o.cta) : '';
     var extra = o.extra ? '<div class="hero-extra">' + o.extra + '</div>' : '';
@@ -725,7 +746,7 @@
     var label = o.label || ((hasTxt ? [o.text, o.sub].filter(function (x) { return x != null && x !== ''; }).join(' ') + ' \u00b7 ' : '') + RS.t('core.ring.label', { pct: RS.fmt.pct(p) }));
     var style = o.size ? ' style="--ring-size:' + RS.clamp(o.size, 24, 400) + 'px"' : '';
     var label2 = hasTxt ? '<span class="ring-txt" aria-hidden="true">' + (o.text != null && o.text !== '' ? '<span class="ring-val">' + txt(o.text) + '</span>' : '') +
-      (o.sub ? '<span class="ring-sub">' + txt(o.sub) + '</span>' : '') + '</span>' : '';
+      (o.sub ? '<span class="ring-sub' + (String(o.sub).length > 9 ? ' is-long' : '') + '">' + txt(o.sub) + '</span>' : '') + '</span>' : '';
     // Below 100% the round caps would add half a stroke at each end (at 95–99% they touch at 12 o'clock), so the
     // dash is shortened by one stroke and shifted forward by half a stroke: the visible arc runs from 0 to p%.
     var bar = '';
@@ -840,12 +861,16 @@
       fieldActs(o) + attrsOf(o.attrs) + '>' + txt(o.value) + '</textarea>';
     return fieldWrap(o, id, control);
   };
-  // select({id, label, options:[{value, text, disabled?}], value, act (change → fn(value, el)), arg, hint, hideLabel, attrs})
+  // select({id, label, options:[{value, text, disabled?, lang?, dir?}], value, act (change → fn(value, el)), arg, hint,
+  //         hideLabel, attrs})
+  // An option written in another language names it with lang (and dir), so screen readers switch voice (WCAG
+  // 3.1.2). The language picker: RS.LANGS.map(l => ({value: l.code, text: l.name, lang: l.code, dir: l.dir})).
   ui.select = function (o) {
     o = o || {};
     var id = o.id || RS.uid('f');
     var opts = (o.options || []).map(function (op) {
-      return '<option value="' + esc(op.value) + '"' + (String(op.value) === String(o.value) ? ' selected' : '') + (op.disabled ? ' disabled' : '') + '>' + txt(op.text) + '</option>';
+      return '<option value="' + esc(op.value) + '"' + attr('lang', op.lang) + attr('dir', op.dir) + (String(op.value) === String(o.value) ? ' selected' : '') +
+        (op.disabled ? ' disabled' : '') + '>' + txt(op.text) + '</option>';
     }).join('');
     var control = '<div class="select-wrap"><select class="select" id="' + esc(id) + '" name="' + esc(o.name || id) + '"' +
       (o.hint ? ' aria-describedby="' + esc(id) + '-hint"' : '') + fieldActs(o) + attrsOf(o.attrs) + '>' + opts + '</select>' + RS.icon('chevron-down', { size: 18 }) + '</div>';
@@ -1091,13 +1116,15 @@
     void layer.offsetWidth;                // commit the closed state so the transition runs
     layer.classList.add('is-shown');
   }
+  // Closing waits for the exit transition: the 240ms slide, or under reduced motion the 200ms crossfade (the
+  // overlay fades out as it faded in, it never vanishes at once).
   function hideLayer(layer, stillOpen) {
     layer.classList.remove('is-shown');
     setTimeout(function () {
       if (stillOpen()) return;
       layer.classList.remove('is-open');
       layer.innerHTML = '';
-    }, RS.reducedMotion() ? 0 : 240);
+    }, RS.reducedMotion() ? 200 : 240);
   }
   function focusEl(el) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
 
@@ -1404,8 +1431,8 @@
         if (before && doc.contains(before) && canFocus(before)) focusEl(before); else fallbackFocus();
       }
       if (now === true) { if (el.parentNode) el.parentNode.removeChild(el); return; }
-      el.classList.add('is-leaving');
-      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, RS.reducedMotion() ? 0 : 200);
+      el.classList.add('is-leaving');                  // a 200ms fade (no movement under reduced motion)
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 200);
     }
     el.rsHide = hide;
     el.addEventListener('pointerenter', function () { hovered = true; pause(); });
@@ -1432,20 +1459,47 @@
   };
 
   /* ------------------------------------------------------------------ topbar */
+  // A title that would need more than two lines is clamped to two (css .is-clamped). Unclamped text is never
+  // overflow: hidden, so accents and Arabic dots are never cut in the usual one- or two-line case.
+  function fitTitle(bar) {
+    var h1 = bar.querySelector('.topbar-title');
+    if (!h1) return;
+    h1.classList.remove('is-clamped');
+    var lh = parseFloat(getComputedStyle(h1).lineHeight);
+    if (lh && h1.scrollHeight > lh * 2.5) h1.classList.add('is-clamped');
+  }
+  // The topbar's real height drives the scroll padding that keeps focused controls clear of it (css: html
+  // scroll-padding-top); the title is fitted again when the bar changes size (fonts arriving, rotation).
+  var topbarRO = null;
+  function watchTopbar(bar) {
+    if (topbarRO || !window.ResizeObserver) return;
+    var frame = 0;
+    topbarRO = new ResizeObserver(function () {
+      root.style.setProperty('--topbar-pad', (bar.offsetHeight + 12) + 'px');
+      // next frame: re-clamping inside the callback would resize the observed bar during its own notification
+      if (!frame) frame = requestAnimationFrame(function () { frame = 0; fitTitle(bar); });
+    });
+    topbarRO.observe(bar);
+  }
   // topbar({title, sub, back (true | fallback route), actions:[{icon, act, arg, label, href, id}]})
+  // Title and sub wrap instead of being cut (a title longer than two lines is clamped to two); a title longer than
+  // 18 characters is .is-long (smaller on narrow screens).
   RS.topbar = function (o) {
     o = o || {};
     var bar = doc.getElementById('topbar');
     var inner = bar && bar.querySelector('.topbar-in');
     if (!inner) return;
+    watchTopbar(bar);
     var back = o.back ? '<button type="button" class="icon-btn topbar-back" data-act="nav.back"' + (typeof o.back === 'string' ? attr('data-arg', o.back) : '') +
       ' aria-label="' + esc(RS.t('core.back')) + '">' + RS.icon('chevron-left', { size: 24 }) + '</button>' : '';
+    var title = String(o.title || RS.t('core.app'));
     var titles = '<div class="topbar-titles">' + (o.sub ? '<span class="topbar-sub">' + txt(o.sub) + '</span>' : '') +
-      '<h1 class="topbar-title" tabindex="-1">' + txt(o.title || RS.t('core.app')) + '</h1></div>';
+      '<h1 class="topbar-title' + (title.length > 18 ? ' is-long' : '') + '" tabindex="-1">' + txt(title) + '</h1></div>';
     var actions = (o.actions || []).map(function (a) { return ui.iconBtn(a.icon, a); }).join('');
     // Outside a route render (RS.refresh restores focus itself), keep focus on the same topbar control.
     var k = rendering ? null : focusKey(doc.activeElement);
     inner.innerHTML = back + titles + '<div class="topbar-actions">' + actions + '</div>';
+    fitTitle(bar);
     if (k && k.root === 'topbar') focusByKey(k);
   };
 

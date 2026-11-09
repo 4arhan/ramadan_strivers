@@ -28,6 +28,7 @@ no purple, no violet, no gold).
 | `--hairline` | `rgba(16,25,21,.09)` | `rgba(238,248,242,.09)` | 1px separators |
 | `--accent` | `#047857` emerald | `#6EE7B7` mint | progress, links, toggles, icons |
 | `--accent-soft` | `rgba(4,120,87,.10)` | `rgba(110,231,183,.12)` | selected rows, chips |
+| `--accent-ink` | `#03684C` | `#6EE7B7` | accent text on an `--accent-soft` tint (active chip, Sahih/Quran grade) |
 | `--danger` | `#B42318` | `#FDA29B` | destructive text only |
 
 **Hero object (identical in both themes)**

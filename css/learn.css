@@ -24,8 +24,9 @@
 
 /* Home ---------------------------------------------------------------------- */
 .lrn-intro { margin: -2px 0 6px; font-size: 14px; color: var(--ink-3); line-height: 1.45; }
-.lrn-qt { margin-bottom: 14px; }
 .lrn-soon .row-ic { background: var(--card-2); color: var(--ink-3); }
+/* deck rows: the deck's description, then its counts on their own line */
+.lrn-desc { display: block; margin-bottom: 2px; color: var(--ink-2); }
 
 /* Session progress (plain, above the hero) ------------------------------------ */
 .lrn-prog { display: flex; flex-direction: column; gap: 8px; padding-inline: 4px; }
@@ -33,8 +34,10 @@
 .lrn-prog-score { color: var(--accent); white-space: nowrap; }
 .view > .lrn-prog + .hero { margin-top: var(--s3); }
 
-/* Keyboard hint: only where there is a keyboard-and-pointer setup */
-.lrn-keys { padding-inline: 8px; text-align: center; font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+/* Keyboard hint: only where there is a keyboard-and-pointer setup. It sits clear of the hero's green drop shadow
+   (which reaches about 48px below the hero) and in --ink-2, so it keeps at least 4.5:1 over the tinted paper. */
+.lrn-keys { padding-inline: 8px; text-align: center; font-size: 12.5px; font-weight: 500; color: var(--ink-2); }
+.view > .lrn-keys { margin-top: var(--s7); }
 @media (hover: none), (pointer: coarse) { .lrn-keys { display: none; } }
 
 .lrn-focus:focus, .lrn-focus:focus-visible { outline: none; box-shadow: none; }
@@ -52,6 +55,7 @@
 .lrn-stmt { font-size: 21px; font-weight: 600; line-height: 1.42; letter-spacing: -.012em; color: var(--hero-ink); overflow-wrap: anywhere; }
 @media (max-width: 360px) { .lrn-stmt { font-size: 19px; } }
 .lrn-ai { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12.5px; font-weight: 600; color: var(--hero-ink-3); }
+.lrn-ai.is-empty { display: none; }                  /* the request failed or left this statement as it was */
 .lrn-ai .ic { color: var(--hero-accent); }
 .lrn-ai .spinner { width: 14px; height: 14px; border-color: var(--hero-track); border-top-color: var(--hero-accent); }
 
@@ -182,12 +186,32 @@
 .lrn-face.is-short .lrn-front { font-size: 22px; }
 .lrn-face.is-long .ar-text { font-size: 1.22em; line-height: 1.9; }
 .lrn-face.is-long .lrn-translit { font-size: 13.5px; }
+/* the back repeats the prompt in one compact line above the answer */
+.lrn-recap {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hero-hairline);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--hero-ink-2);
+  overflow-wrap: break-word;
+}
+.lrn-recap-ar { font-family: var(--font-quran); font-size: 1.3em; font-weight: 400; line-height: 1.3; letter-spacing: 0; color: var(--hero-ink); margin-inline-end: 8px; }
 .lrn-back { font-size: 17px; font-weight: 500; line-height: 1.55; color: var(--hero-ink); overflow-wrap: anywhere; }
 .lrn-face .lrn-src { margin-top: 12px; }
 .lrn-rate { margin-bottom: 10px; font-size: 13px; font-weight: 600; color: var(--hero-ink-3); }
 
-/* Again / Hard / Good / Easy */
+/* Again / Hard / Good / Easy: one row of four while every label fits its button on one line; js (fitGrades)
+   measures the labels held on one line (.is-measuring) and switches to 2×2 (.is-2col) when one does not (long
+   translations, narrow phones). Below 360px it is always 2×2. Only in 2×2 may a single overlong word break. */
 .lrn-grades { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.lrn-grades.is-2col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lrn-grades.is-measuring .lrn-grade-l, .lrn-grades.is-measuring .lrn-grade-s { white-space: nowrap; }
 @media (max-width: 359px) { .lrn-grades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .lrn-grade {
   display: flex;
@@ -207,8 +231,10 @@
 }
 @media (hover: hover) { .lrn-grade:hover { background: var(--lrn-glass-hover); } }
 .lrn-grade:active { transform: scale(.97); }
-.lrn-grade-l { font-size: 14.5px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
-.lrn-grade-s { font-size: 12px; font-weight: 600; line-height: 1.2; color: var(--hero-ink-3); overflow-wrap: anywhere; }
+.lrn-grade-l { font-size: 14.5px; font-weight: 700; line-height: 1.2; overflow-wrap: normal; }
+.lrn-grade-s { font-size: 12px; font-weight: 600; line-height: 1.2; color: var(--hero-ink-3); overflow-wrap: normal; }
+.lrn-grades.is-2col .lrn-grade-l, .lrn-grades.is-2col .lrn-grade-s { overflow-wrap: break-word; }
+@media (max-width: 359px) { .lrn-grade-l, .lrn-grade-s { overflow-wrap: break-word; } }
 .lrn-grade.is-good { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); }
 .lrn-grade.is-good .lrn-grade-s { color: var(--mint-ink); opacity: .78; }
 

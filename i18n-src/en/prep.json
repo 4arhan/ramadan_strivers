@@ -25,6 +25,8 @@
   "prep.ui.m.reflections": "Reflections",
   "prep.ui.m.week": "Week",
   "prep.ui.m.reflection": "Reflection",
+  "prep.ui.m.fullDays": "Days fully done",
+  "prep.ui.m.prayers": "Prayers on time",
 
   "prep.ui.ring.sub": "ready",
   "prep.ui.ring.label": "Readiness {pct}",
@@ -36,6 +38,9 @@
   "prep.ui.cta.startEyebrow": "2 minutes to begin",
   "prep.ui.cta.continue": "Continue the readiness check",
   "prep.ui.cta.continueEyebrow": "Pick up where you left off",
+  "prep.ui.cta.see.one": "See the {n}-day plan",
+  "prep.ui.cta.see.other": "See the {n}-day plan",
+  "prep.ui.cta.seeEyebrow": "What the prep covers",
   "prep.ui.cta.home": "Open Ramadan Prep",
 
   "prep.ui.early.note.one": "You started before {month}, so you are going through the plan at your own pace. On 1 {month}, in {n} day, it starts again from day 1 so that day {total} falls on the eve of Ramadan.",
@@ -129,6 +134,7 @@
   "prep.ui.salah.all": "All five on time today. Alhamdulillah.",
   "prep.ui.salah.weekCount": "{n} of {total} on time",
   "prep.ui.salah.chartLabel": "Prayers on time in the last 7 days: {n} of {total}",
+  "prep.ui.salah.beforeFajr": "It is before Fajr, so your ticks still count for {day}.",
 
   "prep.ui.quran.kicker": "Quran check-in",
   "prep.ui.quran.title": "Your Quran today",
@@ -185,6 +191,16 @@
   "prep.ui.list.doneOf.one": "{done} of {n} prompt done",
   "prep.ui.list.doneOf.other": "{done} of {n} prompts done",
 
+  "prep.ui.catch.kicker": "Catch up",
+  "prep.ui.catch.title": "Catch up on your focus",
+  "prep.ui.catch.body": "You joined the plan on day {n}. These earlier days have prompts in your focus areas, and you can still do them.",
+  "prep.ui.catch.left.one": "{n} focus prompt to do",
+  "prep.ui.catch.left.other": "{n} focus prompts to do",
+  "prep.ui.catch.more.one": "{n} more earlier day with focus prompts is in your plan below.",
+  "prep.ui.catch.more.other": "{n} more earlier days with focus prompts are in your plan below.",
+  "prep.ui.catch.days.one": "{n} earlier day has prompts in your focus areas. Start with day {day}.",
+  "prep.ui.catch.days.other": "{n} earlier days have prompts in your focus areas. Start with day {day}.",
+
   "prep.ui.tracks.kicker": "By area",
   "prep.ui.tracks.title": "Your progress by area",
   "prep.ui.tracks.sub.one": "{done} of {n} prompt done",
@@ -224,6 +240,7 @@
   "prep.ui.qada.clear": "All caught up. Alhamdulillah.",
 
   "prep.ui.day.title": "Day {n}",
+  "prep.ui.day.of": "of {total}",
   "prep.ui.day.kicker": "Day {n} of {total}",
   "prep.ui.day.prev": "Previous day",
   "prep.ui.day.next": "Next day",
@@ -256,16 +273,16 @@
 
   "prep.ui.settings.kicker": "Prep settings",
   "prep.ui.settings.reminder": "Daily prep reminder",
-  "prep.ui.settings.reminderSub": "A gentle notification each day",
-  "prep.ui.settings.reminderAt": "Every day at {time}",
-  "prep.ui.settings.reminderOn": "On, once a day",
+  "prep.ui.settings.reminderSub": "A short reminder each day",
+  "prep.ui.settings.reminderOn": "On, around {time}",
   "prep.ui.settings.retake": "Retake the readiness check",
   "prep.ui.settings.retakeSub": "Update your focus areas. Your progress is kept.",
   "prep.ui.settings.restart": "Restart the plan",
   "prep.ui.settings.restartSub": "Clear your ticks and begin again",
-  "prep.ui.settings.how": "Readiness adds up your readiness check (40%), the prompts done out of those due so far (40%) and your prayers on time over the last 7 days (20%). A day without a salah check-in counts as none on time. Until a part has something to count, your readiness check stands in for it.",
+  "prep.ui.settings.how": "Readiness adds up your readiness check (40%), the prompts you have done out of those on the days before today (40%; ticking today's prompts can make up for a missed one) and your prayers on time over the last 7 days (20%). Earlier days without a salah check-in count as none on time; today counts once you check in. Until a part has something to count, your readiness check stands in for it.",
   "prep.ui.restart.title": "Restart your prep?",
   "prep.ui.restart.body": "Your ticked prompts are cleared and the plan begins again. Your reflections, check-ins and readiness check are kept.",
+  "prep.ui.restart.bodyShaban": "Your ticks are cleared and the plan continues from today, day {n}. Your reflections, check-ins and readiness check are kept.",
   "prep.ui.restart.ok": "Restart",
   "prep.ui.restart.done": "Your plan has restarted at day {n}",
 

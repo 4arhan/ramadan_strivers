@@ -361,8 +361,9 @@
     }
     return { on: on, of: of };
   }
-  // readiness = 40% readiness check + 40% prompts done of those due + 20% prayers on time (0..100). A part with
-  // nothing to count yet takes the readiness-check score; without a readiness check the other parts share its weight.
+  // readiness = 40% readiness check + 40% prompts done of those on this round's days that are over (promptStats) +
+  // 20% prayers on time (salahStats), 0..100. A part with nothing to count yet (day 1, or no check-in so far) takes
+  // the readiness-check score; without a readiness check the other parts share its weight.
   function readiness(s) {
     s = s || state();
     var A = assessPct(s);
@@ -1504,15 +1505,38 @@
     var raw = obj(RS.store.get(KEY, null)), m = obj(raw.reflections), moved = false;
     Object.keys(m).forEach(function (k) { if (typeof m[k] === 'string') { m[k] = reflOf(m[k]); moved = true; } });
     if (moved) { raw.reflections = m; RS.store.set(KEY, raw); }
+    return moved;
+  }
+  // Keeps each stored salah array in step with its per-prayer ticks. A sync merge takes the array from one device
+  // and the newest tick of every prayer from both (pray), so the array can lag behind until it is rebuilt here.
+  function repairCheckins() {
+    var raw = obj(RS.store.get(KEY, null)), ci = obj(raw.checkins), fixed = false;
+    Object.keys(ci).forEach(function (k) {
+      var c = ci[k];
+      if (!c || typeof c !== 'object' || !Object.keys(obj(c.pray)).length) return;
+      var want = salahOf({ checkins: ci }, k);
+      if (!Array.isArray(c.salah) || c.salah.length !== 5 || c.salah.some(function (v, i) { return v !== want[i]; })) { c.salah = want; fixed = true; }
+    });
+    if (fixed) { raw.checkins = ci; RS.store.set(KEY, raw); }
+    return fixed;
   }
 
   RS.on('boot', function () {
     try {
       migrateReflections();
+      repairCheckins();
       migratePages();
       var s = state();
       if (s.autoShow && isStale(s) && autoHide(s)) save(s);    // the Ramadan this prep was for has ended
     } catch (e) { console.error('[RS] prep boot step failed', e); }
+    // After a sync: plain-text reflections from an older build become {t, ts}, and salah arrays are rebuilt from the
+    // merged per-prayer ticks. A rebuilt array is sent back once (a 'data' event), so the cloud copy matches too.
+    RS.on('sync', function () {
+      try {
+        migrateReflections();
+        if (repairCheckins()) RS.emit('data', { source: 'prep' });
+      } catch (e) { console.error('[RS] prep sync step failed', e); }
+    });
     // Cloud feature flags arrive after boot: re-render the prep home once they are known (the reminder row),
     // unless someone is typing.
     if (RS.cloud && RS.cloud.ready && typeof RS.cloud.ready.then === 'function') {

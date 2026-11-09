@@ -1,14 +1,23 @@
 /* =====================================================================================================
    Ramadan Strivers v8 — learn.js (learn module). The Learn tab and its sessions:
-     #/learn                    home: Today's 5 hero, then your mistakes, flashcard decks (above the quiz while any
-                                cards are due), quiz topics (one list: True or false | Multiple choice), stats
+     #/learn                    home: Today's 5 hero, then the cards True or false and Multiple choice (a row per topic
+                                with its question count and best score, plus All mixed), Flashcards (a row per deck
+                                with its description and due/new counts), Your mistakes (when there are any), stats
      #/learn/quiz?cat=<id|all>  10 shuffled true/false statements
      #/learn/mcq?cat=<id|all>   10 multiple-choice questions (four options, radio semantics)
      #/learn/flash?deck=<id>    spaced repetition: Leitner boxes 1-5, next review after 0/1/3/7/16 days; due cards
                                 first, then up to 10 new cards per deck per day. &cram=1 practises reviewed cards
                                 ahead of schedule: there only "Again" changes a card's schedule, and no new cards
-     #/learn/daily              Today's 5: 2 true/false + 2 multiple choice + 1 flashcard, once a day, with a streak
+     #/learn/daily              Today's 5: 2 true/false + 2 multiple choice + 1 flashcard, once a day, with a streak.
+                                A round belongs to the day it was opened on: once the date changes, an unfinished
+                                round is replaced by the new day's set the next time it is touched (re-render, the
+                                app coming back to the foreground, an answer, Next, a flip or a grade), so no answer
+                                counts for the wrong day; a finished round from an earlier day says so honestly.
      #/learn/review             questions answered wrongly (?ids=tf:<id>,mcq:<id> reviews one round's mistakes)
+   A round never shows the same wording twice (two topics may share a statement).
+   Keyboard: T/F, A-D, 1-4 and Space are single-key shortcuts, so they work only while focus is on the question card
+     (WCAG 2.1.4, "active only on focus"); the card takes focus on arrival and after every step. Enter (next
+     question, turn the card) works anywhere outside other controls.
    Navigation: a round belongs to its history entry (history.state.lrn = round id). Back, Forward or a reload onto
      that entry shows the round as it was, finished or not (rounds are kept in memory and in sessionStorage
      'rs-learn-session'); a new navigation (a row on the Learn home, a typed link) starts a new round, and so does
@@ -22,16 +31,19 @@
                     mistakes: ['tf:<id>' | 'mcq:<id>'] (newest first, max 50), newDay: {date, d: {deckId: n}}}
                    daily.date = last day Today's 5 was completed · daily.done = completed sessions in total ·
                    daily.today = {date, items:[key], n, cor, ok:[bool]} = today's set and progress
-     sessionStorage rs-learn-session {qt: 'tf'|'mcq' (home quiz list), rounds: {id: round}} (this tab only)
+     sessionStorage rs-learn-session {rounds: {id: round}} (this tab only)
    Public hooks: RS.learn.summary() → {streak, bestStreak, dueCards, accuracy (0-100), answered, correct, mastered,
      dailyDone, dailyProgress} · RS.learn.dueCount() · RS.learn.dailyDone().
-   Every save is followed by RS.emit('data', {source: 'learn'}) (cloud sync listens).
+   Every save is followed by RS.emit('data', {source: 'learn'}) (cloud sync listens), including the moment
+     Today's set is chosen.
    Home hero metrics: Accuracy · Best streak · Due cards. CONTRACT §2 lists "Streak": the current daily streak is
      already the huge number, so the metric shows the best streak (cards mastered moved to the stats card).
+     Pending product sign-off; the alternative the spec allows is "cards mastered" as the huge number.
    AI levels: when RS.cloud.aiAvailable() and the reading level is 'kids' or the quiz level 'advanced', the
      true/false statements of a session go through RS.cloud.quizTransform(cards); answers never change.
      Multiple-choice questions are not sent: /api/ai/quiz rewrites true/false cards ({q, a, x, r}) only, and a
-     reworded stem would no longer match its four fixed options.
+     reworded stem would no longer match its four fixed options. A rewrite that arrives while its statement is on
+     screen replaces the text in place (focus stays where it is) and is announced by the note's status region.
    ===================================================================================================== */
 (function () {
   'use strict';
@@ -84,8 +96,19 @@
   function bdi(s) { return '<bdi>' + esc(s) + '</bdi>'; }
   function changed() { RS.emit('data', { source: 'learn' }); }
   function routeArg(route, params) { return RS.router.href(route, params).slice(2); }    // 'learn/flash?deck=duas'
+  // A metric without data shows a dash; screen readers hear what it means instead: metric(label, null, srText).
+  var DASH = '–';
+  function metric(label, value, none) { return value == null || value === '' ? { label: label, value: DASH, none: none } : { label: label, value: value }; }
   // Every learn screen's one hero object; 'lrn-hero' scopes the module's hero tokens and tweaks in css/learn.css.
-  function hero(o) { o.cls = 'lrn-hero' + (o.cls ? ' ' + o.cls : ''); return RS.ui.hero(o); }
+  function hero(o) {
+    o.cls = 'lrn-hero' + (o.cls ? ' ' + o.cls : '');
+    var html = RS.ui.hero(o);
+    var none = (o.metrics || []).filter(function (m) { return m.value === DASH; }).map(function (m) { return m.none || L('sr.none'); });
+    var i = 0;
+    return none.length ? html.replace(/<dd>–<\/dd>/g, function (m) {
+      return i < none.length ? '<dd><span aria-hidden="true">' + DASH + '</span>' + srOnly(none[i++]) + '</dd>' : m;
+    }) : html;
+  }
   // While a language has no translation of a content string, RS.t falls back to English. Such text is marked
   // lang="en" dir="ltr" so it keeps its reading order inside a right-to-left page and screen readers switch voice.
   function fb(key) {
@@ -108,8 +131,9 @@
   function catIcon(id) { var c = findBy(cats(), id); return c && c.icon ? c.icon : (id === 'all' ? 'shuffle' : 'circle-help'); }
   function knownCat(id) { return id === 'all' || !!findBy(cats(), id) || RS.has('cat.' + id); }
   // An unknown topic or deck id is never shown: the quiz type's (or Flashcards') title stands in for it.
+  // "All mixed" is the content's own cat.all (translated with the topics); learn.cat.all is only a fallback.
   function catName(id, kind) {
-    if (!id || id === 'all') return L('cat.all');
+    if (!id || id === 'all') return RS.has('cat.all') ? RS.t('cat.all') : L('cat.all');
     if (RS.has('cat.' + id)) return RS.t('cat.' + id);
     return L(kind === 'mcq' ? 'mcq.title' : 'tf.title');
   }
@@ -141,6 +165,19 @@
       if (p.t === 'fc') it.deck = cardMap()[p.id].deck;
       return it;
     });
+  }
+  // The wording a round shows for an item; two items with the same wording never share a round.
+  function wording(t, id) { return norm(t === 'tf' || t === 'mcq' ? RS.t(t + '.' + id + '.q') : t + ':' + id); }
+  function norm(s) { return String(s).replace(/\s+/g, ' ').trim().toLowerCase(); }
+  function uniqueItems(items, max) {
+    var seen = {}, out = [];
+    items.forEach(function (it) {
+      var w = wording(it.t, it.id);
+      if ((max != null && out.length >= max) || seen[w]) return;
+      seen[w] = 1;
+      out.push(it);
+    });
+    return out;
   }
 
   /* ------------------------------------------------------------------ storage (v7-compatible + rs-learn) */
@@ -189,7 +226,7 @@
   }
   function putStats(s) { RS.store.set('rs-quiz-stats', { ans: s.ans, cor: s.cor }); }
   function getTfBest() { return cleanPct(RS.store.get('rs-quiz-best', null)); }
-  function accuracyText(st) { return st.ans > 0 ? RS.fmt.pct(st.cor / st.ans * 100) : '–'; }
+  function accuracyText(st) { return st.ans > 0 ? RS.fmt.pct(st.cor / st.ans * 100) : null; }      // null: no answers yet
 
   // This tab's session data (sessionStorage; a memory copy when storage is blocked or full).
   var ssMem = {};
@@ -304,15 +341,23 @@
   function ensureDaily(o) {
     var t = today(), td = o.daily.today;
     if (td && td.date === t && td.items.length && td.items.every(keyOk)) return td;
-    var tf = shuffle(tfAll()), mcq = shuffle(mcqAll()), ti = 0;
-    function takeTf() { var q = tf[ti++]; return q ? 'tf:' + q.id : null; }
-    var keys = [takeTf(), mcq[0] ? 'mcq:' + mcq[0].id : takeTf(), takeTf(), mcq[1] ? 'mcq:' + mcq[1].id : takeTf()];
+    var tf = shuffle(tfAll()), mcq = shuffle(mcqAll()), seen = {};
+    function take(list, type) {
+      while (list.length) {
+        var q = list.shift(), w = wording(type, q.id);
+        if (!seen[w]) { seen[w] = 1; return type + ':' + q.id; }
+      }
+      return null;
+    }
+    var keys = [take(tf, 'tf'), take(mcq, 'mcq') || take(tf, 'tf'), take(tf, 'tf'), take(mcq, 'mcq') || take(tf, 'tf')];
     var fc = dailyCard(o);
-    keys.push(fc ? 'fc:' + fc : takeTf());
+    keys.push(fc ? 'fc:' + fc : take(tf, 'tf'));
     td = { date: t, items: keys.filter(Boolean), n: 0, cor: 0, ok: [] };
     o.daily.today = td;
     return td;
   }
+  // Whether Today's 5 can be put together at all (content is still being written while the app ships).
+  function dailyPossible(o, dv) { return !!(dv.td && dv.td.items.length) || tfAll().length > 0 || mcqAll().length > 0 || !!dailyCard(o); }
   function completeDaily(o) {
     var t = today(), d = o.daily;
     if (d.date === t) return false;
@@ -373,19 +418,29 @@
       aiSettled(s);
     }, function () { s.ai = 'off'; aiSettled(s); });
   }
-  // The rewrites reach the round even while it is off screen (it may come back with Back/Forward); on screen the
-  // current card is repainted only while it is still unanswered (never under the reader's eyes).
+  // The rewrites reach the round even while it is off screen (it may come back with Back/Forward). On screen, the
+  // current statement changes only while it is still unanswered, and in place: nothing is re-rendered, so focus
+  // stays where it is (the statement, a True/False pill), and the note under the statement, a status region since
+  // the request started, announces "Reworded for your level by AI".
   function aiSettled(s) {
     if (S === s) aiRepaint(s);
     else if (mem[s.id] === s) keep(s);
   }
   function aiRepaint(s) {
-    if (S !== s || s.done || s.empty || s.phase !== 'q') { keep(s); return; }
-    var it = s.items[s.i];
-    if (!it || it.t !== 'tf' || !document.getElementById('lrn-stmt')) { keep(s); return; }
-    var a = document.activeElement, keepArg = a && a.getAttribute ? a.getAttribute('data-arg') : null;
-    paint(null);
-    if (keepArg) { var b = document.querySelector('#view [data-act="learn.tf"][data-arg="' + keepArg + '"]'); if (b) focusEl(b); }
+    keep(s);
+    if (S !== s || s.done || s.empty || s.phase !== 'q') return;
+    var it = s.items[s.i], stmt = document.querySelector('#lrn-stmt .lrn-stmt'), note = document.getElementById('lrn-ai');
+    if (!it || it.t !== 'tf' || !stmt) return;
+    var tx = tfText(it);
+    if (tx.ai) {
+      stmt.textContent = tx.q;
+      stmt.removeAttribute('lang');
+      stmt.removeAttribute('dir');
+    }
+    if (note) {
+      note.innerHTML = tx.ai ? aiNoteInner() : '';
+      note.classList.toggle('is-empty', !tx.ai);
+    }
   }
 
   /* ------------------------------------------------------------------ rounds: history entries, memory, reloads */
@@ -456,7 +511,7 @@
     return !s.detached && !!td && td.items.join('|') === s.set && td.n === s.i + (s.phase === 'a' ? 1 : 0);
   }
   function roundFor(kind, p) {
-    var key = sessionKey(kind, p), id = entryRound(), s = null;
+    var key = sessionKey(kind, p), id = entryRound(), s = null, gone = null;
     if (id) {
       s = mem[id] && mem[id].key === key ? mem[id] : null;
       if (!s) {
@@ -464,11 +519,29 @@
         s = revive(isObj(all.rounds) ? all.rounds[id] : null, key);
         if (s) mem[id] = s;
       }
-      if (s && kind === 'daily' && !dailyCurrent(s)) s = null;
+      if (s && kind === 'daily' && !dailyCurrent(s)) { gone = s; s = null; }
     }
-    if (!s) return startSession(kind, p);
+    if (!s) return gone && staleDaily(gone) ? newDaily(gone) : startSession(kind, p);
     if (s.aiRetry) { delete s.aiRetry; aiStart(s); }
     return s;
+  }
+  // Today's 5 belongs to the day it was opened on. A round left unfinished when the date changes is replaced by the
+  // new day's set the next time anything happens on it (a re-render, the app coming back to the foreground, an
+  // answer, Next, a flip or a grade): that tap only brings in the new set, so no answer counts for the wrong day.
+  // A finished round from an earlier day stays, and its results say that a new day has started (dailyResult).
+  function staleDaily(s) { return !!s && s.kind === 'daily' && !s.done && s.date !== today(); }
+  function newDaily(old) {
+    drop(old);
+    var s = startSession('daily', old.params);
+    if (!s.done && !s.empty) RS.toast(L('d.newDay'));
+    return s;
+  }
+  function renewIfStale() {
+    if (!staleDaily(S)) return false;
+    S = newDaily(S);
+    tagEntry(S);
+    paint('top');
+    return true;
   }
 
   function startSession(kind, params) {
@@ -481,7 +554,7 @@
       var type = kind === 'quiz' ? 'tf' : 'mcq';
       s.cat = p.cat || 'all';
       var pool = (type === 'tf' ? tfAll() : mcqAll()).filter(function (q) { return s.cat === 'all' || q.cat === s.cat; });
-      s.items = shuffle(pool).slice(0, ROUND).map(function (q) { return { t: type, id: q.id, key: type + ':' + q.id }; });
+      s.items = uniqueItems(shuffle(pool).map(function (q) { return { t: type, id: q.id, key: type + ':' + q.id }; }), ROUND);
       if (!s.items.length) s.empty = knownCat(s.cat) ? type : 'nocat';
     } else if (kind === 'flash') {
       var d = deckById(p.deck);
@@ -503,10 +576,11 @@
         }
         s.sum = { cor: dv.td ? dv.td.cor : null, total: dv.td ? dv.td.items.length : null };
       } else {
-        var td = ensureDaily(o);
-        putL(o);
+        // a newly chosen set is saved and announced at once (cloud sync then has it before the first answer)
+        var prev = o.daily.today, td = ensureDaily(o);
         s.items = itemsFrom(td.items);
-        if (s.items.length !== td.items.length) { o.daily.today = null; td = ensureDaily(o); putL(o); s.items = itemsFrom(td.items); }
+        if (s.items.length !== td.items.length) { o.daily.today = null; td = ensureDaily(o); s.items = itemsFrom(td.items); }
+        if (td !== prev) { putL(o); changed(); }
         s.set = td.items.join('|');
         if (!s.items.length) s.empty = 'daily';
         s.i = Math.min(td.n, s.items.length);
@@ -515,7 +589,7 @@
       }
     } else if (kind === 'review') {
       var keys = p.ids ? String(p.ids).split(',') : liveMistakes(o);
-      s.items = itemsFrom(keys.filter(function (k) { return /^(tf|mcq):/.test(k); })).slice(0, ROUND);
+      s.items = uniqueItems(itemsFrom(keys.filter(function (k) { return /^(tf|mcq):/.test(k); })), ROUND);
       if (!s.items.length) s.empty = 'review';
     }
     if (!s.empty && !s.done) aiStart(s);
@@ -557,9 +631,16 @@
     changed();
     advance(s);
   }
+  // Runs for an answer of today's round (answer/grade replace a round from an earlier day first: renewIfStale).
   function dailyStep(o, s, ok) {
-    var td = o.daily.today;
-    if (!td || td.date !== today()) return;             // the date changed mid-session: leave the new day's set alone
+    var t = today(), td = o.daily.today;
+    if (!s.detached && (!td || td.date !== t)) {
+      // Today's progress is no longer saved (an older cloud snapshot or another tab replaced rs-learn): this round
+      // is today's set again, with the answers it already has, so its answers are never dropped.
+      s.date = t;
+      td = o.daily.today = { date: t, items: s.set ? s.set.split('|') : s.items.map(function (x) { return x.key; }), n: s.i, cor: 0,
+        ok: s.res.slice(0, s.i).map(function (r) { return !!r.ok; }) };
+    }
     if (s.detached || td.items.join('|') !== s.set) {
       // Cloud sync brought another device's set for today: never write this session's answers into its slots.
       // This device still finishes its own five, and that completes today's 5.
@@ -584,11 +665,16 @@
       if (s.kind === 'quiz' && isNew) RS.store.set('rs-quiz-best', best);
       s.sum = { cor: cor, total: total, pct: pct, best: best[s.cat], newBest: isNew && pct > 0 && prev != null };
     } else if (s.kind === 'flash') {
-      var seen = {}, fresh = 0;
-      s.res.forEach(function (r) { if (!seen[r.id]) { seen[r.id] = 1; if (r.isNew) fresh++; } });
-      s.sum = { cor: cor, total: total, pct: pct, cards: Object.keys(seen).length, fresh: fresh };
+      // counted in cards throughout: a card graded "Again" and seen again counts once, by its final grade
+      var last = {}, order = [], fresh = 0;
+      s.res.forEach(function (r) {
+        if (!hasOwn.call(last, r.id)) { order.push(r.id); if (r.isNew) fresh++; }
+        last[r.id] = r;
+      });
+      var cards = order.length, recalled = order.filter(function (id) { return last[id].ok; }).length;
+      s.sum = { cor: recalled, total: cards, pct: cards ? Math.round(recalled / cards * 100) : 0, cards: cards, fresh: fresh };
     } else if (s.kind === 'daily') {
-      var td = !s.detached && o.daily.today && o.daily.today.date === today() ? o.daily.today : null;
+      var td = !s.detached && o.daily.today && o.daily.today.date === s.date ? o.daily.today : null;
       s.sum = { cor: td ? td.cor : cor, total: td ? td.items.length : total };
     } else {
       s.sum = { cor: cor, total: total, pct: pct };
@@ -627,7 +713,15 @@
     if (top - delta < barH + 12) delta = top - (barH + 12);
     if (delta > 0) window.scrollBy({ top: delta, behavior: smooth() });
   }
-  // focus: 'top' (a new screen), 'reveal' (an answer) or null (the same screen, e.g. AI rewrites arrived)
+  // The question card's focus target for the current step: the statement, the revealed answer, or a card face.
+  // Focus on the card is what turns its single-key shortcuts on (see the keydown handler).
+  function focusCurrent() {
+    var it = curItem();
+    if (!it) return false;
+    focusEl(it.t === 'fc' ? (S.flipped ? 'lrn-back' : 'lrn-front') : (S.phase === 'a' ? 'lrn-reveal' : 'lrn-stmt'));
+    return true;
+  }
+  // focus: 'top' (a new screen) or 'reveal' (an answer)
   function paint(focus) {
     var view = document.getElementById('view');
     if (!view || !S) return;
@@ -635,16 +729,43 @@
     keep(S);
     topbarFor(S);
     view.innerHTML = sessionHtml(S);
+    fitGrades();
     if (focus === 'top') {
       window.scrollTo(0, 0);
-      var it = curItem();
-      focusEl(S.done || S.empty ? 'lrn-h' : (it && it.t === 'fc' ? 'lrn-front' : 'lrn-stmt'));
+      if (!focusCurrent()) focusEl('lrn-h');
     } else if (focus === 'reveal') {
       var r = document.getElementById('lrn-reveal');
       focusEl(r);
       bringIntoView(r, document.getElementById('lrn-next'));
     }
   }
+  // Again / Hard / Good / Easy sit in one row of four while every label fits its button on one line; otherwise
+  // (long translations such as French "Aujourd'hui" or Spanish "Otra vez" at 360px) the row becomes 2×2, so a
+  // label never breaks inside a word or wraps under a narrow button. Measured with the labels held on one line
+  // (.is-measuring) and with computed widths (fractional, and unaffected by the card's 3D rotation), after each
+  // paint, on resize and when a web font finishes loading.
+  function px(v) { return parseFloat(v) || 0; }
+  function fitGrades() {
+    var g = document.querySelector('#view .lrn-grades');
+    if (!g) return;
+    g.classList.remove('is-2col');
+    g.classList.add('is-measuring');
+    var tight = RS.$$('.lrn-grade', g).some(function (b) {
+      var cs = getComputedStyle(b), room = px(cs.width);
+      if (cs.boxSizing === 'border-box') room -= px(cs.paddingLeft) + px(cs.paddingRight) + px(cs.borderLeftWidth) + px(cs.borderRightWidth);
+      return RS.$$('.lrn-grade-l, .lrn-grade-s', b).some(function (s) { return px(getComputedStyle(s).width) > room + 0.01; });
+    });
+    g.classList.remove('is-measuring');
+    if (tight) g.classList.add('is-2col');
+  }
+  var fitFrame = 0;
+  function fitSoon() {
+    if (fitFrame) return;
+    fitFrame = requestAnimationFrame(function () { fitFrame = 0; fitGrades(); });
+  }
+  window.addEventListener('resize', fitSoon);
+  try { if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', fitSoon); } catch (e) { /* older browsers */ }
+
   function setHidden(el, on) {
     if (!el) return;
     if (on) { el.setAttribute('aria-hidden', 'true'); el.setAttribute('inert', ''); }
@@ -680,10 +801,11 @@
     var body = it.t === 'tf' ? tfHtml(s, it) : (it.t === 'mcq' ? mcqHtml(s, it) : fcHtml(s, it));
     return progressHtml(s) + body + '<p class="lrn-keys">' + esc(keysHint(it)) + '</p>';
   }
-  // sr: the screen-reader form ("Question 2 of 10.") that starts the question's focus target
+  // sr: the screen-reader form ("Question 2 of 10.") that starts the question's focus target. A flashcard is a
+  // "Card", also inside Today's 5.
   function posLabel(s, sr) {
-    var v = { i: num(s.i + 1), n: num(s.items.length) };
-    return L((s.kind === 'flash' ? 's.cardOf' : 's.qOf') + (sr ? 'Sr' : ''), v);
+    var v = { i: num(s.i + 1), n: num(s.items.length) }, it = s.items[s.i];
+    return L((s.kind === 'flash' || (it && it.t === 'fc') ? 's.cardOf' : 's.qOf') + (sr ? 'Sr' : ''), v);
   }
   function progressHtml(s) {
     var done = s.i + (s.phase === 'a' ? 1 : 0);
@@ -696,9 +818,12 @@
     return '<div class="lrn-stmt-w lrn-focus" id="lrn-stmt" tabindex="-1">' + srOnly(posLabel(s, true)) +
       '<p class="lrn-stmt"' + fb(key) + '>' + esc(text) + '</p></div>';
   }
+  // The AI note is a status region from the moment the request is sent, so the "Reworded" text that replaces
+  // "Adapting…" in place (aiRepaint) is announced.
+  function aiNoteInner() { return RS.icon('brain', { size: 15 }) + '<span>' + esc(L('ai.done')) + '</span>'; }
   function aiNote(s, isAi) {
-    if (isAi) return '<p class="lrn-ai">' + RS.icon('brain', { size: 15 }) + '<span>' + esc(L('ai.done')) + '</span></p>';
-    if (s.ai === 'pending' && s.phase === 'q') return '<p class="lrn-ai" role="status"><span class="spinner" aria-hidden="true"></span><span>' + esc(L('ai.pending')) + '</span></p>';
+    if (isAi) return '<p class="lrn-ai" id="lrn-ai" role="status">' + aiNoteInner() + '</p>';
+    if (s.ai === 'pending' && s.phase === 'q') return '<p class="lrn-ai" id="lrn-ai" role="status"><span class="spinner" aria-hidden="true"></span><span>' + esc(L('ai.pending')) + '</span></p>';
     return '';
   }
   function revealHtml(ok, line, x, src, xKey) {
@@ -752,9 +877,11 @@
       sr = markText(right, mine);
     }
     var checked = r ? r.choice === i : false;
+    // the visible letter starts the name ("B Their charity": the letter and the text are separate flex items), so
+    // voice control can say "click B" (WCAG 2.5.3)
     return '<div class="lrn-opt-w"><button type="button" role="radio" aria-checked="' + checked + '" class="' + cls + '" data-act="learn.mcq" data-arg="' + i + '"' +
       ' tabindex="' + (i === 0 ? '0' : '-1') + '"' + (r ? ' disabled' : '') + '>' +
-      '<span class="lrn-opt-k" aria-hidden="true">' + esc(L('opt.' + i)) + '</span>' +
+      '<span class="lrn-opt-k">' + esc(L('opt.' + i)) + '</span>' +
       '<span class="lrn-opt-t"><span class="lrn-bidi"' + fb('mcq.' + id + '.o' + i) + '>' + esc(text) + '</span>' + sr + '</span>' + mark + '</button></div>';
   }
   function mcqHtml(s, it) {
@@ -796,9 +923,15 @@
       (showTr ? '<p class="lrn-translit" lang="ar-Latn" dir="ltr">' + esc(tr) + '</p>' : '') +
       (front ? '<p class="lrn-front"' + fb('fc.' + it.id + '.f') + '>' + esc(front) + '</p>' : '') + '</div>' +
       '<div class="lrn-face-ft">' + RS.ui.cta({ act: 'learn.flip', id: 'lrn-flip', eyebrow: L('fc.showEyebrow'), text: L('fc.show') }) + '</div></div>';
+    // the back repeats what was asked in one compact line (a short Arabic term, then the prompt), so the card can
+    // be rated with the question in view
+    var recap = front || tr;
+    var recapHtml = recap || (ar && size === ' is-short') ? '<p class="lrn-recap">' +
+      (ar && size === ' is-short' ? '<span class="lrn-recap-ar" lang="ar" dir="rtl">' + esc(ar) + '</span> ' : '') +
+      (recap ? '<span class="lrn-recap-t"' + (front ? fb('fc.' + it.id + '.f') : ' lang="ar-Latn" dir="ltr"') + '>' + esc(recap) + '</span>' : '') + '</p>' : '';
     var backHtml = '<div class="lrn-face is-back"' + (fl ? '' : ' aria-hidden="true" inert') + '>' +
       RS.ui.kicker(deckIcon(it.deck), L('fc.answer')) +
-      '<div class="lrn-face-bd lrn-focus" id="lrn-back" tabindex="-1"><p class="lrn-back"' + fb('fc.' + it.id + '.b') + '>' + esc(back) + '</p>' +
+      '<div class="lrn-face-bd lrn-focus" id="lrn-back" tabindex="-1">' + recapHtml + '<p class="lrn-back"' + fb('fc.' + it.id + '.b') + '>' + esc(back) + '</p>' +
       (c.ref || c.grade ? '<p class="lrn-src">' + RS.ui.ref({ ref: c.ref, url: c.url, grade: c.grade }) + '</p>' : '') + '</div>' +
       '<div class="lrn-face-ft"><p class="lrn-rate" id="lrn-rate">' + esc(L('fc.rate')) + '</p>' +
       '<div class="lrn-grades" role="group" aria-labelledby="lrn-rate">' + gradeBtns(it) + '</div></div></div>';
@@ -849,16 +982,15 @@
     var sm = s.sum || {};
     if (s.kind === 'flash') return flashResult(s, sm);
     if (s.kind === 'daily') return dailyResult(s, sm);
-    // "Correct" is this round; the accuracy next to it is the lifetime figure, so it says "Overall accuracy".
-    var metrics = [
-      { label: L('m.correct'), value: frac(sm.cor, sm.total) },
-      { label: L('m.overall'), value: accuracyText(getStats()) }
-    ];
+    // The round's score is the huge number (and the ring): the metrics add what the hero does not show yet, the
+    // lifetime accuracy and how many answers it is based on, and the topic's best (or what is left to review).
+    var st = getStats();
+    var metrics = [metric(L('m.overall'), accuracyText(st), L('sr.noAnswers')), metric(L('m.totalAns'), num(st.ans))];
     var cta, extraBtn = '', back = true;
     if (s.kind === 'review') {
       // the count on the button, the "Still to review" metric and the next round always describe the same questions
       var left = reviewLeft(s);
-      metrics.push({ label: L('m.left'), value: num(left.length) });
+      metrics.unshift(metric(L('m.left'), num(left.length)));
       if (left.length) {
         cta = { eyebrow: left.length > ROUND ? LN('n.nextOf', left.length, { k: num(ROUND) }) : LN('n.toReview', left.length),
           text: L(s.params.ids ? 'r.reviewAgain' : 'r.keepReviewing'), act: 'learn.retry' };
@@ -867,7 +999,7 @@
         back = false;
       }
     } else {
-      metrics.push({ label: L('m.best'), value: sm.best != null ? RS.fmt.pct(sm.best) : '–' });
+      metrics.unshift(metric(L('m.best'), sm.best != null ? RS.fmt.pct(sm.best) : null, L('sr.none')));
       var wrong = wrongKeys(s);
       if (wrong.length) {
         cta = { eyebrow: LN('n.toReview', wrong.length), text: L('r.review'), act: 'learn.review' };
@@ -885,7 +1017,7 @@
       }) + roundCard(s.res) + (back ? backRow(extraBtn) : '');
   }
   function whenText(iso) {
-    if (!iso) return '–';
+    if (!iso) return null;                                // nothing scheduled (shown as a dash, see metric())
     var d = daysUntil(iso);
     if (d <= 0) return L('when.today');
     if (d === 1) return L('when.tomorrow');
@@ -912,22 +1044,34 @@
       hero({
         kicker: { icon: deckIcon(s.deck), text: deckName(s.deck) }, number: num(sm.cards), unit: LN('unit.cards', sm.cards), label: L('fs.label'),
         ring: { pct: sm.pct, text: RS.fmt.pct(sm.pct), sub: L('fs.recall'), label: L('ring.recall', { pct: RS.fmt.pct(sm.pct) }) },
-        metrics: [{ label: L('m.new'), value: num(sm.fresh) }, { label: L('m.recalled'), value: frac(sm.cor, sm.total) },
-          { label: L('m.next'), value: whenText(k.due > 0 ? today() : k.next) }],
+        metrics: [metric(L('m.new'), num(sm.fresh)), metric(L('m.recalled'), frac(sm.cor, sm.total)),
+          metric(L('m.next'), whenText(k.due > 0 ? today() : k.next), L('sr.noReview'))],
         cta: cta
       }) + roundCard(s.res) + (back ? backRow('') : '');
   }
   function dailyResult(s, sm) {
-    var o = getL(), dv = dailyView(o), due = mostDueDeck(o);
+    var o = getL(), dv = dailyView(o);
+    if (!dv.doneToday) {
+      // "Done" only while today's 5 is saved as done. A round finished on an earlier day (the app was left open
+      // overnight), or one whose completion is gone (learning data reset), leads on to today's set instead.
+      var newDay = s.date !== today();
+      return heading(newDay ? L('d.newDayTitle') : L('d.title')) +
+        hero({
+          kicker: { icon: 'target', text: L('hero.kicker') }, number: num(dv.streak), unit: LN('unit.days', dv.streak),
+          label: newDay ? L('d.newDayLabel') : streakLabel(dv), ring: todayRing(dv), metrics: heroMetrics(o, getStats(), dv),
+          cta: dailyCta(dv, true)
+        }) + backRow('');
+    }
+    var due = mostDueDeck(o);
     var cta = due ? { eyebrow: L('cta.doneEyebrow'), text: L('cta.review'), act: 'learn.go', arg: routeArg('learn/flash', { deck: due }) }
       : { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), act: 'learn.go', arg: routeArg('learn/quiz', { cat: 'all' }) };
     var known = sm.cor != null && sm.total;
     return heading(known ? L('d.done', { n: num(sm.cor), total: num(sm.total) }) : L('d.doneLabel')) +
       hero({
         kicker: { icon: 'target', text: L('hero.kicker') }, number: num(dv.streak), unit: LN('unit.days', dv.streak), label: L('d.doneLabel'),
-        ring: { pct: 100, text: frac(dv.total, dv.total), sub: L('ring.today'), label: L('ring.goal', { n: num(dv.total), total: num(dv.total) }) },
-        metrics: [{ label: L('m.correct'), value: known ? frac(sm.cor, sm.total) : '–' },
-          { label: L('m.overall'), value: accuracyText(getStats()) }, { label: L('m.bestStreak'), value: num(dv.best) }],
+        ring: todayRing(dv),
+        metrics: [metric(L('m.correct'), known ? frac(sm.cor, sm.total) : null, L('sr.none')),
+          metric(L('m.overall'), accuracyText(getStats()), L('sr.noAnswers')), metric(L('m.bestStreak'), num(dv.best))],
         cta: cta
       }) + roundCard(s.res) + backRow('');
   }
@@ -938,11 +1082,11 @@
     if (e === 'caught') {
       var o = getL(), d = deckById(s.deck), k = deckStats(o, d), pct = k.total ? k.mastered / k.total * 100 : 0;
       var cram = hasReviewed(o, d);                       // nothing reviewed yet: nothing to practise ahead
-      return heading(L('fe.label', { when: whenText(k.next) })) + hero({
+      return heading(k.next ? L('fe.label', { when: whenText(k.next) }) : L('fe.none')) + hero({
         cls: 'lrn-frac', kicker: { icon: deckIcon(s.deck), text: deckName(s.deck) }, number: num(k.mastered), unit: '/' + num(k.total),
         label: LN('fe.mastered', k.total),
         ring: { pct: pct, text: RS.fmt.pct(pct), label: L('ring.mastered', { pct: RS.fmt.pct(pct) }) },
-        metrics: [{ label: L('m.due'), value: num(k.due) }, { label: L('m.new'), value: num(k.newLeft) }, { label: L('m.next'), value: whenText(k.next) }],
+        metrics: [metric(L('m.due'), num(k.due)), metric(L('m.new'), num(k.newLeft)), metric(L('m.next'), whenText(k.next), L('sr.noReview'))],
         cta: cram ? { eyebrow: L('fe.cramEyebrow'), text: L('fe.cram'), act: 'learn.go', arg: routeArg('learn/flash', { deck: s.deck, cram: '1' }) } : backCta()
       }) + (cram ? backRow('') : '');
     }
@@ -968,6 +1112,7 @@
   function tooSoon(e, since) { return !!e && e.type === 'click' && e.detail > 0 && Date.now() - since < TAP_MS; }
 
   function answer(type, choice, e) {
+    if (renewIfStale()) return;                         // a round of Today's 5 from an earlier day: today's set instead
     var it = curItem();
     if (!it || S.phase !== 'q' || it.t !== type || tooSoon(e, tap.paint)) return;
     var ok;
@@ -988,11 +1133,13 @@
   RS.act('learn.tf', function (arg, el, e) { answer('tf', arg === 't', e); });
   RS.act('learn.mcq', function (arg, el, e) { answer('mcq', parseInt(arg, 10), e); });
   RS.act('learn.next', function (arg, el, e) {
+    if (renewIfStale()) return;
     if (!S || S.done || S.phase !== 'a' || tooSoon(e, tap.answer)) return;
     advance(S);
     paint('top');
   });
   RS.act('learn.flip', function (arg, el, e) {
+    if (renewIfStale()) return;
     var it = curItem();
     if (!it || it.t !== 'fc' || S.flipped || tooSoon(e, tap.paint)) return;
     S.flipped = true;
@@ -1015,6 +1162,7 @@
     }, RS.reducedMotion() ? 0 : 260);
   });
   RS.act('learn.grade', function (g, el, e) {
+    if (renewIfStale()) return;
     var it = curItem();
     if (!it || it.t !== 'fc' || !S.flipped || GRADES.indexOf(g) < 0 || tooSoon(e, tap.flip)) return;
     gradeCard(S, it, g);
@@ -1052,13 +1200,6 @@
     if (!arg || tooSoon(e, tap.paint)) return;
     RS.router.go(String(arg), null, { replace: true });
   });
-  RS.act('learn.qt', function (v) {
-    if (v !== 'tf' && v !== 'mcq') return;
-    var all = ssRead();
-    all.qt = v;
-    ssWrite(all);
-    RS.refresh();
-  });
 
   /* ------------------------------------------------------------------ keyboard: T/F, 1-4/A-D, Space, Enter, arrows */
   // Latin layouts use the letter on the key (AZERTY's A is A); other layouts (Arabic, Urdu, Russian, Hindi, Bengali)
@@ -1088,6 +1229,12 @@
     radios.forEach(function (b, k) { b.setAttribute('tabindex', k === j ? '0' : '-1'); });
     focusEl(radios[j]);
   }
+  // WCAG 2.1.4 (character key shortcuts): T/F, A-D, 1-4 and Space act only while focus is on the question card
+  // (#view .lrn-q / .lrn-flash: its statement, revealed answer, card face, pills, options or grade buttons). The
+  // card takes focus on arrival (onShow) and after every step (paint), so they work without a click; with focus on
+  // the topbar, the page or anywhere else, typing or dictating never answers. Enter is not a character key: it
+  // goes to the next question or turns the card from anywhere outside another control.
+  function inCard(el) { return !!(el && el.closest && el.closest('#view .lrn-q, #view .lrn-flash')); }
   document.addEventListener('keydown', function (e) {
     var it = curItem();
     if (!it || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
@@ -1102,6 +1249,11 @@
       if (k === 'Enter' && !onControl) run('learn.next');
       return;
     }
+    if (k === 'Enter') {
+      if (it.t === 'fc' && !S.flipped && !onControl) run('learn.flip');
+      return;
+    }
+    if (!inCard(tg)) return;
     if (it.t === 'tf') {
       var l = keyLetter(e);
       if (l === 't' || l === 'f') run('learn.tf', l);
@@ -1119,7 +1271,7 @@
       }
     } else if (it.t === 'fc') {
       if (!S.flipped) {
-        if ((k === ' ' || k === 'Enter') && !onControl) run('learn.flip');
+        if (k === ' ' && !onControl) run('learn.flip');
       } else {
         var gi = keyDigit(e) - 1;
         if (gi >= 0 && gi < GRADES.length) run('learn.grade', GRADES[gi]);
@@ -1134,14 +1286,37 @@
     if (dv.best > 0) return L('hero.streakLost');
     return L('hero.streakNew');
   }
-  function heroCta(dv, o) {
+  // Today's 5 ring, metrics and start/continue CTA, shared by the Learn home and an outdated Today's 5 result.
+  // The CTA is a link on the home and an in-place step ('learn.go') from a session screen.
+  function todayRing(dv) {
+    return { pct: dv.n / Math.max(1, dv.total) * 100, text: frac(dv.n, dv.total), sub: L('ring.today'), label: L('ring.goal', { n: num(dv.n), total: num(dv.total) }) };
+  }
+  function heroMetrics(o, st, dv) {
+    return [metric(L('m.accuracy'), accuracyText(st), L('sr.noAnswers')), metric(L('m.bestStreak'), num(dv.best)), metric(L('m.due'), num(dueAll(o)))];
+  }
+  function dailyCta(dv, inPlace) {
+    var c = dv.n > 0 ? { eyebrow: L('cta.contEyebrow', { n: num(dv.n), total: num(dv.total) }), text: L('cta.cont') }
+      : { eyebrow: L('cta.startEyebrow'), text: L('cta.start') };
+    if (inPlace) { c.act = 'learn.go'; c.arg = 'learn/daily'; } else c.href = '#/learn/daily';
+    return c;
+  }
+  function firstDeck(o) {
+    var due = mostDueDeck(o);
+    if (due) return due;
+    var d = decksAll().filter(function (x) { return deckIds(x).length > 0; })[0];
+    return d ? d.id : null;
+  }
+  function heroCta(dv, o, canDaily) {
     if (!dv.doneToday) {
-      return dv.n > 0 ? { eyebrow: L('cta.contEyebrow', { n: num(dv.n), total: num(dv.total) }), text: L('cta.cont'), href: '#/learn/daily' }
-        : { eyebrow: L('cta.startEyebrow'), text: L('cta.start'), href: '#/learn/daily' };
+      if (canDaily) return dailyCta(dv, false);
+      // nothing to put in Today's 5 yet (content is still being written): a deck with cards, else no CTA
+      var deck = firstDeck(o);
+      return deck ? { eyebrow: L('fc.title'), text: deckName(deck), href: RS.router.href('learn/flash', { deck: deck }) } : null;
     }
     var due = mostDueDeck(o);
-    return due ? { eyebrow: L('cta.doneEyebrow'), text: L('cta.review'), href: RS.router.href('learn/flash', { deck: due }) }
-      : { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), href: RS.router.href('learn/quiz', { cat: 'all' }) };
+    if (due) return { eyebrow: L('cta.doneEyebrow'), text: L('cta.review'), href: RS.router.href('learn/flash', { deck: due }) };
+    var more = tfAll().length ? 'learn/quiz' : (mcqAll().length ? 'learn/mcq' : null);
+    return more ? { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), href: RS.router.href(more, { cat: 'all' }) } : null;
   }
   function introP(key) { return '<p class="lrn-intro">' + esc(L(key)) + '</p>'; }
   // A topic or deck the content team has announced (named) but not filled yet shows as a plain "Coming soon" row.
@@ -1162,19 +1337,12 @@
     });
     return rows;
   }
-  function quizType() { return ssRead().qt === 'mcq' ? 'mcq' : 'tf'; }
-  // True or false and multiple choice share the topics, so one list with a switch instead of two long cards.
-  function quizCard(o) {
-    var tf = tfAll(), mcq = mcqAll();
-    var head = { kicker: { icon: 'circle-help', text: L('quiz.kicker') }, title: L('quiz.title') };
-    if (!tf.length && !mcq.length) {
-      head.body = RS.ui.empty({ icon: 'circle-help', title: L('e.tfTitle'), body: L('e.quizAll') });
-      return RS.ui.card(head);
-    }
-    var type = quizType(), pool = type === 'tf' ? tf : mcq;
-    var seg = RS.ui.seg([{ value: 'tf', text: L('tf.title') }, { value: 'mcq', text: L('mcq.title') }], type, { act: 'learn.qt', label: L('quiz.type'), cls: 'lrn-qt' });
-    head.body = seg + (pool.length ? introP(type + '.intro') + RS.ui.list(topicRows(pool, type === 'tf' ? getTfBest() : o.mcqBest, type))
-      : RS.ui.empty({ icon: 'circle-help', title: L('e.tfTitle'), body: L(type === 'tf' ? 'e.tfAll' : 'e.mcqAll') }));
+  // True or false, then Multiple choice: one card each, a row per topic (question count, best score) and All mixed.
+  function quizCard(o, type) {
+    var pool = type === 'tf' ? tfAll() : mcqAll();
+    var head = { kicker: { icon: type === 'tf' ? 'circle-help' : 'list-checks', text: L('quiz.kicker') }, title: L(type + '.title') };
+    head.body = pool.length ? introP(type + '.intro') + RS.ui.list(topicRows(pool, type === 'tf' ? getTfBest() : o.mcqBest, type))
+      : RS.ui.empty({ icon: 'circle-help', title: L('e.tfTitle'), body: L(type === 'tf' ? 'e.tfAll' : 'e.mcqAll') });
     return RS.ui.card(head);
   }
   function flashCard(o) {
@@ -1192,8 +1360,11 @@
       if (k.newLeft) parts.push(LN('n.new', k.newLeft));
       if (!parts.length) parts.push(L('fc.caughtUp'));
       parts.push(LN('n.cards', k.total));
+      // the content team's description of the deck, then its counts
+      var dk = 'deck.' + d.id + '.desc', desc = txt(dk);
       return RS.ui.row({
-        icon: d.icon || 'layers', title: deckName(d.id), subHtml: RS.ui.meta(parts.map(bdi)),
+        icon: d.icon || 'layers', title: deckName(d.id),
+        subHtml: (desc ? '<span class="lrn-desc"' + fb(dk) + '>' + esc(desc) + '</span>' : '') + RS.ui.meta(parts.map(bdi)),
         href: RS.router.href('learn/flash', { deck: d.id }), chevron: true
       });
     }));
@@ -1213,24 +1384,20 @@
     });
   }
   var homeDate = '';
+  // The hero, then (CONTRACT order) True or false, Multiple choice, Flashcards, Your mistakes when there are any,
+  // and the lifetime stats.
   function renderHome(view) {
     RS.topbar({ title: RS.t('nav.learn'), sub: L('home.sub') });
     homeDate = today();
-    var o = getL(), st = getStats(), dv = dailyView(o), due = dueAll(o), mis = liveMistakes(o).length;
+    var o = getL(), st = getStats(), dv = dailyView(o), mis = liveMistakes(o).length;
+    var canDaily = dv.doneToday || dailyPossible(o, dv);
     var h = [hero({
       id: 'lrn-hero',
       kicker: { icon: 'target', text: L('hero.kicker') },
-      number: num(dv.streak), unit: LN('unit.days', dv.streak), label: streakLabel(dv),
-      ring: { pct: dv.n / Math.max(1, dv.total) * 100, text: frac(dv.n, dv.total), sub: L('ring.today'), label: L('ring.goal', { n: num(dv.n), total: num(dv.total) }) },
-      metrics: [{ label: L('m.accuracy'), value: accuracyText(st) }, { label: L('m.bestStreak'), value: num(dv.best) },
-        { label: L('m.due'), value: num(due) }],
-      cta: heroCta(dv, o)
-    })];
-    // what needs doing comes first: mistakes to review and decks with due cards sit right under the hero
+      number: num(dv.streak), unit: LN('unit.days', dv.streak), label: canDaily ? streakLabel(dv) : L('e.daily'),
+      ring: todayRing(dv), metrics: heroMetrics(o, st, dv), cta: heroCta(dv, o, canDaily)
+    }), quizCard(o, 'tf'), quizCard(o, 'mcq'), flashCard(o)];
     if (mis) h.push(mistakesCard(mis));
-    if (due) h.push(flashCard(o));
-    h.push(quizCard(o));
-    if (!due) h.push(flashCard(o));
     h.push(statsCard(st, o));
     view.innerHTML = h.join('');
   }
@@ -1245,21 +1412,42 @@
       title: function (p) { return titleFor(kind, p || {}); },
       render: function (view, params) {
         var p = params || {};
-        // a new screen arms the double-tap guard; RS.refresh() (sync, language) re-renders the same round without it
+        // A new screen arms the double-tap guard. RS.refresh() (sync, language) re-renders the same round, unless the
+        // date has changed under an unfinished round of Today's 5: then today's set takes its place.
         if (!S || S.key !== sessionKey(kind, p)) { S = roundFor(kind, p); tap.paint = Date.now(); }
+        else if (staleDaily(S)) { S = newDaily(S); tap.paint = Date.now(); }
         tagEntry(S);
         keep(S);
         topbarFor(S);
         view.innerHTML = sessionHtml(S);
+        fitGrades();
+      },
+      // Core focuses the screen title after onShow; the question card takes focus right after it, so the card's
+      // single-key shortcuts work from the first question (never while a sheet or dialog is open, and never away
+      // from a control the reader has already moved to).
+      onShow: function () {
+        setTimeout(function () {
+          if (!S || S.kind !== kind || RS.router.current().route !== 'learn/' + kind) return;
+          if ((RS.sheet && RS.sheet.isOpen && RS.sheet.isOpen()) || document.querySelector('#dialog-root.is-open')) return;
+          var a = document.activeElement;
+          if (a && a !== document.body && a !== document.documentElement && !(a.closest && a.closest('#topbar'))) return;
+          focusCurrent();
+        }, 0);
       },
       onHide: function () { if (S) keep(S); S = null; }
     });
   });
 
-  // Cloud sync can replace rs-learn / rs-quiz-*; a new day changes Today's 5 and due cards.
+  // Cloud sync can replace rs-learn / rs-quiz-*; a new day changes Today's 5 and due cards. Coming back to the app
+  // on a new day refreshes the Learn home; on a round of Today's 5 from an earlier day it brings in today's set (a
+  // finished round re-renders: its result then says that a new day has started).
   RS.on('sync', function () { if (RS.router.current().route === 'learn') RS.refresh(); });
   document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'visible' && homeDate && homeDate !== today() && RS.router.current().route === 'learn') RS.refresh();
+    if (document.visibilityState !== 'visible') return;
+    var route = RS.router.current().route;
+    if (route === 'learn') { if (homeDate && homeDate !== today()) RS.refresh(); return; }
+    if (!S || route !== 'learn/' + S.kind || S.kind !== 'daily' || S.date === today()) return;
+    if (S.done) RS.refresh(); else renewIfStale();
   });
 
   /* ------------------------------------------------------------------ public hooks (CONTRACT §8) */

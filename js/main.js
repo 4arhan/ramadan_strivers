@@ -153,7 +153,7 @@
         ui.seg([{ value: 'system', text: RS.t('theme.system') }, { value: 'light', text: RS.t('theme.light') }, { value: 'dark', text: RS.t('theme.dark') }],
           RS.settings.theme, { act: 'theme.set', label: RS.t('theme.label') }) +
         ui.select({ id: 'sg-lang', label: RS.t('core.lang.label'), value: RS.lang(), act: 'lang.set',
-          options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name }; }) }) +
+          options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name, lang: l.code, dir: l.dir }; }) }) +
         '<p class="caption">' + RS.esc(RS.fmt.hijri()) + ' · ' + RS.esc(RS.fmt.date(new Date(), { weekday: 'long', day: 'numeric', month: 'long' })) + ' · ' +
         RS.esc(RS.fmt.time(new Date())) + ' · ' + RS.esc(RS.tn('core.sg.days', 1)) + ' / ' + RS.esc(RS.tn('core.sg.days', 5)) + '</p></div>'
     }));
@@ -338,7 +338,7 @@
       RS.sheet.open({
         title: t('sheetTitle'),
         body: '<p>' + RS.esc(t('sheetBody')) + '</p><div class="chips mt-3">' + [1, 5, 10, 20].map(function (n) {
-          return RS.ui.chip('+' + n, { act: 'sg.sheetAdd', arg: n });
+          return RS.ui.chip(RS.fmt.signed(n), { act: 'sg.sheetAdd', arg: n });
         }).join('') + '</div><div class="mt-4">' + RS.ui.field({ id: 'sg-sheet-pages', label: t('pagesField'), type: 'number', inputmode: 'numeric', value: 0, min: 0 }) + '</div>',
         actions: [{ text: RS.t('core.cancel'), act: 'sheet.close' }, { text: RS.t('core.save'), act: 'sg.sheetSave', variant: 'primary' }]
       });

@@ -31,6 +31,7 @@
   "learn.m.correct": "Correct",
   "learn.m.best": "Best",
   "learn.m.bestStreak": "Best streak",
+  "learn.m.totalAns": "Total answered",
   "learn.m.left": "Still to review",
   "learn.m.new": "New",
   "learn.m.recalled": "Recalled",
@@ -38,8 +39,6 @@
 
   "learn.cat.all": "All mixed",
   "learn.quiz.kicker": "Quiz",
-  "learn.quiz.title": "Choose a topic",
-  "learn.quiz.type": "Question type",
   "learn.tf.title": "True or false",
   "learn.tf.intro": "Ten quick statements a round, each with its source.",
   "learn.mcq.title": "Multiple choice",
@@ -93,6 +92,9 @@
   "learn.sr.right": "(correct answer)",
   "learn.sr.mine": "(your answer)",
   "learn.sr.rightMine": "(correct answer, your answer)",
+  "learn.sr.noAnswers": "No answers yet",
+  "learn.sr.noReview": "Nothing scheduled",
+  "learn.sr.none": "None yet",
   "learn.keys.tf": "Keys: {t} for true, {f} for false, Enter for the next question",
   "learn.keys.mcq": "Keys: {first} to {last} to answer, Enter for the next question",
   "learn.keys.fc": "Keys: Space to turn the card, {first} to {last} to rate it",
@@ -144,6 +146,7 @@
   "learn.fs.reviewDeck": "Review {deck}",
   "learn.fs.backEyebrow": "Done for now",
   "learn.fe.label": "Nothing is due. Next review: {when}.",
+  "learn.fe.none": "Nothing is due.",
   "learn.fe.mastered.one": "card mastered · nothing is due right now",
   "learn.fe.mastered.other": "cards mastered · nothing is due right now",
   "learn.fe.cramEyebrow": "Review ahead of schedule",
@@ -153,6 +156,9 @@
   "learn.d.sub": "Daily practice",
   "learn.d.done": "Today's 5 complete: {n} of {total} correct",
   "learn.d.doneLabel": "Today's 5 is done. Come back tomorrow to keep your streak.",
+  "learn.d.newDay": "A new day has started, so Today's 5 has a new set.",
+  "learn.d.newDayTitle": "A new day has started",
+  "learn.d.newDayLabel": "A new day has started. Today's 5 has a new set waiting for you.",
 
   "learn.rv.title": "Mistakes review",
   "learn.rv.sub": "Learn from what you missed",
@@ -170,7 +176,6 @@
   "learn.e.daily": "Today's 5 needs quiz questions, and none are available yet.",
   "learn.e.review": "Nothing to review. Questions you miss will appear here.",
   "learn.e.decks": "Flashcard decks are on their way.",
-  "learn.e.quizAll": "Quiz questions are on their way.",
   "learn.e.tfAll": "True or false questions are on their way.",
   "learn.e.mcqAll": "Multiple-choice questions are on their way."
 }

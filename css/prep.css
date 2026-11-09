@@ -86,6 +86,10 @@
 /* Prompts: round check rows with track tags and an expandable tip ------------------- */
 .prep-prompt .row-title { font-weight: 550; }
 .prep-prompt.is-done .row-title { color: var(--ink-2); }
+/* A locked prompt (a later day, a closed plan) is still there to read: full-strength text, only the check dimmed */
+.row.prep-prompt.is-disabled { opacity: 1; }
+.prep-prompt.is-disabled .row-title { color: var(--ink-2); }
+.prep-prompt.is-disabled .check { opacity: .45; }
 .prep-tags { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; vertical-align: middle; margin-inline-end: 4px; }
 .prep-tag {
   display: inline-flex;
@@ -101,7 +105,7 @@
   line-height: 1.2;
   white-space: nowrap;
 }
-.prep-tag.is-focus { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.prep-tag.is-focus { background: var(--accent-soft); border-color: transparent; color: var(--accent-ink, var(--accent)); }
 .prep-tip-btn { gap: 2px; }
 .prep-tip-btn .ic { transition: transform var(--dur) var(--ease); }
 .prep-tip-btn[aria-expanded="true"] .ic { transform: rotate(180deg); }
@@ -147,8 +151,9 @@
   font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
-/* A finished day keeps its number; completion is the accent edge plus a small check badge */
-.prep-dn.is-done { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+/* A finished day keeps its number; completion is the accent edge plus a small check badge. Accent text on a tint uses
+   --accent-ink (app.css) where the foundation defines it */
+.prep-dn.is-done { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink, var(--accent)); }
 .prep-dn-ok {
   position: absolute;
   inset-inline-end: -5px;
@@ -163,9 +168,13 @@
   box-shadow: 0 0 0 2px var(--card);
 }
 .prep-dn-ok .ic { width: 12px; height: 12px; stroke-width: 3; }
-.prep-dn.is-today { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.prep-dn.is-today { border-color: var(--accent); color: var(--accent-ink, var(--accent)); box-shadow: 0 0 0 3px var(--accent-soft); }
 .prep-dn.is-future { background: transparent; border-style: dashed; color: var(--ink-3); }
 .row.prep-day.is-today { background: var(--accent-soft); }
+/* Today's row is already tinted: its number sits on that one tint (a second tint behind the accent number would
+   drop it below 4.5:1), and the check badge's ring takes the row's colour (tint over card) instead of a white halo */
+.row.prep-day.is-today .prep-dn { background: transparent; }
+.row.prep-day.is-today .prep-dn-ok { box-shadow: 0 0 0 2px var(--accent-soft), 0 0 0 2px var(--card); }
 .row.prep-day.is-future .row-title { color: var(--ink-2); font-weight: 500; }
 .row.prep-day .row-val { min-width: 2.6em; }
 
@@ -212,19 +221,25 @@
 .prep-q-nav .btn { flex: 1 1 140px; }
 .prep-q-nav + .caption { margin-top: var(--s3); }
 
-/* Day screen: the day's theme is the hero's headline (the ring shows the prompts done) */
+/* Day screen: the day number is the hero figure and the day's theme its headline (the ring shows the prompts done) */
 .prep-day-hero .hero-main { align-items: flex-start; }
 .prep-day-hero .hero-label {
-  margin-top: 2px;
-  font-size: clamp(22px, 6.4vw, 27px);
+  margin-top: 10px;
+  font-size: clamp(19px, 5.4vw, 22px);
   font-weight: 650;
-  line-height: 1.22;
+  line-height: 1.25;
   letter-spacing: var(--track-tight);
   color: var(--hero-ink);
   overflow-wrap: break-word;
   text-wrap: balance;
 }
 .prep-mot .quote { margin: 0; }
+
+/* Salah check-in before Fajr: which day the ticks count for */
+.prep-late { margin: -2px 0 var(--s3); }
+
+/* Catch-up card (started after day 1): earlier days with focus prompts */
+.prep-catch .list .row { min-height: 60px; }
 
 /* Intro bottom CTA */
 .prep-start { margin-top: var(--s5); }

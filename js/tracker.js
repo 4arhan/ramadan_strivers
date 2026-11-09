@@ -12,6 +12,10 @@
             not counted and come back when sisters' mode is turned off.
    Import   merges by key: each day, date, Quran-page day, journal entry and setting in the file replaces the same
             one here; everything else on the device is kept (see applyImport).
+   Events   every write of tracker data (day records, Quran pages, rs-extras, badges, best streaks, synced settings)
+            is followed by RS.emit('data', {source: 'tracker'}). Exception: view state kept in rs-settings (which
+            sections are open, the Ramadan day being viewed, the reminder date) and rs-season are saved silently; none
+            of them is part of the cloud snapshot, and a day change emits 'day'.
    Hooks    RS.tracker (CONTRACT §8): getDay(n) · todayIndex() · totals() · streaks() · qPages()
             + saveDay() · dayPct(n) · points() · best() · renderTodayChecklist(el)
    Rules    v7 behaviour, with the fact-check corrections: each night comes before its day, so the odd nights
@@ -39,6 +43,8 @@
   function tn(k, c, v) { return RS.tn(k, c, v); }
   function nf(x) { return RS.fmt.n(x); }
   function pf(x) { return RS.fmt.pct(x); }
+  // '+15' for gains: RS.fmt.signed keeps the sign in front in the RTL UI (core.js), '+' + n where it is missing
+  function signed(x) { return typeof RS.fmt.signed === 'function' ? RS.fmt.signed(x) : '+' + nf(x); }
   function isObj(o) { return !!o && typeof o === 'object' && !Array.isArray(o); }
   function num(v) { v = Number(v); return isFinite(v) ? v : 0; }
   function emit() { RS.emit('data', { source: 'tracker' }); }
@@ -80,17 +86,28 @@
   function yCtx(iso) { iso = iso || RS.todayISO(); return { kind: 'year', date: iso, key: 'rs-yr-' + iso, l10: false, mult: 1 }; }
   function checkCtx() { return RS.appMode() === 'year' ? yCtx() : rCtx(); }
 
+  // Year-round dates (not in v7, which showed the whole Ramadan list): no Tarawih, the Ramadan night prayer, and the
+  // deeds about the day's fast (dua at iftar, "Who among you is fasting today?", no overeating at iftar, avoiding
+  // arguments while fasting) only on a date with a logged fast, so an ordinary day can reach 100%.
+  var YEAR_OFF = { tarawih: 1 }, FAST_ONLY = { 'dua-iftar': 1, 'abu-bakr-fasting': 1, 'no-overeating': 1, arguments: 1 };
+  function counts(ctx, id) {
+    if (ctx.kind !== 'year') return true;
+    if (YEAR_OFF[id]) return false;
+    return !FAST_ONLY[id] || fastLogged(ctx.date);
+  }
   function applicable(ctx) {
     var out = [];
-    sections().forEach(function (s) { if (s.l10 && !ctx.l10) return; out = out.concat(secIds(s)); });
+    sections().forEach(function (s) { if (s.l10 && !ctx.l10) return; secIds(s).forEach(function (id) { if (counts(ctx, id)) out.push(id); }); });
     return out;
   }
   // v7 saveDay(): every applicable deed is stored (true/false); deeds set aside in sisters' mode are left out of
   // ck, done, tot and points; points ×1.5 on days 21-30. hck keeps the set-aside ticks (see change()).
+  // Kept as they are, uncounted: ids this content no longer has, and on a year-round date the ticks of fast-day deeds
+  // while no fast is logged (logging the fast again brings them back).
   function build(ctx, ck, hayd, hck) {
     ck = ck || {};
     var out = {}, done = 0, tot = 0, pts = 0;
-    Object.keys(ck).forEach(function (id) { if (!deed(id)) out[id] = !!ck[id]; });     // ids this content no longer has
+    Object.keys(ck).forEach(function (id) { if (!deed(id) || (ck[id] && !counts(ctx, id))) out[id] = !!ck[id]; });
     applicable(ctx).forEach(function (id) {
       var d = deed(id);
       if (hayd && d.haydOff) return;
@@ -126,11 +143,12 @@
   function streaksAt(day, recs) { recs = recs || allDays(); var o = {}; SK.forEach(function (k) { o[k] = calcStreak(STREAK[k], day, recs); }); return o; }
   T.streaks = function () { return streaksAt(curDay()); };
   function bestStored() { var b = getObj('rs-best-streaks') || {}, o = {}; SK.forEach(function (k) { o[k] = Math.max(0, Math.round(num(b[k]))); }); return o; }
+  // stores any streak that beats the best so far; true when rs-best-streaks changed
   function saveBest(cur) {
     var b = bestStored(), changed = false;
     SK.forEach(function (k) { if (cur[k] > b[k]) { b[k] = cur[k]; changed = true; } });
     if (changed) RS.store.set('rs-best-streaks', b);
-    return b;
+    return changed;
   }
   T.best = function () { var b = bestStored(), c = T.streaks(); SK.forEach(function (k) { b[k] = Math.max(b[k], c[k]); }); return b; };
   function streakName(k) { return t('me.streak.' + k); }
@@ -298,7 +316,9 @@
       var app = ABU.filter(function (i) { return i in rec.ck; });
       var missing = app.filter(function (i) { return !rec.ck[i]; });
       if (app.length === 4 && missing.length === 1) {
-        say(t('today.toast.abuBakr', { deed: deedLabel(missing[0]) }));
+        // the deed's short name ("visiting a sick person"), not its question-and-answer label ("— I did")
+        var short = 'today.abu.' + missing[0];
+        say(t('today.toast.abuBakr', { deed: RS.has(short) ? t(short) : deedLabel(missing[0]) }));
         setOpen('abuBakr', true);
       }
     }
@@ -343,6 +363,35 @@
   function flush(id) { var p = pend[id]; if (!p) return; clearTimeout(p.tm); delete pend[id]; p.fn(); }
   function flushAll() { Object.keys(pend).forEach(flush); }
   function refresh() { flushAll(); RS.refresh(); }
+  // One polite status region outside #view (which every refresh replaces), created at boot so that later changes are
+  // read out: e.g. the day switcher's result, while focus stays on its arrow (WCAG 4.1.3). Emptied first, so the
+  // same message twice is read twice.
+  function liveEl() {
+    var el = document.getElementById('tr-live');
+    if (!el && document.body) {
+      el = document.createElement('div');
+      el.id = 'tr-live';
+      el.className = 'sr-only';
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      el.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+  var liveT = null;
+  function announce(msg) {
+    var el = liveEl();
+    if (!el) return;
+    el.textContent = '';
+    clearTimeout(liveT);
+    liveT = setTimeout(function () { el.textContent = msg; }, 100);
+  }
+  // "Day 18 of 30: 45%, 12 of 61 deeds done" for the Ramadan day Today shows
+  function announceDay() {
+    var ctx = rCtx(), st = live(ctx);
+    announce(t('today.step.live', { n: nf(ctx.day), pct: pf(st.pct), done: nf(st.done), tot: nf(st.tot) }));
+  }
   var softT = null;
   function softRefresh() {
     clearTimeout(softT);
@@ -410,8 +459,8 @@
     if (RS.store.raw('rs-inst-x')) return '';
     var ios = !installEvt && isIOS() && !standalone();
     if (!installEvt && !ios) return '';
-    var btns = (installEvt ? ui.btn(t('today.install.btn'), { act: 'tr.install', icon: 'download', size: 'sm' }) : '') +
-      ui.btn(t('today.install.later'), { act: 'tr.installx', variant: 'ghost', size: 'sm' });
+    var btns = (installEvt ? ui.btn(t('today.install.btn'), { act: 'tr.install', icon: 'download' }) : '') +
+      ui.btn(t('today.install.later'), { act: 'tr.installx', variant: 'ghost' });
     return ui.card({
       kicker: { icon: 'smartphone', text: t('today.install.kicker') }, cls: 'tr-install',
       body: '<p>' + esc(t(ios ? 'today.install.ios' : 'today.install.body')) + '</p><div class="btn-row mt-3">' + btns + '</div>'
@@ -503,14 +552,16 @@
   }
 
   /* ---------------------------------------------------------------- checklist */
+  // o.preview: read-only rows (Ramadan Prep); o.pin: a Ramadan day number whose record the ticks change (me/day
+  // outside Ramadan mode) instead of the day or date Today shows.
   function checklist(ctx, rec, o) {
     o = o || {};
-    var detail = !!RS.settings.detail, ck = rec ? rec.ck : {}, hayd = rec ? rec.hayd : false;
-    var h = [ui.section(t('today.list.title'), { text: t(detail ? 'today.list.hideSources' : 'today.list.showSources'), act: 'tr.detail', icon: detail ? 'eye-off' : 'eye' })];
-    if (!o.preview) h.push(haydCard(hayd));
+    var v = { ctx: ctx, ck: rec ? rec.ck : {}, hayd: rec ? rec.hayd : false, detail: !!RS.settings.detail, preview: !!o.preview, pin: o.pin || 0 };
+    var h = [ui.section(t('today.list.title'), { text: t(v.detail ? 'today.list.hideSources' : 'today.list.showSources'), act: 'tr.detail', icon: v.detail ? 'eye-off' : 'eye' })];
+    if (!v.preview) h.push(haydCard(v.hayd, v.pin));
     sections().forEach(function (sec) {
       if (sec.l10 && !ctx.l10) return;
-      h.push(secCard(sec, ck, hayd, detail, o.preview));
+      h.push(secCard(sec, v));
     });
     return h.join('');
   }
@@ -520,8 +571,11 @@
     el.innerHTML = checklist(ctx, getRec(ctx.key));
   };
 
-  function secCard(sec, ck, hayd, detail, preview) {
-    var ids = secIds(sec), done = 0, tot = 0;
+  function secCard(sec, v) {
+    var ck = v.ck, hayd = v.hayd, preview = v.preview;
+    var shown = function (id) { return !!deed(id) && counts(v.ctx, id); };
+    var ids = secIds(sec).filter(shown), done = 0, tot = 0;
+    if (!ids.length) return '';
     ids.forEach(function (id) { if (hayd && deed(id).haydOff) return; tot++; if (ck[id]) done++; });
     var open = isOpen(sec.id), bid = 'tr-secbd-' + sec.id, hid = 'tr-sech-' + sec.id;
     var countTxt = preview ? tn('today.sec.items', tot) : t('today.sec.count', { done: nf(done), tot: nf(tot) });
@@ -536,22 +590,22 @@
       if (sec.note && RS.has('sec.' + sec.id + '.note')) {
         body += '<div class="tr-note"><p>' + esc(t('sec.' + sec.id + '.note')) + '</p>' + ui.ref({ ref: sec.note.ref, url: sec.note.url, grade: sec.note.grade }) + '</div>';
       }
-      var rows = function (list) { return ui.list(list.filter(deed).map(function (id) { return deedRow(id, ck, hayd, detail, preview); }), { cls: 'tr-deeds' }); };
+      var rows = function (list) { return ui.list(list.filter(shown).map(function (id) { return deedRow(id, v); }), { cls: 'tr-deeds' }); };
       (sec.subs || []).forEach(function (sub) {
-        var list = (sub.items || []).filter(deed);
+        var list = (sub.items || []).filter(shown);
         if (!list.length) return;
         body += '<h4 class="tr-sub">' + RS.icon(sub.icon || 'circle', { size: 16 }) + '<span>' + esc(t('sub.' + sub.id)) + '</span></h4>' + rows(list);
       });
-      if (sec.items && sec.items.length) body += rows(sec.items);
+      if (sec.items && sec.items.filter(shown).length) body += rows(sec.items);
     }
     return '<section class="card tr-sec' + (sec.l10 ? ' is-l10' : '') + (!preview && tot && done === tot ? ' is-complete' : '') + '" id="tr-sec-' + esc(sec.id) + '">' + head +
       '<div class="tr-sec-bd" id="' + bid + '"' + (open ? '' : ' hidden') + '>' + body + '</div></section>';
   }
 
-  function deedRow(id, ck, hayd, detail, preview) {
-    var d = deed(id), off = !!(hayd && d.haydOff), on = !off && !!ck[id], label = deedLabel(id);
+  function deedRow(id, v) {
+    var d = deed(id), preview = v.preview, off = !!(v.hayd && d.haydOff), on = !off && !!v.ck[id], label = deedLabel(id);
     var extra = '';
-    if (detail) {
+    if (v.detail) {
       var exp = deedExp(id);
       if (exp) extra += '<p class="tr-exp">' + esc(exp) + '</p>';
       var links = [];
@@ -567,18 +621,20 @@
       var dl = duaLines();
       if (dl.length) extra += '<div class="tr-dualist"><p class="tr-dualist-t">' + esc(t('today.duaList')) + '</p><ul>' + dl.slice(0, 20).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
     }
-    var pts = t('today.deed.pts', { n: nf(num(d.pts)) });
+    // "+15" is shown; a screen reader hears ", 15 points" after the name instead of "+15" run into it
+    var pts = '<span class="row-val" aria-hidden="true">' + esc(signed(num(d.pts))) + '</span>' +
+      '<span class="sr-only">' + esc(tn('today.deed.ptsSr', num(d.pts))) + '</span>';
     if (preview) {
-      return ui.row({ lead: '<span class="tr-dot" aria-hidden="true"></span>', title: label, value: pts, extra: extra || null, cls: 'tr-deed' });
+      return ui.row({ lead: '<span class="tr-dot" aria-hidden="true"></span>', title: label, trail: pts, extra: extra || null, cls: 'tr-deed' });
     }
     return ui.row({
-      lead: ui.check(on, { cls: off ? 'is-off' : '' }), check: { on: on, act: 'tr.tick', arg: id },
-      title: label, sub: off ? t('today.deed.off') : '', value: pts, disabled: off, extra: extra || null, cls: 'tr-deed'
+      lead: ui.check(on, { cls: off ? 'is-off' : '' }), check: { on: on, act: 'tr.tick', arg: v.pin ? id + '@' + v.pin : id },
+      title: label, sub: off ? t('today.deed.off') : '', trail: pts, disabled: off, extra: extra || null, cls: 'tr-deed'
     });
   }
 
-  function haydCard(on) {
-    var row = ui.row({ icon: 'flower-2', title: t('today.hayd.title'), sub: t('today.hayd.sub'), toggle: { on: on, act: 'tr.hayd' }, id: 'tr-hayd-row' });
+  function haydCard(on, pin) {
+    var row = ui.row({ icon: 'flower-2', title: t('today.hayd.title'), sub: t('today.hayd.sub'), toggle: { on: on, act: 'tr.hayd', arg: pin || null }, id: 'tr-hayd-row' });
     var body = '<ul class="list"><li class="li">' + row + '</li></ul>';
     if (on) {
       var tips = [];
@@ -663,7 +719,7 @@
     view.innerHTML = ui.hero({
       kicker: { icon: 'list-checks', text: t('today.preview.kicker') }, number: nf(all.length), label: t('today.preview.label'),
       metrics: [{ label: t('today.preview.sections'), value: nf(sections().filter(function (s) { return !s.l10; }).length) },
-        { label: t('today.preview.points'), value: nf(pts) }, { label: t('today.preview.lastTen'), value: '+' + nf(l10.length) }]
+        { label: t('today.preview.points'), value: nf(pts) }, { label: t('today.preview.lastTen'), value: signed(l10.length) }]
     }) + ui.note(t('today.preview.note'), { icon: 'info', tone: 'plain' }) + checklist(rCtx(21), null, { preview: true });
   }
 
@@ -768,6 +824,12 @@
   /* ================================================================ QURAN */
   function renderQuran(view) {
     var ram = RS.appMode() === 'ramadan';
+    // a new Ramadan with last season's pages still on the device: neutral until the archive question is answered
+    if (ram && archiveAsk) {
+      RS.topbar({ title: t('nav.quran'), sub: RS.fmt.hijri() });
+      view.innerHTML = archiveWait() + quranLinks();
+      return;
+    }
     RS.topbar({ title: t('nav.quran'), sub: ram ? t('today.step.title', { n: nf(curDay()) }) : RS.fmt.hijri() });
     view.innerHTML = ram ? quranRamadan() : quranYear();
   }
@@ -791,7 +853,9 @@
       kicker: { icon: 'book-open', text: t('quran.kicker') }, number: nf(tot), unit: tn('quran.unit', tot),
       label: left === 0 ? t('quran.complete') : t('quran.of', { juz: nf(juzOf(tot)) }),
       ring: { pct: pc, text: pf(pc), label: t('quran.ring', { pct: pf(pc) }) },
-      metrics: [{ label: t('quran.mToday'), value: nf(today) }, { label: t('quran.mNeeded'), value: left === 0 ? '\u2013' : nf(pace) }, { label: t('quran.mDaysLeft'), value: nf(dLeft) }],
+      // the pages of the day being viewed: "Today" only when it is today's date in a live Ramadan
+      metrics: [{ label: liveDay() === day ? t('quran.mToday') : t('quran.mDay', { n: nf(day) }), value: nf(today) },
+        { label: t('quran.mNeeded'), value: left === 0 ? '\u2013' : nf(pace) }, { label: t('quran.mDaysLeft'), value: nf(dLeft) }],
       cta: { eyebrow: t('quran.ctaEyebrow'), text: t('quran.cta'), act: 'tr.qlog' }
     }));
     h.push(ui.card({ kicker: { icon: 'chart-column', text: t('quran.chartTitle') }, cls: 'tr-qchart-card',
@@ -864,9 +928,9 @@
     RS.sheet.open({
       title: t('quran.sheetTitle'),
       body: '<form id="tr-q-form" data-act-submit="tr.qsave" novalidate><p class="tr-q-so">' + esc(so) + '</p>' +
-        '<div class="chips mt-3" role="group" aria-label="' + esc(t('quran.quick')) + '">' + [1, 5, 10, 20].map(function (v) { return ui.chip('+' + nf(v), { act: 'tr.qchip', arg: v }); }).join('') + '</div>' +
+        '<div class="chips mt-3" role="group" aria-label="' + esc(t('quran.quick')) + '">' + [1, 5, 10, 20].map(function (v) { return ui.chip(signed(v), { act: 'tr.qchip', arg: v }); }).join('') + '</div>' +
         '<div class="mt-4">' + ui.field({ id: 'tr-q-add', name: 'pages', label: t('quran.addLabel'), type: 'number', inputmode: 'numeric', min: 1, max: Q_TOTAL, placeholder: '0', hint: t('quran.addHint'), attrs: { step: '1' } }) + '</div>' +
-        (cur > 0 ? '<div class="mt-3">' + ui.btn(t('quran.clear'), { act: 'tr.qclear', variant: 'danger', icon: 'trash-2', size: 'sm' }) + '</div>' : '') + '</form>',
+        (cur > 0 ? '<div class="mt-3">' + ui.btn(t('quran.clear'), { act: 'tr.qclear', variant: 'danger', icon: 'trash-2' }) + '</div>' : '') + '</form>',
       actions: [{ text: t('core.cancel'), act: 'sheet.close' }, { text: t('quran.addBtn'), variant: 'primary', type: 'submit', attrs: { form: 'tr-q-form' } }]
     });
   }
@@ -918,7 +982,9 @@
     emit();
     return rec;
   };
-  function season() { var s = RS.store.raw('rs-season'); return /^\d{4}$/.test(String(s || '')) ? String(s) : String(RS.hijri().year); }
+  // The Ramadan (Hijri year) the days on this device belong to: rs-season, else worked out from the data (v6 never
+  // stored it, see inferSeason), else the Hijri year now (nothing logged yet).
+  function season() { return storedSeason() || (hasRamadanData() ? inferSeason() : String(RS.hijri().year)); }
   function heatLv(x) { if (!x || !(x.pct > 0)) return 0; return x.pct >= 76 ? 4 : x.pct >= 51 ? 3 : x.pct >= 26 ? 2 : 1; }
 
   var catScope = 'day';
@@ -961,7 +1027,7 @@
     var vals = [];
     for (d = 1; d <= m.lastRec; d++) vals.push(m.recs[d] ? m.recs[d].pct : null);
     h.push(ui.card({ kicker: { icon: 'chart-line', text: t('me.trend') },
-      body: m.dc ? trendChart(vals, { label: t('me.trendLabel', { n: nf(m.lastRec), k: nf(vals.filter(function (v) { return v != null; }).length) }) })
+      body: m.dc ? trendChart(vals, { label: tn('me.trendLabel', vals.filter(function (v) { return v != null; }).length, { last: nf(m.lastRec) }) })
         : ui.empty({ icon: 'chart-line', title: t('me.trendEmptyTitle'), body: t('me.trendEmpty') }) }));
     // categories
     h.push(categoriesCard(day, m.recs));
@@ -998,13 +1064,15 @@
     var cw = day <= 7 ? 1 : day <= 14 ? 2 : day <= 21 ? 3 : 4;
     if (cw > 1) {
       var R = [[1, 7], [8, 14], [15, 21], [22, 30]];
-      var pa = avg(R[cw - 2][0], R[cw - 2][1]) || 0, ca = avg(R[cw - 1][0], R[cw - 1][1]) || 0;
+      var pa = avg(R[cw - 2][0], R[cw - 2][1]), ca = avg(R[cw - 1][0], R[cw - 1][1]);
       body += '<hr class="divider"><p class="tr-h3">' + esc(t('me.cmp.weeks')) + '</p>' + ui.metrics([
-        { label: t('me.cmp.week', { n: nf(cw - 1) }), value: pf(pa) }, { label: t('me.cmp.week', { n: nf(cw) }), value: pf(ca) }], { cls: 'mt-2' });
-      if (pa > 0) {
+        { label: t('me.cmp.week', { n: nf(cw - 1) }), value: pa == null ? '\u2013' : pf(pa) }, { label: t('me.cmp.week', { n: nf(cw) }), value: ca == null ? '\u2013' : pf(ca) }], { cls: 'mt-2' });
+      // the difference of two averages is in percentage points (64% → 74% is "10 percentage points higher", not 10%);
+      // only compared when both weeks have something logged
+      if (pa != null && ca != null) {
         var diff = ca - pa;
         body += '<p class="tr-delta ' + (diff > 0 ? 'is-up' : diff < 0 ? 'is-down' : '') + '">' + RS.icon(diff > 0 ? 'arrow-up' : diff < 0 ? 'arrow-down' : 'minus', { size: 16 }) +
-          '<span>' + esc(diff > 0 ? t('me.cmp.better', { n: nf(diff) }) : diff < 0 ? t('me.cmp.lower', { n: nf(-diff) }) : t('me.cmp.same')) + '</span></p>';
+          '<span>' + esc(diff > 0 ? tn('me.cmp.up', diff) : diff < 0 ? tn('me.cmp.down', -diff) : t('me.cmp.same')) + '</span></p>';
       }
     }
     return ui.card({ kicker: { icon: 'scale', text: t('me.cmp.title') }, cls: 'tr-cmp', body: body });
@@ -1062,7 +1130,8 @@
     var e = m[id];
     if (!e) return t('me.badge.locked');
     var d = isObj(e) && e.d ? new Date(e.d) : null;
-    return d && !isNaN(d.getTime()) ? t('me.badge.unlocked', { date: RS.fmt.date(d, { day: 'numeric', month: 'long', year: 'numeric' }) }) : t('me.badge.on');
+    // a badge from older data (true, or no date) has no unlock date to show
+    return d && !isNaN(d.getTime()) ? t('me.badge.unlocked', { date: RS.fmt.date(d, { day: 'numeric', month: 'long', year: 'numeric' }) }) : t('me.badge.unlockedNoDate');
   }
   function openBadge(id) {
     var b = badges().filter(function (x) { return x.id === id; })[0];
@@ -1125,23 +1194,34 @@
       if (rows.length) body += '<p class="tr-h3 mt-4">' + esc(t('me.day.bySection')) + '</p>' + ui.list(rows, { cls: 'tr-compact tr-daysum-list' });
       body = '<div class="tr-daysum" tabindex="0" role="group" aria-label="' + esc(t('me.day.summary', { n: nf(d) })) + '">' + body + '</div>';
     }
-    RS.sheet.open({ title: t('me.day.title', { n: nf(d) }), body: body,
-      actions: [{ text: t('me.day.details'), act: 'tr.daydetail', arg: d }, { text: t('me.day.open'), act: 'tr.dayopen', arg: d, variant: 'primary' }] });
+    // "Open in Today" only where Today shows Ramadan days; in year-round and Prep mode the day is changed on me/day
+    var acts = RS.appMode() === 'ramadan'
+      ? [{ text: t('me.day.details'), act: 'tr.daydetail', arg: d }, { text: t('me.day.open'), act: 'tr.dayopen', arg: d, variant: 'primary' }]
+      : [{ text: t('core.close'), act: 'sheet.close' }, { text: t('me.day.edit'), act: 'tr.daydetail', arg: d, variant: 'primary' }];
+    RS.sheet.open({ title: t('me.day.title', { n: nf(d) }), body: body, actions: acts });
   }
+  // Ramadan mode: the day's summary (done and not done) and "Open in Today", which shows that day on Today.
+  // Year-round and Prep mode, where Today shows other things: the day's checklist right here, so a past Ramadan day
+  // can still be corrected (the ticks change rs-day-<n>, never the date or the day Today shows).
   function renderDay(view, params) {
-    var d = RS.clamp(parseInt(params && params.n, 10) || curDay(), 1, DAYS), p = dayParts(d), x = p.x;
+    var d = RS.clamp(parseInt(params && params.n, 10) || curDay(), 1, DAYS), p = dayParts(d), x = p.x, ram = RS.appMode() === 'ramadan';
     RS.topbar({ title: t('me.day.title', { n: nf(d) }), sub: t('me.sub', { year: season() }), back: 'me' });
     var h = [ui.hero({
       kicker: { icon: 'calendar-days', text: t('today.kicker.day', { n: nf(d) }) }, number: x ? nf(x.pct) : '0', unit: '%',
-      label: x ? t('me.day.label') : t('me.day.none'), ring: { pct: x ? x.pct : 0 },
+      label: x ? t('me.day.label') : t('me.day.none'), ring: { pct: x ? x.pct : 0, id: 'tr-ring' },
       metrics: [{ label: t('today.metric.deeds'), value: x ? nf(x.done) + '/' + nf(x.tot) : '\u2013' }, { label: t('today.metric.points'), value: x ? nf(x.pts) : '\u2013' }, { label: t('today.metric.quran'), value: nf(p.q) }],
-      cta: { eyebrow: t('me.day.ctaEyebrow'), text: t('me.day.open'), act: 'tr.dayopen', arg: d }
+      cta: ram ? { eyebrow: t('me.day.ctaEyebrow'), text: t('me.day.open'), act: 'tr.dayopen', arg: d } : null
     })];
-    if (x && x.hayd) h.push(ui.note(t('me.day.hayd'), { icon: 'flower-2', tone: 'plain' }));
-    var dn = deedGroups(p.done, 'is-done', 3), ms = deedGroups(p.missed, 'is-missed', 3);
-    if (x) {
-      h.push(ui.card({ kicker: { icon: 'circle-check', text: t('me.day.done') }, body: dn || '<p class="caption">' + esc(t('me.day.noneDone')) + '</p>' }));
-      if (ms) h.push(ui.card({ kicker: { icon: 'circle', text: t('me.day.missed') }, body: ms }));
+    if (!ram) {
+      h.push(ui.note(t('me.day.editNote', { n: nf(d), year: season() }), { icon: 'info', tone: 'plain' }));
+      h.push(checklist(rCtx(d), getRec('rs-day-' + d), { pin: d }));
+    } else {
+      if (x && x.hayd) h.push(ui.note(t('me.day.hayd'), { icon: 'flower-2', tone: 'plain' }));
+      var dn = deedGroups(p.done, 'is-done', 3), ms = deedGroups(p.missed, 'is-missed', 3);
+      if (x) {
+        h.push(ui.card({ kicker: { icon: 'circle-check', text: t('me.day.done') }, body: dn || '<p class="caption">' + esc(t('me.day.noneDone')) + '</p>' }));
+        if (ms) h.push(ui.card({ kicker: { icon: 'circle', text: t('me.day.missed') }, body: ms }));
+      }
     }
     if (p.j && p.j.t) h.push(ui.card({ kicker: { icon: 'notebook-pen', text: t('journal.kicker') }, body: (p.j.p ? '<p class="tr-jprompt">' + esc(p.j.p) + '</p>' : '') + '<p class="tr-jtext">' + esc(p.j.t) + '</p>' }));
     view.innerHTML = h.join('');
@@ -1152,7 +1232,8 @@
     RS.topbar({ title: t('me.badges'), back: 'me' });
     var m = badgeMap(), c = badgeCount(m), tot = badges().length;
     view.innerHTML = ui.hero({
-      kicker: { icon: 'award', text: t('me.badges') }, number: nf(c), unit: '/' + nf(tot), label: t('me.badgesLabel'),
+      // one string ("3/12"): a separate "/12" unit would take the RTL direction and read "3 12/" in Arabic
+      kicker: { icon: 'award', text: t('me.badges') }, number: nf(c) + '/' + nf(tot), label: t('me.badgesLabel'),
       ring: { pct: tot ? c / tot * 100 : 0 }
     }) + ui.card({ cls: 'is-tight tr-badge-list', body: ui.list(badges().map(function (b) {
       var on = !!m[b.id];
@@ -1211,8 +1292,10 @@
     if (cur === 'prep') opts.splice(2, 0, 'prep');
     var rows = opts.map(function (v) {
       var on = v === cur;
+      // each row switches to its mode and closes the sheet (an action, not a toggle): the current one is marked
+      // aria-current rather than aria-pressed
       return ui.row({ lead: ui.check(on), title: modeName(v), sub: t('me.set.modeDesc.' + v, { month: month }), act: 'tr.modepick', arg: v,
-        cls: on ? 'is-current' : '', attrs: { 'aria-pressed': on ? 'true' : 'false' } });
+        cls: on ? 'is-current' : '', attrs: { 'aria-current': on ? 'true' : null } });
     });
     RS.sheet.open({ title: t('me.set.modeTitle'), cls: 'tr-mode-sheet', body: ui.list(rows, { cls: 'tr-modes' }), actions: [{ text: t('core.close'), act: 'sheet.close' }] });
   }
@@ -1232,7 +1315,7 @@
       cta: { eyebrow: t('me.set.mode'), text: t('me.set.modeCta'), act: 'tr.modesheet' }
     })];
     out.push(ui.card({ kicker: { icon: 'palette', text: t('me.set.display') }, cls: 'tr-set', body:
-      ui.select({ id: 'tr-set-lang', label: t('me.set.language'), value: RS.lang(), act: 'tr.lang', options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name }; }) }) +
+      ui.select({ id: 'tr-set-lang', label: t('me.set.language'), value: RS.lang(), act: 'tr.lang', options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name, lang: l.code, dir: l.dir }; }) }) +
       '<div class="field"><span class="field-lbl" id="tr-theme-lbl">' + esc(t('theme.label')) + '</span>' +
       ui.seg([{ value: 'system', text: t('theme.system') }, { value: 'light', text: t('theme.light') }, { value: 'dark', text: t('theme.dark') }], s.theme, { act: 'tr.theme', label: t('theme.label') }) + '</div>' +
       ui.select({ id: 'tr-set-level', label: t('me.set.level'), hint: t('me.set.levelSub'), value: s.level || 'adult', act: 'tr.level',
@@ -1270,16 +1353,20 @@
       .replace(/[\u2013\u2014\u2212]/g, '-').replace(/\u2026/g, '...').replace(/[\u00a0\u202f\u2009]/g, ' ')
       .replace(/\u00d7/g, 'x').replace(/\ufdfa/g, '(peace be upon him)');
   }
-  // Journal text for the PDF (Helvetica = Latin-1): emoji, variation selectors and joiners are removed, and each run
-  // of another script becomes a short marker ("[Arabic]" or "[...]"), so "said الحمد لله after Fajr 🙏" prints as
-  // "said [Arabic] after Fajr". Only an entry that would lose more than half of its letters is replaced by a note
-  // (null); one that has nothing left at all (only emoji) is skipped ('').
+  // Journal text for the PDF. jsPDF's Helvetica prints WinAnsi (cp1252): Latin-1 plus the characters in CP1252
+  // (œ Œ € š „ ‰ ™ …), so French "cœur", "10 €" or "Œuvre" print as they are. Emoji, variation selectors, joiners
+  // and control characters are removed, and each run of another script becomes a short marker ("[Arabic]" or
+  // "[...]"), so "said الحمد لله after Fajr 🙏" prints as "said [Arabic] after Fajr". Only an entry that would lose
+  // more than half of its letters is replaced by a note (null); one with nothing left at all (only emoji) is skipped ('').
   var EMOJI = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{2300}-\u{23FF}\u{E0020}-\u{E007F}\u{FE00}-\u{FE0F}\u{200B}-\u{200F}\u{20E3}]/gu;
-  var OTHER_RUN = /[^\u0000-\u00ff]+(?:[\s.,;:!?'"()\-]+[^\u0000-\u00ff]+)*/g;
-  var ARABIC = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  var CP1252 = '\u0152\u0153\u0160\u0161\u0178\u017d\u017e\u0192\u02c6\u02dc\u2013\u2014\u2018\u2019\u201a\u201c\u201d\u201e\u2020\u2021\u2022\u2026\u2030\u2039\u203a\u20ac\u2122';
+  var NOT_WIN = '[^\\u0000-\\u00ff' + CP1252 + ']';
+  var OTHER_RUN = new RegExp(NOT_WIN + '+(?:[\\s.,;:!?\'"()\\-]+' + NOT_WIN + '+)*', 'g');
+  var CTRL = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/g;
+  var ARABIC = /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\ufb50-\ufdff\ufe70-\ufeff]/;
   function letters(str) { var m = String(str).match(/\p{L}/gu); return m ? m.length : 0; }
   function pdfText(str) {
-    var s0 = latin(String(str == null ? '' : str).replace(EMOJI, ''));
+    var s0 = latin(String(str == null ? '' : str).replace(EMOJI, '').replace(CTRL, ''));
     var before = letters(s0), kept = s0.replace(OTHER_RUN, ' ');
     var after = letters(kept);
     var out = s0.replace(OTHER_RUN, function (run) { return ARABIC.test(run) ? pT('me.pdf.arabic') : '[...]'; })
@@ -1316,7 +1403,10 @@
     var N = function (x) { return nfm.format(x); };
     var PINE = [11, 34, 25], EMER = [4, 120, 87], MINT = [167, 243, 208], SOFT = [236, 253, 245], INK = [16, 25, 21], INK2 = [69, 82, 76], INK3 = [95, 108, 102], HAIR = [214, 224, 219];
     var W = 210, H = 297, M = 16, y = 0;
-    var m = meData(), b = T.best(), cur = T.streaks(), q = qObj(), bm = badgeMap(), sea = season();
+    // "current" streaks run up to today in a live Ramadan, else up to the last day with a record (not the day that
+    // happens to be open on Today)
+    var m = meData(), b = T.best(), q = qObj(), bm = badgeMap(), sea = season();
+    var cur = streaksAt((!archiveAsk && liveDay()) || m.lastRec || curDay(), m.recs);
     function col(c, kind) { if (kind === 'fill') doc.setFillColor(c[0], c[1], c[2]); else if (kind === 'draw') doc.setDrawColor(c[0], c[1], c[2]); else doc.setTextColor(c[0], c[1], c[2]); }
     function font(style, size) { doc.setFont('helvetica', style); doc.setFontSize(size); }
     function room(hh) { if (y + hh > H - 18) { doc.addPage(); y = 20; } }
@@ -1557,45 +1647,94 @@
     return true;
   }
   function hasRamadanData() { for (var i = 1; i <= DAYS; i++) if (RS.store.raw('rs-day-' + i) != null) return true; return qTotal() > 0; }
-  // v7 archiveCheck: a new Ramadan (Hijri year) with last season's data on the device → offer to archive it.
-  // Until the question is answered Today shows a neutral hero (archiveWait), not last season's record as today's.
-  var archiveAsk = null;
+  function storedSeason() { var s = String(RS.store.raw('rs-season') || '').trim(); return /^\d{4}$/.test(s) ? s : ''; }
+  // The Ramadan that data saved at time `ms` belongs to: the latest one that had begun by then (Hijri month 9 or
+  // later of that year, else the year before).
+  function seasonAt(ms) { var h = RS.hijri(new Date(ms)); return String(h.month >= 9 ? h.year : h.year - 1); }
+  // rs-season is missing when the days were saved by v6, which never stored it (v6 was the live version in Ramadan
+  // 1447 AH; v7 came later). The season then comes from the data, never from today's date: the newest timestamp of a
+  // day record or a Ramadan journal entry (v6 and v7 save one with each). Data with no timestamp at all counts as the
+  // season before the current one until the current Ramadan is over, so a new Ramadan still asks what to do with it.
+  function inferSeason() {
+    var ts = 0, j = extras().journal;
+    for (var i = 1; i <= DAYS; i++) { var r = getRec('rs-day-' + i); if (r && r.ts > ts) ts = r.ts; }
+    if (isObj(j)) Object.keys(j).forEach(function (k) { if (/^r\d+$/.test(k) && isObj(j[k]) && num(j[k].ts) > ts) ts = num(j[k].ts); });
+    if (ts > 0) return seasonAt(Math.min(ts, Date.now()));
+    var h = RS.hijri();
+    return String(h.month > 9 ? h.year : h.year - 1);
+  }
+  // Boot, before the first render: days without rs-season get their season from the data, and a device with nothing
+  // logged starts the season when Ramadan begins (v7 rule). Saved silently (rs-season is not in the cloud snapshot).
+  function seasonBoot() {
+    if (storedSeason()) return;
+    var h = RS.hijri(), s = hasRamadanData() ? inferSeason() : (h.month === 9 ? String(h.year) : '');
+    if (s) RS.store.setRaw('rs-season', s);
+  }
+  // v7 archiveCheck: a new Ramadan (Hijri year) with an earlier season's days on the device → offer to archive them.
+  // Only an explicit choice in the sheet stores anything. Closing it (Escape, Back, the scrim, the close button) means
+  // "later": rs-season stays as it was, Today and Quran keep a neutral hero (archiveWait) whose button asks again, and
+  // the question comes back at the next start. Last season's records are never shown as this Ramadan's.
+  var archiveAsk = null, archiveSheet = false;
   function archiveNeeded() {
-    var h = RS.hijri(), sea = RS.store.raw('rs-season');
-    if (!sea || h.month !== 9 || String(h.year) === String(sea) || !hasRamadanData()) return null;
-    return { year: String(h.year), old: String(sea) };
+    var h = RS.hijri();
+    if (h.month !== 9 || !hasRamadanData()) return null;
+    var sea = season();
+    return sea === String(h.year) ? null : { year: String(h.year), old: sea };
   }
   function archiveWait() {
     var a = archiveAsk;
     return ui.hero({ kicker: { icon: 'moon', text: t('today.archive.kicker', { year: a.year }) }, label: t('today.archive.title'), cls: 'tr-hero-topic',
       text: t('today.archive.wait', { old: a.old }), cta: { eyebrow: t('today.archive.eyebrow'), text: t('today.archive.choose'), act: 'tr.archive' } });
   }
-  var archiveOpen = false;
-  function archiveCheck() {
-    var h = RS.hijri(), sea = RS.store.raw('rs-season'), has = hasRamadanData();
-    if (!sea) { if (has || h.month === 9) RS.store.setRaw('rs-season', String(h.year)); return; }
-    if (h.month !== 9 || String(h.year) === String(sea)) return;
-    if (!has) { RS.store.setRaw('rs-season', String(h.year)); return; }
-    if (archiveOpen) return;
-    archiveOpen = true;
-    if (!archiveAsk) { archiveAsk = { year: String(h.year), old: String(sea) }; softRefresh(); }
-    RS.confirm({ title: t('today.archive.title'), body: t('today.archive.body', { year: h.year, old: sea }), ok: t('today.archive.ok'), cancel: t('today.archive.cancel') }).then(function (ok) {
-      archiveOpen = false;
-      archiveAsk = null;
-      if (ok) {
-        var arc = { days: {}, qPages: RS.store.raw('rs-quran-pages'), best: RS.store.raw('rs-best-streaks'), journal: {} };
-        for (var d = 1; d <= DAYS; d++) { var k = RS.store.raw('rs-day-' + d); if (k != null) { arc.days[d] = k; RS.store.del('rs-day-' + d); } }
-        RS.store.del('rs-quran-pages');
-        var x = extras();
-        if (isObj(x.journal)) Object.keys(x.journal).forEach(function (jk) { if (/^r\d+$/.test(jk)) { arc.journal[jk] = x.journal[jk]; delete x.journal[jk]; } });
-        RS.store.set('rs-extras', x);
-        RS.store.setRaw('rs-archive-' + sea, JSON.stringify(arc));
-        RS.toast(t('today.archive.done', { old: sea }), { tone: 'success' });
-      }
-      RS.store.setRaw('rs-season', String(h.year));
-      emit();
-      softRefresh();
+  // Re-reads the question (at start-up, when the app comes back to the foreground, from the neutral hero's button);
+  // open: show it now.
+  function archiveCheck(open) {
+    var h = RS.hijri();
+    // nothing on the device to move: the new season simply starts (v7)
+    if (h.month === 9 && !hasRamadanData() && storedSeason() !== String(h.year)) RS.store.setRaw('rs-season', String(h.year));
+    var was = !!archiveAsk;
+    archiveAsk = archiveNeeded();
+    if (!!archiveAsk !== was) softRefresh();
+    if (archiveAsk && open) openArchiveSheet();
+  }
+  function openArchiveSheet() {
+    var a = archiveAsk;
+    if (!a || archiveSheet) return;
+    archiveSheet = true;
+    RS.sheet.open({
+      title: t('today.archive.title'), cls: 'tr-archive-sheet',
+      body: '<p>' + esc(t('today.archive.body', { year: a.year, old: a.old })) + '</p><p class="caption mt-3">' + esc(t('today.archive.later')) + '</p>',
+      actions: [{ text: t('today.archive.cancel'), act: 'tr.archivekeep' }, { text: t('today.archive.ok'), act: 'tr.archivego', variant: 'primary' }],
+      onClose: function () { archiveSheet = false; }
     });
+  }
+  // archive: the old season's days, Quran pages and Ramadan journal entries move to rs-archive-<old season> (an
+  // archive already there for that season keeps whatever this one does not replace); otherwise they stay where they
+  // are and count as this season's (v7 "Cancel"). Badges and best streaks stay either way.
+  function archiveAnswer(archive) {
+    var a = archiveAsk;
+    RS.sheet.close();
+    if (!a) return;
+    if (archive) {
+      var prev = RS.store.get('rs-archive-' + a.old, null);
+      var arc = { days: {}, qPages: RS.store.raw('rs-quran-pages'), best: RS.store.raw('rs-best-streaks'), journal: {} };
+      for (var d = 1; d <= DAYS; d++) { var k = RS.store.raw('rs-day-' + d); if (k != null) { arc.days[d] = k; RS.store.del('rs-day-' + d); } }
+      RS.store.del('rs-quran-pages');
+      var x = extras();
+      if (isObj(x.journal)) Object.keys(x.journal).forEach(function (jk) { if (/^r\d+$/.test(jk)) { arc.journal[jk] = x.journal[jk]; delete x.journal[jk]; } });
+      RS.store.set('rs-extras', x);
+      if (isObj(prev)) {
+        ['days', 'journal'].forEach(function (f) { if (isObj(prev[f])) Object.keys(prev[f]).forEach(function (k2) { if (!(k2 in arc[f])) arc[f][k2] = prev[f][k2]; }); });
+        if (arc.qPages == null && prev.qPages != null) arc.qPages = prev.qPages;
+        if (arc.best == null && prev.best != null) arc.best = prev.best;
+      }
+      RS.store.setRaw('rs-archive-' + a.old, JSON.stringify(arc));
+    }
+    RS.store.setRaw('rs-season', a.year);
+    archiveAsk = null;
+    RS.toast(archive ? t('today.archive.done', { old: a.old }) : t('today.archive.kept', { year: a.year }), { tone: archive ? 'success' : 'default' });
+    emit();
+    softRefresh();
   }
   function dailyReminder() {
     var mode = RS.appMode();
@@ -1618,10 +1757,13 @@
     RS.buzz(8);
     RS.emit('day', d);
     refresh();
+    announceDay();                          // focus stays on the arrow: the new day and its progress are read out
   });
-  RS.act('tr.tick', function (id) {
+  // arg: a deed id (the day or date Today shows), or "<id>@<day>" for a Ramadan day changed on me/day
+  RS.act('tr.tick', function (arg) {
+    var m = /^(.+)@(\d{1,2})$/.exec(String(arg || '')), id = m ? m[1] : arg;
     if (!deed(id)) return;
-    var ctx = checkCtx(), on = false;
+    var ctx = m ? rCtx(m[2]) : checkCtx(), on = false;
     var r = change(ctx, function (ck, st) { if (st.hayd && deed(id).haydOff) return; ck[id] = !ck[id]; on = ck[id]; }, { id: id });
     RS.buzz(on ? 10 : 6);
     refresh();
@@ -1629,8 +1771,9 @@
     if (secEl && (r.perfect || secEl.classList.contains('is-complete'))) pulseSection(sec);
     if (r.perfect) pulseRing();
   });
-  RS.act('tr.hayd', function () {
-    var ctx = checkCtx();
+  // arg: empty (Today), or a Ramadan day number (me/day)
+  RS.act('tr.hayd', function (arg) {
+    var n = parseInt(arg, 10), ctx = n >= 1 && n <= DAYS ? rCtx(n) : checkCtx();
     change(ctx, function (ck, st) { st.hayd = !st.hayd; });
     RS.buzz(8);
     refresh();
@@ -1672,10 +1815,23 @@
     setExtra('qada', null, q);
     refresh();
   });
+  // A fast logged from 2 Shawwal on also counts toward the six days of Shawwal (until six are marked), and undoing
+  // it takes that one back. Today's year-round record is re-totalled, because the fast-day deeds count only with a fast.
   RS.act('tr.fast', function () {
-    var iso = RS.todayISO(), f = extras().fasts, on = isObj(f) && isObj(f[iso]) && !!f[iso].v;
-    if (!on && fastInfo(new Date()).blocked) return;
-    setExtra('fasts', iso, { v: !on, ts: Date.now() });
+    var iso = RS.todayISO(), f = extras().fasts, cur = isObj(f) && isObj(f[iso]) ? f[iso] : null, on = !!(cur && cur.v);
+    var fi = fastInfo(new Date()), h = fi.h, entry = { v: !on, ts: Date.now() }, six = -1;
+    if (!on && fi.blocked) return;
+    if (h.month === 10 && h.day >= 2) {
+      var n = shawwalDone(h.year);
+      if (!on && n < 6) { six = n + 1; entry.sh = 1; }
+      else if (on && cur.sh) six = Math.max(0, n - 1);
+    }
+    if (six >= 0) setExtra('shawwal', String(h.year), six, true);
+    setExtra('fasts', iso, entry, true);
+    var y = yCtx(iso), r = getRec(y.key);
+    if (r) RS.store.set(y.key, build(y, r.ck, r.hayd, r.hck));
+    emit();
+    if (six === 6 && !on) RS.toast(t('modes.shawwal.done'), { tone: 'success' });
     RS.buzz(8);
     refresh();
   });
@@ -1741,11 +1897,15 @@
   RS.act('tr.installx', function () { RS.store.setRaw('rs-inst-x', '1'); refresh(); });
   RS.act('tr.heat', function (d) { openDaySheet(RS.clamp(parseInt(d, 10) || 1, 1, DAYS)); });
   RS.act('tr.daydetail', function (d) { RS.sheet.close(); RS.router.go('me/day', { n: RS.clamp(parseInt(d, 10) || 1, 1, DAYS) }); });
+  // Today shows Ramadan days only in Ramadan mode; otherwise the day is opened on me/day and the day Today would
+  // show is left alone.
   RS.act('tr.dayopen', function (d) {
     d = RS.clamp(parseInt(d, 10) || 1, 1, DAYS);
     RS.sheet.close();
+    if (RS.appMode() !== 'ramadan') { RS.router.go('me/day', { n: d }); return; }
     if (RS.settings.day !== d) { RS.settings.day = d; RS.saveSettings(); RS.emit('day', d); }
     RS.router.go('today');
+    if (!archiveAsk) setTimeout(announceDay, 400);
   });
   RS.act('tr.badge', function (id) { openBadge(id); });
   RS.act('tr.catscope', function (v) { catScope = v === 'all' ? 'all' : 'day'; refresh(); });
@@ -1769,7 +1929,9 @@
   RS.act('tr.mode', setMode);
   RS.act('tr.modesheet', function () { openModeSheet(); });
   RS.act('tr.modepick', function (v) { RS.sheet.close(); setMode(v); });
-  RS.act('tr.archive', function () { archiveCheck(); });
+  RS.act('tr.archive', function () { archiveCheck(true); });
+  RS.act('tr.archivego', function () { archiveAnswer(true); });
+  RS.act('tr.archivekeep', function () { archiveAnswer(false); });
   RS.act('tr.guideopen', function (id) {
     var el = document.getElementById('tr-g-' + id);
     if (!el) return;
@@ -1805,10 +1967,15 @@
   /* ================================================================ boot */
   RS.on('boot', function () {
     applyBody();
-    archiveAsk = archiveNeeded();           // before the first render: Today stays neutral until the question is answered
+    liveEl();
+    seasonBoot();                           // before the first render: v6 days get their season from the data
+    archiveAsk = archiveNeeded();           // Today and Quran stay neutral until the new-season question is answered
     autoDay(true);
-    saveBest(T.streaks());
-    setTimeout(archiveCheck, 0);            // after router.start(): the first navigation closes open dialogs
+    var best = saveBest(T.streaks());
+    setTimeout(function () {                // after router.start(): the first navigation closes open overlays
+      if (best) emit();                     // rs-best-streaks is part of the cloud snapshot
+      archiveCheck(true);
+    }, 0);
     setTimeout(dailyReminder, 1500);
     var c = RS.cloud;
     if (c && c.ready && typeof c.ready.then === 'function') c.ready.then(softRefresh, function () {});
@@ -1818,6 +1985,7 @@
   RS.on('theme', function () { var c = RS.router.current(); if (c && c.route === 'me/settings') softRefresh(); });
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { flushAll(); return; }
+    archiveCheck(false);                    // the app may have stayed open into a new Ramadan
     if (autoDay()) softRefresh();
     else updateCta();
   });

@@ -4,8 +4,8 @@
    mint/emerald accent used sparingly, Manrope with tabular figures, thin line icons.
    Sections: 1 tokens · 2 base · 3 layout & shell · 4 topbar · 5 bottom nav · 6 hero object · 7 cards & lists ·
              8 metrics · 9 ring · 10 buttons & CTA · 11 controls (toggle, seg, chips, fields, check) ·
-             12 feedback (empty, bar, grade, ref) · 13 charts · 14 sheet, dialog, toast · 15 utilities ·
-             16 styleguide · 17 motion · 18 focus (component overrides)
+             12 feedback (empty, bar, grade, ref) · 13 charts · 14 sheet, dialog, toast · 15 utilities and bidi
+             for shared text · 16 styleguide · 17 motion · 18 focus (component overrides)
    Rules: logical properties only (RTL-safe), 44px touch targets, no emoji/gold/gradient text, no shadows on
    ordinary cards. Module CSS (tracker/learn/prep/cloud.css) builds on these classes and tokens.
    ========================================================================== */
@@ -25,6 +25,7 @@
   --card-edge: transparent;         /* hairline border on cards only in dark mode */
   --accent: #047857;
   --accent-soft: rgba(4, 120, 87, .10);
+  --accent-ink: #03684C;            /* accent TEXT on an --accent-soft tint (chips): >= 5.4:1 on every light surface */
   --on-accent: #FFFFFF;
   --danger: #B42318;
   --danger-soft: rgba(180, 35, 24, .08);
@@ -71,6 +72,10 @@
   --font-quran: 'Amiri', 'Noto Naskh Arabic', 'Noto Sans Arabic', 'Geeza Pro', serif;
   --track-tight: -.02em;
   --track-wide: .04em;
+  /* line-height for text clamped with overflow: hidden (CTA text, an over-long topbar title): the line box must hold
+     the script's tallest ink or accents, Arabic dots and Devanagari matras are cut. Measured: Latin with accents 1.29,
+     Devanagari 1.31, Bengali 1.29, Urdu 1.57, Arabic 1.71 (set per language below). */
+  --lh-clamp: 1.32;
   --ease: cubic-bezier(.2, .8, .2, 1);
   --dur: 200ms;
 }
@@ -90,6 +95,7 @@
   --card-edge: rgba(238, 248, 242, .07);
   --accent: #6EE7B7;
   --accent-soft: rgba(110, 231, 183, .12);
+  --accent-ink: #6EE7B7;
   --on-accent: #052E22;
   --danger: #FDA29B;
   --danger-soft: rgba(253, 162, 155, .10);
@@ -120,6 +126,7 @@
     --card-edge: rgba(238, 248, 242, .07);
     --accent: #6EE7B7;
     --accent-soft: rgba(110, 231, 183, .12);
+    --accent-ink: #6EE7B7;
     --on-accent: #052E22;
     --danger: #FDA29B;
     --danger-soft: rgba(253, 162, 155, .10);
@@ -152,9 +159,9 @@
 }
 
 /* Script fallbacks (Manrope first so Latin digits stay tabular Manrope) */
-html:lang(ar), html:lang(ur) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Arabic', 'Geeza Pro', 'Segoe UI', system-ui, sans-serif; }
-html:lang(bn) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Bengali', 'Vrinda', system-ui, sans-serif; }
-html:lang(hi) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Devanagari', 'Mangal', system-ui, sans-serif; }
+html:lang(ar), html:lang(ur) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Arabic', 'Geeza Pro', 'Segoe UI', system-ui, sans-serif; --lh-clamp: 1.75; }
+html:lang(bn) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Bengali', 'Vrinda', system-ui, sans-serif; --lh-clamp: 1.35; }
+html:lang(hi) { --font: 'Manrope', 'RS Honorific', 'Noto Sans Devanagari', 'Mangal', system-ui, sans-serif; --lh-clamp: 1.35; }
 html:lang(zh) { --font: 'Manrope', 'RS Honorific', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC', system-ui, sans-serif; }
 /* Tracking breaks cursive joining (Arabic) and conjuncts/CJK rhythm: keep letter-spacing only for Latin/Cyrillic */
 html:lang(ar), html:lang(ur), html:lang(bn), html:lang(hi), html:lang(zh) { --track-tight: 0; --track-wide: 0; }
@@ -169,8 +176,9 @@ html {
   text-size-adjust: 100%;
   background: var(--paper);
   /* Keep focused controls clear of the sticky topbar and the floating nav when the browser scrolls them into view
-     (WCAG 2.4.11). main.js/core.js put .no-nav on <html> on screens without the nav. */
-  scroll-padding-top: calc(72px + env(safe-area-inset-top));
+     (WCAG 2.4.11). main.js/core.js put .no-nav on <html> on screens without the nav. --topbar-pad is the measured
+     topbar height + 12px (core.js; the title may wrap to two lines); the fallback fits a one-line title. */
+  scroll-padding-top: var(--topbar-pad, calc(72px + env(safe-area-inset-top)));
   scroll-padding-bottom: calc(var(--nav-h) + var(--nav-gap) + 24px + env(safe-area-inset-bottom));
 }
 html.no-nav { scroll-padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
@@ -188,7 +196,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden would turn <body> into a scroll container whenever <html> is not overflow: visible
+     (the scroll lock below), and the sticky topbar would then stick to <body> and scroll away with the page */
+  overflow-x: clip;
+}
+@supports not (overflow-x: clip) {
+  body { overflow-x: hidden; }
+  html.is-locked body { overflow: visible; }      /* older engines: keep <body> from becoming the scroller while locked */
 }
 h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
 h1, h2, h3, h4 { font-weight: 700; letter-spacing: var(--track-tight); line-height: 1.25; }
@@ -235,7 +249,8 @@ svg { overflow: visible; }
 .view > .sec-hd { margin-top: var(--s6); }
 .view > .sec-hd + * { margin-top: var(--s2); }
 .boot-msg { padding: 64px 8px; text-align: center; color: var(--ink-3); font-size: 15px; }
-html.is-locked, html.is-locked body { overflow: hidden; }
+/* sheet or dialog open: only the root stops scrolling (see body above); the sticky topbar stays where it was */
+html.is-locked { overflow: hidden; }
 
 /* 4. TOPBAR --------------------------------------------------------------- */
 .topbar {
@@ -262,8 +277,14 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   padding-right: max(8px, env(safe-area-inset-right));
 }
 .topbar-titles { flex: 1 1 auto; min-width: 0; padding-inline: 8px; }
-.topbar-sub { display: block; font-size: 12px; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.topbar-title { font-size: 22px; font-weight: 700; letter-spacing: var(--track-tight); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Translated titles are often longer than the English ones ("Preparación para el Ramadán" at 320px): title and sub
+   wrap instead of being cut, and RS.topbar marks a long title .is-long (a little smaller on narrow screens). A title
+   that would need more than two lines (a long competition name) is clamped to two: RS.topbar measures it and adds
+   .is-clamped. Only then is it overflow: hidden, with a line box tall enough for its script (--lh-clamp). */
+.topbar-sub { display: block; font-size: 12px; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); line-height: 1.3; overflow-wrap: anywhere; }
+.topbar-title { font-size: 22px; font-weight: 700; letter-spacing: var(--track-tight); line-height: 1.2; overflow-wrap: anywhere; }
+.topbar-title.is-long { font-size: clamp(18px, 5.6vw, 22px); line-height: 1.18; }
+.topbar-title.is-clamped { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: var(--lh-clamp); }
 .topbar-title:focus, .topbar-title:focus-visible, .view:focus-visible { outline: none; box-shadow: none; }
 .topbar-actions { display: flex; align-items: center; flex: none; }
 .icon-btn {
@@ -358,6 +379,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   color: var(--hero-ink);
   --accent: var(--hero-accent);
   --accent-soft: rgba(110, 231, 183, .14);
+  --accent-ink: var(--hero-accent);
   --hairline: var(--hero-hairline);
   --ink: var(--hero-ink);
   --ink-2: var(--hero-ink-2);
@@ -368,6 +390,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .hero .kicker .ic { color: var(--hero-accent); }
 .hero-main { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); margin-top: var(--s4); }
 .hero-figure { flex: 1 1 auto; min-width: 0; }
+/* Long figures (ui.hero: 5+ characters, 4+ with a unit, e.g. 2,140 pts) are set smaller so they stay beside the
+   ring at 320px. Last resort: a figure that still does not fit (1,234,567) moves the ring below it. */
+.hero-num.is-long .num { font-size: clamp(40px, 12vw, 56px); }
+.hero-main.is-long { flex-wrap: wrap; }
+.hero-main.is-long > .hero-figure { flex: 1 1 0; min-width: min-content; }
+.hero-main.is-long :is(.hero-label, .hero-text) { overflow-wrap: anywhere; }    /* only the figure sets the width */
 .hero-num { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px var(--s2); }
 .hero-num.unit-tight { column-gap: 2px; }                       /* 37% · 3/5 read as one figure */
 [dir="rtl"] .hero-num.unit-tight { flex-direction: row-reverse; justify-content: flex-end; }   /* still "37%" */
@@ -378,6 +406,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   letter-spacing: -.04em;
   color: var(--hero-ink);
   font-variant-numeric: tabular-nums;
+  unicode-bidi: plaintext;          /* '+2' / '-3' keep their sign in front in the RTL UI (no strong letter: LTR) */
 }
 .hero-num .unit { font-size: 20px; font-weight: 400; color: var(--hero-ink-2); letter-spacing: -.01em; }
 .hero-label { margin-top: 8px; font-size: 14.5px; font-weight: 500; color: var(--hero-ink-2); line-height: 1.4; }
@@ -506,9 +535,9 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
    "Year-round", "30 days") are marked .is-text by ui.metrics and set a little smaller than figures. */
 .metric dd { margin: 4px 0 0; font-size: clamp(16px, 4.8vw, 20px); font-weight: 600; letter-spacing: var(--track-tight); color: var(--ink); line-height: 1.25; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .metric.is-text dd { font-size: clamp(15px, 4.1vw, 16px); line-height: 1.3; letter-spacing: 0; }
-/* physical alignment (see .row-val): labels and values stay on the UI's side even when module CSS gives them
-   unicode-bidi: plaintext for mixed-script text */
-.metric dt, .metric dd { text-align: left; }
+/* plaintext: a value without letters ('+3', '-12%') runs left to right, so its sign stays in front in the RTL UI;
+   words keep their own direction. The alignment is physical (see .row-val), so labels and values stay on the UI's side. */
+.metric dt, .metric dd { text-align: left; unicode-bidi: plaintext; }
 [dir="rtl"] .metric dt, [dir="rtl"] .metric dd { text-align: right; }
 .metrics.on-dark .metric { border-color: var(--hero-hairline); }
 .metrics.on-dark dt { color: var(--hero-ink-3); }
@@ -534,7 +563,7 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
 @media (max-width: 360px) { .hero .ring { --ring-size: 88px; } }
 .ring-svg { grid-area: 1 / 1; width: 100%; height: 100%; transform: rotate(-90deg); }
 .ring-track { fill: none; stroke: var(--track); }
-.ring-bar { fill: none; stroke-linecap: round; transition: stroke-dashoffset .6s var(--ease); }
+.ring-bar { fill: none; stroke-linecap: round; transition: stroke-dashoffset .25s var(--ease), stroke-dasharray .25s var(--ease); }
 .ring .stop-a { stop-color: var(--ring-a); }
 .ring .stop-b { stop-color: var(--ring-b); }
 .ring.on-dark .ring-track { stroke: var(--hero-track); }
@@ -553,8 +582,26 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
 .ring.on-dark .ring-svg { filter: drop-shadow(0 0 6px rgba(110, 231, 183, .35)); }
 .ring.is-empty::before { opacity: .35; }
 .ring-txt { grid-area: 1 / 1; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.05; max-width: 78%; }
-.ring-val { font-size: calc(var(--ring-size) * .22); font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
-.ring-sub { margin-top: 2px; font-size: max(12px, calc(var(--ring-size) * .1)); font-weight: 600; color: var(--ink-3); letter-spacing: .02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.ring-val { font-size: calc(var(--ring-size) * .22); font-weight: 600; letter-spacing: -.03em; color: var(--ink); unicode-bidi: plaintext; }
+/* The sub-label is never cut: it wraps (translations such as "Добрые дела" take two short lines in the 88px ring at
+   320px), and ui.ring marks one longer than 9 characters .is-long (a little smaller). No line clamp: a clamp needs
+   overflow: hidden, which cut Arabic and Urdu dots in this small line box. Keep ring subs to a word or two. */
+.ring-sub {
+  max-width: 100%;
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  unicode-bidi: plaintext;
+  font-size: max(12px, calc(var(--ring-size) * .1));
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: .02em;
+  color: var(--ink-3);
+}
+.ring-sub.is-long { font-size: max(11px, calc(var(--ring-size) * .09)); letter-spacing: 0; }
+html:lang(ar) .ring-sub, html:lang(ur) .ring-sub { line-height: 1.35; }   /* two lines: room for dots and hamza */
+html:lang(hi) .ring-sub, html:lang(bn) .ring-sub { line-height: 1.25; }
 .ring.on-dark .ring-val { color: var(--hero-ink); }
 .ring.on-dark .ring-sub { color: var(--hero-ink); }
 
@@ -578,15 +625,14 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
   transition: transform .15s var(--ease), background-color var(--dur) var(--ease), border-color var(--dur), opacity var(--dur);
 }
 .btn .ic { width: 18px; height: 18px; }
-.btn:active:not(:disabled) { transform: scale(.98); }
-.btn:disabled, .btn.is-disabled { opacity: .45; }
+.btn:active:not(:disabled):not(.is-disabled) { transform: scale(.98); }
 .btn-primary { background: var(--btn-bg); color: var(--btn-ink); box-shadow: var(--btn-shadow); }
 .btn-secondary { background: transparent; border-color: var(--hairline-2); color: var(--ink); }
 .btn-ghost { background: transparent; color: var(--accent); }
 .btn-danger { background: transparent; border-color: var(--hairline-2); color: var(--danger); }
 @media (hover: hover) {
-  .btn-secondary:hover:not(:disabled), .btn-ghost:hover:not(:disabled) { background: var(--accent-soft); }
-  .btn-danger:hover:not(:disabled) { background: var(--danger-soft); }
+  .btn-secondary:hover:not(:disabled):not(.is-disabled), .btn-ghost:hover:not(:disabled):not(.is-disabled) { background: var(--accent-soft); }
+  .btn-danger:hover:not(:disabled):not(.is-disabled) { background: var(--danger-soft); }
 }
 .btn-block { display: flex; width: 100%; }
 .btn-sm { min-height: 40px; padding: 8px 16px; font-size: 14px; }
@@ -596,6 +642,10 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
 /* Inside the hero the primary pill is mint in both themes */
 .hero .btn-primary { background: var(--mint); color: var(--mint-ink); box-shadow: none; }
 .hero .btn-secondary { border-color: var(--hero-hairline); color: var(--hero-ink); }
+/* Disabled: one neutral style for every variant instead of a faded fill (a faded mint or pine pill reads as a
+   mid-green slab, DESIGN §7). Declared after the variants so it wins at equal specificity. */
+.btn:disabled, .btn.is-disabled { opacity: 1; background: var(--card-2); border-color: var(--hairline); color: var(--ink-3); box-shadow: none; cursor: not-allowed; }
+.hero .btn:disabled, .hero .btn.is-disabled { background: rgba(236, 253, 245, .06); }
 
 .cta {
   display: flex;
@@ -632,12 +682,12 @@ button.row:active, a.row:active, .row-main:active { background: var(--card-2); }
   font-size: 15.5px;
   font-weight: 650;
   color: var(--hero-ink);
-  line-height: 1.3;
+  line-height: var(--lh-clamp);     /* clamped: the line box holds the script's tallest ink (see --lh-clamp) */
 }
 /* Hero text sits on the UI's side, under the eyebrow, whatever its script. The alignment is physical because
    unicode-bidi: plaintext (here, and in module CSS for mixed-script text) resolves start/end/match-parent against
    the text's OWN direction: a Latin competition name in the Arabic UI would otherwise sit on the left. */
-.hero-label, .hero-text, .cta-eyebrow, .cta-text { text-align: left; }
+.hero-label, .hero-text, .cta-eyebrow, .cta-text { text-align: left; unicode-bidi: plaintext; }
 [dir="rtl"] .hero-label, [dir="rtl"] .hero-text, [dir="rtl"] .cta-eyebrow, [dir="rtl"] .cta-text { text-align: right; }
 .cta-arrow { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--mint); color: var(--mint-ink); transition: transform var(--dur) var(--ease); }
 .cta-arrow .ic { width: 20px; height: 20px; stroke-width: 2; }
@@ -707,8 +757,9 @@ button.tgl::after { content: ''; position: absolute; inset: -7px -3px; }
   white-space: nowrap;
 }
 .chip .ic { width: 15px; height: 15px; }
+.chip > span { unicode-bidi: plaintext; }    /* '+5' keeps its sign in front in the RTL UI; words keep their own direction */
 button.chip::after { content: ''; position: absolute; inset: -4px 0; }
-.chip.is-active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }   /* state edge >= 3:1 */
+.chip.is-active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }   /* state edge >= 3:1 */
 
 /* Fields */
 .field { display: flex; flex-direction: column; gap: var(--s2); min-width: 0; }
@@ -769,7 +820,7 @@ button.check::after { content: ''; position: absolute; inset: -8px; }
 .empty .btn { margin-top: var(--s2); }
 
 .bar { position: relative; display: block; height: 6px; border-radius: var(--r-pill); background: var(--track); overflow: hidden; }
-.bar-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--ring-a), var(--ring-b)); transition: width .5s var(--ease); }
+.bar-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--ring-a), var(--ring-b)); transition: width .25s var(--ease); }
 [dir="rtl"] .bar-fill { background: linear-gradient(270deg, var(--ring-a), var(--ring-b)); }
 .bar.on-dark { background: var(--hero-track); }
 .bar.on-dark .bar-fill { background: linear-gradient(90deg, #ECFDF5, #6EE7B7); }
@@ -790,10 +841,10 @@ button.check::after { content: ''; position: absolute; inset: -8px; }
   border: 1px solid transparent;
   vertical-align: middle;
 }
-.grade-sahih { background: var(--accent-soft); color: var(--accent); }
+.grade-sahih { background: var(--accent-soft); color: var(--accent-ink); }      /* >= 5.4:1 on card, card-2 and paper */
 .grade-hasan { background: var(--card-2); border-color: var(--hairline-2); color: var(--ink-2); }
 .grade-daif { background: var(--danger-soft); color: var(--danger); }
-.grade-quran { background: transparent; border-color: var(--accent); color: var(--accent); }
+.grade-quran { background: transparent; border-color: var(--accent); color: var(--accent-ink); }
 .grade-other { background: var(--card-2); border-color: var(--hairline); color: var(--ink-3); }
 
 .ref { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; font-weight: 600; color: var(--ink-3); line-height: 1.4; }
@@ -807,7 +858,7 @@ button.check::after { content: ''; position: absolute; inset: -8px; }
 
 /* Display numbers outside the hero (huge, thin, tabular) */
 .display-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
-.display { font-size: clamp(56px, 17vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -.04em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.display { font-size: clamp(56px, 17vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -.04em; color: var(--ink); font-variant-numeric: tabular-nums; unicode-bidi: plaintext; }
 .display-unit { font-size: 18px; font-weight: 500; color: var(--ink-2); }
 .quote + .ref { margin-top: 10px; }
 
@@ -874,7 +925,7 @@ button.check::after { content: ''; position: absolute; inset: -8px; }
   border-bottom: 0;
   box-shadow: 0 -12px 40px -12px rgba(4, 24, 17, .25);
   transform: translateY(100%);
-  transition: transform .26s var(--ease);
+  transition: transform .24s var(--ease);
 }
 .is-shown > .sheet { transform: none; }
 .sheet:focus { outline: none; }
@@ -951,8 +1002,9 @@ html.is-locked .toast-root { top: calc(12px + env(safe-area-inset-top)); bottom:
 .toast-x { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin-block: -8px; border-radius: 50%; color: #B6CEC3; transition: background-color var(--dur) var(--ease), color var(--dur); }
 .toast-x .ic { width: 18px; height: 18px; }
 @media (hover: hover) { .toast-x:hover { background: rgba(236, 253, 245, .08); color: #EEF8F2; } }
-.toast.is-leaving { opacity: 0; transform: translateY(6px); transition: opacity .18s, transform .18s; }
+.toast.is-leaving { opacity: 0; transform: translateY(6px); transition: opacity .2s var(--ease), transform .2s var(--ease); }
 @keyframes rs-toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes rs-fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* 15. UTILITIES ------------------------------------------------------------------ */
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
@@ -986,6 +1038,18 @@ html.is-locked .toast-root { top: calc(12px + env(safe-area-inset-top)); bottom:
 .meta-i { position: relative; display: inline-flex; align-items: center; min-width: 0; margin-inline-start: 13px; }
 .meta-i::before { content: ''; position: absolute; inset-inline-start: -8px; top: 50%; width: 3px; height: 3px; margin-top: -1.5px; border-radius: 50%; background: var(--ink-3); opacity: .7; }
 .meta .link-btn { margin-block: -12px; }
+/* Bidi for shared text. A string may be an English fallback (a key not translated yet) or user text (a name, a
+   journal entry) inside a translated UI. plaintext orders each paragraph by its own first strong letter, so in the
+   Arabic UI "Reset all data?" keeps its "?" at the end and "29 Jumada al-Ula" its 29 in front. The alignment stays
+   on the UI's side and is physical (plaintext would resolve start/end against the text's own direction; see
+   .row-val, .toast-msg, .cta-text). Zero specificity: any class that aligns text (.t-center, module classes) wins,
+   and an element with its own dir attribute keeps it. Centred text only gets the ordering. Deliberately not done
+   in RS.t with isolate characters: the same strings feed attributes and the jsPDF report. */
+:where(.topbar-title, .topbar-sub, .sheet-title, .dialog-title, .dialog-body, .card-title, .card-bd > p, .sheet-bd > p, .row-title, .row-sub,
+       .note > span, .kicker > span, .sec-title, .field-lbl, .field-hint):where(:not([dir])) { unicode-bidi: plaintext; text-align: left; }
+:where([dir="rtl"]) :where(.topbar-title, .topbar-sub, .sheet-title, .dialog-title, .dialog-body, .card-title, .card-bd > p, .sheet-bd > p, .row-title, .row-sub,
+       .note > span, .kicker > span, .sec-title, .field-lbl, .field-hint):where(:not([dir])) { text-align: right; }
+:where(.empty-title, .empty-body, .stepper-title, .stepper-sub, .btn > span):where(:not([dir])) { unicode-bidi: plaintext; }
 
 /* 16. STYLEGUIDE (hidden #/styleguide route) ------------------------------------------- */
 .sg-label { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); }
@@ -1012,6 +1076,9 @@ html.is-locked .toast-root { top: calc(12px + env(safe-area-inset-top)); bottom:
   .sheet:not(.is-dragging), .is-shown > .sheet:not(.is-dragging), .dialog, .is-shown > .dialog { transform: none !important; }
   .sheet { opacity: 0; transition: opacity .2s linear; }
   .is-shown > .sheet { opacity: 1; }
+  .sheet.is-dragging { transition: opacity .2s linear; }     /* let go to close: it fades out where it was dropped */
+  /* overlays and toasts fade in AND out (core.js waits 200ms before removing them) */
+  .toast { animation-name: rs-fade-in; animation-duration: .2s !important; animation-timing-function: linear; }
   .btn:active:not(:disabled), .cta:active .cta-arrow, .toast.is-leaving { transform: none !important; }
   .tgl-knob, .check .ic, .ring-bar, .bar-fill, .nav { transition-duration: .01ms !important; }
   .no-nav .nav { transform: none; }
