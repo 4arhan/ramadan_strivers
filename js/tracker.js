@@ -1749,9 +1749,26 @@
     emit();
     softRefresh();
   }
+  // Shown on the Today screen only (elsewhere it would cover a quiz or prep screen): if the app opened on another
+  // tab, it waits until Today is visited.
+  var reminderWaiting = false;
   function dailyReminder() {
     var mode = RS.appMode();
     if (mode === 'prep' || archiveAsk) return;
+    var cur = RS.router && RS.router.current ? RS.router.current() : null;
+    if (!cur || cur.route !== 'today') {
+      if (!reminderWaiting) {
+        reminderWaiting = true;
+        RS.on('route', function onRoute() {
+          var c = RS.router.current();
+          if (!c || c.route !== 'today') return;
+          RS.off('route', onRoute);
+          reminderWaiting = false;
+          setTimeout(dailyReminder, 1200);
+        });
+      }
+      return;
+    }
     var today = RS.todayISO();
     if (RS.settings.remindOn === today) return;
     var ctx = mode === 'year' ? yCtx() : rCtx(), r = getRec(ctx.key);
