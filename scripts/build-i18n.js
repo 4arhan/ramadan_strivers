@@ -133,17 +133,26 @@ function pluralGroups(en) {
   return groups;
 }
 
+// The Eid report PDF uses jsPDF's Helvetica (Latin-1 only), so js/tracker.js (PDF_LANGS) prints its labels in English
+// for every other language; those languages need only the me.pdf.* toasts. Keep in step with scripts/check-i18n.js.
+const PDF_LANGS = ['en', 'es', 'fr', 'pt'];
+const PDF_TOASTS = ['me.pdf.loading', 'me.pdf.done', 'me.pdf.failed'];
+const pdfOnly = (code, k) => PDF_LANGS.indexOf(code) < 0 && k.startsWith('me.pdf.') && PDF_TOASTS.indexOf(k) < 0;
+
 function compare(en, lang) {
   const report = { missing: [], extra: [], mismatch: [] };
   if (lang.code === 'en') return report;
   const groups = pluralGroups(en);
+  // Required plural categories are those that whole numbers 0..1000 reach, as in scripts/check-i18n.js. es/fr/pt also
+  // have "many" (exact millions); RS.tn falls back to the language's own .other there, which is the right form.
   let cats;
-  try { cats = new Intl.PluralRules(lang.code).resolvedOptions().pluralCategories; } catch (e) { cats = ['one', 'other']; }
+  try { const pr = new Intl.PluralRules(lang.code), seen = new Set(); for (let i = 0; i <= 1000; i++) seen.add(pr.select(i)); cats = [...seen]; }
+  catch (e) { cats = ['one', 'other']; }
   const pluralKeyBase = k => { const i = k.lastIndexOf('.'); const b = k.slice(0, i); return i > 0 && groups.has(b) && PLURAL_CATS.includes(k.slice(i + 1)) ? b : null; };
   for (const k of Object.keys(en)) {
     const base = pluralKeyBase(k);
     if (base) continue;
-    if (!Object.prototype.hasOwnProperty.call(lang.dict, k)) report.missing.push(k);
+    if (!Object.prototype.hasOwnProperty.call(lang.dict, k)) { if (!pdfOnly(lang.code, k)) report.missing.push(k); }
     else if (!sameSet(placeholders(en[k]), placeholders(lang.dict[k]))) report.mismatch.push(k);
   }
   for (const [base] of groups) {

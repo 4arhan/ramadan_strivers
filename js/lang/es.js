@@ -1686,7 +1686,7 @@
   "nav.compete": "Competir",
   "nav.label": "Principal",
   "nav.learn": "Aprender",
-  "nav.me": "Yo",
+  "nav.me": "Perfil",
   "nav.quran": "Corán",
   "nav.today": "Hoy",
   "org.account.body": "Los organizadores necesitan una cuenta para gestionar la competición desde cualquier dispositivo.",

@@ -1649,7 +1649,7 @@
   "modes.year.white": "মাসের {n} তারিখ: আইয়ামে বিজের একটি দিন, সুন্নত রোজা।",
   "nav.compete": "প্রতিযোগিতা",
   "nav.label": "প্রধান",
-  "nav.learn": "শিখুন",
+  "nav.learn": "শিক্ষা",
   "nav.me": "আমি",
   "nav.quran": "কুরআন",
   "nav.today": "আজ",

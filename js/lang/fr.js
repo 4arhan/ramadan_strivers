@@ -1686,7 +1686,7 @@
   "nav.compete": "Concours",
   "nav.label": "Principal",
   "nav.learn": "Apprendre",
-  "nav.me": "Moi",
+  "nav.me": "Profil",
   "nav.quran": "Coran",
   "nav.today": "Aujourd'hui",
   "org.account.body": "Les organisateurs ont besoin d'un compte pour gérer le concours depuis n'importe quel appareil.",
