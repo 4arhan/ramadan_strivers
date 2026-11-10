@@ -417,5 +417,8 @@
   "me.set.cloud": "账号与提醒",
   "me.set.prep": "斋月准备",
   "me.set.showPrep": "在“今日”显示斋月准备",
-  "me.set.showPrepSub": "你的准备计划、举意、杜阿清单和补斋计划"
+  "me.set.showPrepSub": "你的准备计划、举意、杜阿清单和补斋计划",
+  "me.pdf.loading": "正在生成报告…",
+  "me.pdf.done": "报告已下载",
+  "me.pdf.failed": "无法生成报告。请检查网络连接后重试。"
 }
