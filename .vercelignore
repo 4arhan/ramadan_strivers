@@ -2,3 +2,5 @@ scripts/
 mobile/
 node_modules/
 *.md
+i18n-src/
+content/

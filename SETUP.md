@@ -1,6 +1,6 @@
-# Setup — Ramadan Strivers v7 on Vercel
+# Setup — Ramadan Strivers v8 on Vercel
 
-The app is a static front-end (`index.html`, `i18n.js`, `cloud.js`) plus serverless functions in `api/`.
+The app is a static front-end (`index.html`, `css/`, `js/` modules, generated `js/content.js` and `js/lang/*.js`) plus one serverless function, `api/router.js`, that serves every route in `api/_routes/`.
 It works with **no configuration at all** (tracker, quiz, prayer times, languages, modes). Each cloud
 feature switches itself on when its environment variable exists. Set these in **Vercel → Project → Settings → Environment Variables**, then redeploy.
 
@@ -19,9 +19,10 @@ feature switches itself on when its environment variable exists. Set these in **
 Check status any time at `/api/health` — it reports which features are on.
 
 ## Deploy
-- Production branch on Vercel: **`vercel`** (Settings → Git → Production Branch). `main` stays the GitHub-Pages version.
-- Every push to `vercel` redeploys. `vercel.json` carries rewrites (`/s/:id` share pages, `/poster/:code`, `/join/:code`), cache headers and the cron.
-- The repo has no build step; Node 20+ functions are bundled by Vercel.
+- Production branch on Vercel: **`product`** (Settings → Git → Production Branch). `main` is the development branch: every push to it builds a preview deployment.
+- Every push to `product` redeploys production. `vercel.json` carries rewrites (`/s/:id` share pages, `/poster/:code`, `/join/:code`), cache headers and the cron.
+- The repo has no build step at deploy time (generated files are committed); the Node 22 function is bundled by Vercel. `content/`, `i18n-src/`, `scripts/` and Markdown files are not uploaded (`.vercelignore`).
+- After editing `content/*.json` run `npm run build:content`; after editing translations run `npm run build:i18n` and `npm run check:i18n`, then commit the generated files.
 
 ## Re-pointing the domain later
 Nothing in the code depends on the host name — share links, invitation links, posters and the WhatsApp reply all use the request's origin (`APP_URL` if set). To move `www.ramadanstrivers.com`:

@@ -1,18 +1,8 @@
 // Daily job (Vercel Cron): push reminders (Ramadan day/odd-night/pre-Ramadan/year-round) and Friday organiser digests.
 const { handler, send, err, esc } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const { hijri, MONTHS } = require('../../_lib/hijri'); const mail = require('../../_lib/email'); const { HADITHS } = require('../../_lib/content');
-// The daily hadith is the same fact-checked text the app shows on Today for that day (content/hadith.json:
-// {n, text, ref}); the older built-in list is only a fallback if that file is missing, without the narrations the
-// fact-check found weak and removed from the app (Ibn Majah 1753, Tirmidhi 663, Ibn Khuzaymah 1887).
-let DAILY = null;
-try { DAILY = require('../../../content/hadith.json'); } catch(e){ DAILY = null; }
-const WEAK = /^(Ibn Majah 1753|Tirmidhi 663|Ibn Khuzaymah 1887)$/;
-const FALLBACK = HADITHS.filter(h => h && h.t && !WEAK.test(String(h.s || '').trim()));
-function hadithFor(day){
-  const list = Array.isArray(DAILY) ? DAILY.filter(h => h && h.text) : [];
-  const h = list.find(x => x.n === day) || list[(day - 1) % (list.length || 1)];
-  if(h) return { t: String(h.text), s: String(h.ref || '') };
-  const o = FALLBACK[(day - 1) % FALLBACK.length]; return { t: o.t, s: o.s };
-}
+// The daily hadith is the same fact-checked text the app shows on Today for that day: api/_lib/content.js is generated
+// from content/hadith.json by scripts/build-content.js ({t: text, s: ref, l: url}, ordered by day 1-30).
+function hadithFor(day){ const o = HADITHS[(Math.max(1, day) - 1) % HADITHS.length]; return { t: o.t, s: o.s }; }
 function clip(s, n){ s = String(s); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; }
 module.exports = handler(async (req, res) => {
   if(process.env.CRON_SECRET && (req.headers.authorization || '') !== 'Bearer ' + process.env.CRON_SECRET) throw err(401, 'unauthorized');
@@ -47,7 +37,7 @@ function pushMessage(hj, now){
     const h = hadithFor(d); return { title: 'Ramadan day ' + d, body: clip(h.t, 110) + (h.s ? ' (' + h.s + ')' : '') + ' Log today\'s deeds.' }; }
   if(hj.month === 8){ const left = 30 - hj.day; return { title: left > 1 ? left + ' days to Ramadan' : 'Ramadan is almost here', body: 'Set your goals, plan your qada fasts and prepare your dua list in Ramadan Strivers.' }; }
   if(hj.month === 10 && hj.day <= 28) return { title: 'Six days of Shawwal', body: 'Whoever fasts Ramadan and follows it with six days of Shawwal, it is as if they fasted forever (Muslim 1164). Track them in the app.' };
-  if(hj.month === 12 && hj.day <= 10) return { title: 'The best days of the year', body: 'Day ' + hj.day + ' of Dhul Hijjah: no days are dearer to Allah for good deeds than these ten (Bukhari 969).' };
+  if(hj.month === 12 && hj.day <= 10) return { title: 'The best days of the year', body: 'Day ' + hj.day + ' of Dhul Hijjah: there are no days in which righteous deeds are more beloved to Allah than these ten days (Tirmidhi 757).' };
   const dow = (now instanceof Date ? now : new Date()).getUTCDay(); if(dow === 0 || dow === 3) return { title: 'Fasting tomorrow?', body: (dow === 0 ? 'Monday' : 'Thursday') + ' is a Sunnah fasting day. Set your intention tonight.' };
   const h = hadithFor(((hj.day - 1) % 30) + 1); return { title: 'Ramadan Strivers', body: clip(h.t, 120) + (h.s ? ' (' + h.s + ')' : '') };
 }

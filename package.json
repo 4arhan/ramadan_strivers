@@ -1,11 +1,15 @@
 {
   "name": "ramadan-strivers",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "private": true,
-  "description": "Ramadan Strivers \u2014 planner, tracker, quiz and competitions. Static front-end + Vercel serverless API.",
+  "description": "Ramadan Strivers: Ramadan tracker, Quran tracker, learning (quiz and flashcards), Ramadan Prep and competitions. Static PWA + Vercel serverless API.",
   "scripts": {
-    "dev": "node scripts/dev-server.js",
-    "test": "node scripts/test-api.js"
+    "dev": "node scripts/dev-server.js 3000",
+    "build:content": "node scripts/build-content.js",
+    "build:i18n": "node scripts/build-i18n.js",
+    "check:i18n": "node scripts/check-i18n.js",
+    "test": "node scripts/test-api.js",
+    "test:api": "node scripts/test-api.js"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
