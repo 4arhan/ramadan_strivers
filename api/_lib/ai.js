@@ -2,7 +2,7 @@
 const crypto = require('crypto');
 const { one, q } = require('./db');
 function configured(){ return !!process.env.ANTHROPIC_API_KEY; }
-const MODEL = process.env.AI_MODEL || 'claude-sonnet-5';
+const MODEL = process.env.AI_MODEL || 'claude-opus-5-5';
 async function complete(system, user, maxTokens){
   if(!configured()){ const e = new Error('AI not configured (ANTHROPIC_API_KEY)'); e.status = 503; e.code = 'ai_not_configured'; throw e; }
   const r = await fetch('https://api.anthropic.com/v1/messages', {

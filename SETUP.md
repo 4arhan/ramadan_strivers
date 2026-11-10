@@ -11,7 +11,7 @@ feature switches itself on when its environment variable exists. Set these in **
 | Magic-link sign-in, Friday organiser digests | `RESEND_API_KEY`, optional `EMAIL_FROM` | resend.com (free tier). Verify your sending domain, e.g. `Ramadan Strivers <hello@ramadanstrivers.com>`. |
 | Web push reminders | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | `npx web-push generate-vapid-keys`. Subject is `mailto:you@example.com`. |
 | Daily cron (push + digests) | `CRON_SECRET` (recommended) | Any random string; Vercel sends it automatically to `/api/cron/daily` (schedule in `vercel.json`, 15:00 UTC daily; Hobby plan allows one run per day). |
-| AI explain / reflection prompts / quiz levels | `ANTHROPIC_API_KEY`, optional `AI_MODEL` (default `claude-sonnet-5`) | console.anthropic.com. Explanations are cached per deed/language/level, so cost is minimal. |
+| AI explain / reflection prompts / quiz levels | `ANTHROPIC_API_KEY`, optional `AI_MODEL` (default `claude-opus-5-5`; set `claude-sonnet-5-5` to lower cost) | console.anthropic.com. Explanations are cached per deed/language/level, so cost is minimal. |
 | WhatsApp bot | Twilio WhatsApp sender → webhook `https://<your-domain>/api/whatsapp` (POST) | twilio.com. Commands: `JOIN CODE Name`, `PAGES n`, `STATUS`, `HADITH`. |
 | Canonical URL in emails/share links | `APP_URL` (e.g. `https://www.ramadanstrivers.com`) | Optional; defaults to the request host. |
 | Hijri offset for the server cron | `HIJRI_OFFSET` (`-1`, `0`, `1`) | Optional. |
