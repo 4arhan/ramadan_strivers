@@ -130,7 +130,7 @@
   "core.ring.label": "{pct} completado",
   "core.save": "Guardar",
   "core.skip": "Saltar al contenido",
-  "core.tagline": "De musulmán a creyente",
+  "core.tagline": "De musulmán a mu'min",
   "deck.ayat.desc": "El pasaje del Corán sobre el ayuno y la sura al-Qadr.",
   "deck.ayat.name": "Aleyas sobre el ayuno",
   "deck.duas.desc": "Súplicas auténticas con el texto árabe, la transliteración y el significado.",
