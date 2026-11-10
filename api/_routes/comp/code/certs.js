@@ -34,7 +34,7 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 .in{min-height:548px;padding:36px 48px 30px;border-radius:14px;background:#fff;border:1px solid rgba(110,231,183,.55);text-align:center}
 .h{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#047857}
 .t{margin:14px 0 24px;font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.15;color:#101915}
-.n{display:inline-block;padding:0 28px 10px;font-size:46px;font-weight:300;letter-spacing:-.02em;line-height:1.1;color:#0B2219;border-bottom:2px solid #6EE7B7}
+.n{display:inline-block;max-width:100%;padding:0 28px 10px;font-size:46px;font-weight:300;letter-spacing:-.02em;line-height:1.1;color:#0B2219;border-bottom:2px solid #6EE7B7;overflow-wrap:anywhere}
 .g{margin-top:8px;font-size:15px;font-weight:500;color:#5F6C66}
 .d{max-width:760px;margin:22px auto 8px;font-size:17px;line-height:1.65;color:#45524C}
 .d b{color:#101915;font-weight:650}
@@ -54,6 +54,28 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 .np button:focus-visible{outline:2px solid #047857;outline-offset:3px}
 .empty{max-width:520px;margin:48px auto;padding:28px 24px;border-radius:22px;background:#fff;text-align:center;color:#45524C;font-size:15px;line-height:1.6}
 .empty h1{margin:0 0 8px;font-size:22px;font-weight:700;letter-spacing:-.02em;color:#101915}
+/* Phones and tablets (organisers open this page from the app's Tools): the four figures as a 2 x 2 grid, a long name
+   wraps inside the certificate, nothing wider than the screen. Print and PDF keep the A4 layout above. */
+@media screen and (max-width:820px){
+.s{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 0}
+.s div{min-width:0;padding:0 8px}
+.s div:nth-child(odd){border-left:0}
+}
+@media screen and (max-width:600px){
+.c{padding:10px 8px}
+.b{padding:8px;border-radius:18px}
+.in{min-height:0;padding:24px 14px 22px}
+.h{font-size:12px;letter-spacing:.1em}
+.t{margin:10px 0 18px;font-size:clamp(24px,7.5vw,32px)}
+.n{padding:0 6px 8px;font-size:clamp(28px,9vw,40px)}
+.d{margin-top:16px;font-size:15.5px}
+.s{margin:20px 0 14px}
+.s dd{font-size:26px}
+.q{margin-bottom:20px}
+.sig{gap:16px}
+.sig span{width:auto;flex:1 1 0;min-width:0}
+.np{flex-wrap:wrap;text-align:center}
+}
 @media print{.np{display:none}body{background:#fff}.c{padding:0}}
 </style></head><body><main>${rows.length ? `<div class="np"><span><b>${n(rows.length)}</b> certificate${rows.length === 1 ? '' : 's'}</span><button type="button" onclick="print()">${PRINTER}Print / Save as PDF</button></div>${rows.map(page).join('')}`
   : `<section class="empty"><h1>No certificates yet</h1><p>Certificates are made for everyone who has joined ${esc(c.name)} and is shown on the leaderboard. Share the join code, then open this page again.</p></section>`}</main></body></html>`);

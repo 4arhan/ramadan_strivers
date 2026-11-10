@@ -14,8 +14,8 @@
             one here; everything else on the device is kept (see applyImport).
    Events   every write of tracker data (day records, Quran pages, rs-extras, badges, best streaks, synced settings)
             is followed by RS.emit('data', {source: 'tracker'}). Exception: view state kept in rs-settings (which
-            sections are open, the Ramadan day being viewed, the reminder date) and rs-season are saved silently; none
-            of them is part of the cloud snapshot, and a day change emits 'day'.
+            sections are open, the Ramadan day being viewed, the reminder date), rs-season and rs-inst-x are saved
+            silently; none of them is part of the cloud snapshot, and a day change emits 'day'.
    Hooks    RS.tracker (CONTRACT §8): getDay(n) · todayIndex() · totals() · streaks() · qPages()
             + saveDay() · dayPct(n) · points() · best() · renderTodayChecklist(el)
    Rules    v7 behaviour, with the fact-check corrections: each night comes before its day, so the odd nights
@@ -93,7 +93,9 @@
   function counts(ctx, id) {
     if (ctx.kind !== 'year') return true;
     if (YEAR_OFF[id]) return false;
-    return !FAST_ONLY[id] || fastLogged(ctx.date);
+    if (!FAST_ONLY[id]) return true;
+    if (ctx.fast == null) ctx.fast = fastLogged(ctx.date);    // read once per context (yCtx makes a new one each time)
+    return ctx.fast;
   }
   function applicable(ctx) {
     var out = [];
@@ -150,7 +152,15 @@
     if (changed) RS.store.set('rs-best-streaks', b);
     return changed;
   }
-  T.best = function () { var b = bestStored(), c = T.streaks(); SK.forEach(function (k) { b[k] = Math.max(b[k], c[k]); }); return b; };
+  // the longest run anywhere in the stored days (a day without a record ends a run, as in calcStreak)
+  function maxRun(fn, recs) {
+    var best = 0, run = 0;
+    for (var d = 1; d <= DAYS; d++) { if (recs[d] && fn(recs[d].ck)) { run++; if (run > best) best = run; } else run = 0; }
+    return best;
+  }
+  // best streaks: the stored ones (they outlive an archived season) or a longer run in this season's days, so a best
+  // is never shorter than a streak shown next to it (the Eid report's current streaks run to the last logged day)
+  T.best = function () { var b = bestStored(), recs = allDays(); SK.forEach(function (k) { b[k] = Math.max(b[k], maxRun(STREAK[k], recs)); }); return b; };
   function streakName(k) { return t('me.streak.' + k); }
 
   /* ================================================================ badges (v7 chkBdg, exactly) */
@@ -494,7 +504,7 @@
   function topStreak(s) { var k = SK[0]; SK.forEach(function (x) { if (s[x] > s[k]) k = x; }); return { k: k, n: s[k] }; }
 
   function ramadanToday() {
-    if (archiveAsk) return archiveWait();
+    if (archiveAsk) return archiveWait() + installCard() + prayerCard();   // nothing from last season's days
     var ctx = rCtx(), day = ctx.day, rec = getRec(ctx.key), st = live(ctx);
     var nt = nightOf(day), top = topStreak(T.streaks());
     var kick = nt && nt.odd ? { icon: 'moon-star', text: t(nt.now ? 'today.kicker.oddNow' : nt.live ? 'today.kicker.oddTonight' : 'today.kicker.oddEve', { n: nf(nt.n) }) }
@@ -621,15 +631,16 @@
       var dl = duaLines();
       if (dl.length) extra += '<div class="tr-dualist"><p class="tr-dualist-t">' + esc(t('today.duaList')) + '</p><ul>' + dl.slice(0, 20).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
     }
-    // "+15" is shown; a screen reader hears ", 15 points" after the name instead of "+15" run into it
-    var pts = '<span class="row-val" aria-hidden="true">' + esc(signed(num(d.pts))) + '</span>' +
-      '<span class="sr-only">' + esc(tn('today.deed.ptsSr', num(d.pts))) + '</span>';
+    // "+15" is shown; a screen reader hears "Fajr prayer, 15 points" (words inside the title) instead of "+15" run
+    // into the name
+    var pts = '<span class="row-val" aria-hidden="true">' + esc(signed(num(d.pts))) + '</span>';
+    var title = esc(label) + '<span class="sr-only">' + esc(tn('today.deed.ptsSr', num(d.pts))) + '</span>';
     if (preview) {
-      return ui.row({ lead: '<span class="tr-dot" aria-hidden="true"></span>', title: label, trail: pts, extra: extra || null, cls: 'tr-deed' });
+      return ui.row({ lead: '<span class="tr-dot" aria-hidden="true"></span>', titleHtml: title, trail: pts, extra: extra || null, cls: 'tr-deed' });
     }
     return ui.row({
       lead: ui.check(on, { cls: off ? 'is-off' : '' }), check: { on: on, act: 'tr.tick', arg: v.pin ? id + '@' + v.pin : id },
-      title: label, sub: off ? t('today.deed.off') : '', trail: pts, disabled: off, extra: extra || null, cls: 'tr-deed'
+      titleHtml: title, sub: off ? t('today.deed.off') : '', trail: pts, disabled: off, extra: extra || null, cls: 'tr-deed'
     });
   }
 
@@ -1655,11 +1666,13 @@
   // 1447 AH; v7 came later). The season then comes from the data, never from today's date: the newest timestamp of a
   // day record or a Ramadan journal entry (v6 and v7 save one with each). Data with no timestamp at all counts as the
   // season before the current one until the current Ramadan is over, so a new Ramadan still asks what to do with it.
+  var TS_MIN = Date.UTC(2020, 0, 1);       // an older "timestamp" (0, 1, …) is not a real save time
   function inferSeason() {
     var ts = 0, j = extras().journal;
-    for (var i = 1; i <= DAYS; i++) { var r = getRec('rs-day-' + i); if (r && r.ts > ts) ts = r.ts; }
-    if (isObj(j)) Object.keys(j).forEach(function (k) { if (/^r\d+$/.test(k) && isObj(j[k]) && num(j[k].ts) > ts) ts = num(j[k].ts); });
-    if (ts > 0) return seasonAt(Math.min(ts, Date.now()));
+    var see = function (v) { v = num(v); if (v >= TS_MIN && v > ts) ts = v; };
+    for (var i = 1; i <= DAYS; i++) { var r = getRec('rs-day-' + i); if (r) see(r.ts); }
+    if (isObj(j)) Object.keys(j).forEach(function (k) { if (/^r\d+$/.test(k) && isObj(j[k])) see(j[k].ts); });
+    if (ts) return seasonAt(Math.min(ts, Date.now()));
     var h = RS.hijri();
     return String(h.month > 9 ? h.year : h.year - 1);
   }
@@ -1971,7 +1984,7 @@
     seasonBoot();                           // before the first render: v6 days get their season from the data
     archiveAsk = archiveNeeded();           // Today and Quran stay neutral until the new-season question is answered
     autoDay(true);
-    var best = saveBest(T.streaks());
+    var best = saveBest(T.best());          // a longer run in the stored days becomes the best (e.g. v6 data)
     setTimeout(function () {                // after router.start(): the first navigation closes open overlays
       if (best) emit();                     // rs-best-streaks is part of the cloud snapshot
       archiveCheck(true);

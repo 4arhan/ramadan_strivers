@@ -11,17 +11,25 @@
             starts earlier goes through the plan at their own pace and it starts again on 1 Sha'ban: each pass is a
             "round", and only ticks made since the round began count (older ticks stay stored). In Ramadan the plan
             is a read-only summary.
-   Storage  rs-prep  {v:2, started (ms, first start; cloud sync keeps the earlier one), since {ts, hy} (the current
-                      pass: the start or last restart, and the Hijri year of the Ramadan it prepares for), hy,
+   Storage  rs-prep  {v:2, started (ms, first start; cloud sync keeps the earlier one), since {ts, hy, first, …}
+                      (the current pass: ts = the start or last restart, hy = the Hijri year of the Ramadan it prepares
+                      for, first = when this year's programme started; a pass for another year is stale), hy,
                       answers {qid: option}, assessment {qid: score}, assessedAt, done {promptId: ms},
                       undone {promptId: {ts}} (an untick newer than the tick wins: cloud merges done by max and
-                      undone by newer ts), reflections {n: {t, ts}} (older builds stored plain text: read as ts 0),
+                      undone by newer ts), reflections {n: {t, ts, prev?}} (prev: the reflection of an earlier pass,
+                      shown as context; older builds stored plain text: read as ts 0),
                       checkins {'YYYY-MM-DD': {salah: [bool x5], pray: {fajr: {v, ts}, …}, quran: {minutes, ts}}},
-                      qunit, completedAt, autoShow (prep turned settings.showPrep on), past}
+                      qunit, completedAt, prior {to, ratio, got, complete} (what the pass before this round reached:
+                      kept by a restart, or for the round that starts again on 1 Sha'ban), past {year: programme}}
+            rs-prep-local {v, autoShow} — this device only, never synced: prep turned settings.showPrep (a device
+                      setting) on, and turns it off again when Ramadan begins or the programme is over.
             Sync     Everything another device can edit carries its own ts, so cloud sync (cloud.js newer(): the newer
                       ts wins per key) merges reflections one by one, Quran minutes per date and salah prayer by prayer
                       (pray; salah [bool x5] is kept in step with it and read through it). A check-in date has no ts
                       of its own on purpose: that would make one device's whole day replace the other's.
+                      Nothing is stored as null: cloud sync takes this device's plain values over the other copy's,
+                      so a status this device does not know (never started, no unit chosen) is left out rather than
+                      stored empty, where it would tell every other device that the programme never started.
                       The salah check-in follows the prayer day (Fajr to Fajr): before Fajr, ticks count for the day
                       before, so a late Isha lands on its own day.
             Quran pages are not kept here: the check-in reads and writes the tracker's stores, so the Quran tab shows
@@ -37,6 +45,7 @@
   if (!RS || !RS.router) return;
 
   var KEY = 'rs-prep';
+  var LOCAL = 'rs-prep-local';
   var EXTRAS = 'rs-extras';
   var QPAGES = 'rs-quran-pages';
   var PRAYERS = [
@@ -52,8 +61,10 @@
   // on a question always wins. This table is only a fallback for the question set it was written for (ids a1..a7,
   // all present; questions added later need their own track); otherwise no area mapping rather than a wrong one.
   var Q_TRACK = { a1: 'salah', a2: 'salah', a3: 'quran', a4: 'quran', a5: 'fasting', a6: 'habits', a7: 'charity' };
-  var FOCUS_BELOW = 70;      // an area becomes a focus area when its readiness-check score is below this (%)
+  var STRONG_FROM = 70;      // both focus areas at or above this readiness-check score (%): "a strong base" line
   var FULL_DONE = 70;        // share of the round's prompts (%) for the full "prep complete" wording
+  var GLOW_MS = 2800;        // the completion glow (css .prep-celebrate: 2 x 1.4 s)
+  var AGAIN_DAYS = 7;        // the first week of a round that started again on 1 Sha'ban says so on the prep home
   var SALAH_WINDOW = 7;
   var FAJR_FALLBACK = 3;     // without prayer times, the prayer day turns over at 3 am (local)
   var CATCH_ROWS = 3;        // earlier focus days listed on the catch-up card
@@ -73,8 +84,8 @@
   // out '48%' in RTL itself). A sign before the figure (no app language does this) stays in one piece.
   function pctParts(v) {
     var s = RS.fmt.pct(v), n = num(Math.round(v)), i = s.indexOf(n);
-    if (i < 0 || s.slice(0, i).replace(/[‎‏؜\s]/g, '')) return { number: s, unit: '' };
-    return { number: n, unit: s.slice(i + n.length).replace(/[‎‏؜]/g, '') };
+    if (i < 0 || s.slice(0, i).replace(/[\u200e\u200f\u061c\s]/g, '')) return { number: s, unit: '' };
+    return { number: n, unit: s.slice(i + n.length).replace(/[\u200e\u200f\u061c]/g, '') };
   }
   function obj(x) { return x && typeof x === 'object' && !Array.isArray(x) ? x : {}; }
   function safeId(s) { return String(s).replace(/[^A-Za-z0-9_-]/g, '_'); }
@@ -139,20 +150,20 @@
   function todayKey() { return RS.todayISO(); }
   function calKey() { return RS.todayISO(noon()) + '|' + (parseInt(RS.settings.hijriOff, 10) || 0); }
 
-  // Days until 1 Ramadan (0 during Ramadan) and until 1 Sha'ban (0 during Sha'ban), walking forward day by day with
-  // RS.hijri (settings.hijriOff applies). Cached per date and moon setting.
+  // Days until 1 Ramadan and until Sha'ban (0 during Sha'ban), walking forward day by day from today with RS.hijri
+  // (settings.hijriOff applies). As the hook's spec says, the walk stops at Hijri month 9 day 1: 0 on 1 Ramadan, and
+  // later in Ramadan the days until next year's (prep's own screens check inRamadan() first). Cached per date and
+  // moon setting.
   var walkCache = { k: null, v: null };
   function walk() {
     var k = calKey();
     if (walkCache.k === k) return walkCache.v;
     var v = { ram: null, sha: null };
     try {
-      var base = noon(), h = RS.hijri(base);
-      if (h.month === 9) v.ram = 0;
-      if (h.month === 8) v.sha = 0;
-      for (var i = 1; i <= 400 && (v.ram == null || v.sha == null); i++) {
+      var base = noon();
+      for (var i = 0; i <= 400 && (v.ram == null || v.sha == null); i++) {
         var x = RS.hijri(addDays(base, i));
-        if (v.ram == null && x.month === 9) v.ram = i;       // the first Ramadan date reached is 1 Ramadan
+        if (v.ram == null && x.month === 9 && x.day === 1) v.ram = i;
         if (v.sha == null && x.month === 8) v.sha = i;
       }
     } catch (e) { v = { ram: null, sha: null }; }
@@ -165,6 +176,7 @@
   function inRamadan() { return month() === 9; }
   // The Hijri year of the Ramadan a date prepares for (the current one until it ends, then the next).
   function targetYear(d) { var h = RS.hijri(noon(d)); return h.month <= 9 ? h.year : h.year + 1; }
+  function thisYear(ts) { return ts > 0 && targetYear(new Date(ts)) === targetYear(); }
   // Plan day of a date in Sha'ban: its Hijri day, or the last day on the eve of Ramadan (when Sha'ban has 29 days).
   var shCache = {};
   function shabanDay(d) {
@@ -188,13 +200,14 @@
   }
 
   /* ------------------------------------------------------------------ state */
-  // A reflection {t, ts}; a plain string (older builds, CONTRACT §5 'reflections:{n:text}') reads as {t, ts: 0}.
+  // A reflection {t, ts, prev?}; a plain string (older builds, CONTRACT §5 'reflections:{n:text}') reads as {t, ts: 0}.
   function reflOf(v) {
     if (typeof v === 'string') return { t: v, ts: 0 };
     v = obj(v);
-    return { t: typeof v.t === 'string' ? v.t : '', ts: Number(v.ts) > 0 ? Number(v.ts) : 0 };
+    var out = { t: typeof v.t === 'string' ? v.t : '', ts: Number(v.ts) > 0 ? Number(v.ts) : 0 }, p = obj(v.prev);
+    if (typeof p.t === 'string' && p.t.trim() && Number(p.ts) > 0) out.prev = { t: p.t, ts: Number(p.ts) };
+    return out;
   }
-  function reflText(s, n) { return reflOf(s.reflections[n]).t; }
   function state() {
     var s = obj(RS.store.get(KEY, null));
     s.answers = obj(s.answers);
@@ -206,21 +219,45 @@
     s.checkins = obj(s.checkins);
     if (typeof s.started === 'string') s.started = Date.parse(s.started) || null;
     if (typeof s.started !== 'number' || !isFinite(s.started) || s.started <= 0) s.started = null;
-    if (Q_UNITS.indexOf(s.qunit) < 0) s.qunit = 'pages';
+    if (!(Number(obj(s.since).ts) > 0)) s.since = null;
+    if (Q_UNITS.indexOf(s.qunit) < 0) s.qunit = null;              // not chosen: pages (unitOf)
     return s;
   }
+  // Statuses stored only when known (see Sync in the header): save() leaves out the ones without a value.
+  var OPTIONAL = ['started', 'since', 'hy', 'assessedAt', 'completedAt', 'startDay', 'qunit'];
   function save(s) {
+    OPTIONAL.forEach(function (k) { if (s[k] == null) delete s[k]; });
+    delete s.autoShow;                    // a device setting, kept in rs-prep-local since this build
     s.v = 2;
     RS.store.set(KEY, s);
     RS.emit('data', { source: 'prep' });
   }
-  // The current pass began at the start or at the last restart. Cloud sync keeps the EARLIER `started` of two
-  // devices, so a restart (or a new year's start) is recorded in `since` {ts, hy}, which syncs by its timestamp.
-  function passStart(s) { var ts = Number(obj(s.since).ts) || 0; return Math.max(s.started || 0, ts > 0 ? ts : 0); }
-  function passYear(s) { return parseInt(obj(s.since).hy, 10) || parseInt(s.hy, 10) || (s.started ? targetYear(s.started) : 0); }
-  // A programme started for an earlier Ramadan is kept (in rs-prep.past once a new one starts) but no longer runs.
-  function isStale(s) { return !!s.started && passYear(s) !== targetYear(); }
-  function isOn(s) { return !!s.started && !isStale(s); }
+  function unitOf(s) { return Q_UNITS.indexOf(s.qunit) >= 0 ? s.qunit : 'pages'; }
+  // The current pass {ts, hy, first}: `since` (the start or the last restart, synced as a whole by its timestamp), or
+  // for data from before `since` existed, `started`. null: never started on any device. The Hijri year it prepares
+  // for decides whether it runs, so starting is never undone by a device that lacks it: a pass of an earlier year is
+  // stale (kept in rs-prep.past once a new one starts). `first` is when this year's programme started (a restart
+  // keeps it), for the salah window.
+  function passOf(s) {
+    var x = obj(s.since), ts = Number(x.ts) || 0;
+    if (!(ts > 0)) return s.started ? { ts: s.started, hy: parseInt(s.hy, 10) || targetYear(s.started), first: s.started } : null;
+    var hy = parseInt(x.hy, 10) || targetYear(ts), first = Number(x.first) || 0;
+    if (!(first > 0 && first <= ts)) first = s.started && s.started <= ts && targetYear(s.started) === hy ? s.started : ts;
+    return { ts: ts, hy: hy, first: first };
+  }
+  function passStart(s) { var p = passOf(s); return p ? p.ts : 0; }
+  function passYear(s) { var p = passOf(s); return p ? p.hy : 0; }
+  function progStart(s) { var p = passOf(s); return p ? p.first : 0; }
+  function isStale(s) { var p = passOf(s); return !!p && p.hy !== targetYear(); }
+  function isOn(s) { var p = passOf(s); return !!p && p.hy === targetYear(); }
+
+  // this device only: {v, autoShow}
+  function local() { return obj(RS.store.get(LOCAL, null)); }
+  function setLocal(patch) {
+    var l = local();
+    Object.keys(patch).forEach(function (k) { if (patch[k] == null) delete l[k]; else l[k] = patch[k]; });
+    RS.store.set(LOCAL, l);
+  }
 
   // The current round: ticks made from `from` on count, and it began on plan day `day`. An earlier pass ends on
   // 1 Sha'ban, when the plan starts again at day 1 in step with the calendar; a start or restart in Sha'ban begins
@@ -265,9 +302,61 @@
     days().forEach(function (d) { if (d.n >= r.day) { all += prompts(d).length; got += dayDone(s, d, r); } });
     return all ? 100 * got / all : 0;
   }
-  function reflectionCount(s) { return Object.keys(s.reflections).filter(function (k) { return reflText(s, k).trim(); }).length; }
   // Days whose prompts are all done (this round's ticks, catch-up included).
   function fullDays(s, r) { return days().filter(function (d) { var all = prompts(d).length; return all && dayDone(s, d, r) === all; }).length; }
+
+  // Reflections belong to a pass like the ticks do, except that a restart keeps them: one written for an earlier
+  // Ramadan, or (by someone who started before Sha'ban) before the plan started again on 1 Sha'ban, is shown as
+  // read-only context above this pass's empty reflection of the same day, and kept as `prev` once that is written.
+  function isEarlier(s, ts) {
+    if (!(ts > 0)) return false;                      // older builds stored no date: this pass
+    if (!thisYear(ts)) return true;
+    var sh = shabanStart(), first = progStart(s);
+    return sh != null && ts < sh && first > 0 && first < sh;
+  }
+  // Day n: this pass's text ('' if none) and the earlier reflection shown above it ({t, ts} or null).
+  function reflection(s, n) {
+    var e = reflOf(s.reflections[n]);
+    if (isEarlier(s, e.ts)) return { t: '', earlier: e.t.trim() ? { t: e.t, ts: e.ts } : (e.prev || null) };
+    return { t: e.t, earlier: e.prev || null };
+  }
+  function reflText(s, n) { return reflection(s, n).t; }
+  function reflectionCount(s) { return Object.keys(s.reflections).filter(function (k) { return reflText(s, k).trim(); }).length; }
+
+  // What the pass before this round reached, for the days before one of this round is over: {to (this round's start),
+  // ratio (prompts done of those due, 0..100 or null), got (prompts ticked), complete}. A restart stores it as it
+  // moves the round. For the round that starts again on 1 Sha'ban (someone who started earlier) it is worked out
+  // from that pass's ticks until a tick of the new round, which may tick a prompt again, stores it (ensurePrior).
+  function passStats(s, from, to) {
+    var last = RS.clamp(dayDiff(new Date(from), new Date(to - 1)) + 1, 1, totalDays()), due = 0, done = 0, got = 0;
+    days().forEach(function (d) {
+      prompts(d).forEach(function (p) {
+        var ts = tickTs(s, p.id), hit = ts >= from && ts < to;
+        if (hit) got += 1;
+        if (d.n <= last) { due += 1; if (hit) done += 1; }
+      });
+    });
+    var c = Number(s.completedAt) || 0;
+    return { to: to, ratio: due ? Math.round(100 * Math.min(done, due) / due) : null, got: got, complete: c >= from && c < to };
+  }
+  function priorOf(s, r) {
+    var pr = obj(s.prior);
+    if (Number(pr.to) === r.from) return pr;
+    var from = passStart(s);
+    return from > 0 && r.from > from ? passStats(s, from, r.from) : null;
+  }
+  function ensurePrior(s) {
+    if (!isOn(s)) return false;
+    var r = round(s);
+    if (Number(obj(s.prior).to) === r.from || !(r.from > passStart(s))) return false;
+    s.prior = passStats(s, passStart(s), r.from);
+    return true;
+  }
+  // The prompts part of readiness while no day of this round is over yet: the earlier pass's result (null: none).
+  function carried(s, r) {
+    var pr = priorOf(s, r), v = pr ? Number(pr.ratio) : NaN;
+    return pr && pr.ratio != null && isFinite(v) ? RS.clamp(v, 0, 100) : null;
+  }
 
   /* ------------------------------------------------------------------ assessment + readiness */
   function answerIdx(ans, q) {
@@ -317,11 +406,12 @@
     Object.keys(acc).forEach(function (k) { out[k] = Math.round(100 * acc[k].got / acc[k].max); });
     return out;
   }
-  // Up to two weakest areas below FOCUS_BELOW (ties keep the content order: salah and Quran come first).
+  // The two weakest areas of the readiness check, however well it went (ties keep the content order, so salah and
+  // the Quran come first). An area without a question (the heart) has no score and is never a focus.
   function focusTracks(s) {
     var sc = trackScores(s);
     return tracks().map(function (tr, i) { return { id: tr.id, i: i, pct: sc[tr.id] }; })
-      .filter(function (x) { return x.pct != null && x.pct < FOCUS_BELOW; })
+      .filter(function (x) { return x.pct != null; })
       .sort(function (a, b) { return a.pct - b.pct || a.i - b.i; })
       .slice(0, 2).map(function (x) { return x.id; });
   }
@@ -346,10 +436,11 @@
     });
     return { due: due, done: Math.min(done, due) };
   }
-  // Prayers on time over the last 7 prayer days of the programme. An earlier day without a check-in counts as 0 of 5;
-  // the current prayer day counts once checked in. In Ramadan the window ends on the last day of Sha'ban.
+  // Prayers on time over the last 7 prayer days of the programme (from this year's start: a restart keeps the
+  // check-ins). An earlier day without a check-in counts as 0 of 5; the current prayer day counts once checked in.
+  // In Ramadan the window ends on the last day of Sha'ban.
   function salahStats(s) {
-    var end = salahDay(), h = RS.hijri(end), closed = h.month === 9, on = 0, of = 0, from = passStart(s);
+    var end = salahDay(), h = RS.hijri(end), closed = h.month === 9, on = 0, of = 0, from = progStart(s);
     if (closed) end = addDays(end, -h.day);               // the last day of Sha'ban
     for (var i = 0; i < SALAH_WINDOW; i++) {
       var d = addDays(end, -i), k = RS.todayISO(d);
@@ -363,13 +454,15 @@
   }
   // readiness = 40% readiness check + 40% prompts done of those on this round's days that are over (promptStats) +
   // 20% prayers on time (salahStats), 0..100. A part with nothing to count yet (day 1, or no check-in so far) takes
-  // the readiness-check score; without a readiness check the other parts share its weight.
+  // the readiness-check score, except the prompts part of a round that follows an earlier pass (a restart, or the
+  // plan starting again on 1 Sha'ban): it keeps that pass's result. Without a readiness check the other parts share
+  // its weight.
   function readiness(s) {
     s = s || state();
     var A = assessPct(s);
     if (!isOn(s)) return A == null ? 0 : A;
     var r = round(s), p = promptStats(s, r), q = salahStats(s);
-    var parts = [[A, 0.4], [p.due ? 100 * p.done / p.due : null, 0.4], [q.of ? 100 * q.on / q.of : null, 0.2]];
+    var parts = [[A, 0.4], [p.due ? 100 * p.done / p.due : carried(s, r), 0.4], [q.of ? 100 * q.on / q.of : null, 0.2]];
     var sum = 0, w = 0;
     parts.forEach(function (x) {
       var v = x[0] == null ? A : x[0];
@@ -525,10 +618,46 @@
   /* ------------------------------------------------------------------ shared pieces */
   var openTips = {};
   var openWeeks = {};
-  var celebrate = false;
+  var celebratedAt = 0;      // when the last day was completed: prep heroes rendered within GLOW_MS glow
   var draft = null;          // retake answers: saved only when "See my result" is tapped
   var refocus = null;        // day stepper arrow to focus again after moving to another day
-  function takeCelebrate() { var c = celebrate; celebrate = false; return c; }
+  var checkFrom = null;      // the screen (hash) below the readiness check in the history (prep.begin)
+
+  // The completion glow lasts GLOW_MS from the tick, wherever a prep hero is drawn meanwhile. A hero drawn again
+  // during it (the tracker refreshes Today right after a change) carries on where the glow was instead of starting
+  // over: a negative animation delay. Later renders, and heroes drawn after it ended, do not glow.
+  function glow(html) {
+    var e = Date.now() - celebratedAt;
+    if (!celebratedAt || e >= GLOW_MS) return html;
+    return html.replace('<section class="hero ', '<section style="animation-delay:-' + Math.max(0, Math.round(e)) + 'ms" class="hero prep-celebrate ');
+  }
+
+  // A status line outside #view, created once (in-view live regions are re-created by every RS.refresh(), so screen
+  // readers would not read them). Polite; the same text twice is still read.
+  function liveEl() {
+    var el = document.getElementById('prep-live');
+    if (!el && document.body) {
+      el = document.createElement('div');
+      el.id = 'prep-live';
+      el.className = 'sr-only';
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      el.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+  var liveTimer = null;
+  function announce(msg) {
+    var el = liveEl();
+    if (!el || !msg) return;
+    el.textContent = '';
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () { el.textContent = msg; }, 120);
+  }
+  function dayLine(n) {
+    return dayByN(n) ? t('live.day', { n: num(n), total: num(totalDays()), theme: RS.t('prep.day.' + n + '.theme') }) : t('day.title', { n: num(n) });
+  }
 
   function tag(text, cls) { return '<span class="prep-tag' + (cls ? ' ' + cls : '') + '">' + esc(text) + '</span>'; }
   function trackTags(trackId, focus) {
@@ -591,13 +720,21 @@
       kicker: { icon: 'clock', text: t('salah.kicker') },
       title: t('salah.title'), titleId: 'prep-salah-title',
       cls: 'prep-salah-card',
-      body: late + grid + '<p class="prep-status' + (count === 5 ? ' accent' : '') + '" aria-live="polite">' + esc(count === 5 ? t('salah.all') : t('salah.count', { n: num(count), total: num(5) })) + '</p>' + chart
+      body: late + grid + '<p class="prep-status' + (count === 5 ? ' accent' : '') + '">' + esc(salahLine(count)) + '</p>' + chart
     });
   }
+  function salahLine(count) { return count === 5 ? t('salah.all') : t('salah.count', { n: num(count), total: num(5) }); }
 
+  function quranToday(s, unit) { return unit === 'pages' ? pagesToday() : minutesOn(s, todayKey()); }
+  // "6 pages read today. 4 pages to go" (announced after +/-)
+  function quranLine(s) {
+    var unit = unitOf(s), pages = unit === 'pages', v = quranToday(s, unit), left = Math.max(0, quranTarget(targetDay(s), unit) - v);
+    return t('live.quran', { value: tn(pages ? 'live.pages' : 'live.minutes', v),
+      left: left ? tn(pages ? 'quran.leftPages' : 'quran.leftMinutes', left) : t('quran.reached') });
+  }
   function quranCard(s) {
-    var unit = s.qunit, pages = unit === 'pages', n = targetDay(s);
-    var v = pages ? pagesToday() : minutesOn(s, todayKey()), target = quranTarget(n, unit), step = Q_STEP[unit];
+    var unit = unitOf(s), pages = unit === 'pages', n = targetDay(s);
+    var v = quranToday(s, unit), target = quranTarget(n, unit), step = Q_STEP[unit];
     var pct = Math.min(100, Math.round(100 * v / target));
     var left = Math.max(0, target - v);
     var stepBtn = function (sign, icon, label, disabled) {
@@ -650,10 +787,8 @@
     return m;
   }
   function heroHtml(where) {
-    var s = state(), total = totalDays(), n = planDay(s), du = daysUntilRamadan(), h = RS.hijri(noon());
-    var on = isOn(s), kick = { icon: 'sprout', text: t('kicker') };
-    var big = du != null && du > 0 ? { number: num(du), label: tn('daysUntil', du) } : { number: num(n), label: t('heroDayOf', { n: num(n), total: num(total) }) };
-    var cls = 'prep-hero' + (takeCelebrate() ? ' prep-celebrate' : '');
+    var s = state(), total = totalDays(), n = planDay(s), h = RS.hijri(noon());
+    var on = isOn(s), kick = { icon: 'sprout', text: t('kicker') }, cls = 'prep-hero';
     if (h.month === 9) {
       return RS.ui.hero({
         cls: cls, kicker: kick, text: t('begun.body'),
@@ -661,15 +796,20 @@
         cta: where === 'today' ? null : { eyebrow: t('begun.eyebrow'), text: t('begun.cta'), act: 'nav.go', arg: 'today' }
       });
     }
+    var du = daysUntilRamadan();
+    var big = du != null && du > 0 ? { number: num(du), label: tn('daysUntil', du) } : { number: num(n), label: t('heroDayOf', { n: num(n), total: num(total) }) };
     if (!on) {
-      var partial = answeredCount(s.answers) > 0 && firstUnanswered(s.answers) >= 0;
+      var partial = answeredCount(s.answers) > 0 && firstUnanswered(s.answers) >= 0, ready = days().length > 0;
+      var metrics0 = [{ label: t('m.plan'), value: tn('m.days', total) }];
+      if (ready) metrics0.push({ label: t('m.daily'), value: tn('m.steps', perDay()) });
       return RS.ui.hero({
-        cls: cls, kicker: kick, number: big.number, label: big.label, text: tn('invite', perDay()),
-        metrics: [{ label: t('m.plan'), value: tn('m.days', total) }, { label: t('m.daily'), value: tn('m.steps', perDay()) }],
+        // While the daily prompts are still being written, nothing promises a number of prompts a day.
+        cls: cls, kicker: kick, number: big.number, label: big.label, text: ready ? tn('invite', perDay()) : t('inviteSoon'),
+        metrics: metrics0,
         // From Today the first tap opens the intro (what the plan is, with its own "Start my prep"); on the intro it
         // starts the readiness check. A half-done check continues from both.
         cta: partial ? { eyebrow: t('cta.continueEyebrow'), text: t('cta.continue'), act: 'prep.start' } :
-          where === 'today' ? { eyebrow: t('cta.seeEyebrow'), text: tn('cta.see', total), act: 'nav.go', arg: 'prep' } :
+          where === 'today' ? { eyebrow: t('cta.seeEyebrow'), text: ready ? tn('cta.see', total) : t('cta.home'), act: 'nav.go', arg: 'prep' } :
             { eyebrow: t('cta.startEyebrow'), text: t('cta.start'), act: 'prep.start' }
       });
     }
@@ -677,20 +817,30 @@
     var metrics = [{ label: t('m.day'), value: frac(n, total) }];
     if (days().length) metrics.push({ label: t('m.prompts'), value: frac(doneCount(s, r), allPromptCount()) });
     metrics.push({ label: t('m.salah'), value: frac(salahToday(s), 5) });
-    return RS.ui.hero({
+    return glow(RS.ui.hero({
       cls: cls + (done ? ' is-complete' : ''),
       kicker: done ? { icon: 'badge-check', text: t('complete.kicker') } : kick,
       number: big.number, label: big.label,
       ring: { pct: rd, text: RS.fmt.pct(rd), sub: t('ring.sub'), label: t('ring.label', { pct: RS.fmt.pct(rd) }) },
       metrics: metrics,
       cta: ctaFor(s, where)
-    });
+    }));
   }
   // Started before Sha'ban: say when the plan starts again (or that this pass is over).
   function paceText(s) {
     var sh = daysUntilShaban();
     if (!early(s) || sh == null) return '';
     return tn(waiting(s) ? 'wait.note' : 'early.note', sh, { month: shaban(), total: num(totalDays()) });
+  }
+  // In the first week of the round that started again on 1 Sha'ban: why the ticks are back at zero, and what the
+  // first pass reached (its ticks no longer count, and a tick may be made again).
+  function againText(s) {
+    if (!isOn(s) || month() !== 8 || planDay(s) > AGAIN_DAYS || !days().length) return '';
+    var r = round(s);
+    if (!(r.from > passStart(s))) return '';
+    var pr = priorOf(s, r), all = allPromptCount();
+    if (!pr) return '';
+    return tn(pr.complete ? 'again.noteDone' : 'again.note', all, { month: shaban(), total: num(totalDays()), done: num(RS.clamp(Number(pr.got) || 0, 0, all)) });
   }
 
   /* ------------------------------------------------------------------ prep home */
@@ -824,9 +974,9 @@
     m.push({ label: t('m.prayers'), value: num(prayersSince(s, r)) });
     return RS.ui.card({
       cls: 'prep-complete',
-      body: '<div class="prep-complete-in"><span class="prep-complete-ic" aria-hidden="true">' + RS.icon('badge-check', { size: 26 }) + '</span>' +
-        '<div class="stack-sm"><h2 class="card-title">' + esc(t(full ? 'complete.title' : 'complete.titlePartial')) + '</h2><p>' + esc(t(full ? 'complete.body' : 'complete.bodyPartial')) + '</p>' + again + '</div></div>' +
-        '<div class="mt-4">' + RS.ui.metrics(m) + '</div>'
+      kicker: { icon: 'calendar-check', text: tn('list.title', totalDays()) },
+      title: t(full ? 'complete.title' : 'complete.titlePartial'),
+      body: '<p>' + esc(t(full ? 'complete.body' : 'complete.bodyPartial')) + '</p>' + again + '<div class="mt-4">' + RS.ui.metrics(m) + '</div>'
     });
   }
   // In Ramadan (plan closed, not completed): a read-only summary.
@@ -842,14 +992,16 @@
   function pushSupported() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
   function settingsCard() {
     var rows = [];
-    // The cloud module owns push: its 'push.toggle' action opens the time picker or turns reminders off (rs-push).
-    // The hour is read the way its settings row reads it (an hour it does not offer, or v7's '1', means 20:00).
+    // The cloud module owns push (rs-push) and its daily reminder, which counts down to Ramadan in Sha'ban: its
+    // 'push.toggle' action turns reminders off, or opens its time picker while they are off. So the row is a switch
+    // only while they are on; off, it is a button that opens that sheet. The hour is read the way its settings row
+    // reads it (an hour it does not offer, or v7's '1', means 20:00).
     if (RS.cloud && RS.cloud.feat && RS.cloud.feat.push && pushSupported()) {
       var push = RS.store.get('rs-push', null), hour = push && typeof push === 'object' ? Number(push.hour) : NaN;
       if (PUSH_HOURS.indexOf(hour) < 0) hour = 20;
-      rows.push(RS.ui.row({ icon: 'bell', title: t('settings.reminder'),
-        sub: push ? t('settings.reminderOn', { time: RS.fmt.time(new Date(2000, 0, 1, hour, 0)) }) : t('settings.reminderSub'),
-        toggle: { on: !!push, act: 'push.toggle' } }));
+      rows.push(push ? RS.ui.row({ icon: 'bell', title: t('settings.reminder'), sub: t('settings.reminderOn', { time: RS.fmt.time(new Date(2000, 0, 1, hour, 0)) }),
+        toggle: { on: true, act: 'push.toggle' } }) :
+        RS.ui.row({ icon: 'bell', title: t('settings.reminder'), sub: t('settings.reminderOff', { month: shaban() }), act: 'push.toggle', chevron: true }));
     }
     if (questions().length) rows.push(RS.ui.row({ icon: 'list-checks', title: t('settings.retake'), sub: t('settings.retakeSub'), act: 'prep.retake', chevron: true }));
     rows.push(RS.ui.row({ icon: 'rotate-ccw', title: t('settings.restart'), sub: t('settings.restartSub'), act: 'prep.restart', cls: 'prep-danger' }));
@@ -862,7 +1014,7 @@
   function homeView(view, s) {
     var ro = inRamadan(), n = planDay(s), r = round(s), complete = isComplete(s), h = [];
     h.push(heroHtml('home'));
-    var pace = complete ? '' : paceText(s);
+    var pace = complete ? '' : paceText(s) || againText(s);
     if (pace) h.push(RS.ui.note(pace, { icon: 'calendar-days', tone: 'plain' }));
     if (complete) h.push(completeCard(s, r));
     else if (ro) h.push(summaryCard(s, r));
@@ -883,12 +1035,13 @@
   }
 
   /* ------------------------------------------------------------------ intro (not started) */
-  // The last programme (stale, or archived in rs-prep.past): Hijri year and prompts done.
+  // The last programme (stale: its archive in rs-prep.past once a new start began, else its own data; or with no
+  // pass at all, the newest archive): Hijri year and prompts done.
   function lastPrep(s) {
-    var src = null, year = 0;
-    if (isStale(s)) { src = s; year = passYear(s); }
-    else if (!s.started) {
-      var past = obj(s.past), ks = Object.keys(past).filter(function (k) { return /^\d{3,4}$/.test(k); }).sort(function (a, b) { return b - a; });
+    var src = null, year = 0, past = obj(s.past);
+    if (isStale(s)) { year = passYear(s); src = past[String(year)] ? obj(past[String(year)]) : s; }
+    else if (!passOf(s)) {
+      var ks = Object.keys(past).filter(function (k) { return /^\d{3,4}$/.test(k); }).sort(function (a, b) { return b - a; });
       if (ks.length) { src = obj(past[ks[0]]); year = parseInt(ks[0], 10); }
     }
     if (!src || !year) return null;
@@ -912,7 +1065,9 @@
       kicker: { icon: 'route', text: t('how.kicker') },
       body: RS.ui.list([
         nq ? RS.ui.row({ icon: 'list-checks', title: t('how.check'), sub: tn('how.checkSub', nq) }) : '',
-        RS.ui.row({ icon: 'calendar-days', title: tn('how.daily', perDay()), sub: t('how.dailySub') }),
+        // the daily prompts may still be being written: say so instead of promising a number a day
+        days().length ? RS.ui.row({ icon: 'calendar-days', title: tn('how.daily', perDay()), sub: t('how.dailySub') }) :
+          RS.ui.row({ icon: 'sprout', title: t('empty.title'), sub: t('empty.body') }),
         RS.ui.row({ icon: 'circle-check', title: t('how.checkins'), sub: t('how.checkinsSub') })
       ])
     }));
@@ -936,7 +1091,7 @@
   /* ------------------------------------------------------------------ assessment */
   // First time: answers are saved as you go (the check can be continued later). A retake (after a result, or once
   // the programme runs) works on a copy that is saved only by "See my result"; leaving the check discards it.
-  function isRetake(s) { return !!s.assessedAt || isOn(s); }
+  function isRetake(s) { return thisYear(Number(s.assessedAt) || 0) || isOn(s); }    // a check for an earlier Ramadan does not count
   function assessAnswers(s) {
     if (!isRetake(s)) return s.answers;
     if (!draft) draft = { answers: Object.assign({}, s.answers) };
@@ -992,7 +1147,8 @@
       view.innerHTML = RS.ui.hero({ kicker: { icon: 'list-checks', text: t('assess.kicker') }, text: t('result.none'), cta: { text: t('cta.start'), act: 'prep.start' } });
       return;
     }
-    var on = isOn(s), ro = inRamadan(), total = totalDays(), sc = trackScores(s), focus = focusTracks(s), scored = Object.keys(sc).length > 0;
+    var on = isOn(s), ro = inRamadan(), total = totalDays(), sc = trackScores(s), focus = focusTracks(s);
+    var strong = focus.length > 0 && focus.every(function (id) { return sc[id] >= STRONG_FROM; });
     var r = on ? round(s) : null, cur = planDay(s), day = dayByN(cur);
     // "Your plan starts today" only when this check started the programme (same moment) today, not on a retake.
     var here = on && Math.abs((Number(s.assessedAt) || 0) - passStart(s)) < 5000 && dayDiff(new Date(passStart(s)), noon()) === 0;
@@ -1015,22 +1171,18 @@
       cta: cta
     }));
     if (focus.length) {
+      // The two weakest areas are the focus however strong they are; a strong result says so as well.
       h.push(RS.ui.card({
         kicker: { icon: 'target', text: t('result.focusKicker') },
         title: tn('result.focusTitle', focus.length),
         body: RS.ui.list(focus.map(function (id) {
           var tr = trackById(id);
           return RS.ui.row({ icon: tr.icon, title: trackName(id), sub: ctext('prep.track.' + id + '.desc'), value: RS.fmt.pct(sc[id]) });
-        })) + '<p class="caption mt-3">' + esc(t('result.focusBody')) + '</p>'
-      }));
-    } else if (scored) {
-      h.push(RS.ui.card({
-        kicker: { icon: 'target', text: t('result.focusKicker') },
-        title: t('result.strongTitle'),
-        body: '<p>' + esc(t('result.strongBody', { pct: RS.fmt.pct(FOCUS_BELOW) })) + '</p>'
+        })) + (strong ? '<p class="mt-3">' + esc(t('result.strongBody', { pct: RS.fmt.pct(STRONG_FROM) })) + '</p>' : '') +
+          '<p class="caption mt-3">' + esc(t('result.focusBody')) + '</p>'
       }));
     }
-    if (scored) {
+    if (focus.length) {
       h.push(RS.ui.card({
         kicker: { icon: 'compass', text: t('result.areasKicker') },
         body: RS.ui.list(tracks().filter(function (tr) { return sc[tr.id] != null; }).map(function (tr) {
@@ -1079,36 +1231,44 @@
       return;
     }
     var got = dayDone(s, day, r), all = prompts(day).length, track = day.track && trackById(day.track);
-    var refl = reflText(s, n);
+    var rf = reflection(s, n), refl = rf.t;
     var h = [stepper];
     var pctDay = all ? Math.round(100 * got / all) : 0;
-    // The day number is the hero figure and the day's theme its headline.
-    h.push(RS.ui.hero({
-      cls: 'prep-hero prep-day-hero' + (takeCelebrate() ? ' prep-celebrate' : ''),
+    // The day number and the ring (prompts done) share the top row; the day's theme is the headline, full width under
+    // it, and part of the hero's accessible name (track kicker + theme).
+    var hero = glow(RS.ui.hero({
+      cls: 'prep-hero prep-day-hero',
       kicker: { icon: track ? track.icon : 'sprout', text: track ? trackName(day.track) : t('kicker') },
       number: num(n), unit: t('day.of', { total: num(total) }),
-      label: RS.t('prep.day.' + n + '.theme'),
       ring: all ? { pct: pctDay, text: frac(got, all), sub: t('ring.done'), label: tn('day.ringLabel', all, { done: num(got) }) } : null,
-      metrics: [
+      extra: '<h3 class="prep-day-theme" id="prep-day-theme">' + esc(RS.t('prep.day.' + n + '.theme')) + '</h3>' + RS.ui.metrics([
         { label: t('m.week'), value: num(weekOf(n)) },
         { label: t('m.reflection'), value: refl.trim() ? t('day.written') : t('day.notYet'), id: 'prep-refl-m', text: true }
-      ]
+      ], { onDark: true })
     }));
+    h.push(hero.replace(/^(<section[^>]*\saria-labelledby=")([^"]+)"/, '$1$2 prep-day-theme"'));
     if (n === total && isComplete(s)) h.push(completeCard(s, r));
     h.push(promptsCard(s, day, { kicker: live && n === cur ? t('day.stepsToday') : t('day.steps') }));
     var mot = ctext('prep.day.' + n + '.mot');
     if (mot || day.ref) {
+      // In the Arabic UI the motivation of a day with a Quran reference is the ayah itself: Quranic text, set in Amiri.
+      var ayah = RS.lang() === 'ar' && (RS.ui.gradeClass(day.grade || '') === 'quran' || /^qur'?an\s/i.test(String(day.ref || '')));
       h.push(RS.ui.card({
         kicker: { icon: 'scroll-text', text: t('day.motivation') },
         cls: 'prep-mot',
-        body: (mot ? '<blockquote class="quote">' + esc(mot) + '</blockquote>' : '') + RS.ui.ref({ ref: day.ref, url: day.url, grade: day.grade })
+        body: (mot ? '<blockquote class="quote' + (ayah ? ' prep-ayah' : '') + '">' + (ayah ? RS.ui.arabic(mot) : esc(mot)) + '</blockquote>' : '') +
+          RS.ui.ref({ ref: day.ref, url: day.url, grade: day.grade })
       }));
     }
     var q = ctext('prep.day.' + n + '.reflect');
+    // A reflection written in an earlier pass (an earlier Ramadan, or before the plan started again on 1 Sha'ban)
+    // stays readable above this pass's own.
+    var earlier = rf.earlier ? '<figure class="prep-earlier"><figcaption class="caption">' + esc(t('day.earlier', { date: RS.fmt.hijri(new Date(rf.earlier.ts)) })) +
+      '</figcaption><blockquote class="prep-earlier-t" dir="auto">' + esc(rf.earlier.t) + '</blockquote></figure>' : '';
     h.push(RS.ui.card({
       kicker: { icon: 'notebook-pen', text: t('day.reflection') },
       cls: 'prep-reflect',
-      body: RS.ui.textarea({ id: 'prep-refl', label: q || t('day.reflectFallback'), value: refl, rows: 4, maxlength: TEXT_MAX, placeholder: t('day.reflectPh'),
+      body: earlier + RS.ui.textarea({ id: 'prep-refl', label: q || t('day.reflectFallback'), value: refl, rows: 4, maxlength: TEXT_MAX, placeholder: t('day.reflectPh'),
         actInput: 'prep.reflect', actChange: 'prep.reflect', arg: n }) +
         '<p class="caption mt-2" id="prep-refl-status" aria-live="polite">' + esc(refl.trim() ? t('saved') : t('savedHint')) + '</p>'
     }));
@@ -1118,7 +1278,7 @@
   /* ------------------------------------------------------------------ plan (v7 intentions, dua list, make-up fasts) */
   function planView(view) {
     RS.topbar({ title: t('plan.title'), sub: t('title'), back: 'prep' });
-    var g = goals(), q = qada(), dc = duaCount(), du = daysUntilRamadan();
+    var g = goals(), q = qada(), dc = duaCount(), du = inRamadan() ? null : daysUntilRamadan();
     var written = g.filter(function (x) { return x.trim(); }).length;
     var h = [];
     // The time left to prepare is the figure (none once Ramadan has begun or when the date is unknown).
@@ -1161,7 +1321,7 @@
       kicker: { icon: 'calendar-check', text: t('plan.qada') },
       title: t('plan.qadaTitle'),
       body: '<div class="stack">' + stepper('owed', t('plan.owed'), q.owed) + stepper('done', t('plan.madeUp'), q.done) + '</div>' +
-        '<p class="prep-status' + (q.owed && q.done >= q.owed ? ' accent' : '') + '" aria-live="polite">' + esc(qadaLine(q)) + '</p>'
+        '<p class="prep-status' + (q.owed && q.done >= q.owed ? ' accent' : '') + '">' + esc(qadaLine(q)) + '</p>'
     }));
     view.innerHTML = h.join('');
   }
@@ -1190,53 +1350,75 @@
   RS.on('route', function (e) {
     var route = e && e.route;
     if (route !== 'prep/assess') draft = null;             // leaving the readiness check discards a retake
+    // The check is entered by a push from the screen it was opened on and then replaces itself screen by screen,
+    // so the last other screen shown is the one under it in the history.
+    if (route && route !== 'prep/assess' && route !== 'prep/result') checkFrom = RS.router.href(route, e.params);
     if (refocus) {
       var arg = refocus;
       refocus = null;
-      // The router focuses the screen title after a navigation; put focus back on the arrow that was used.
+      // The router focuses the screen title after a navigation; put focus back on the arrow that was used, and say
+      // which day is now on screen (the arrow's own name does not change).
       if (route === 'prep/day') {
+        var n = parseInt(e.params && e.params.n, 10);
         setTimeout(function () {
           var el = document.querySelector('#view [data-act="prep.dayStep"][data-arg="' + arg + '"]');
           if (el) { try { el.focus({ preventScroll: true }); } catch (err) { el.focus(); } }
+          if (n >= 1) announce(dayLine(n));
         }, 0);
       }
     }
+    checkAutoHide();
   });
 
   /* ------------------------------------------------------------------ actions */
-  // Starting turns on the Today prep cards (settings.showPrep, the v7 "show prep card" flag) so the check-ins and
-  // prompts are on Today in every mode; prep turns it off again when this Ramadan is over, unless it was on before.
+  // A pass for the coming Ramadan that already exists (started on another device and synced) is kept as it is:
+  // starting again never moves the round. Starting turns on the Today prep cards (settings.showPrep, the v7 "show
+  // prep card" flag) so the check-ins and prompts are on Today in every mode; prep turns it off again when Ramadan
+  // begins or the programme is over, unless it was on before (rs-prep-local, this device only).
   function startProgram(s, at) {
     at = at || Date.now();
-    s.started = at;
-    s.hy = targetYear();
-    s.since = { ts: at, hy: s.hy };
-    s.completedAt = null;
+    if (!isOn(s)) {
+      s.hy = targetYear();
+      s.since = { ts: at, hy: s.hy, first: at };
+      if (!s.started) s.started = at;
+      s.completedAt = null;
+    }
     if (!RS.settings.showPrep) {
       RS.settings.showPrep = true;
       RS.saveSettings();
-      s.autoShow = true;
+      setLocal({ autoShow: true });
     }
   }
-  function autoHide(s) {
-    if (!s.autoShow) return false;
-    s.autoShow = false;
+  function autoHide() {
+    if (!local().autoShow) return false;
+    setLocal({ autoShow: null });
     if (RS.settings.showPrep) { RS.settings.showPrep = false; RS.saveSettings(); }
     return true;
   }
+  // Ramadan has begun (the plan is closed; Today has its own checklist), or the programme ended with the last one.
+  function checkAutoHide() {
+    try { if (local().autoShow && (inRamadan() || !isOn(state()))) autoHide(); } catch (e) { console.error('[RS] prep auto-hide failed', e); }
+  }
   // Values are blanked rather than deleted so that cloud sync (which merges key by key) does not bring them back.
   function blank(m, v) { var out = {}; Object.keys(obj(m)).forEach(function (k) { out[k] = v && typeof v === 'object' ? Object.assign({}, v) : v; }); return out; }
+  // The programme of an earlier Ramadan, kept in rs-prep.past[year] before a new one starts (once: a later call keeps
+  // that copy). Its pass stays as it is, stale by its year until the new start replaces it, so an archive made on a
+  // device that has not synced yet can never stop a programme started on another one. Its ticks are older than any
+  // new start and its reflections are an earlier year's (see isEarlier); only the plain answers need blanking.
   function archive(s) {
-    if (!s.started) return;
-    var past = obj(s.past), y = passYear(s) || targetYear(s.started);
-    past[String(y)] = { started: s.started, since: s.since || null, answers: s.answers, assessment: s.assessment, done: s.done, undone: s.undone,
-      reflections: s.reflections, completedAt: s.completedAt || null };
+    var p = passOf(s);
+    if (!p) return;
+    var past = obj(s.past), y = String(p.hy);
+    if (!past[y]) {
+      var keep = { answers: s.answers, assessment: s.assessment, done: s.done, undone: s.undone, reflections: s.reflections };
+      ['started', 'since', 'completedAt'].forEach(function (k) { if (s[k] != null) keep[k] = s[k]; });
+      past[y] = keep;
+    }
     s.past = past;
-    s.started = null; s.hy = null; s.since = null; s.startDay = null; s.completedAt = null; s.assessedAt = null;
     s.answers = blank(s.answers, null); s.assessment = blank(s.assessment, null);
-    s.reflections = blank(s.reflections, { t: '', ts: Date.now() });     // newer than any copy on another device
     s.done = {}; s.undone = {};
-    autoHide(s);
+    s.completedAt = null; s.assessedAt = null;           // left out by save()
+    autoHide();
   }
 
   RS.act('prep.start', function () {
@@ -1248,9 +1430,10 @@
       if (RS.router.current().route === 'prep') RS.refresh(); else RS.router.go('prep');
       return;
     }
-    // Continue at the first unanswered question; with every answer given, at the last one ("See my result").
+    // Continue at the first unanswered question; with every answer given, at the last one ("See my result"). From
+    // the result screen (no answers yet) the check takes its place, as the result will take the check's.
     var i = firstUnanswered(s.answers);
-    RS.router.go('prep/assess', { q: i < 0 ? questions().length - 1 : i });
+    RS.router.go('prep/assess', { q: i < 0 ? questions().length - 1 : i }, RS.router.current().route === 'prep/result' ? { replace: true } : null);
   });
   RS.act('prep.retake', function () { draft = null; RS.router.go('prep/assess', { q: 0 }); });
 
@@ -1286,7 +1469,13 @@
     save(s);
     RS.router.go('prep/result', null, { replace: true });
   });
-  RS.act('prep.begin', function (route) { RS.router.go(route || 'prep', null, { replace: true }); });
+  // Leaving the result: back to the screen the check was opened on is a Back, so that screen is not in the history
+  // twice (a Back from it would then seem to do nothing); any other screen takes the result's place.
+  RS.act('prep.begin', function (route) {
+    route = route || 'prep';
+    if (checkFrom && RS.router.href(route) === checkFrom) RS.router.back(route);
+    else RS.router.go(route, null, { replace: true });
+  });
 
   // A tap records that one prayer with its time (pray), so syncing with another device keeps the prayers each one
   // ticked; salah [bool x5] is updated with it.
@@ -1301,12 +1490,14 @@
     s.checkins[key] = c;
     save(s);
     RS.buzz(8);
+    // the toast is read out itself; otherwise the new count is (the card's status line is drawn again)
     if (salah[i] && salah.every(Boolean)) RS.toast(t('toast.allSalah'), { tone: 'success' });
+    else announce(salahLine(salah.filter(Boolean).length));
     RS.refresh();
   });
   RS.act('prep.q', function (sign) {
-    var s = state(), key = todayKey(), unit = s.qunit;
-    var before = unit === 'pages' ? pagesToday() : minutesOn(s, key);
+    var s = state(), key = todayKey(), unit = unitOf(s);
+    var before = quranToday(s, unit);
     var v = RS.clamp(before + (sign === '-' ? -Q_STEP[unit] : Q_STEP[unit]), 0, Q_MAX[unit]);
     if (v === before) return;
     if (unit === 'pages') setPagesToday(v);
@@ -1319,13 +1510,14 @@
     RS.buzz(6);
     var target = quranTarget(targetDay(s), unit);
     if (before < target && v >= target) RS.toast(t('toast.quranTarget'), { tone: 'success' });
+    else announce(quranLine(state()));
     RS.refresh();
   });
   RS.act('prep.qunit', function (unit) {
     if (Q_UNITS.indexOf(unit) < 0) return;
     var s = state();
-    if (s.qunit === unit) return;
-    s.qunit = unit;
+    if (unitOf(s) === unit && s.qunit) return;
+    s.qunit = unit;                              // a choice made here is stored (and synced), pages included
     save(s);
     RS.refresh();
   });
@@ -1336,6 +1528,9 @@
       RS.toast(inRamadan() ? t('day.readonly') : isOn(s) ? tn('day.opensIn', day.n - planDay(s), { day: num(day.n) }) : t('day.notStarted'));
       return;
     }
+    // The first tick of a round that started again on 1 Sha'ban keeps what the earlier pass reached, since it may
+    // tick one of that pass's prompts again.
+    ensurePrior(s);
     var r = round(s), wasComplete = lastDayDone(s, r), finished = false, at = Date.now();
     // An untick is recorded with its time (undone) so that syncing with another device does not tick it again.
     if (isDone(s, id, r)) { delete s.done[id]; s.undone[id] = { ts: at }; }
@@ -1343,7 +1538,8 @@
     var nowDone = isDone(s, id, r);
     if (!wasComplete && lastDayDone(s, r) && !((Number(s.completedAt) || 0) >= r.from)) {
       s.completedAt = at;
-      celebrate = finished = true;
+      celebratedAt = at;
+      finished = true;
     }
     save(s);
     RS.buzz(nowDone ? 10 : 6);
@@ -1381,9 +1577,12 @@
     if (!(n >= 1)) return;
     var text = String(value || '').slice(0, TEXT_MAX);
     var write = function () {
-      var s = state();
+      var s = state(), earlier = reflection(s, n).earlier;
       // {t, ts} like the journal: sync keeps the newer edit. '' (not deleted) so that a cleared reflection syncs.
-      s.reflections[n] = { t: text.trim() ? text : '', ts: Date.now() };
+      // An earlier pass's reflection of this day stays with it (prev), still shown above.
+      var e = { t: text.trim() ? text : '', ts: Date.now() };
+      if (earlier) e.prev = earlier;
+      s.reflections[n] = e;
       save(s);
       status('prep-refl-status', t('saved'));
       // the day hero's Reflection metric, when this day is still on screen

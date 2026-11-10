@@ -1,14 +1,17 @@
 // Daily job (Vercel Cron): push reminders (Ramadan day/odd-night/pre-Ramadan/year-round) and Friday organiser digests.
 const { handler, send, err, esc } = require('../../_lib/util'); const { q } = require('../../_lib/db'); const { hijri, MONTHS } = require('../../_lib/hijri'); const mail = require('../../_lib/email'); const { HADITHS } = require('../../_lib/content');
 // The daily hadith is the same fact-checked text the app shows on Today for that day (content/hadith.json:
-// {n, text, ref}); the older built-in list is only a fallback if that file is missing.
+// {n, text, ref}); the older built-in list is only a fallback if that file is missing, without the narrations the
+// fact-check found weak and removed from the app (Ibn Majah 1753, Tirmidhi 663, Ibn Khuzaymah 1887).
 let DAILY = null;
 try { DAILY = require('../../../content/hadith.json'); } catch(e){ DAILY = null; }
+const WEAK = /^(Ibn Majah 1753|Tirmidhi 663|Ibn Khuzaymah 1887)$/;
+const FALLBACK = HADITHS.filter(h => h && h.t && !WEAK.test(String(h.s || '').trim()));
 function hadithFor(day){
   const list = Array.isArray(DAILY) ? DAILY.filter(h => h && h.text) : [];
   const h = list.find(x => x.n === day) || list[(day - 1) % (list.length || 1)];
   if(h) return { t: String(h.text), s: String(h.ref || '') };
-  const o = HADITHS[(day - 1) % HADITHS.length]; return { t: o.t, s: o.s };
+  const o = FALLBACK[(day - 1) % FALLBACK.length]; return { t: o.t, s: o.s };
 }
 function clip(s, n){ s = String(s); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; }
 module.exports = handler(async (req, res) => {

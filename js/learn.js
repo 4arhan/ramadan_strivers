@@ -1031,9 +1031,8 @@
         act: 'learn.go', arg: routeArg('learn/flash', { deck: due }) };
     }
     var dv = dailyView(o);
-    if (dv.doneToday) return null;
-    return dv.n > 0 ? { eyebrow: L('cta.contEyebrow', { n: num(dv.n), total: num(dv.total) }), text: L('cta.cont'), act: 'learn.go', arg: 'learn/daily' }
-      : { eyebrow: L('cta.startEyebrow'), text: L('cta.start'), act: 'learn.go', arg: 'learn/daily' };
+    if (dv.doneToday || !dailyPossible(o, dv)) return null;
+    return dailyCta(dv, true);
   }
   function flashResult(s, sm) {
     var o = getL(), d = deckById(s.deck), k = d ? deckStats(o, d) : { due: 0, next: '' };
@@ -1062,9 +1061,8 @@
           cta: dailyCta(dv, true)
         }) + backRow('');
     }
-    var due = mostDueDeck(o);
-    var cta = due ? { eyebrow: L('cta.doneEyebrow'), text: L('cta.review'), act: 'learn.go', arg: routeArg('learn/flash', { deck: due }) }
-      : { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), act: 'learn.go', arg: routeArg('learn/quiz', { cat: 'all' }) };
+    var cta = doneCta(o, true), back = !!cta;
+    if (!cta) cta = backCta(L('cta.doneEyebrow'));        // the CTA already goes back: no second "Back to Learn"
     var known = sm.cor != null && sm.total;
     return heading(known ? L('d.done', { n: num(sm.cor), total: num(sm.total) }) : L('d.doneLabel')) +
       hero({
@@ -1073,7 +1071,7 @@
         metrics: [metric(L('m.correct'), known ? frac(sm.cor, sm.total) : null, L('sr.none')),
           metric(L('m.overall'), accuracyText(getStats()), L('sr.noAnswers')), metric(L('m.bestStreak'), num(dv.best))],
         cta: cta
-      }) + roundCard(s.res) + backRow('');
+      }) + roundCard(s.res) + (back ? backRow('') : '');
   }
 
   /* ------------------------------------------------------------------ empty states (still one hero) */
@@ -1306,17 +1304,21 @@
     var d = decksAll().filter(function (x) { return deckIds(x).length > 0; })[0];
     return d ? d.id : null;
   }
-  function heroCta(dv, o, canDaily) {
-    if (!dv.doneToday) {
-      if (canDaily) return dailyCta(dv, false);
-      // nothing to put in Today's 5 yet (content is still being written): a deck with cards, else no CTA
-      var deck = firstDeck(o);
-      return deck ? { eyebrow: L('fc.title'), text: deckName(deck), href: RS.router.href('learn/flash', { deck: deck }) } : null;
-    }
+  // After Today's 5: due cards, else more questions (whichever kind exists), else nothing (null).
+  function doneCta(o, inPlace) {
     var due = mostDueDeck(o);
-    if (due) return { eyebrow: L('cta.doneEyebrow'), text: L('cta.review'), href: RS.router.href('learn/flash', { deck: due }) };
-    var more = tfAll().length ? 'learn/quiz' : (mcqAll().length ? 'learn/mcq' : null);
-    return more ? { eyebrow: L('cta.doneEyebrow'), text: L('cta.more'), href: RS.router.href(more, { cat: 'all' }) } : null;
+    var route = due ? 'learn/flash' : (tfAll().length ? 'learn/quiz' : (mcqAll().length ? 'learn/mcq' : null));
+    if (!route) return null;
+    var c = { eyebrow: L('cta.doneEyebrow'), text: due ? L('cta.review') : L('cta.more') }, p = due ? { deck: due } : { cat: 'all' };
+    if (inPlace) { c.act = 'learn.go'; c.arg = routeArg(route, p); } else c.href = RS.router.href(route, p);
+    return c;
+  }
+  function heroCta(dv, o, canDaily) {
+    if (dv.doneToday) return doneCta(o, false);
+    if (canDaily) return dailyCta(dv, false);
+    // nothing to put in Today's 5 yet (content is still being written): a deck with cards, else no CTA
+    var deck = firstDeck(o);
+    return deck ? { eyebrow: L('fc.title'), text: deckName(deck), href: RS.router.href('learn/flash', { deck: deck }) } : null;
   }
   function introP(key) { return '<p class="lrn-intro">' + esc(L(key)) + '</p>'; }
   // A topic or deck the content team has announced (named) but not filled yet shows as a plain "Coming soon" row.

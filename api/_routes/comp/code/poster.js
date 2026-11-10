@@ -30,12 +30,12 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 .org{margin:18px 0 6px;font-size:40px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#EEF8F2}
 .sub{font-size:15px;font-weight:500;color:#B6CEC3}
 .card{margin:22px auto 0;padding:26px 24px 24px;border-radius:22px;background:#fff}
-.qr{width:270px;margin:0 auto;padding:12px;border-radius:16px;border:1px solid rgba(16,25,21,.09)}
+.qr{width:min(270px,100%);margin:0 auto;padding:12px;border-radius:16px;border:1px solid rgba(16,25,21,.09)}
 .qr svg{display:block;width:100%;height:auto}
 .hint{margin-top:16px;font-size:15px;color:#45524C}
 .hint b{color:#101915;font-weight:650}
 .lbl{margin-top:18px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6C66}
-.code{margin-top:4px;font-size:64px;font-weight:300;letter-spacing:.18em;line-height:1.05;color:#0B2219;padding-left:.18em}
+.code{margin-top:4px;font-size:clamp(36px,13vw,64px);font-weight:300;letter-spacing:.18em;line-height:1.05;color:#0B2219;padding-left:.18em}
 .steps{display:inline-block;margin:18px 0 0;padding:0;list-style:none;text-align:left;font-size:15px;line-height:1.5;color:#45524C;counter-reset:s}
 .steps li{position:relative;padding:5px 0 5px 36px;counter-increment:s}
 .steps li::before{content:counter(s);position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;background:rgba(4,120,87,.10);color:#047857;font-size:13px;font-weight:700;line-height:26px;text-align:center}
@@ -49,6 +49,15 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 .np{margin-top:22px}
 .np button{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 24px;border:0;border-radius:999px;background:linear-gradient(180deg,#16422F,#0B2219);color:#fff;font:inherit;font-size:15px;font-weight:650;cursor:pointer}
 .np button:focus-visible{outline:2px solid #047857;outline-offset:3px}
+/* Phones: the QR code and the join code shrink with the screen; print keeps the A4 layout. */
+@media screen and (max-width:480px){
+.p{padding:16px 12px 28px}
+.top{padding:22px 18px 20px;border-radius:24px}
+.org{margin-top:14px;font-size:clamp(26px,8.5vw,40px)}
+.card{padding:20px 14px 20px}
+.hint{overflow-wrap:anywhere}
+.steps{font-size:14.5px}
+}
 @media print{body{background:#fff}.np{display:none}.p{padding:0}.card{padding:18px 0 0}}
 </style></head><body><main class="p">
 <section class="top"><div class="brand">${icon('moon', 20)}<span>Ramadan Strivers</span></div>
