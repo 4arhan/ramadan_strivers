@@ -110,7 +110,7 @@
   "cloud.open.link": "Ouvrir la page",
   "cloud.open.title": "Ouvrir la page",
   "cloud.set.sync": "Synchronisation",
-  "cloud.sync.at": "Synchronisé à {time}",
+  "cloud.sync.at": "Dernière synchronisation : {time}",
   "cloud.sync.done": "Synchronisé",
   "cloud.sync.failed": "Échec de la synchronisation : {error}",
   "cloud.sync.never": "Pas encore synchronisé",

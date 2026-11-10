@@ -13,6 +13,11 @@ const h8 = s => crypto.createHash('sha1').update(String(s)).digest('hex').slice(
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'i18n-src');
 const LANGS = ['zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ur'];
+// The Eid report PDF uses jsPDF's Helvetica (Latin-1 only), so js/tracker.js (PDF_LANGS) prints its labels in English
+// for every other language. Those languages need only the me.pdf.* toasts, not the PDF labels.
+const PDF_LANGS = ['en', 'es', 'fr', 'pt'];
+const PDF_TOASTS = ['me.pdf.loading', 'me.pdf.done', 'me.pdf.failed'];
+const pdfOnly = (lang, k) => PDF_LANGS.indexOf(lang) < 0 && k.startsWith('me.pdf.') && PDF_TOASTS.indexOf(k) < 0;
 const PLURAL_CATS = ['zero', 'one', 'two', 'few', 'many', 'other'];
 const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F2FF}\u{2B50}\u{2B55}\u{231A}-\u{23FF}]/u;
 const KEEP_SAME = /^(?:[A-Z0-9 .,:;'’\-–—\/()#%+&ﷺ]*|.*\b(?:Ramadan Strivers|Tarteel|Quran\.com|WhatsApp|PDF|CSV|QR|URL|API|Email|OK)\b.*)$/;
@@ -50,6 +55,7 @@ for(const lang of targets){
     const isPlural = k => pluralBases.has(k.replace(/\.(zero|one|two|few|many|other)$/, '')) && /\.(zero|one|two|few|many|other)$/.test(k);
     for(const k of Object.keys(src)){
       if(isPlural(k)) continue;
+      if(!(k in tr) && pdfOnly(lang, k)) continue;
       if(!(k in tr)){ E.push(f + ': missing ' + k); continue; }
       const v = tr[k];
       if(typeof src[k] !== 'string'){ if(JSON.stringify(v) === undefined) E.push(f + ': bad value ' + k); continue; }
@@ -58,7 +64,7 @@ for(const lang of targets){
       if(ph(src[k]).join() !== ph(v).join()) E.push(f + ': placeholders differ ' + k + ' en=' + ph(src[k]).join(',') + ' ' + lang + '=' + ph(v).join(','));
       if(tags(src[k]).join() !== tags(v).join()) E.push(f + ': HTML tags differ ' + k);
       if(EMOJI.test(v)) E.push(f + ': emoji in ' + k);
-      if(v === src[k] && src[k].split(/\s+/).length >= 3 && !KEEP_SAME.test(src[k])) W.push(f + ': looks untranslated ' + k);
+      if(v === src[k] && src[k].split(/\s+/).length >= 3 && !KEEP_SAME.test(src[k]) && /\p{L}/u.test(src[k].replace(/\{[a-zA-Z0-9_]+\}/g, ''))) W.push(f + ': looks untranslated ' + k);
       if(snap && snap[f] && snap[f][k] !== undefined && snap[f][k] !== h8(src[k])) W.push(f + ': STALE (English changed since translation) ' + k);
       if(snap && snap[f] && snap[f][k] === undefined) W.push(f + ': NEW key since snapshot ' + k);
     }

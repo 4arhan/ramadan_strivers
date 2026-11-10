@@ -11,7 +11,7 @@
   "cloud.sync.offline": "Sin conexión. La sincronización se reanudará al reconectarte.",
   "cloud.sync.unavailable": "No disponible en este servidor",
   "cloud.sync.syncing": "Sincronizando…",
-  "cloud.sync.at": "Sincronizado a las {time}",
+  "cloud.sync.at": "Última sincronización: {time}",
   "cloud.sync.never": "Aún sin sincronizar",
   "cloud.sync.failed": "Error de sincronización: {error}",
   "cloud.sync.done": "Sincronizado",
