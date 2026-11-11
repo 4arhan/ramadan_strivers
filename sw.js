@@ -9,7 +9,7 @@
    - /api/*, /s/* share pages, /poster/*: never cached.
    Shipping: bump VERSION, and ASSET_V together with the ?v= query strings in index.html (ICON_V with the icon URLs
    in index.html and manifest.webmanifest when the app icon changes). */
-const VERSION = 'rs-v8.0.0-4';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
+const VERSION = 'rs-v8.0.0-5';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
 const ASSET_V = '8.0.0';
 const ICON_V = '8';            // icons are cached as immutable: a new icon needs a new ?v= (index.html, manifest, push)
 const SHELL_FILES = [

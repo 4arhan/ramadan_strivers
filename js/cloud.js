@@ -397,10 +397,16 @@
       handlePending();
       primeComp();
       if (changed) softRefresh();
+      // The status request failed although the browser says it is online (a deploy in progress, a DNS change, a brief
+      // network blip): ask again by itself after 4 s, 15 s and 45 s instead of showing "offline" until someone taps.
+      if (feat.offline && navigator.onLine !== false && featRetry < 3) {
+        setTimeout(function () { if (feat.offline) featLoad(); }, [4000, 15000, 45000][featRetry++]);
+      } else if (!feat.offline) featRetry = 0;
       return feat;
     });
     return featP;
   }
+  var featRetry = 0;
   // Back online: reload the feature flags if they failed, then retry what failed while offline (cloud sync, scores).
   window.addEventListener('online', function () {
     (feat.offline || !feat.loaded ? featLoad() : Promise.resolve(feat)).then(function () {
