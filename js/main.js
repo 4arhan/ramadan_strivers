@@ -63,7 +63,7 @@
     var qs;
     try { qs = new URLSearchParams(location.search); } catch (e) { return; }
     var p = {};
-    ['join', 't', 'magic', 'tab'].forEach(function (k) { var v = qs.get(k); if (v != null && v !== '') p[k] = v; });
+    ['join', 't', 'magic', 'tab', 'buddy'].forEach(function (k) { var v = qs.get(k); if (v != null && v !== '') p[k] = v; });
     if (!Object.keys(p).length) return;
     if (p.join) p.join = String(p.join).trim().toUpperCase();
     RS.bootParams = p;
@@ -71,7 +71,8 @@
     if (p.tab && TAB_ALIAS[p.tab]) target = TAB_ALIAS[p.tab];
     if (p.join) target = 'compete';
     if (p.magic && !target) target = 'me';
-    ['join', 't', 'magic', 'tab'].forEach(function (k) { qs.delete(k); });
+    if (p.buddy && !target) target = 'me/buddies';
+    ['join', 't', 'magic', 'tab', 'buddy'].forEach(function (k) { qs.delete(k); });
     var rest = qs.toString();
     var hash = target ? RS.router.href(target) : location.hash;
     history.replaceState(history.state, '', location.pathname + (rest ? '?' + rest : '') + hash);

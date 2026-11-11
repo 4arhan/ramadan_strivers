@@ -246,7 +246,12 @@
     { code: 'bn', name: '\u09ac\u09be\u0982\u09b2\u09be', dir: 'ltr' },
     { code: 'pt', name: 'Portugu\u00eas', dir: 'ltr' },
     { code: 'ru', name: '\u0420\u0443\u0441\u0441\u043a\u0438\u0439', dir: 'ltr' },
-    { code: 'ur', name: '\u0627\u0631\u062f\u0648', dir: 'rtl' }
+    { code: 'ur', name: '\u0627\u0631\u062f\u0648', dir: 'rtl' },
+    { code: 'id', name: 'Bahasa Indonesia', dir: 'ltr' },
+    { code: 'ms', name: 'Bahasa Melayu', dir: 'ltr' },
+    { code: 'tr', name: 'T\u00fcrk\u00e7e', dir: 'ltr' },
+    { code: 'fa', name: '\u0641\u0627\u0631\u0633\u06cc', dir: 'rtl' },
+    { code: 'sw', name: 'Kiswahili', dir: 'ltr' }
   ];
   function langByCode(code) {
     for (var i = 0; i < RS.LANGS.length; i++) if (RS.LANGS[i].code === code) return RS.LANGS[i];
@@ -343,7 +348,7 @@
     devanagari: 'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300..700&display=swap',
     amiri: 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap'
   };
-  var SCRIPT_FONT = { ar: 'arabic', ur: 'arabic', bn: 'bengali', hi: 'devanagari' };
+  var SCRIPT_FONT = { ar: 'arabic', ur: 'arabic', fa: 'arabic', bn: 'bengali', hi: 'devanagari' };
   var fontsLoaded = {};
   RS.loadFont = function (key) {
     var url = FONT_URLS[key];

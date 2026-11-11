@@ -35,6 +35,8 @@ function check(name, cond, extra){ if(cond) console.log('  ✓', name); else { f
   r = await call('PATCH', '/api/comp/' + code + '/participants', { id: aisha.id, flagged: false, hidden: true }, tok); check('patch hide/unflag', r.status === 200 && r.data.participant.hidden === true);
   r = await call('GET', '/api/comp/' + code + '/board'); check('hidden removed from board', r.data.individuals.length === 2);
   r = await call('PATCH', '/api/comp/' + code, { prizes: ['Umrah', 'iPad', 'Quran set'], settings: { dailyCap: '', message: 'Go team!' } }, tok); check('patch comp prizes/settings', r.status === 200 && r.data.competition.prizes.length === 3 && r.data.competition.settings.dailyCap == null && r.data.competition.settings.message === 'Go team!', r.data);
+  r = await call('GET', '/api/comp/' + code + '/analytics', null, tok); check('analytics (owner)', r.status === 200 && r.data.daily.length === 30 && r.data.totals.joined === 3 && r.data.totals.invited === 2 && r.data.daily[0].active === 2 && r.data.retention.length === 4 && r.data.teams.length >= 2, r.data);
+  r = await call('GET', '/api/comp/' + code + '/analytics'); check('analytics without auth 401', r.status === 401);
   r = await fetch(BASE + '/api/comp/' + code + '/export', { headers: { Authorization: 'Bearer ' + tok } }); const csv = await r.text(); check('csv export', r.status === 200 && csv.includes('Aisha K.') && csv.split('\n').length >= 6, csv.slice(0, 100));
   r = await fetch(BASE + '/poster/' + code); const poster = await r.text(); check('poster html with QR + code (rewrite)', r.status === 200 && poster.includes('<svg') && poster.includes(code) && poster.includes('Al-Noor Trust'));
   r = await fetch(BASE + '/api/comp/' + code + '/certs?auth=' + tok); const certs = await r.text(); check('certificates html', r.status === 200 && certs.includes('Certificate of Achievement') && certs.includes('Fatima Z'));
@@ -50,6 +52,17 @@ function check(name, cond, extra){ if(cond) console.log('  ✓', name); else { f
   r = await call('DELETE', '/api/push/subscribe', { endpoint: 'https://push.example/abc' }); check('unsubscribe', r.status === 200);
   r = await call('GET', '/api/cron/daily'); check('cron runs (skips push/email without keys)', r.status === 200 && r.data.skipped.length === 2 && r.data.hijri.year > 1440, r.data);
   console.log('ai'); r = await call('POST', '/api/ai/explain', { label: 'Fajr prayer', ref: 'Bukhari 555', lang: 'en' }); check('ai explain 503 without key', r.status === 503);
+  console.log('buddy'); r = await call('POST', '/api/buddy', { name: 'Yusuf', summary: { d: 12, p: 80, s: 5, dl: 11, q: 140, m: 'ramadan', last: '2026-03-01', secret: 'x' } }); check('buddy create', r.status === 201 && r.data.code.length === 8 && r.data.token, r.data); const bud = r.data;
+  r = await call('POST', '/api/buddy', { summary: {} }); check('buddy without name 400', r.status === 400);
+  r = await call('GET', '/api/buddy/' + bud.code); check('buddy public view: summary only, no token, no nudges', r.status === 200 && r.data.name === 'Yusuf' && r.data.summary.p === 80 && r.data.summary.secret === undefined && r.data.token === undefined && r.data.nudges === undefined, r.data);
+  r = await call('POST', '/api/buddy/' + bud.code + '/nudge', { kind: 'dua', from: 'Mum' }); check('nudge', r.status === 201);
+  r = await call('POST', '/api/buddy/' + bud.code + '/nudge', { kind: 'dua', from: 'Mum' }); check('same nudge within the hour is not repeated', r.status === 200 && r.data.repeated === true);
+  r = await call('POST', '/api/buddy/' + bud.code + '/nudge', { kind: 'free text', from: 'Mum' }); check('unknown nudge kind 400', r.status === 400);
+  r = await call('GET', '/api/buddy/' + bud.code + '?t=' + bud.token); check('owner sees 1 nudge', r.status === 200 && r.data.nudges.length === 1 && r.data.nudges[0].from === 'Mum', r.data);
+  r = await call('PUT', '/api/buddy/' + bud.code, { token: 'wrong', summary: { p: 1 } }); check('update with wrong token 403', r.status === 403);
+  r = await call('PUT', '/api/buddy/' + bud.code, { token: bud.token, summary: { d: 13, p: 55 }, ack: true }); check('owner update + ack', r.status === 200 && r.data.summary.d === 13 && r.data.nudges.length === 0, r.data);
+  r = await call('DELETE', '/api/buddy/' + bud.code, { token: bud.token }); check('stop sharing', r.status === 200);
+  r = await call('GET', '/api/buddy/' + bud.code); check('gone 404', r.status === 404);
   console.log('whatsapp'); const form = async (b) => { const x = await fetch(BASE + '/api/whatsapp', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(b) }); return await x.text(); };
   r = await call('POST', '/api/comp', { name: 'Masjid Noor', type: 'Mosque' }, tok); const code2 = r.data.competition.code;
   let t = await form({ From: 'whatsapp:+15551234567', Body: 'JOIN ' + code2 + ' Uncle Yusuf' }); check('wa join', t.includes('Welcome to Masjid Noor'), t);

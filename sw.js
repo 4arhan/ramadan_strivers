@@ -9,13 +9,13 @@
    - /api/*, /s/* share pages, /poster/*: never cached.
    Shipping: bump VERSION, and ASSET_V together with the ?v= query strings in index.html (ICON_V with the icon URLs
    in index.html and manifest.webmanifest when the app icon changes). */
-const VERSION = 'rs-v8.0.0-3';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
+const VERSION = 'rs-v8.0.0-4';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
 const ASSET_V = '8.0.0';
 const ICON_V = '8';            // icons are cached as immutable: a new icon needs a new ?v= (index.html, manifest, push)
 const SHELL_FILES = [
-  'css/app.css', 'css/tracker.css', 'css/learn.css', 'css/prep.css', 'css/cloud.css',
+  'css/app.css', 'css/tracker.css', 'css/learn.css', 'css/prep.css', 'css/cloud.css', 'css/social.css',
   'js/core.js', 'js/icons.js', 'js/lang/en.js', 'js/content.js',
-  'js/tracker.js', 'js/learn.js', 'js/prep.js', 'js/cloud.js', 'js/main.js'
+  'js/tracker.js', 'js/learn.js', 'js/prep.js', 'js/cloud.js', 'js/social.js', 'js/main.js'
 ].map(p => '/' + p + '?v=' + ASSET_V);
 const STATIC_FILES = [
   '/', '/manifest.webmanifest', '/vendor/adhan.umd.min.js', '/vendor/honorific.woff2',

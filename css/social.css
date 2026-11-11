@@ -1,0 +1,44 @@
+/* ==========================================================================
+   social.css — family profiles, buddies, embed sheet, organiser insights and the home display (js/social.js).
+   Builds on css/app.css tokens and components. Logical properties only (RTL-safe), 44px touch targets.
+   ========================================================================== */
+.so-btns { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s4); }
+.so-btns.so-end { justify-content: center; }
+.so-hint { margin-top: var(--s2); color: var(--ink-3); font-size: 13px; line-height: 1.45; }
+.card > .so-hint:first-child, .card-bd > .so-hint:first-child { margin-top: 0; }
+.so-hint + .bars, .so-hint + .so-hbar, .so-hint + .list, .so-hint + .note { margin-top: var(--s3); }
+.so-link { margin-top: var(--s3); padding: 10px 12px; border-radius: var(--r-input); background: var(--card-2); border: 1px solid var(--hairline);
+  font-size: 13px; font-weight: 600; color: var(--ink-2); overflow-wrap: anywhere; }
+.so-profile.is-on { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.so-buddy-row { display: flex; align-items: center; gap: var(--s4); }
+.so-buddy-row > div { min-inline-size: 0; flex: 1; }
+form[data-act-submit^="fam."] > * + *, form[data-act-submit^="buddy."] > * + * { margin-top: var(--s4); }
+.so-embed .seg { margin-top: var(--s3); }
+.so-embed .field { margin-top: var(--s4); }
+.so-embed textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+
+/* Horizontal bars (insights): label, track, value */
+.so-hbar { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) auto; align-items: center; gap: var(--s3); padding-block: 7px; font-size: 14px; }
+.so-hbar + .so-hbar { border-top: 1px solid var(--hairline); }
+.so-hbar-l { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
+.so-hbar-l small { display: block; margin-top: 2px; color: var(--ink-3); font-size: 12px; font-weight: 500; }
+.so-hbar-t { block-size: 8px; border-radius: var(--r-pill); background: var(--track); overflow: hidden; }
+.so-hbar-t i { display: block; block-size: 100%; border-radius: var(--r-pill); background: var(--accent); }
+.so-hbar-v { min-inline-size: 2.5em; text-align: end; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+/* Home display: one calm dark panel that fills the screen; the shell (top bar, tab bar) steps aside */
+html.is-display .topbar, html.is-display .nav { display: none; }
+html.is-display .view { max-inline-size: none; padding: 0; margin: 0; }
+.so-disp { min-block-size: 100vh; min-block-size: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(12px, 3vh, 32px);
+  padding: clamp(20px, 5vw, 64px); background: var(--hero-bg); color: var(--hero-ink); text-align: center; }
+.so-disp-top { color: var(--hero-ink-2); font-weight: 600; font-size: clamp(15px, 2.4vw, 26px); line-height: 1.4; }
+.so-disp-hijri { color: var(--hero-accent); }
+.so-disp-clock { font-size: clamp(64px, 19vw, 240px); font-weight: 200; line-height: 1; letter-spacing: var(--track-tight); font-variant-numeric: tabular-nums; }
+.so-disp-next { font-size: clamp(18px, 3.4vw, 40px); font-weight: 600; color: var(--mint); }
+.so-disp-tiles { inline-size: min(100%, 900px); }
+.so-disp-quote { max-inline-size: 60ch; color: var(--hero-ink-2); font-size: clamp(15px, 2vw, 24px); line-height: 1.55; }
+.so-disp-foot { margin-top: var(--s2); opacity: .75; }
+.so-disp-foot .btn { background: transparent; color: var(--hero-ink-2); border-color: var(--hero-hairline); }
+
+.so-m2 { margin-top: var(--s4); padding-top: var(--s4); border-top: 1px solid var(--hairline); }
+.so-disp-quote small { display: inline-block; margin-top: 8px; color: var(--hero-ink-3); font-size: .8em; }

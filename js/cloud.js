@@ -1632,7 +1632,7 @@
   }
   // Organiser dashboard tabs (ARIA tabs: one tab stop, the arrow keys move between them, see the keydown handler): one
   // row of chips that scrolls sideways when it does not fit (never two rows). The chosen tab's content is its panel.
-  var OTABS = [['board', 'chart-column'], ['roster', 'users'], ['enrol', 'user-plus'], ['settings', 'settings'], ['tools', 'layers']];
+  var OTABS = [['board', 'trophy'], ['insights', 'chart-column'], ['roster', 'users'], ['enrol', 'user-plus'], ['settings', 'settings'], ['tools', 'layers']];
   function orgTabsHtml() {
     return '<div class="chips cl-tabs" role="tablist" aria-label="' + esc(t('compete.tabs.label')) + '">' + OTABS.map(function (x) {
       var on = cmp.otab === x[0];
@@ -1690,6 +1690,7 @@
     else if (tab === 'enrol') panel = enrolHtml();
     else if (tab === 'settings') panel = orgSettingsHtml();
     else if (tab === 'tools') panel = toolsHtml(s);
+    else if (tab === 'insights') panel = RS.social && RS.social.insightsHtml ? RS.social.insightsHtml(c) : '';
     else panel = boardCardHtml(boardOpts());
     h.push('<div class="cl-tabpanel" role="tabpanel" id="cmp-tabpanel" aria-labelledby="cmp-tab-' + esc(tab) + '">' + panel + '</div>');
     return h.join('');
@@ -1785,7 +1786,7 @@
       ui.row({ icon: 'award', title: t('compete.tools.certs'), sub: t('compete.tools.certsSub'), act: 'cmp.openUrl', arg: 'certs', chevron: true }),
       ui.row({ icon: 'download', title: t('compete.tools.csv'), sub: t('compete.tools.csvSub'), act: 'cmp.csv', chevron: true }),
       ui.row({ icon: 'refresh-cw', title: t('compete.tools.refresh'), act: 'cmp.refresh', chevron: true })
-    ]) });
+    ].concat(RS.social && RS.social.toolsRows ? RS.social.toolsRows(c) : [])) });
     var open = c.open !== false;
     var danger = ui.card({ cls: 'cl-danger-card', kicker: { icon: 'triangle-alert', text: t('compete.tools.danger') }, body: ui.list([
       ui.row({ icon: open ? 'lock' : 'lock-open', title: t(open ? 'compete.tools.close' : 'compete.tools.reopen'), sub: t(open ? 'compete.tools.closeSub' : 'compete.tools.reopenSub'),
@@ -2732,7 +2733,7 @@
     if (row) { row.setAttribute('tabindex', '-1'); row.setAttribute('data-cl-focus', ''); focusEl(row); }
   });
   RS.act('cmp.otab', function (v) {
-    cmp.otab = ['board', 'roster', 'enrol', 'settings', 'tools'].indexOf(v) >= 0 ? v : 'board';
+    cmp.otab = ['board', 'insights', 'roster', 'enrol', 'settings', 'tools'].indexOf(v) >= 0 ? v : 'board';
     RS.refresh();
   });
   RS.act('cmp.copy', function () {

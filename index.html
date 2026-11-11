@@ -33,12 +33,34 @@
 <link rel="stylesheet" href="css/learn.css?v=8.0.0">
 <link rel="stylesheet" href="css/prep.css?v=8.0.0">
 <link rel="stylesheet" href="css/cloud.css?v=8.0.0">
+<link rel="stylesheet" href="css/social.css?v=8.0.0">
+<script>
+  /* Family profiles: a switch asked for by js/social.js (sessionStorage rsf-switch) happens here, before any module
+     reads storage. The profile in use lives in the rs-* keys; the others wait in rsf-data-<id>. The outgoing profile
+     is stored first, so a full device loses nothing: the write fails and the switch is skipped. */
+  (function () { try {
+    var ss = window.sessionStorage, ls = window.localStorage, req = ss.getItem('rsf-switch');
+    if (!req) return;
+    ss.removeItem('rsf-switch'); req = JSON.parse(req);
+    var f = JSON.parse(ls.getItem('rsf-profiles') || 'null');
+    if (!f || !f.list || req.to === f.active || !f.list.some(function (p) { return p.id === req.to; })) return;
+    var DEVICE = { 'rs-dev-sw': 1, 'rs-inst-x': 1, 'rs-push': 1 }, keys = [], out = {}, i, k;
+    for (i = 0; i < ls.length; i++) { k = ls.key(i); if (k && k.indexOf('rs-') === 0 && !DEVICE[k]) keys.push(k); }
+    keys.forEach(function (x) { out[x] = ls.getItem(x); });
+    ls.setItem('rsf-data-' + f.active, JSON.stringify(out));
+    keys.forEach(function (x) { ls.removeItem(x); });
+    var inc = JSON.parse(ls.getItem('rsf-data-' + req.to) || 'null');
+    if (inc) { for (k in inc) if (Object.prototype.hasOwnProperty.call(inc, k) && typeof inc[k] === 'string') ls.setItem(k, inc[k]); ls.removeItem('rsf-data-' + req.to); }
+    else if (req.settings) ls.setItem('rs-settings', JSON.stringify(req.settings));
+    f.active = req.to; ls.setItem('rsf-profiles', JSON.stringify(f));
+  } catch (e) {} })();
+</script>
 <script>
   /* Apply the saved theme and text direction before first paint (main.js applies everything again). */
   (function () { try {
     var s = JSON.parse(localStorage.getItem('rs-settings') || '{}'), d = document.documentElement;
     if (s.theme === 'light' || s.theme === 'dark') d.setAttribute('data-theme', s.theme);
-    if (typeof s.lang === 'string' && /^[a-z]{2}$/.test(s.lang)) { d.lang = s.lang; d.dir = (s.lang === 'ar' || s.lang === 'ur') ? 'rtl' : 'ltr'; }
+    if (typeof s.lang === 'string' && /^[a-z]{2}$/.test(s.lang)) { d.lang = s.lang; d.dir = (s.lang === 'ar' || s.lang === 'ur' || s.lang === 'fa') ? 'rtl' : 'ltr'; }
   } catch (e) {} })();
 </script>
 </head>
@@ -78,6 +100,7 @@
 <script src="js/learn.js?v=8.0.0"></script>
 <script src="js/prep.js?v=8.0.0"></script>
 <script src="js/cloud.js?v=8.0.0"></script>
+<script src="js/social.js?v=8.0.0"></script>
 <script src="js/main.js?v=8.0.0"></script>
 </body>
 </html>

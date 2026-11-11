@@ -17,6 +17,9 @@ const ROUTES = [
   ['ai/explain', () => require('./_routes/ai/explain')],
   ['ai/reflect', () => require('./_routes/ai/reflect')],
   ['ai/quiz', () => require('./_routes/ai/quiz')],
+  ['buddy', () => require('./_routes/buddy/index')],
+  ['buddy/:code', () => require('./_routes/buddy/item')],
+  ['buddy/:code/nudge', () => require('./_routes/buddy/nudge')],
   ['comp', () => require('./_routes/comp/index')],
   ['comp/:code', () => require('./_routes/comp/item')],
   ['comp/:code/join', () => require('./_routes/comp/code/join')],
@@ -27,6 +30,7 @@ const ROUTES = [
   ['comp/:code/export', () => require('./_routes/comp/code/export')],
   ['comp/:code/poster', () => require('./_routes/comp/code/poster')],
   ['comp/:code/certs', () => require('./_routes/comp/code/certs')],
+  ['comp/:code/analytics', () => require('./_routes/comp/code/analytics')],
 ].map(([pattern, load]) => ({ parts: pattern.split('/'), load }));
 
 function match(path){

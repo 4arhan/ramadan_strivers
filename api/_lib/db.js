@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS push_subs(
   tz TEXT, lat DOUBLE PRECISION, lng DOUBLE PRECISION, lang TEXT DEFAULT 'en',
   created_at TIMESTAMPTZ DEFAULT now(), last_sent TIMESTAMPTZ);
 CREATE TABLE IF NOT EXISTS shares(id TEXT PRIMARY KEY, data JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS buddies(
+  code TEXT PRIMARY KEY, token TEXT UNIQUE NOT NULL, name TEXT NOT NULL,
+  summary JSONB NOT NULL DEFAULT '{}'::jsonb, nudges JSONB NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
 CREATE TABLE IF NOT EXISTS ai_cache(key TEXT PRIMARY KEY, value JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
 `;
 function connString(){ return process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.POSTGRES_PRISMA_URL || ''; }

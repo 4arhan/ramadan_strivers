@@ -36,7 +36,7 @@ const DEV = path.join(SRC, '_dev');
 const OUT = path.join(ROOT, 'js', 'lang');
 const PLURAL_CATS = ['zero', 'one', 'two', 'few', 'many', 'other'];
 const STUB_MARK = 'no translations yet';
-const FALLBACK_LANGS = ['en', 'zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ur'];
+const FALLBACK_LANGS = ['en', 'zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ur', 'id', 'ms', 'tr', 'fa', 'sw'];
 
 // The app's language list (RS.LANGS in js/core.js) is the source of truth for which files must exist.
 function appLangs() {
@@ -135,7 +135,7 @@ function pluralGroups(en) {
 
 // The Eid report PDF uses jsPDF's Helvetica (Latin-1 only), so js/tracker.js (PDF_LANGS) prints its labels in English
 // for every other language; those languages need only the me.pdf.* toasts. Keep in step with scripts/check-i18n.js.
-const PDF_LANGS = ['en', 'es', 'fr', 'pt'];
+const PDF_LANGS = ['en', 'es', 'fr', 'pt', 'id', 'ms', 'sw'];
 const PDF_TOASTS = ['me.pdf.loading', 'me.pdf.done', 'me.pdf.failed'];
 const pdfOnly = (code, k) => PDF_LANGS.indexOf(code) < 0 && k.startsWith('me.pdf.') && PDF_TOASTS.indexOf(k) < 0;
 

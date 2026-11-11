@@ -1047,6 +1047,8 @@
       action: { text: t('me.badgesAll'), act: 'nav.go', arg: 'me/badges', icon: 'chevron-right' }, body: badgeGrid(bm) }));
     // cloud (account, competitions)
     if (RS.cloud && typeof RS.cloud.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.cloud.meCardsHtml(); }, '') || '');
+    // family profiles, buddies, calendar, home display
+    if (RS.social && typeof RS.social.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.social.meCardsHtml(); }, '') || '');
     // more
     var more = [
       ui.row({ icon: 'settings', title: t('me.settings'), sub: t('me.settingsSub'), act: 'nav.go', arg: 'me/settings', chevron: true }),
@@ -1352,7 +1354,7 @@
   function saveSetting(k, v) { RS.settings[k] = v; RS.saveSettings(); emit(); }
 
   /* ================================================================ Eid report (jsPDF) */
-  var PDF_LANGS = ['en', 'es', 'fr', 'pt'];   // Helvetica covers Latin-1 only
+  var PDF_LANGS = ['en', 'es', 'fr', 'pt', 'id', 'ms', 'sw'];   // Helvetica covers Latin-1 only
   function pdfLang() { return PDF_LANGS.indexOf(RS.lang()) >= 0 ? RS.lang() : 'en'; }
   function pT(k, v) {
     var L = pdfLang(), d = RS.I18N[L] || {}, en = RS.I18N.en || {};

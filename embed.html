@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Leaderboard · Ramadan Strivers</title>
+<!-- Embeddable leaderboard: <iframe src="/embed.html?code=ABC123&lang=en&theme=light&view=individuals&n=10">.
+     It reads the same public board the app shows (display names, teams, points; hidden participants are left out),
+     refreshes every minute and links to the join page. No cookies, no storage, no tracking. -->
+<style>
+  :root { --paper: #F2F5F3; --card: #FFFFFF; --ink: #101915; --ink-3: #5F6C66; --hair: rgba(16, 25, 21, .09); --accent: #047857; --soft: rgba(4, 120, 87, .10); --accent-ink: #03684C; }
+  :root[data-theme="dark"] { --paper: #0B1410; --card: #121E19; --ink: #EEF8F2; --ink-3: #9DB3A8; --hair: rgba(167, 243, 208, .14); --accent: #34D399; --soft: rgba(52, 211, 153, .14); --accent-ink: #A7F3D0; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font: 15px/1.4 Manrope, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans Arabic', 'Noto Sans Bengali', 'Noto Sans Devanagari', Arial, sans-serif; background: var(--paper); color: var(--ink); padding: 12px; }
+  .box { background: var(--card); border: 1px solid var(--hair); border-radius: 18px; padding: 16px; max-inline-size: 480px; margin-inline: auto; }
+  .kick { color: var(--accent-ink); font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  h1 { font-size: 19px; font-weight: 700; line-height: 1.25; margin-top: 2px; overflow-wrap: anywhere; }
+  ol { list-style: none; padding: 0; margin-top: 10px; }
+  li { display: flex; align-items: center; gap: 12px; min-block-size: 44px; padding-block: 8px; border-top: 1px solid var(--hair); }
+  .rk { flex: none; inline-size: 30px; block-size: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--soft); color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+  li:nth-child(-n+3) .rk { background: var(--accent); color: var(--card); }
+  .nm { flex: 1; min-inline-size: 0; font-weight: 600; overflow-wrap: anywhere; }
+  .nm small { display: block; color: var(--ink-3); font-weight: 500; font-size: 12px; }
+  .pt { flex: none; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .pt small { color: var(--ink-3); font-weight: 600; font-size: 12px; margin-inline-start: 3px; }
+  .msg { padding-block: 18px; color: var(--ink-3); text-align: center; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--hair); font-size: 13px; }
+  a { color: var(--accent-ink); font-weight: 700; text-decoration: none; }
+  a:hover, a:focus-visible { text-decoration: underline; }
+  .foot .by { color: var(--ink-3); font-weight: 500; }
+</style>
+</head>
+<body>
+<main class="box" id="box" aria-live="polite"><p class="msg">…</p></main>
+<script>
+(function () {
+  'use strict';
+  var qs = new URLSearchParams(location.search);
+  var code = String(qs.get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  var lang = /^[a-z]{2}$/.test(qs.get('lang') || '') ? qs.get('lang') : 'en';
+  var view = qs.get('view') === 'teams' ? 'teams' : 'individuals';
+  var n = Math.max(3, Math.min(50, parseInt(qs.get('n'), 10) || 10));
+  var root = document.documentElement, box = document.getElementById('box');
+  if (qs.get('theme') === 'dark') root.setAttribute('data-theme', 'dark');
+  root.lang = lang; root.dir = (lang === 'ar' || lang === 'ur' || lang === 'fa') ? 'rtl' : 'ltr';
+  window.RS = { I18N: {} };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function t(k, v) {
+    var d = window.RS.I18N[lang] || {}, en = window.RS.I18N.en || {}, s = d[k] != null ? d[k] : (en[k] != null ? en[k] : k);
+    return String(s).replace(/\{(\w+)\}/g, function (m, x) { return v && v[x] != null ? v[x] : m; });
+  }
+  var nfm; try { nfm = new Intl.NumberFormat(lang + '-u-nu-latn'); } catch (e) { nfm = new Intl.NumberFormat('en'); }
+  function nf(x) { return nfm.format(Number(x) || 0); }
+  function load(src) { return new Promise(function (res) { var s = document.createElement('script'); s.src = src; s.onload = s.onerror = function () { res(); }; document.head.appendChild(s); }); }
+  function render(d, failed) {
+    var name = d && d.competition ? d.competition.name : '';
+    var h = '<p class="kick">' + esc(t('embed.heading')) + '</p>' + (name ? '<h1><bdi>' + esc(name) + '</bdi></h1>' : '');
+    if (failed) h += '<p class="msg">' + esc(t('embed.failed')) + '</p>';
+    else {
+      var rows = view === 'teams' && d.groups && d.groups.length ? d.groups.slice(0, n).map(function (g) { return { rank: g.rank, name: g.grp, sub: '', pts: g.avgPts }; })
+        : d.individuals.slice(0, n).map(function (r) { return { rank: r.rank, name: r.name, sub: r.grp, pts: r.totalPts }; });
+      if (!rows.length) h += '<p class="msg">' + esc(t('embed.empty')) + '</p>';
+      else h += '<ol>' + rows.map(function (r) {
+        return '<li><span class="rk">' + nf(r.rank) + '</span><span class="nm"><bdi>' + esc(r.name) + '</bdi>' + (r.sub ? '<small><bdi>' + esc(r.sub) + '</bdi></small>' : '') +
+          '</span><span class="pt">' + nf(r.pts) + '<small>' + esc(t('compete.pts')) + '</small></span></li>'; }).join('') + '</ol>';
+    }
+    var join = location.origin + '/?join=' + encodeURIComponent(code);
+    h += '<p class="foot">' + (d && d.competition && d.competition.open === false ? '<span></span>' : '<a href="' + join + '" target="_blank" rel="noopener">' + esc(t('embed.join', { code: code })) + '</a>') +
+      '<a class="by" href="' + location.origin + '/" target="_blank" rel="noopener">' + esc(t('embed.powered')) + '</a></p>';
+    box.innerHTML = h;
+  }
+  var last = null;
+  function refresh() {
+    if (!code) { render(null, true); return; }
+    fetch('/api/comp/' + encodeURIComponent(code) + '/board', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function (d) { last = d; render(d, false); }, function () { if (!last) render(null, true); });
+  }
+  Promise.all([load('js/lang/en.js?v=8.0.0')].concat(lang !== 'en' ? [load('js/lang/' + lang + '.js?v=8.0.0')] : [])).then(function () {
+    refresh(); setInterval(function () { if (!document.hidden) refresh(); }, 60000);
+  });
+})();
+</script>
+</body>
+</html>

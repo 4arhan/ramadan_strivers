@@ -12,10 +12,10 @@ const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const h8 = s => crypto.createHash('sha1').update(String(s)).digest('hex').slice(0, 8);
 const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'i18n-src');
-const LANGS = ['zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ur'];
+const LANGS = ['zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ur', 'id', 'ms', 'tr', 'fa', 'sw'];
 // The Eid report PDF uses jsPDF's Helvetica (Latin-1 only), so js/tracker.js (PDF_LANGS) prints its labels in English
 // for every other language. Those languages need only the me.pdf.* toasts, not the PDF labels.
-const PDF_LANGS = ['en', 'es', 'fr', 'pt'];
+const PDF_LANGS = ['en', 'es', 'fr', 'pt', 'id', 'ms', 'sw'];
 const PDF_TOASTS = ['me.pdf.loading', 'me.pdf.done', 'me.pdf.failed'];
 const pdfOnly = (lang, k) => PDF_LANGS.indexOf(lang) < 0 && k.startsWith('me.pdf.') && PDF_TOASTS.indexOf(k) < 0;
 const PLURAL_CATS = ['zero', 'one', 'two', 'few', 'many', 'other'];
