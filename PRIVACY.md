@@ -6,6 +6,10 @@
 
 **Competitions:** a participant shares only a display name, an optional class/team label, and aggregate scores (points, days logged, average %, Quran pages). The organiser can see per-day totals for integrity review — never which individual deeds were ticked. Participants can leave at any time; organisers can remove anyone. Closing a competition stops all score updates.
 
+**Buddies:** if you create a buddy link, the server stores the name you typed and a short summary (your Ramadan day, today's completion %, your best current streak, days logged, Quran pages and the date you were last active). Anyone who has the link can see that summary and send you one of four preset encouragements with their name; they cannot send free text. Individual deeds, the journal and sisters' mode are never shared. "Stop sharing" deletes the link and its data from the server.
+
+**Family profiles and the home display:** profiles are kept only on your device; nothing about them is sent to the server. The home display reads the data already on the device. An embedded leaderboard on an organiser's website shows the same public board as the app (display names, teams, points) and sets no cookies.
+
 **Children (under 13):** no email, no account and no phone number is ever required of a participant. Organisers running school competitions should enable *Participants under 13* in competition settings: this hides social-sharing buttons for those participants and keeps display names only. Schools remain the data controller for their rosters; we recommend first names + class, not full names, and deleting the competition after Eid (one tap).
 
 **Push notifications:** stored as a browser subscription endpoint plus your chosen hour and, if you enabled prayer times, your approximate coordinates (for iftar reminders). Turn off in Settings to delete the subscription.
