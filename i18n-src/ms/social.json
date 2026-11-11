@@ -37,7 +37,7 @@
   "fam.rowOff": "Kongsi peranti ini dengan keluarga anda",
   "buddy.title": "Rakan",
   "buddy.kicker": "Rakan amal",
-  "buddy.intro": "Jemput seorang rakan atau ahli keluarga untuk melihat perkembangan anda dan memberi anda semangat. Ikut mereka kembali untuk melakukan perkara yang sama.",
+  "buddy.intro": "Jemput seorang rakan atau ahli keluarga untuk melihat kemajuan anda dan memberi anda semangat. Ikut mereka kembali untuk melakukan perkara yang sama.",
   "buddy.count.other": "rakan yang anda ikuti",
   "buddy.buddy": "Rakan",
   "buddy.mineKicker": "Pautan rakan anda",
@@ -169,14 +169,14 @@
   "ins.csvPct": "Purata penyelesaian %",
   "ins.csvPts": "Mata",
   "ins.csvPages": "Halaman al-Quran",
-  "disp.title": "Mod paparan skrin",
+  "disp.title": "Paparan rumah",
   "disp.rowSub": "Jam, kiraan detik solat dan waktu berbuka untuk tablet, paparan pintar atau TV",
   "disp.day": "Hari {n}",
   "disp.iftar": "Berbuka",
   "disp.suhoor": "Akhir sahur",
   "disp.next": "Solat seterusnya",
-  "disp.nextIn": "{prayer} dalam masa {time}",
+  "disp.nextIn": "{prayer} dalam {time}",
   "disp.streak": "Rentetan",
   "disp.setLocation": "Tetapkan lokasi anda untuk waktu solat",
-  "disp.exit": "Keluar paparan"
+  "disp.exit": "Tutup paparan"
 }

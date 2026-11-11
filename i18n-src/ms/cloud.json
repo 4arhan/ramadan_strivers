@@ -53,7 +53,7 @@
   "acct.delete": "Padam akaun dan data awan",
   "acct.delete.title": "Padam akaun anda?",
   "acct.delete.body": "Akaun anda dan semua data awannya dipadam secara kekal. Data pada peranti ini dikekalkan.",
-  "acct.delete.bodyOwned.other": "Akaun anda dan semua data awannya dipadam secara kekal. Data pada peranti ini dikekalkan. Anda menganjurkan {n} pertandingan: pertandingan itu terus berjalan, tetapi tiada sesiapa boleh mengurus atau memadamnya setelah akaun anda dipadam. Tutup atau padam dahulu di Bertanding.",
+  "acct.delete.bodyOwned.other": "Akaun anda dan semua data awannya dipadam secara kekal. Data pada peranti ini dikekalkan. Anda menganjurkan {n} pertandingan: pertandingan itu terus berjalan, tetapi tiada sesiapa boleh mengurus atau memadamnya setelah akaun anda dipadam. Tutup atau padam dahulu dalam tab Bertanding.",
   "acct.delete.ok": "Padam akaun",
   "acct.deleted": "Akaun dipadam. Data anda pada peranti ini dikekalkan.",
   "acct.loggedOut": "Anda telah log keluar. Data anda kekal pada peranti ini.",
