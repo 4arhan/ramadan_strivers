@@ -6,7 +6,7 @@ feature switches itself on when its environment variable exists. Set these in **
 
 | Feature | What to set | Where to get it |
 |---|---|---|
-| Accounts, cloud sync, competitions, share links | `DATABASE_URL` | Vercel → **Storage → Create Database → Postgres (Neon)** → Connect to project (it adds `DATABASE_URL`/`POSTGRES_URL` automatically). Tables are created on first request. |
+| Accounts, cloud sync, competitions, buddies, organiser insights, share links | `DATABASE_URL` | Vercel → **Storage → Create Database → Postgres (Neon)** → Connect to project (it adds `DATABASE_URL`/`POSTGRES_URL` automatically). Tables are created on first request. |
 | Session signing | `AUTH_SECRET` | Any long random string (`openssl rand -hex 32`). Falls back to a hash of the DB URL if unset. |
 | Magic-link sign-in, Friday organiser digests | `RESEND_API_KEY`, optional `EMAIL_FROM` | resend.com (free tier). Verify your sending domain, e.g. `Ramadan Strivers <hello@ramadanstrivers.com>`. |
 | Web push reminders | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | `npx web-push generate-vapid-keys`. Subject is `mailto:you@example.com`. |

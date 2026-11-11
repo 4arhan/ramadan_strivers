@@ -21,6 +21,7 @@
     { "name": "Today's checklist", "url": "/?tab=today", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] },
     { "name": "Quran tracker", "url": "/?tab=quran", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] },
     { "name": "Learn", "url": "/?tab=learn", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] },
-    { "name": "Competition", "url": "/?tab=compete", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] }
+    { "name": "Competition", "url": "/?tab=compete", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] },
+    { "name": "Home display", "url": "/?tab=display", "icons": [{ "src": "/icons/icon-192.png?v=8", "sizes": "192x192" }] }
   ]
 }

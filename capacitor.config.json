@@ -3,6 +3,7 @@
   "appName": "Ramadan Strivers",
   "webDir": "www",
   "server": { "url": "https://www.ramadanstrivers.com", "cleartext": false },
+  "plugins": { "Preferences": { "group": "group.com.ramadanstrivers.app" } },
   "ios": { "contentInset": "always", "backgroundColor": "#070b14" },
   "android": { "backgroundColor": "#070b14", "allowMixedContent": false }
 }

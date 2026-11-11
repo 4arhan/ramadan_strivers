@@ -1455,10 +1455,12 @@
   "guide.modes.body": "The app follows the Hijri calendar (Umm al-Qura). In Ramadan it sets the day automatically, in Sha'ban it suggests Ramadan Prep, and the rest of the year it tracks Sunnah fasts (Mondays, Thursdays and the 13th to 15th of each month), the six days of Shawwal and the first ten days of Dhul Hijjah. If your community sighted the moon a day earlier or later, adjust it by one day in settings. You can also choose the mode yourself.",
   "guide.journal.title": "Reflection journal and Eid report",
   "guide.journal.body": "Write a line each day about what you learned or want to improve. On Eid, download a PDF report with your days, Quran pages, streaks, badges and reflections — a keepsake, and a way to celebrate children's effort.",
+  "guide.together.title": "Family, buddies and the home display",
+  "guide.together.body": "Family profiles (in Me) let several people share one phone, each with their own checklist, Quran log and badges. Buddies let you send a private link to a friend or relative: they see a short summary of your progress, never your checklist or journal, and can send you encouragement. You can also add Ramadan to your calendar with iftar times, and open the home display, a full-screen clock with the next prayer and iftar time for a tablet or TV.",
   "guide.account.title": "Account and sync",
   "guide.account.body": "Everything works without an account and stays on your device. Create one if you want a backup and to sync between phone, tablet and computer. You can delete the account and its cloud data at any time.",
   "guide.languages.title": "Languages",
-  "guide.languages.body": "The app is available in English, Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian and Urdu, with right-to-left layout for Arabic and Urdu. Translations of hadith and verse meanings are for understanding; follow the source link for the authoritative text.",
+  "guide.languages.body": "The app is available in 15 languages: English, Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian, Urdu, Indonesian, Malay, Turkish, Persian and Swahili, with right-to-left layout for Arabic, Urdu and Persian. Translations of hadith and verse meanings are for understanding; follow the source link for the authoritative text.",
   "guide.privacy.title": "Privacy and your data",
   "guide.privacy.body": "Your tracker data lives on your device. Nothing is sent anywhere unless you join a competition (display name and totals), create an account (for sync), turn on reminders, share your progress, or use the explain feature. Export a backup file or reset everything from the data section."
 }

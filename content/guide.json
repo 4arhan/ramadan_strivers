@@ -78,6 +78,12 @@
   "body": "Write a line each day about what you learned or want to improve. On Eid, download a PDF report with your days, Quran pages, streaks, badges and reflections — a keepsake, and a way to celebrate children's effort."
  },
  {
+  "id": "together",
+  "icon": "users",
+  "title": "Family, buddies and the home display",
+  "body": "Family profiles (in Me) let several people share one phone, each with their own checklist, Quran log and badges. Buddies let you send a private link to a friend or relative: they see a short summary of your progress, never your checklist or journal, and can send you encouragement. You can also add Ramadan to your calendar with iftar times, and open the home display, a full-screen clock with the next prayer and iftar time for a tablet or TV."
+ },
+ {
   "id": "account",
   "icon": "cloud",
   "title": "Account and sync",
@@ -87,7 +93,7 @@
   "id": "languages",
   "icon": "languages",
   "title": "Languages",
-  "body": "The app is available in English, Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian and Urdu, with right-to-left layout for Arabic and Urdu. Translations of hadith and verse meanings are for understanding; follow the source link for the authoritative text."
+  "body": "The app is available in 15 languages: English, Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian, Urdu, Indonesian, Malay, Turkish, Persian and Swahili, with right-to-left layout for Arabic, Urdu and Persian. Translations of hadith and verse meanings are for understanding; follow the source link for the authoritative text."
  },
  {
   "id": "privacy",

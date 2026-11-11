@@ -58,7 +58,7 @@
 
   /* ------------------------------------------------------------------ v7 query parameters */
   // ?join=CODE&t=TOKEN (competition invite) · ?magic=TOKEN (email sign-in) · ?tab=<tab> (shortcuts, v7 names too)
-  var TAB_ALIAS = { today: 'today', quran: 'quran', learn: 'learn', quiz: 'learn', compete: 'compete', me: 'me', progress: 'me', more: 'me' };
+  var TAB_ALIAS = { today: 'today', quran: 'quran', learn: 'learn', quiz: 'learn', compete: 'compete', me: 'me', progress: 'me', more: 'me', display: 'display', buddies: 'me/buddies', family: 'me/family' };
   function handleParams() {
     var qs;
     try { qs = new URLSearchParams(location.search); } catch (e) { return; }

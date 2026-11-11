@@ -16,7 +16,8 @@ The web app is store-ready as a PWA: `manifest.webmanifest`, `sw.js` (offline + 
    it loads the live site, so every web deploy updates the app without a store release).
 2. `npx cap add ios` / `npx cap add android`, then `npx cap open ios` → set icons from `/icons/icon-1024.png`, bundle id `com.ramadanstrivers.app`.
 3. For iOS web push, add `@capacitor/push-notifications` and register the token with `/api/push/subscribe` — or rely on the PWA installed via Safari "Add to Home Screen" (iOS 16.4+ supports web push there).
-4. Home-screen widgets ("Iftar in 2h 10m") are native: a small WidgetKit / Glance extension reading `/api`-free local data via the Capacitor Preferences plugin. Not included yet.
+4. Home-screen, lock-screen and watch widgets: source is in `android-widget/`, `ios-widget/` and `wear-os/`, and the data they read is described in `WIDGETS.md`. Add `@capacitor/preferences` (`npm i @capacitor/preferences && npx cap sync`): the web app then writes the widget snapshot by itself. The native sources were written without a compiler: build and test them in Android Studio and Xcode before release.
+5. Smart displays and TVs need no native code: open the Home display (`/?tab=display`) and cast it or open it in the device's browser.
 
 ## Domain / API base
 The front-end calls the API on the same origin. For a native build that bundles the files locally, set
