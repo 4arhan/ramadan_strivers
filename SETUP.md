@@ -20,6 +20,7 @@ Check status any time at `/api/health` — it reports which features are on.
 
 ## Deploy
 - Production branch on Vercel: **`product`** (Settings → Git → Production Branch). `main` is the development branch: every push to it builds a preview deployment.
+- `product` is published in two places: Vercel production (the full app with the API) and GitHub Pages at `www.ramadanstrivers.com` (static files only, see the `CNAME` file). On GitHub Pages there is no `/api`, so accounts, competitions, buddies, insights and push stay switched off there until the domain is pointed at Vercel (see "Re-pointing the domain later").
 - Every push to `product` redeploys production. `vercel.json` carries rewrites (`/s/:id` share pages, `/poster/:code`, `/join/:code`), cache headers and the cron.
 - The repo has no build step at deploy time (generated files are committed); the Node 22 function is bundled by Vercel. `content/`, `i18n-src/`, `scripts/` and Markdown files are not uploaded (`.vercelignore`).
 - After editing `content/*.json` run `npm run build:content`; after editing translations run `npm run build:i18n` and `npm run check:i18n`, then commit the generated files.
