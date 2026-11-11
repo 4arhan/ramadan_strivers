@@ -39,7 +39,17 @@ CREATE TABLE IF NOT EXISTS buddies(
   created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
 CREATE TABLE IF NOT EXISTS ai_cache(key TEXT PRIMARY KEY, value JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
 `;
-function connString(){ return process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.POSTGRES_PRISMA_URL || ''; }
+// Vercel's storage integrations name the variable differently depending on the provider and on the prefix chosen when the
+// database is connected (DATABASE_URL, POSTGRES_URL, STORAGE_URL, MYDB_DATABASE_URL, ...). Take the standard names first,
+// then any variable ending in DATABASE_URL / POSTGRES_URL (pooled before unpooled) that holds a postgres:// address.
+function connString(){
+  const env = process.env, isPg = v => /^postgres(ql)?:\/\//i.test(String(v || ''));
+  for(const k of ['DATABASE_URL', 'POSTGRES_URL', 'POSTGRES_PRISMA_URL', 'DATABASE_URL_UNPOOLED', 'POSTGRES_URL_NON_POOLING']) if(isPg(env[k])) return env[k];
+  const keys = Object.keys(env).filter(k => /(DATABASE_URL|POSTGRES_URL|POSTGRES_PRISMA_URL)$/.test(k) && isPg(env[k])).sort();
+  if(keys.length) return env[keys[0]];
+  const any = Object.keys(env).filter(k => /_URL$/.test(k) && isPg(env[k])).sort();
+  return any.length ? env[any[0]] : '';
+}
 function configured(){ return !!connString(); }
 function getPool(){
   if(pool) return pool;
