@@ -150,6 +150,7 @@
   "fast.r.ill": "Maladie",
   "fast.r.travel": "Voyage",
   "fast.r.period": "Règles",
+  "fast.r.otherReason": "Autre raison",
   "fast.owedNote.one": "Ajouté à vos jeûnes à rattraper : {n} à rattraper après le Ramadan.",
   "fast.owedNote.other": "Ajouté à vos jeûnes à rattraper : {n} à rattraper après le Ramadan.",
   "fast.halfNote": "Une partie de la journée, pour les enfants qui apprennent à jeûner. Ce n'est pas compté comme un jeûne manqué.",

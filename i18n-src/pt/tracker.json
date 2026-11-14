@@ -150,7 +150,7 @@
   "fast.r.ill": "Doença",
   "fast.r.travel": "Viagem",
   "fast.r.period": "Menstruação",
-  "fast.r.other": "Outro motivo",
+  "fast.r.otherReason": "Outro motivo",
   "fast.owedNote.one": "Adicionado aos jejuns a repor: {n} para repor depois do Ramadã.",
   "fast.owedNote.other": "Adicionado aos jejuns a repor: {n} para repor depois do Ramadã.",
   "fast.halfNote": "Parte do dia, para crianças que estão aprendendo a jejuar. Não conta como jejum perdido.",

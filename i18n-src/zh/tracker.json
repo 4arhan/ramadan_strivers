@@ -142,7 +142,7 @@
   "fast.r.ill": "生病",
   "fast.r.travel": "旅行",
   "fast.r.period": "经期",
-  "fast.r.other": "其他原因",
+  "fast.r.otherReason": "其他原因",
   "fast.owedNote.other": "已加入应补的斋：斋月后还有{n}天斋要补。",
   "fast.halfNote": "只封一部分时间，适合正在学习封斋的孩子。不算作缺的斋。",
   "fast.qadaKicker": "补斋（Qada）",

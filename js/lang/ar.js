@@ -837,6 +837,7 @@
   "fast.planRamadan.zero": "رمضان القادم بعد نحو {n} يوم.",
   "fast.qadaKicker": "قضاء ما فات من الصيام",
   "fast.r.ill": "مرض",
+  "fast.r.otherReason": "سبب آخر",
   "fast.r.period": "الدورة الشهرية",
   "fast.r.travel": "سفر",
   "fast.reason": "لماذا لم تصم اليوم؟",

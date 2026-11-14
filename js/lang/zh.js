@@ -702,7 +702,7 @@
   "fast.planRamadan.other": "距下一个斋月还有大约{n}天。",
   "fast.qadaKicker": "补斋（Qada）",
   "fast.r.ill": "生病",
-  "fast.r.other": "其他原因",
+  "fast.r.otherReason": "其他原因",
   "fast.r.period": "经期",
   "fast.r.travel": "旅行",
   "fast.reason": "今天为什么没有封斋？",

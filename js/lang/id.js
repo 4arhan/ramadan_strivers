@@ -702,7 +702,7 @@
   "fast.planRamadan.other": "Ramadan berikutnya sekitar {n} hari lagi.",
   "fast.qadaKicker": "Puasa pengganti (qada)",
   "fast.r.ill": "Sakit",
-  "fast.r.other": "Alasan lain",
+  "fast.r.otherReason": "Alasan lain",
   "fast.r.period": "Haid",
   "fast.r.travel": "Bepergian",
   "fast.reason": "Kenapa tidak hari ini?",

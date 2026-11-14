@@ -783,7 +783,7 @@
   "fast.planRamadan.other": "До следующего Рамадана примерно {n} дня.",
   "fast.qadaKicker": "Посты к возмещению (каза)",
   "fast.r.ill": "Болезнь",
-  "fast.r.other": "Другая причина",
+  "fast.r.otherReason": "Другая причина",
   "fast.r.period": "Месячные",
   "fast.r.travel": "Поездка",
   "fast.reason": "Почему не сегодня?",

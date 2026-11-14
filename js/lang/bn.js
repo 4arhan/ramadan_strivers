@@ -729,7 +729,7 @@
   "fast.planRamadan.other": "পরের রমজান আসতে প্রায় {n} দিন বাকি।",
   "fast.qadaKicker": "কাজা রোজা",
   "fast.r.ill": "অসুস্থতা",
-  "fast.r.other": "অন্য কারণ",
+  "fast.r.otherReason": "অন্য কারণ",
   "fast.r.period": "মাসিক",
   "fast.r.travel": "সফর",
   "fast.reason": "আজ কেন নয়?",

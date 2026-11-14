@@ -729,7 +729,7 @@
   "fast.planRamadan.other": "O próximo Ramadã é daqui a cerca de {n} dias.",
   "fast.qadaKicker": "Jejuns a repor (qada)",
   "fast.r.ill": "Doença",
-  "fast.r.other": "Outro motivo",
+  "fast.r.otherReason": "Outro motivo",
   "fast.r.period": "Menstruação",
   "fast.r.travel": "Viagem",
   "fast.reason": "Por que não hoje?",

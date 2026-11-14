@@ -150,6 +150,7 @@
   "fast.r.ill": "Enfermedad",
   "fast.r.travel": "Viaje",
   "fast.r.period": "Menstruación",
+  "fast.r.otherReason": "Otro motivo",
   "fast.owedNote.one": "Añadido a tus ayunos por recuperar: {n} para recuperar después de Ramadán.",
   "fast.owedNote.other": "Añadido a tus ayunos por recuperar: {n} para recuperar después de Ramadán.",
   "fast.halfNote": "Parte del día, para niños que están aprendiendo a ayunar. No cuenta como ayuno perdido.",

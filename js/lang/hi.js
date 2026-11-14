@@ -729,6 +729,7 @@
   "fast.planRamadan.other": "अगला रमज़ान लगभग {n} दिन दूर है।",
   "fast.qadaKicker": "क़ज़ा रोज़े",
   "fast.r.ill": "बीमारी",
+  "fast.r.otherReason": "कोई और वजह",
   "fast.r.period": "पीरियड",
   "fast.r.travel": "सफ़र",
   "fast.reason": "आज क्यों नहीं?",
