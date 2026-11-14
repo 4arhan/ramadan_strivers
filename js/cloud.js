@@ -2384,7 +2384,7 @@
   }
   function resultRows(list) {
     return ui.list(list.map(function (r, i) {
-      var cn = countryName(r.cc) || r.country || '', sub = [r.region, cn].filter(function (x) { return x && x !== r.name; }).join(', ');
+      var cn = countryName(r.cc) || r.country || '', reg = r.region && r.region !== r.name ? r.region : '', sub = reg && cn ? t('prayer.city.place', { city: reg, country: cn }) : (reg || cn);
       return ui.row({ titleHtml: bdi(r.name), subHtml: sub ? bdi(sub) : '', act: 'prayer.pick', arg: String(i), icon: 'map-pin', cls: 'cl-city-row' });
     }), { label: t('prayer.city.label'), id: 'cl-city-list' });
   }
