@@ -81,7 +81,7 @@
   // What a new profile starts with: the language, look and prayer location of the device, nothing personal.
   function seedSettings() {
     var s = RS.settings, out = {};
-    ['lang', 'theme', 'prayer', 'hijriOff'].forEach(function (k) { if (s[k] !== undefined) out[k] = s[k]; });
+    ['lang', 'theme', 'themeChosen', 'prayer', 'hijriOff'].forEach(function (k) { if (s[k] !== undefined) out[k] = s[k]; });
     return out;
   }
   function askSwitch(id, settings) {

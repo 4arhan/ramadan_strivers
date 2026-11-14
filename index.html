@@ -59,7 +59,8 @@
   /* Apply the saved theme and text direction before first paint (main.js applies everything again). */
   (function () { try {
     var s = JSON.parse(localStorage.getItem('rs-settings') || '{}'), d = document.documentElement;
-    if (s.theme === 'light' || s.theme === 'dark') d.setAttribute('data-theme', s.theme);
+    d.setAttribute('data-theme', s.theme === 'dark' ? 'dark' : 'light');
+    if (s.theme === 'system' && s.themeChosen) d.removeAttribute('data-theme');   /* light unless dark, or System, was chosen */
     if (typeof s.lang === 'string' && /^[a-z]{2}$/.test(s.lang)) { d.lang = s.lang; d.dir = (s.lang === 'ar' || s.lang === 'ur' || s.lang === 'fa') ? 'rtl' : 'ltr'; }
   } catch (e) {} })();
 </script>

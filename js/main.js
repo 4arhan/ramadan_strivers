@@ -151,7 +151,7 @@
     h.push(ui.card({
       kicker: { icon: 'sliders-horizontal', text: t('theme') },
       body: '<div class="stack">' +
-        ui.seg([{ value: 'system', text: RS.t('theme.system') }, { value: 'light', text: RS.t('theme.light') }, { value: 'dark', text: RS.t('theme.dark') }],
+        ui.seg([{ value: 'light', text: RS.t('theme.light') }, { value: 'dark', text: RS.t('theme.dark') }, { value: 'system', text: RS.t('theme.system') }],
           RS.settings.theme, { act: 'theme.set', label: RS.t('theme.label') }) +
         ui.select({ id: 'sg-lang', label: RS.t('core.lang.label'), value: RS.lang(), act: 'lang.set',
           options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name, lang: l.code, dir: l.dir }; }) }) +

@@ -1330,7 +1330,7 @@
     out.push(ui.card({ kicker: { icon: 'palette', text: t('me.set.display') }, cls: 'tr-set', body:
       ui.select({ id: 'tr-set-lang', label: t('me.set.language'), value: RS.lang(), act: 'tr.lang', options: RS.LANGS.map(function (l) { return { value: l.code, text: l.name, lang: l.code, dir: l.dir }; }) }) +
       '<div class="field"><span class="field-lbl" id="tr-theme-lbl">' + esc(t('theme.label')) + '</span>' +
-      ui.seg([{ value: 'system', text: t('theme.system') }, { value: 'light', text: t('theme.light') }, { value: 'dark', text: t('theme.dark') }], s.theme, { act: 'tr.theme', label: t('theme.label') }) + '</div>' +
+      ui.seg([{ value: 'light', text: t('theme.light') }, { value: 'dark', text: t('theme.dark') }, { value: 'system', text: t('theme.system') }], s.theme, { act: 'tr.theme', label: t('theme.label') }) + '</div>' +
       ui.select({ id: 'tr-set-level', label: t('me.set.level'), hint: t('me.set.levelSub'), value: s.level || 'adult', act: 'tr.level',
         options: ['adult', 'new', 'kids'].map(function (v) { return { value: v, text: t('me.set.level.' + v) }; }) }) +
       ui.list([ui.row({ title: t('me.set.detail'), sub: t('me.set.detailSub'), toggle: { on: !!s.detail, act: 'tr.detail' }, id: 'tr-set-detail' })], { cls: 'mt-3' }) }));

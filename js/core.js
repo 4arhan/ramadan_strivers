@@ -267,7 +267,7 @@
   }
 
   RS.DEFAULTS = {
-    day: 1, theme: 'system', detail: false, lang: null, mode: null, level: 'adult', autoDay: true,
+    day: 1, theme: 'light', detail: false, lang: null, mode: null, level: 'adult', autoDay: true,
     hijriOff: 0, prayer: null, quizLevel: 'standard', showPrep: false
   };
   RS.settings = RS.settings || {};
@@ -281,7 +281,9 @@
     if (saved && typeof saved === 'object') Object.keys(saved).forEach(function (k) { s[k] = saved[k]; });
     RS.langDetected = !langByCode(s.lang);
     if (RS.langDetected) s.lang = detectLang();
-    if (s.theme !== 'light' && s.theme !== 'dark') s.theme = 'system';
+    /* Light is the default. "System" (follow the device) is kept only when someone picked it in Settings;
+       older saves stored 'system' as the default without anyone choosing it, so those become light. */
+    if (s.theme !== 'light' && s.theme !== 'dark') s.theme = s.theme === 'system' && s.themeChosen ? 'system' : 'light';
     s.day = RS.clamp(parseInt(s.day, 10) || 1, 1, 30);
     if (s.mode !== 'ramadan' && s.mode !== 'prep' && s.mode !== 'year') s.mode = null;
     s.hijriOff = RS.clamp(parseInt(s.hijriOff, 10) || 0, -3, 3);
@@ -504,6 +506,7 @@
   RS.setTheme = function (t) {
     if (t !== 'light' && t !== 'dark') t = 'system';
     RS.settings.theme = t;
+    RS.settings.themeChosen = true;
     RS.saveSettings();
     RS.applyTheme();
     RS.emit('theme', t);
