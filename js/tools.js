@@ -335,6 +335,7 @@
   });
   // The share sheet: a link or text (the existing share), or a story image.
   RS.act('tl.share', function () {
+    if (RS.org && !RS.org.flag('storyImages')) { RS.runAct('share.progress'); return; }   // images switched off: the plain share
     var ram = RS.appMode() === 'ramadan';
     RS.sheet.open({ title: t('share.sheetTitle'), body: ui.list([
       ui.row({ icon: 'share-2', title: t('tl.share.link'), sub: t('tl.share.linkSub'), act: 'tl.shareLink', chevron: true }),

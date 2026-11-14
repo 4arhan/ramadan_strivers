@@ -397,7 +397,7 @@
         var f = (j && j.features) || {}, db = !!(j && j.dbOk);
         // accounts, competitions, sync, magic-link email and push subscriptions all need the database
         return { loaded: true, offline: false, failed: !!(j && j.db && !j.dbOk), db: db, accounts: db && !!f.accounts, competitions: db && !!f.competitions,
-          sync: db && !!f.sync, email: db && !!f.email, ai: !!f.ai, push: db && !!f.push };
+          sync: db && !!f.sync, email: db && !!f.email, ai: !!f.ai, push: db && !!f.push, flags: (j && j.flags) || {} };
       }, function () { return { loaded: true, offline: false, failed: true }; });
     }, function () {
       return { loaded: true, offline: true };
@@ -405,7 +405,10 @@
       var next = { loaded: true, offline: !!res.offline, failed: !!res.failed, db: !!res.db, accounts: !!res.accounts, competitions: !!res.competitions,
         sync: !!res.sync, email: !!res.email, ai: !!res.ai, push: !!res.push };
       var changed = Object.keys(next).some(function (k) { return feat[k] !== next[k]; });
+      var flags = res.flags && typeof res.flags === 'object' ? res.flags : {};
+      if (JSON.stringify(flags) !== JSON.stringify(feat.flags || {})) changed = true;
       Object.assign(feat, next);                     // same object: other modules may hold RS.cloud.feat
+      feat.flags = flags;                            // switched off by the super admin: flags.<name> === false
       featP = null;
       if (readyResolve) { readyResolve(feat); readyResolve = null; }
       if (authToken() && feat.sync) syncNow(false);
@@ -1064,6 +1067,7 @@
   function resetCmp(code) {
     cmp.code = code || null;
     cmp.comp = cmp.board = cmp.roster = cmp.full = cmp.err = null;
+    cmp.myRole = null; cmp.myGrp = '';
     cmp.loading = null;
     cmp.view = 'individuals';
     cmp.otab = 'board';
@@ -1146,13 +1150,14 @@
       var x = getDay(d), q = num(qp[d]);
       // a child's days count on the leaderboard only once a grown-up has checked them, when the family asked for that
       if (RS.kids && RS.kids.needCheck() && !RS.kids.dayChecked(d)) continue;
-      if ((x && x.done > 0) || q) {
+      var ex = RS.org ? num(RS.org.extraPts(d)) : 0;
+      if ((x && x.done > 0) || q || ex) {
         dl++;
-        tp += x ? x.pts : 0;
+        tp += (x ? x.pts : 0) + ex;
         sp += x ? x.pct : 0;
         pages += q;
         last = d;
-        days[d] = { p: x ? x.pct : 0, t: x ? x.pts : 0, q: q };
+        days[d] = { p: x ? x.pct : 0, t: (x ? x.pts : 0) + ex, q: q };
       }
     }
     return { totalPts: tp, daysLogged: dl, avgPct: dl ? Math.round(sp / dl) : 0, quranPages: pages, lastDay: last, days: days };
@@ -1183,6 +1188,8 @@
         cmp.roster = (rs[1] && rs[1].participants) || [];
         var full = rs[2] && rs[2].competitions ? rs[2].competitions.filter(function (c) { return c.code === code; })[0] : null;
         if (full) cmp.full = objOr(full.settings);
+        cmp.myRole = (full && full.role) || 'owner';
+        cmp.myGrp = (full && full.myGrp) || '';
       });
     } else {
       p = api('/api/comp/' + enc(code) + '/board' + (s.token ? '?token=' + enc(s.token) : '')).then(function (r) {
@@ -1262,12 +1269,17 @@
     if (!currentUser() || !feat.accounts) return Promise.resolve(null);
     if (!force && cmp.mine && Date.now() - cmp.mineAt < 60000) return Promise.resolve(cmp.mine);
     if (cmp.mineP) return cmp.mineP;
+    var hadMine = !!cmp.mine;
     cmp.mineP = api('/api/auth/me').then(function (r) {
-      cmp.mine = { owned: (r && r.owned) || [], joined: (r && r.joined) || [] };
+      cmp.mine = { owned: ((r && r.owned) || []).concat(((r && r.managed) || []).map(function (c) { return Object.assign({ managed: c.role }, c); })), joined: (r && r.joined) || [],
+        notices: (r && r.notices) || [], isSuper: !!(r && r.super) };
       cmp.mineAt = Date.now();
       if (r && isObj(r.user)) RS.store.set('rs-user', r.user);
       patch('cmp-mine', '<div id="cmp-mine">' + mineCardHtml() + '</div>');
       patch('cl-mycomps', '<div id="cl-mycomps">' + myCompsHtml() + '</div>');
+      // an organiser's dashboard shows the newest note from Ramadan Strivers once it is known
+      var cs = cmpState();
+      if (!hadMine && cmp.mine.notices.length && cs && cs.role === 'organiser' && onCompete()) softRefresh();
       return cmp.mine;
     }, function () { return null; }).then(function (x) { cmp.mineP = null; return x; });
     return cmp.mineP;
@@ -1579,7 +1591,7 @@
     }
     (m ? m.owned || [] : []).forEach(function (c) {
       if (isCur('organiser', c.code)) return;
-      rows.push(ui.row({ icon: 'building-2', titleHtml: bdi(c.name), subHtml: metaLine([t('compete.mine.owned'), c.code, c.open === false ? t('compete.closed') : '']),
+      rows.push(ui.row({ icon: 'building-2', titleHtml: bdi(c.name), subHtml: metaLine([c.managed ? t('org.role.' + c.managed) : t('compete.mine.owned'), c.code, c.open === false ? t('compete.closed') : '']),
         act: 'cmp.pick', arg: c.code, chevron: true }));
     });
     (m ? m.joined || [] : []).forEach(function (c, i) {
@@ -1640,6 +1652,7 @@
     h.push(pendingInviteCard(s));
     if (cmp.err && !cmp.board) { h.push(errorCard()); h.push(leaveHtml()); return h.join(''); }
     h.push(infoCard(s, false));
+    if (RS.org && c) h.push(RS.org.participantHtml(c, s, cmp.board));
     if (c && c.settings && c.settings.donateUrl) {
       h.push(ui.card({ cls: 'is-tight', body: ui.list([ui.row({ icon: 'hand-heart', title: t('compete.give'),
         subHtml: c.settings.sponsor ? th('compete.giveSub', { name: c.settings.sponsor }) : esc(t('compete.giveSubDefault')), act: 'cloud.give', chevron: true })]) }));
@@ -1656,8 +1669,16 @@
   // Organiser dashboard tabs (ARIA tabs: one tab stop, the arrow keys move between them, see the keydown handler): one
   // row of chips that scrolls sideways when it does not fit (never two rows). The chosen tab's content is its panel.
   var OTABS = [['board', 'trophy'], ['insights', 'chart-column'], ['roster', 'users'], ['enrol', 'user-plus'], ['settings', 'settings'], ['tools', 'layers']];
+  // owner and admin: everything. teacher: their class (no settings). viewer: the board, insights, the roster and reports.
+  function myRole() { return cmp.myRole || 'owner'; }
+  function otabs() {
+    var role = myRole(), all = OTABS.concat(RS.org ? [['manage', 'shield-check']] : []);
+    if (role === 'viewer') return all.filter(function (x) { return ['board', 'insights', 'roster', 'tools'].indexOf(x[0]) >= 0; });
+    if (role === 'teacher') return all.filter(function (x) { return x[0] !== 'settings'; });
+    return all;
+  }
   function orgTabsHtml() {
-    return '<div class="chips cl-tabs" role="tablist" aria-label="' + esc(t('compete.tabs.label')) + '">' + OTABS.map(function (x) {
+    return '<div class="chips cl-tabs" role="tablist" aria-label="' + esc(t('compete.tabs.label')) + '">' + otabs().map(function (x) {
       var on = cmp.otab === x[0];
       return '<button type="button" class="chip' + (on ? ' is-active' : '') + '" role="tab" id="cmp-tab-' + x[0] + '" aria-selected="' + on +
         '" aria-controls="cmp-tabpanel" tabindex="' + (on ? '0' : '-1') + '" data-act="cmp.otab" data-arg="' + x[0] + '">' + RS.icon(x[1], { size: 15 }) +
@@ -1697,6 +1718,7 @@
     var h = [];
     if (!currentUser()) return orgSignInHero(s) + backToAllHtml();
     ensureLoaded(s);
+    loadMine(false);
     h.push(orgHero(s));
     h.push(pendingInviteCard(s));
     if (cmp.err && !cmp.board) {
@@ -1706,13 +1728,17 @@
     }
     var c = cmp.comp;
     if (c && c.open === false) h.push(ui.note(t('compete.closedNote'), { icon: 'lock', tone: 'plain' }));
+    if (RS.org) h.push(RS.org.noticesHtml());
+    if (myRole() !== 'owner') h.push(ui.note(t('org.role.you', { role: t('org.role.' + myRole()) }) + (cmp.myGrp ? ' · ' + cmp.myGrp : ''), { icon: 'shield-check', tone: 'plain' }));
     h.push(orgTabsHtml());
     var tab = cmp.otab, panel;
+    if (!otabs().some(function (x) { return x[0] === tab; })) tab = cmp.otab = 'board';
     if (!c) panel = ui.card({ body: ui.loading(t('compete.loadingBoard')) });
     else if (tab === 'roster') panel = rosterCardHtml();
     else if (tab === 'enrol') panel = enrolHtml();
     else if (tab === 'settings') panel = orgSettingsHtml();
     else if (tab === 'tools') panel = toolsHtml(s);
+    else if (tab === 'manage') panel = RS.org ? RS.org.manageHtml(c, myRole(), cmp.myGrp) : '';
     else if (tab === 'insights') panel = RS.social && RS.social.insightsHtml ? RS.social.insightsHtml(c) : '';
     else panel = boardCardHtml(boardOpts());
     h.push('<div class="cl-tabpanel" role="tabpanel" id="cmp-tabpanel" aria-labelledby="cmp-tab-' + esc(tab) + '">' + panel + '</div>');
@@ -1726,12 +1752,12 @@
     var invited = r.filter(function (p) { return !p.claimed; }).length;
     var rows = r.map(function (p) {
       var marks = (p.flagged ? mark('triangle-alert', t('compete.flagged'), 'is-warn') : '') + (p.hidden ? mark('eye-off', t('compete.roster.hidden')) : '') +
-        (!p.claimed ? mark('mail', t('compete.roster.invited')) : '') + (p.phone ? mark('message-circle', t('compete.roster.whatsapp')) : '');
+        (!p.claimed ? mark('mail', t('compete.roster.invited')) : '') + (p.phone ? mark('message-circle', t('compete.roster.whatsapp')) : '') + (num(p.attendance) ? mark('map-pin', tn('org.checkin.count', num(p.attendance))) : '');
       var sub = [p.grp].concat(p.claimed ? [tn('compete.ptsN', num(p.totalPts)), tn('compete.days', num(p.daysLogged))] : [t('compete.roster.invited')]);
       if (p.claimed && num(p.inactiveDays) >= 3) sub.push(tn('compete.roster.inactive', num(p.inactiveDays)));
-      var acts = (p.flagged ? ui.iconBtn('check', { act: 'cmp.unflag', arg: p.id, label: t('compete.roster.clearFlag', { name: p.name }) }) : '') +
+      var acts = myRole() === 'viewer' ? '' : ((p.flagged ? ui.iconBtn('check', { act: 'cmp.unflag', arg: p.id, label: t('compete.roster.clearFlag', { name: p.name }) }) : '') +
         ui.iconBtn(p.hidden ? 'eye' : 'eye-off', { act: 'cmp.hide', arg: p.id, label: t(p.hidden ? 'compete.roster.show' : 'compete.roster.hide', { name: p.name }) }) +
-        ui.iconBtn('trash-2', { act: 'cmp.remove', arg: p.id, label: t('compete.roster.remove', { name: p.name }), cls: 'cl-danger' });
+        ui.iconBtn('trash-2', { act: 'cmp.remove', arg: p.id, label: t('compete.roster.remove', { name: p.name }), cls: 'cl-danger' }));
       return ui.row({ titleHtml: bdi(p.name) + marks, subHtml: metaLine(sub), trail: '<span class="cl-acts">' + acts + '</span>',
         cls: 'cl-ros' + (p.hidden ? ' is-dim' : '') });
     });
@@ -1810,12 +1836,11 @@
       ui.row({ icon: 'download', title: t('compete.tools.csv'), sub: t('compete.tools.csvSub'), act: 'cmp.csv', chevron: true }),
       ui.row({ icon: 'refresh-cw', title: t('compete.tools.refresh'), act: 'cmp.refresh', chevron: true })
     ].concat(RS.social && RS.social.toolsRows ? RS.social.toolsRows(c) : [])) });
-    var open = c.open !== false;
-    var danger = ui.card({ cls: 'cl-danger-card', kicker: { icon: 'triangle-alert', text: t('compete.tools.danger') }, body: ui.list([
+    var open = c.open !== false, role = myRole(), canEdit = role === 'owner' || role === 'admin';
+    var danger = !canEdit ? '' : ui.card({ cls: 'cl-danger-card', kicker: { icon: 'triangle-alert', text: t('compete.tools.danger') }, body: ui.list([
       ui.row({ icon: open ? 'lock' : 'lock-open', title: t(open ? 'compete.tools.close' : 'compete.tools.reopen'), sub: t(open ? 'compete.tools.closeSub' : 'compete.tools.reopenSub'),
-        act: 'cmp.openToggle', cls: open ? 'cl-danger-row' : '' }),
-      ui.row({ icon: 'trash-2', title: t('compete.tools.delete'), sub: t('compete.tools.deleteSub'), act: 'cmp.delete', cls: 'cl-danger-row' })
-    ]) });
+        act: 'cmp.openToggle', cls: open ? 'cl-danger-row' : '' })
+    ].concat(role === 'owner' ? [ui.row({ icon: 'trash-2', title: t('compete.tools.delete'), sub: t('compete.tools.deleteSub'), act: 'cmp.delete', cls: 'cl-danger-row' })] : [])) });
     var back = ui.card({ cls: 'is-tight', body: ui.list([ui.row({ icon: 'arrow-left', title: t('compete.tools.switch'), sub: t('compete.tools.switchSub'),
       act: 'cmp.switch', chevron: true })]) });
     return invite + reports + back + danger;
@@ -3046,7 +3071,7 @@
     if (row) { row.setAttribute('tabindex', '-1'); row.setAttribute('data-cl-focus', ''); focusEl(row); }
   });
   RS.act('cmp.otab', function (v) {
-    cmp.otab = ['board', 'insights', 'roster', 'enrol', 'settings', 'tools'].indexOf(v) >= 0 ? v : 'board';
+    cmp.otab = otabs().some(function (x) { return x[0] === v; }) ? v : 'board';
     RS.refresh();
   });
   RS.act('cmp.copy', function () {
@@ -3069,14 +3094,15 @@
   // never goes into a URL, the browser history or server logs) and written into a tab opened at the tap, so no pop-up
   // blocker stops it. Where no tab could be opened or written, a sheet offers the page as a file to open and print.
   var certsHtml = null;
-  function openCerts(code) {
+  function openCerts(code, what, title) {
+    what = what || 'certs'; title = title || t('compete.tools.certs');
     var w = null;
     try { w = window.open('', '_blank'); } catch (e) { w = null; }
     if (w) {
-      try { w.opener = null; w.document.title = t('compete.tools.certs'); w.document.body.textContent = t('compete.certs.loading'); } catch (e) { /* written below */ }
+      try { w.opener = null; w.document.title = title; w.document.body.textContent = t('compete.certs.loading'); } catch (e) { /* written below */ }
     }
     var shut = function () { if (w) { try { w.close(); } catch (e) { /* ignore */ } } };
-    fetch(API + '/api/comp/' + enc(code) + '/certs', { headers: { Authorization: 'Bearer ' + authToken() }, cache: 'no-store' }).then(function (r) {
+    fetch(API + '/api/comp/' + enc(code) + '/' + what, { headers: { Authorization: 'Bearer ' + authToken() }, cache: 'no-store' }).then(function (r) {
       if (!r.ok) { var err = new Error('certs'); err.status = r.status; throw err; }
       return r.text();
     }).then(function (html) {
@@ -3087,7 +3113,7 @@
       if (shown) return;
       shut();
       certsHtml = { code: code, html: html };
-      RS.sheet.open({ title: t('compete.tools.certs'), body: '<p>' + esc(t('compete.certs.blocked')) + '</p>' +
+      RS.sheet.open({ title: title, body: '<p>' + esc(t('compete.certs.blocked')) + '</p>' +
         ui.btn(t('compete.certs.download'), { act: 'cmp.certsSave', block: true, icon: 'download', cls: 'mt-4' }) });
     }, function (e) {
       shut();
@@ -3360,6 +3386,17 @@
     syncNow: syncNow,
     shareProgress: shareProgress,
     competition: competition,
+    api: api,
+    errText: errText,
+    copyText: copyText,
+    openUrl: openUrl,
+    openPage: openCerts,
+    cmp: function () { return { state: cmpState(), comp: cmp.comp, full: cmp.full, board: cmp.board, roster: cmp.roster, role: cmp.myRole || 'owner', grp: cmp.myGrp || '', mine: cmp.mine }; },
+    reloadComp: function () { var st = cmpState(); return st ? loadComp(st, false) : Promise.resolve(null); },
+    loadMine: loadMine,
+    agg: cmpAgg,
+    enrolDone: function (r) { cmp.lastEnrol = (r && r.participants) || []; cmp.otab = 'enrol'; RS.toast(tn('compete.enrol.done', num(r && r.enrolled)), { tone: 'success' }); refreshComp(); RS.refresh(); },
+    scoreSoon: function () { cmpScoreSync(false); },
     give: function () { RS.runAct('cloud.give'); },
     prayer: {
       configured: function () { return !!pcfg(); },

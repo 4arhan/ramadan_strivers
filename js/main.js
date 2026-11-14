@@ -70,13 +70,13 @@
   }
 
   /* ------------------------------------------------------------------ v7 query parameters */
-  // ?join=CODE&t=TOKEN (competition invite) · ?magic=TOKEN (email sign-in) · ?tab=<tab> (shortcuts, v7 names too)
+  // ?join=CODE&t=TOKEN (competition invite) · ?checkin=CODE.key (attendance QR code) · ?magic=TOKEN (email sign-in) · ?tab=<tab> (shortcuts, v7 names too)
   var TAB_ALIAS = { today: 'today', quran: 'quran', learn: 'learn', quiz: 'learn', compete: 'compete', me: 'me', progress: 'me', more: 'me', display: 'display', buddies: 'me/buddies', family: 'me/family' };
   function handleParams() {
     var qs;
     try { qs = new URLSearchParams(location.search); } catch (e) { return; }
     var p = {};
-    ['join', 't', 'magic', 'tab', 'buddy'].forEach(function (k) { var v = qs.get(k); if (v != null && v !== '') p[k] = v; });
+    ['join', 't', 'magic', 'tab', 'buddy', 'checkin'].forEach(function (k) { var v = qs.get(k); if (v != null && v !== '') p[k] = v; });
     if (!Object.keys(p).length) return;
     if (p.join) p.join = String(p.join).trim().toUpperCase();
     RS.bootParams = p;
@@ -85,7 +85,7 @@
     if (p.join) target = 'compete';
     if (p.magic && !target) target = 'me';
     if (p.buddy && !target) target = 'me/buddies';
-    ['join', 't', 'magic', 'tab', 'buddy'].forEach(function (k) { qs.delete(k); });
+    ['join', 't', 'magic', 'tab', 'buddy', 'checkin'].forEach(function (k) { qs.delete(k); });
     var rest = qs.toString();
     var hash = target ? RS.router.href(target) : location.hash;
     history.replaceState(history.state, '', location.pathname + (rest ? '?' + rest : '') + hash);

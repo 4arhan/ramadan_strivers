@@ -25,7 +25,7 @@
     return refs.length ? '<div class="st-refs">' + ui.meta(refs.map(function (r) { return ui.ref({ ref: r.ref, url: r.url, grade: r.grade || '' }); })) + '</div>' : '';
   }
   function paras(prefix, n) { var h = ''; for (var i = 1; i <= n; i++) if (RS.has(prefix + i)) h += '<p class="st-p">' + esc(t(prefix + i)) + '</p>'; return h; }
-  function aiOn() { return !!(RS.cloud && typeof RS.cloud.aiAvailable === 'function' && RS.cloud.aiAvailable()); }
+  function aiOn() { return (!RS.org || RS.org.flag('ask')) && !!(RS.cloud && typeof RS.cloud.aiAvailable === 'function' && RS.cloud.aiAvailable()); }
 
   /* ------------------------------------------------------------------ terms */
   // Deeds whose name is (or contains) a term from the list.

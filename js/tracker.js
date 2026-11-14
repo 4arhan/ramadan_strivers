@@ -571,6 +571,7 @@
     if (RS.settings.showPrep) h.push(planCard());
     if (RS.start) h.push(RS.start.todayCardHtml());
     if (RS.kids) h.push(RS.kids.todayCardsHtml(day, true));
+    if (RS.org) h.push(cloudTry(function () { return RS.org.todayHtml(day); }, '') || '');
     h.push(fastStateCard(ctx));
     h.push(checklist(ctx, rec));
     h.push(journalCard(ctx));
@@ -1167,6 +1168,7 @@
     if (RS.cloud && typeof RS.cloud.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.cloud.meCardsHtml(); }, '') || '');
     // family profiles, buddies, calendar, home display
     if (RS.kids) h.push(cloudTry(function () { return RS.kids.meCardHtml(); }, '') || '');
+    if (RS.admin) h.push(cloudTry(function () { return RS.admin.meCardHtml(); }, '') || '');
     if (RS.social && typeof RS.social.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.social.meCardsHtml(); }, '') || '');
     // more
     var more = [

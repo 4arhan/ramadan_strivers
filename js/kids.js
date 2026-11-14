@@ -156,7 +156,7 @@
   /* ------------------------------------------------------------------ where the cards appear */
   function todayCardsHtml(day, ramadan) {
     if (!kids()) return '';
-    return (ramadan ? skyHtml() : '') + storyHtml(ramadan ? day : RS.hijri().day) + (ramadan ? checkCard(day) : '');
+    return (ramadan ? skyHtml() : '') + (RS.org && !RS.org.flag('stories') ? '' : storyHtml(ramadan ? day : RS.hijri().day)) + (ramadan ? checkCard(day) : '');
   }
   function meCardHtml() {
     if (!kids()) return '';
