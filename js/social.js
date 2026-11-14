@@ -109,7 +109,7 @@
     if (!on) btns.push(ui.btn(t('fam.switch'), { act: 'fam.switch', arg: p.id, icon: 'repeat', size: 'sm' }));
     btns.push(ui.btn(t('fam.rename'), { act: 'fam.rename', arg: p.id, variant: 'secondary', icon: 'pencil', size: 'sm' }));
     if (!on) btns.push(ui.btn(t('fam.remove'), { act: 'fam.remove', arg: p.id, variant: 'ghost', icon: 'trash-2', size: 'sm' }));
-    return ui.card({ cls: 'so-profile' + (on ? ' is-on' : ''), kicker: { icon: on ? 'user-check' : 'user-round', text: on ? t('fam.inUse') : t('fam.profile') },
+    return ui.card({ cls: 'so-profile' + (on ? ' is-on' : ''), kicker: { icon: on ? 'user-check' : (p.child ? 'star' : 'user-round'), text: on ? t('fam.inUse') : t(p.child ? 'fam.childProfile' : 'fam.profile') },
       title: p.name, body: ui.metrics([{ label: t('fam.mDays'), value: nf(st.dl) }, { label: t('fam.mAvg'), value: RS.fmt.pct(st.avg) },
         { label: t('fam.mPts'), value: nf(st.pts) }, { label: t('fam.mQuran'), value: nf(st.q) }]) + '<div class="so-btns">' + btns.join('') + '</div>' });
   }
@@ -122,11 +122,38 @@
     } else {
       h.push(ui.hero({ kicker: { icon: 'users', text: t('fam.kicker') }, number: nf(f.list.length), label: tn('fam.count', f.list.length),
         text: t('fam.heroText', { name: (activeProfile() || f.list[0]).name }), cta: { eyebrow: t('fam.ctaEyebrow'), text: t('fam.add'), act: 'fam.add' } }));
+      h.push(goalCard(f));
       f.list.forEach(function (p) { h.push(profileCard(p, f)); });
       h.push(ui.note(t('fam.note'), { icon: 'shield-check', tone: 'plain' }));
     }
     view.innerHTML = h.join('');
   }
+  // One goal the whole family works towards together: Quran pages, days logged or points, added up across profiles.
+  var GOAL_KINDS = { q: [50, 100, 200, 604], dl: [30, 60, 90, 120], pts: [5000, 10000, 20000, 40000] };
+  function goalCard(f) {
+    var g = isObj(f.goal) && GOAL_KINDS[f.goal.k] ? f.goal : null;
+    if (!g) return ui.card({ cls: 'is-tight so-goal', id: 'so-goal', body: ui.list([ui.row({ icon: 'target', title: t('fam.goal.set'), sub: t('fam.goal.setSub'), act: 'fam.goal', chevron: true })]) });
+    var sum = 0; f.list.forEach(function (p) { sum += num(profileStats(p, f)[g.k]); });
+    var pct = RS.clamp(Math.round(sum / Math.max(1, g.n) * 100), 0, 100);
+    return ui.card({ kicker: { icon: 'target', text: t('fam.goal.kicker') }, cls: 'so-goal', id: 'so-goal', action: { text: t('fam.goal.change'), act: 'fam.goal', icon: 'pencil' },
+      body: '<p class="so-goal-t">' + esc(t('fam.goal.line.' + g.k, { done: nf(sum), n: nf(g.n) })) + '</p>' + ui.bar(pct, { cls: 'mt-2' }) +
+        '<p class="caption mt-2">' + esc(sum >= g.n ? t('fam.goal.done') : t('fam.goal.together')) + '</p>' });
+  }
+  RS.act('fam.goal', function () {
+    var f = fam(); if (!f) return;
+    var cur = isObj(f.goal) ? f.goal : { k: 'q', n: 100 }, opts = [];
+    Object.keys(GOAL_KINDS).forEach(function (k) { GOAL_KINDS[k].forEach(function (n) { opts.push({ value: k + ':' + n, text: t('fam.goal.opt.' + k, { n: nf(n) }) }); }); });
+    RS.sheet.open({ title: t('fam.goal.set'), body: '<form data-act-submit="fam.goalSave" novalidate>' +
+      ui.select({ id: 'fam-goal', name: 'goal', label: t('fam.goal.label'), value: cur.k + ':' + cur.n, options: opts }) +
+      ui.btn(t('core.save'), { type: 'submit', block: true, cls: 'mt-3' }) + '</form>' +
+      (f.goal ? '<div class="t-center mt-3"><button type="button" class="link-btn" data-act="fam.goalClear">' + esc(t('fam.goal.clear')) + '</button></div>' : '') });
+  });
+  RS.act('fam.goalSave', function (vals) {
+    var f = fam(), p = String((vals && vals.goal) || '').split(':'), n = parseInt(p[1], 10);
+    if (!f || !GOAL_KINDS[p[0]] || GOAL_KINDS[p[0]].indexOf(n) < 0) return;
+    f.goal = { k: p[0], n: n, ts: Date.now() }; RS.store.set(FKEY, f); RS.sheet.close(); RS.refresh();
+  });
+  RS.act('fam.goalClear', function () { var f = fam(); if (!f) return; delete f.goal; RS.store.set(FKEY, f); RS.sheet.close(); RS.refresh(); });
   function openAdd() {
     var f = fam(), first = !f;
     if (f && f.list.length >= 8) { RS.toast(t('fam.max'), { tone: 'error' }); return; }
@@ -134,6 +161,7 @@
     RS.sheet.open({ title: t('fam.add'), body: '<form data-act-submit="fam.create" novalidate>' +
       (first ? ui.field({ id: 'fam-mine', name: 'mine', label: t('fam.mineLabel'), value: (u && u.name) || '', maxlength: 24, hint: t('fam.mineHint'), required: true }) : '') +
       ui.field({ id: 'fam-new', name: 'name', label: t('fam.newLabel'), maxlength: 24, placeholder: t('fam.newPh'), required: true }) +
+      '<label class="so-childopt"><input type="checkbox" name="child" id="fam-child"> <span><strong>' + esc(t('fam.child')) + '</strong><br>' + esc(t('fam.childSub')) + '</span></label>' +
       '<p class="so-hint">' + esc(t('fam.addHint')) + '</p>' +
       ui.btn(t('fam.create'), { type: 'submit', block: true, icon: 'user-plus' }) + '</form>', focus: first ? '#fam-mine' : '#fam-new' });
   }
@@ -143,10 +171,12 @@
     if (!name || (!f && !mine)) { RS.toast(t('fam.nameNeeded'), { tone: 'error' }); return; }
     if (!f) f = { active: 'p1', list: [{ id: 'p1', name: mine }] };
     var id = newId();
-    f.list.push({ id: id, name: name });
+    var child = !!(vals && vals.child), seed = seedSettings();
+    f.list.push(child ? { id: id, name: name, child: true } : { id: id, name: name });
+    if (child) { seed.level = 'kids'; seed.simple = true; }
     if (!RS.store.set(FKEY, f)) { RS.toast(t('fam.failed'), { tone: 'error' }); return; }
     RS.sheet.close();
-    askSwitch(id, seedSettings());
+    askSwitch(id, seed);
   });
   RS.act('fam.switch', function (id) {
     var f = fam();

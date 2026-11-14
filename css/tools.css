@@ -82,3 +82,20 @@
 .st-word dt { font-weight: 700; }
 .st-word dd { margin: 2px 0 0; color: var(--ink-2, var(--ink)); line-height: 1.5; }
 .tr-term { margin-top: 4px; }
+
+/* Kids: night sky, story, grown-up check, short surahs (js/kids.js) and the family goal --------------------- */
+.kd-sky { display: block; width: 100%; height: auto; }
+.kd-sky-bg { fill: #0B2219; }
+.kd-moon { fill: #A7F3D0; }
+.kd-star { fill: rgba(167, 243, 208, .16); }
+.kd-star.is-on { fill: #6EE7B7; filter: drop-shadow(0 0 3px rgba(110, 231, 183, .9)); }
+.kd-q { padding: 14px; border-radius: 16px; background: var(--accent-soft); }
+.kd-q-t { font-weight: 700; margin-bottom: 10px; }
+.kd-a-t { font-weight: 600; color: var(--accent-ink); }
+.kd-s-n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--accent-soft); color: var(--accent-ink); }
+.kd-s-dot { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--hairline); display: grid; place-items: center; color: var(--card); }
+.kd-s.is-1 .kd-s-dot { border-color: var(--accent); background: linear-gradient(90deg, var(--accent) 50%, transparent 50%); }
+.kd-s.is-2 .kd-s-dot { border-color: var(--accent); background: var(--accent); }
+.so-childopt { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s3); font-size: 14px; line-height: 1.4; }
+.so-childopt input { width: 22px; height: 22px; flex: none; accent-color: var(--accent); margin-top: 2px; }
+.so-goal-t { font-size: 18px; font-weight: 700; }

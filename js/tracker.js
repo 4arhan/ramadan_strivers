@@ -90,6 +90,7 @@
     }
     return listCache.set;
   }
+  T.kidsList = function () { return KIDS_LIST.slice(); };
   T.listInfo = function () { var ctx = checkCtx(); return { on: simpleOn(), level: RS.settings.level, week: newWeek(ctx), weeks: NEW_TIERS.length }; };
   function deedExp(id) { var k = 'deed.' + id + '.exp'; if (!RS.has(k)) return ''; var s = t(k); return s && s.trim() ? s : ''; }
   function badges() { return content().badges || []; }
@@ -569,6 +570,7 @@
     h.push(hadithCard(day));
     if (RS.settings.showPrep) h.push(planCard());
     if (RS.start) h.push(RS.start.todayCardHtml());
+    if (RS.kids) h.push(RS.kids.todayCardsHtml(day, true));
     h.push(fastStateCard(ctx));
     h.push(checklist(ctx, rec));
     h.push(journalCard(ctx));
@@ -901,6 +903,7 @@
       out.push(planCard());
     }
     if (RS.start) out.push(RS.start.todayCardHtml());
+    if (RS.kids) out.push(RS.kids.todayCardsHtml(0, false));
     out.push(checklist(ctx, rec));
     out.push(journalCard(ctx));
     return out.join('');
@@ -957,7 +960,7 @@
       return;
     }
     RS.topbar({ title: t('nav.quran'), sub: ram ? t('today.step.title', { n: nf(curDay()) }) : RS.fmt.hijri() });
-    view.innerHTML = ram ? quranRamadan() : quranYear();
+    view.innerHTML = (ram ? quranRamadan() : quranYear()) + (RS.kids ? RS.kids.quranCardHtml() : '');
   }
   function qMessage(tot, left, pace) {
     var p = tot / Q_TOTAL * 100;
@@ -1163,6 +1166,7 @@
     // cloud (account, competitions)
     if (RS.cloud && typeof RS.cloud.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.cloud.meCardsHtml(); }, '') || '');
     // family profiles, buddies, calendar, home display
+    if (RS.kids) h.push(cloudTry(function () { return RS.kids.meCardHtml(); }, '') || '');
     if (RS.social && typeof RS.social.meCardsHtml === 'function') h.push(cloudTry(function () { return RS.social.meCardsHtml(); }, '') || '');
     // more
     var more = [

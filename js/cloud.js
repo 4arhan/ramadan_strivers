@@ -1144,6 +1144,8 @@
     var qp = qPagesMap(), tp = 0, dl = 0, sp = 0, pages = 0, last = 0, days = {};
     for (var d = 1; d <= 30; d++) {
       var x = getDay(d), q = num(qp[d]);
+      // a child's days count on the leaderboard only once a grown-up has checked them, when the family asked for that
+      if (RS.kids && RS.kids.needCheck() && !RS.kids.dayChecked(d)) continue;
       if ((x && x.done > 0) || q) {
         dl++;
         tp += x ? x.pts : 0;

@@ -1,0 +1,324 @@
+{
+  "easyTf": [
+    "tf002",
+    "tf003",
+    "tf005",
+    "tf009",
+    "tf010",
+    "tf011",
+    "tf-fast-01",
+    "tf-fast-03",
+    "tf-fast-05",
+    "tf-fast-08",
+    "tf-fast-11",
+    "tf018",
+    "tf024",
+    "tf-salah-08",
+    "tf-salah-09",
+    "tf-salah-15",
+    "tf025",
+    "tf029",
+    "tf031",
+    "tf033",
+    "tf-quran-03",
+    "tf-quran-04",
+    "tf-quran-10",
+    "tf-quran-11",
+    "tf-quran-12",
+    "tf035",
+    "tf036",
+    "tf041",
+    "tf042",
+    "tf043",
+    "tf046",
+    "tf047",
+    "tf053",
+    "tf054",
+    "tf-give-09",
+    "tf055",
+    "tf056",
+    "tf057",
+    "tf062",
+    "tf-give-02",
+    "tf-give-08",
+    "tf-give-10",
+    "tf-hist-01",
+    "tf-hist-02",
+    "tf-hist-04",
+    "tf-prep-11",
+    "tf-prep-12",
+    "tf-prep-13"
+  ],
+  "stories": [
+    {
+      "n": 1,
+      "title": "Adam, the First Human",
+      "text": "Allah made the first human, Adam, and taught him the names of all things. The angels did not know these names. They said they only knew what Allah had taught them. Then Adam told them the names. Allah told the angels to bow down before Adam. They all did, except Iblis. He was proud and refused. Adam and his wife lived in the Garden. They could eat from wherever they liked, but Allah told them not to go near one tree. Shaytan made them slip. Then Allah taught Adam words to say, and Allah accepted his repentance. When we do something wrong, we can turn back to Allah too. He is the Most Merciful.",
+      "q": "What happened after Adam turned back to Allah?",
+      "a": "Allah accepted his repentance.",
+      "ref": "Quran 2:30-37",
+      "url": "https://quran.com/2/30-37"
+    },
+    {
+      "n": 2,
+      "title": "Water for a Thirsty Dog",
+      "text": "Prophet Muhammad told his companions about a man who was walking and became very thirsty. He found a well, climbed down into it and drank. When he came out, he saw a dog. It was panting and licking the wet earth because it was so thirsty. The man thought that the dog felt just as he had felt. So he climbed down the well again, filled his shoe with water, held it in his mouth, climbed up and gave the dog a drink. Allah thanked him for this and forgave him. The companions asked if there is a reward for being kind to animals. The Prophet said that there is a reward for kindness to every living creature.",
+      "q": "What did the man use to carry water to the dog?",
+      "a": "His shoe.",
+      "ref": "Bukhari 2363",
+      "url": "https://sunnah.com/bukhari:2363"
+    },
+    {
+      "n": 3,
+      "title": "Nuh and the Ship",
+      "text": "Prophet Nuh called his people to worship Allah alone, but only a few believed. Allah told Nuh to build a ship. Whenever the leaders of his people walked past, they laughed at him. Nuh kept building. Then the command of Allah came, and the water rose. Allah told Nuh to bring a pair of every kind of creature onto the ship, along with his family and the believers. Nuh told them to go on board in the name of Allah. The ship sailed through waves like mountains. Then the water went down, and the ship came to rest on a mountain called Judi. Allah kept Nuh and the believers safe. Nuh did what Allah asked, even when people made fun of him.",
+      "q": "What did Allah tell Nuh to build?",
+      "a": "A ship.",
+      "ref": "Quran 11:36-44",
+      "url": "https://quran.com/11/36-44"
+    },
+    {
+      "n": 4,
+      "title": "A Cheerful Face",
+      "text": "Some good deeds look very small. Prophet Muhammad taught his companion Abu Dharr not to think of any good deed as too small, even meeting your brother with a cheerful face. The Prophet did this himself. A companion called Jarir said that from the day he became a Muslim, every time the Prophet saw him, he greeted him with a smile. The Prophet also said that a good word is charity. So you do not need money to give something. A kind word and a happy face are gifts. Today you can give them to your family, your friends and your neighbours, and Allah sees every one of them.",
+      "q": "What small good deed did the Prophet tell Abu Dharr not to look down on?",
+      "a": "Meeting others with a cheerful face.",
+      "ref": "Muslim 2626; Bukhari 3035; Bukhari 2989",
+      "url": "https://sunnah.com/muslim:2626"
+    },
+    {
+      "n": 5,
+      "title": "Ibrahim and the Idols",
+      "text": "The people of Prophet Ibrahim prayed to statues that they had made. Ibrahim knew that only Allah should be worshipped. One day, when the people had gone away, he broke the statues into pieces, all except the biggest one. When the people came back, they were angry and asked Ibrahim if he had done it. He told them to ask the statues, if they could speak. The people knew very well that statues cannot speak. Ibrahim asked them why they worshipped things that could not help them or harm them. They were furious and decided to burn him. But Allah said, \"O fire, be coolness and safety upon Ibrahim.\" Allah kept him safe.",
+      "q": "What did Allah tell the fire to be?",
+      "a": "Coolness and safety for Ibrahim.",
+      "ref": "Quran 21:57-70",
+      "url": "https://quran.com/21/57-70"
+    },
+    {
+      "n": 6,
+      "title": "Hajar and the Water of Zamzam",
+      "text": "Prophet Ibrahim brought Hajar and their baby Ismail to a dry valley in Makkah. Nobody lived there and there was no water. Hajar asked him, \"Has Allah ordered you to do so?\" He said, \"Yes.\" She said, \"Then He will not neglect us.\" Soon their water was finished, and the baby was very thirsty. Hajar climbed the hill of Safa to look for help. She saw nobody. She ran to the hill of Marwa. She went between the two hills seven times. Then she saw an angel at the place of Zamzam, and water came out of the ground. She drank and fed her baby. Today, pilgrims walk between Safa and Marwa, just as Hajar did.",
+      "q": "How many times did Hajar go between Safa and Marwa?",
+      "a": "Seven times.",
+      "ref": "Bukhari 3364",
+      "url": "https://sunnah.com/bukhari:3364"
+    },
+    {
+      "n": 7,
+      "title": "Building the Kaaba",
+      "text": "When Ismail grew up, he and his father, Prophet Ibrahim, did a great work together. They raised the walls of the Kaaba in Makkah, the House of Allah. As they built, they made dua. They said, \"Our Lord, accept this from us. Indeed, You are the Hearing, the Knowing.\" They also asked Allah to make them and their children people who obey Him, and to accept their repentance. Think about that. They were doing one of the best deeds ever, yet they did not boast. They asked Allah to accept it. When you fast, pray or help someone this Ramadan, you can ask the same: O Allah, please accept this from me.",
+      "q": "Who built the Kaaba together?",
+      "a": "Prophet Ibrahim and his son Ismail.",
+      "ref": "Quran 2:127-128",
+      "url": "https://quran.com/2/127-128"
+    },
+    {
+      "n": 8,
+      "title": "The Man Known for Truth",
+      "text": "A king named Heraclius once heard about Prophet Muhammad and wanted to know more. Some traders from Makkah were in his land. Their leader, Abu Sufyan, was not a Muslim at that time. He was against the Prophet. The king asked him many questions. One was whether the people had ever known Muhammad to tell lies before he said he was a prophet. Abu Sufyan answered, \"No.\" The king asked if he broke his promises. Again the answer was, \"No.\" The king asked what he taught. Abu Sufyan said that he told people to worship Allah alone, to pray, to speak the truth and to be good to their relatives. Even those who were against the Prophet knew that he was truthful.",
+      "q": "What did Abu Sufyan say when asked if the Prophet had ever told lies?",
+      "a": "He said no.",
+      "ref": "Bukhari 7",
+      "url": "https://sunnah.com/bukhari:7"
+    },
+    {
+      "n": 9,
+      "title": "Yusuf and the Well",
+      "text": "When Yusuf was a boy, he had a dream. He saw eleven stars, the sun and the moon bowing down to him. His father, Prophet Yaqub, told him not to tell his brothers. But the brothers were already jealous, because they felt their father loved Yusuf more. They asked to take Yusuf out to play. Then they put him at the bottom of a well. They brought their father his shirt with false blood on it and said a wolf had eaten him. Yaqub did not believe them. He chose to be patient and asked Allah for help. Some travellers found Yusuf in the well and took him to Egypt. Allah was looking after Yusuf the whole time.",
+      "q": "What did Yusuf see in his dream?",
+      "a": "Eleven stars, the sun and the moon bowing down to him.",
+      "ref": "Quran 12:4-21",
+      "url": "https://quran.com/12/4-21"
+    },
+    {
+      "n": 10,
+      "title": "Yusuf Forgives His Brothers",
+      "text": "Many years passed. Yusuf grew up in Egypt, and Allah gave him a high position. He was put in charge of the storehouses of the land. One day his brothers came to Egypt, asking for food. They did not know who he was. At last Yusuf told them, \"I am Yusuf.\" The brothers were ashamed and said that they had done wrong. Yusuf could have punished them. But he said, \"No blame will there be upon you today. May Allah forgive you.\" Then his parents came to Egypt, and the family was together again. Yusuf said that his dream had come true and that Allah had been good to him. Forgiving others is a great deed.",
+      "q": "What did Yusuf do when his brothers said they had done wrong?",
+      "a": "He forgave them.",
+      "ref": "Quran 12:88-100",
+      "url": "https://quran.com/12/88-100"
+    },
+    {
+      "n": 11,
+      "title": "Your Mother, Your Mother, Your Mother",
+      "text": "A man came to Prophet Muhammad with a question. He wanted to know which person most deserved his good company and kind treatment. The Prophet said, \"Your mother.\" The man asked, \"Who is next?\" The Prophet said, \"Your mother.\" The man asked again, \"Who is next?\" The Prophet said, \"Your mother.\" The man asked a fourth time, and the Prophet said, \"Your father.\" Our mothers carried us, fed us and cared for us when we could do nothing for ourselves. Our fathers work hard for us too. In Ramadan, you can help set the table for iftar, tidy up without being asked, and speak gently to your parents. These are deeds that Allah loves.",
+      "q": "How many times did the Prophet say \"Your mother\" before he said \"Your father\"?",
+      "a": "Three times.",
+      "ref": "Bukhari 5971",
+      "url": "https://sunnah.com/bukhari:5971"
+    },
+    {
+      "n": 12,
+      "title": "Baby Musa in the River",
+      "text": "When Musa was a baby, his people were in danger from Pharaoh, a cruel king. Allah inspired Musa's mother to feed her baby and, when she feared for him, to put him into the river. Allah told her not to fear or be sad, and promised to bring him back to her. The family of Pharaoh found the baby. Pharaoh's wife asked that he be kept safe. Musa's sister followed and watched from far away. The baby would not feed from any nurse. So his sister offered to show them a family who could care for him. In this way, Allah returned Musa to his own mother. The promise of Allah is always true.",
+      "q": "Who watched baby Musa from far away?",
+      "a": "His sister.",
+      "ref": "Quran 28:7-13",
+      "url": "https://quran.com/28/7-13"
+    },
+    {
+      "n": 13,
+      "title": "Musa and the Sea",
+      "text": "Allah told Prophet Musa to leave Egypt by night with his people. Pharaoh and his army chased after them. In the morning, the two groups could see each other. In front of Musa's people was the sea. Behind them was the army. The people cried out that they were sure to be caught. Musa said, \"No! Indeed, with me is my Lord; He will guide me.\" Then Allah told Musa to strike the sea with his staff. The sea split apart, and each side stood like a huge mountain. Allah saved Musa and everyone with him. Pharaoh and his army were drowned. When things look impossible, remember Musa's words and trust Allah.",
+      "q": "What did Musa strike the sea with?",
+      "a": "His staff.",
+      "ref": "Quran 26:52-67",
+      "url": "https://quran.com/26/52-67"
+    },
+    {
+      "n": 14,
+      "title": "The Garden Abu Talha Loved",
+      "text": "Abu Talha was a companion in Madinah who owned many date palm gardens. The one he loved most was called Bayruha. It was in front of the Prophet's mosque. Prophet Muhammad used to go there and drink its sweet water. Then Allah sent down an ayah saying that we will never reach true goodness until we give from what we love. Abu Talha came to the Prophet. He said that Bayruha was the thing he loved most, and that he wanted to give it away for the sake of Allah. The Prophet was pleased and told him to share it among his relatives. So Abu Talha did. Real giving means sharing something we love, not only what we no longer want.",
+      "q": "What was the name of the garden Abu Talha gave away?",
+      "a": "Bayruha.",
+      "ref": "Bukhari 1461; Quran 3:92",
+      "url": "https://sunnah.com/bukhari:1461"
+    },
+    {
+      "n": 15,
+      "title": "Yunus and the Great Fish",
+      "text": "Prophet Yunus was sent to his people, but he left them in anger. He got on a ship that was full. Lots were drawn, and Yunus was the one who had to leave the ship. Then a great fish swallowed him. Inside the darkness, Yunus called out to Allah: \"There is no god except You. Glory be to You. Indeed, I have been of the wrongdoers.\" Allah heard him and saved him. The fish put him out onto the shore. He was weak, and Allah made a plant grow over him. Then Allah sent him to a people of a hundred thousand or more, and they believed. Allah says that this is how He saves the believers.",
+      "q": "Where was Yunus when he called out to Allah?",
+      "a": "Inside the great fish, in the darkness.",
+      "ref": "Quran 21:87-88; Quran 37:139-148",
+      "url": "https://quran.com/21/87-88"
+    },
+    {
+      "n": 16,
+      "title": "The Guest and the Lamp",
+      "text": "A hungry man came to Prophet Muhammad. The Prophet had nothing at home but water, so he asked who would host this guest. A man from the Ansar, the Muslims of Madinah, said that he would. At home, his wife told him they had only enough food for their children. They put the children to sleep. They set the food in front of the guest. Then the wife stood up as if to fix the lamp, and put it out. In the dark, the two of them pretended to eat, so that the guest could eat it all. They went to sleep hungry. In the morning, the Prophet told the man that Allah was pleased with what they had done.",
+      "q": "Why did the family put out the lamp?",
+      "a": "So the guest would not see that they were not eating, and could have all the food.",
+      "ref": "Bukhari 3798; Quran 59:9",
+      "url": "https://sunnah.com/bukhari:3798"
+    },
+    {
+      "n": 17,
+      "title": "The Patience of Ayyub",
+      "text": "Ayyub was a prophet of Allah. A great hardship came to him. He did not turn away from Allah. He turned to Him. He called out, \"Indeed, adversity has touched me, and You are the Most Merciful of the merciful.\" Allah answered his dua. Allah told him to strike the ground with his foot. A spring of cool water came out, for him to wash with and to drink. Allah took away his hardship and gave him back his family, and as many again with them, as a mercy. Allah says about Ayyub, \"Indeed, We found him patient, an excellent servant.\" When something is hard for you, be patient like Ayyub and keep asking Allah.",
+      "q": "What did Allah call Ayyub?",
+      "a": "Patient, an excellent servant.",
+      "ref": "Quran 21:83-84; Quran 38:41-44",
+      "url": "https://quran.com/38/41-44"
+    },
+    {
+      "n": 18,
+      "title": "The Angel of the Mountains",
+      "text": "Aishah once asked Prophet Muhammad if he had ever had a day harder than the battle of Uhud. He told her about a day when he had invited some people to Islam and they refused to listen. He walked away full of sadness. Then he looked up and saw a cloud shading him, and in it was the angel Jibril. Jibril told him that Allah had heard what the people said, and had sent the Angel of the Mountains. The angel offered to bring two mountains down upon those people if the Prophet wished. The Prophet said no. He said that he hoped Allah would bring from their children people who would worship Allah alone. He chose mercy.",
+      "q": "What did the Prophet hope for the children of those people?",
+      "a": "That they would worship Allah alone.",
+      "ref": "Bukhari 3231",
+      "url": "https://sunnah.com/bukhari:3231"
+    },
+    {
+      "n": 19,
+      "title": "Sulayman and the Ant",
+      "text": "Allah gave Prophet Sulayman a great kingdom. His army had jinn, people and birds, all marching in rows. Allah had also taught him the speech of birds. One day the army came to a valley of ants. One ant called out, \"O ants, enter your homes, so that Sulayman and his soldiers do not crush you without knowing it.\" Sulayman understood her, and he smiled. He did not feel proud of his power. He made dua at once. He asked Allah to help him be thankful for the blessings given to him and to his parents, and to help him do good deeds that please Allah. The more Allah gives us, the more we should thank Him.",
+      "q": "What did Sulayman do when he heard the ant?",
+      "a": "He smiled and asked Allah to help him be thankful.",
+      "ref": "Quran 27:16-19",
+      "url": "https://quran.com/27/16-19"
+    },
+    {
+      "n": 20,
+      "title": "The Young People of the Cave",
+      "text": "Long ago, some young people believed in Allah, but their people worshipped other things. The young people stood up and said that their Lord is the Lord of the heavens and the earth. To keep their faith safe, they went to a cave. They made dua: \"Our Lord, grant us from Yourself mercy and prepare for us right guidance in our affair.\" Allah made them sleep in the cave. Their dog lay at the entrance with its front legs stretched out. When they woke up, they thought they had slept for a day or part of a day. But Allah tells us they had been there for three hundred and nine years. Allah protects those who hold on to their faith.",
+      "q": "How long did the young people stay in the cave?",
+      "a": "Three hundred and nine years.",
+      "ref": "Quran 18:9-25",
+      "url": "https://quran.com/18/9-25"
+    },
+    {
+      "n": 21,
+      "title": "Luqman's Advice to His Son",
+      "text": "Allah gave a man named Luqman wisdom. The Quran tells us the advice he gave his son. First, he told him never to worship anything along with Allah. He told him that even if a deed is as small as a mustard seed, hidden inside a rock or anywhere in the heavens or the earth, Allah will bring it out. He told him to pray, to encourage what is right, to stop what is wrong, and to be patient. He told him not to turn his face away from people with pride, and not to walk in a boastful way. He told him to walk calmly and to lower his voice. Which piece of this advice can you practise today?",
+      "q": "How small a deed did Luqman say Allah will bring out?",
+      "a": "Even one as small as a mustard seed.",
+      "ref": "Quran 31:13-19",
+      "url": "https://quran.com/31/13-19"
+    },
+    {
+      "n": 22,
+      "title": "Maryam and the Gift from Allah",
+      "text": "Before Maryam was born, her mother made a promise. She promised that her child would be given to the service of Allah. When the baby came, she named her Maryam and asked Allah to protect her. Allah accepted Maryam and made her grow up in a good way. Prophet Zakariyya looked after her. Maryam worshipped Allah in her prayer room. Every time Zakariyya came in to see her, he found food with her. He asked, \"O Maryam, where does this come from?\" She said, \"It is from Allah. Indeed, Allah provides for whom He wills without limit.\" Maryam knew that every good thing we have comes from Allah. Do you remember to thank Him for your food?",
+      "q": "Where did Maryam say her food came from?",
+      "a": "From Allah.",
+      "ref": "Quran 3:35-37",
+      "url": "https://quran.com/3/35-37"
+    },
+    {
+      "n": 23,
+      "title": "Isa Speaks in the Cradle",
+      "text": "Allah gave Maryam a son, Isa, as a sign and a mercy. When she carried the baby to her people, they were very surprised and began to question her. Maryam did not answer. She only pointed to the baby. They asked how they could speak to a child in the cradle. Then, by the power of Allah, baby Isa spoke. He said, \"Indeed, I am the servant of Allah. He has given me the Scripture and made me a prophet.\" He said that Allah had made him blessed wherever he was, had told him to pray and give charity, and had made him good to his mother. Isa was a noble prophet and a servant of Allah.",
+      "q": "What was the first thing baby Isa said about himself?",
+      "a": "That he is the servant of Allah.",
+      "ref": "Quran 19:27-33",
+      "url": "https://quran.com/19/27-33"
+    },
+    {
+      "n": 24,
+      "title": "Ten Years Without a Harsh Word",
+      "text": "When Prophet Muhammad came to Madinah, a boy named Anas was brought to him. His family said that Anas was a clever boy who could help the Prophet. So Anas served him, at home and on journeys. Later, Anas told people what those years were like. He said, \"I served the Prophet for ten years, and he never said to me, 'Uff.'\" The Prophet never blamed him by asking, \"Why did you do that?\" or \"Why did you not do that?\" Think about how gentle that is. Children make mistakes, and the Prophet was always patient with Anas. We can copy him by being patient with our younger brothers, sisters and friends.",
+      "q": "For how many years did Anas serve the Prophet?",
+      "a": "Ten years.",
+      "ref": "Bukhari 6038; Bukhari 2768",
+      "url": "https://sunnah.com/bukhari:6038"
+    },
+    {
+      "n": 25,
+      "title": "The First Revelation",
+      "text": "Before he became a prophet, Muhammad used to go to the cave of Hira to worship Allah alone. One day the angel came to him there and told him to read. He answered, \"I do not know how to read.\" The angel held him tightly and let go, three times. Then the angel recited the first words of the Quran to be revealed: \"Read in the name of your Lord who created.\" The Prophet went home with his heart beating fast. He asked his wife Khadijah to cover him. She comforted him. She said that Allah would never let him down, because he was good to his relatives, helped the poor and was generous to his guests.",
+      "q": "In which cave did the first revelation come?",
+      "a": "The cave of Hira.",
+      "ref": "Bukhari 3; Quran 96:1-5",
+      "url": "https://sunnah.com/bukhari:3"
+    },
+    {
+      "n": 26,
+      "title": "The Most Generous in Ramadan",
+      "text": "The companion Ibn Abbas told us something beautiful about Ramadan. He said that Prophet Muhammad was the most generous of all people. And he was at his most generous in Ramadan, when the angel Jibril met him. Jibril used to come to him every night of Ramadan, and they would go over the Quran together. Ibn Abbas said that the Prophet was then more generous than the wind that blows freely and brings good to everyone. So Ramadan is the month of two things together: the Quran and giving. Tonight, you can read some Quran, even a few ayahs. Then you can give something, even if it is small, like a date, a coin or your help.",
+      "q": "Who met the Prophet every night of Ramadan?",
+      "a": "The angel Jibril.",
+      "ref": "Bukhari 6",
+      "url": "https://sunnah.com/bukhari:6"
+    },
+    {
+      "n": 27,
+      "title": "The Night of Decree",
+      "text": "One night in Ramadan is greater than all the others. It is Laylatul Qadr, the Night of Decree. Allah sent down the Quran on this night. Allah tells us that it is better than a thousand months. That is more than eighty-three years! On this night the angels come down, and Jibril with them, by the permission of their Lord. It is a night of peace until dawn. We are not told exactly which night it is. Prophet Muhammad told us to look for it in the odd nights of the last ten nights of Ramadan. So on these nights, pray, read Quran and make lots of dua. A small deed on this night is worth so much.",
+      "q": "Laylatul Qadr is better than how many months?",
+      "a": "A thousand months.",
+      "ref": "Quran 97:1-5; Bukhari 2017",
+      "url": "https://quran.com/97/1-5"
+    },
+    {
+      "n": 28,
+      "title": "A Thankful Servant",
+      "text": "Aishah, the wife of Prophet Muhammad, saw how he prayed at night. He stood in prayer for so long that his feet became sore and cracked. She asked him why he did this, when Allah had already forgiven him. He answered, \"Should I not love to be a thankful servant?\" The Prophet did not pray only to ask for things. He prayed to say thank you to Allah. Allah has given us so much: our eyes, our families, our food, our faith and this blessed month. We can say thank you with our words by saying Alhamdulillah. We can also say thank you with our actions, by praying and by using our blessings to do good.",
+      "q": "Why did the Prophet pray so much at night?",
+      "a": "Because he loved to be a thankful servant of Allah.",
+      "ref": "Bukhari 4837",
+      "url": "https://sunnah.com/bukhari:4837"
+    },
+    {
+      "n": 29,
+      "title": "The Branch on the Road",
+      "text": "Prophet Muhammad told his companions about a man who was walking along a road. On the path he saw a branch with thorns. It could have hurt the people passing by. The man did not just step over it and carry on. He picked it up and moved it out of the way. That was all he did. But Allah was pleased with his deed and forgave him. This story shows us that no good deed is too small. Picking up litter, moving a stone off the path or putting away a toy that someone might trip on are all good deeds. You may forget them by the evening, but Allah does not forget.",
+      "q": "What did the man move off the road?",
+      "a": "A branch with thorns.",
+      "ref": "Bukhari 652",
+      "url": "https://sunnah.com/bukhari:652"
+    },
+    {
+      "n": 30,
+      "title": "Eid, a Day of Thanks",
+      "text": "Ramadan is over, and Eid al-Fitr is here! In the Quran, Allah says that He wants ease for us, not hardship. He wants us to complete the days of fasting, to say how great He is for guiding us, and to be thankful. That is why we say \"Allahu Akbar\" on Eid. Prophet Muhammad did not go out to the Eid prayer until he had eaten some dates, and he ate an odd number of them. He also came home from the prayer by a different road from the one he took to get there. Today, thank Allah for helping you fast, pray and give. Wear your best clothes, smile and share your joy with others. Eid Mubarak!",
+      "q": "What did the Prophet eat before going to the Eid prayer?",
+      "a": "Some dates, an odd number of them.",
+      "ref": "Quran 2:185; Bukhari 953; Bukhari 986",
+      "url": "https://quran.com/2/185"
+    }
+  ]
+}

@@ -119,7 +119,14 @@
 
   /* ------------------------------------------------------------------ content (read live, never cached) */
   function C() { return RS.content || {}; }
-  function tfAll() { return arr(C().tf).filter(function (q) { return q && q.id; }); }
+  // Kids mode: only the questions picked as suitable for 8 to 12 year olds (RS.startData.easyTf), when there are any.
+  function tfAll() {
+    var all = arr(C().tf).filter(function (q) { return q && q.id; }), easy = RS.kids && RS.kids.easyTf ? RS.kids.easyTf() : null;
+    if (!easy) return all;
+    var set = {}; easy.forEach(function (id) { set[id] = 1; });
+    var out = all.filter(function (q) { return set[q.id]; });
+    return out.length >= 10 ? out : all;
+  }
   function mcqAll() { return arr(C().mcq).filter(function (q) { return q && q.id; }); }
   function cardMap() { var m = C().cards; return m && typeof m === 'object' ? m : {}; }
   function decksAll() { return arr(C().decks).filter(function (d) { return d && d.id; }); }
