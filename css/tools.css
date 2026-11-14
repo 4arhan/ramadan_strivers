@@ -52,3 +52,12 @@
 
 /* Home display: the estimated-date note */
 .so-disp-note { font-size: 14px; opacity: .7; margin-top: 4px; }
+
+/* Usage statistics notice (js/track.js) ---------------------------------------------------------------------- */
+.tk-notice {
+  position: fixed; inset-inline: 12px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 40; max-width: 520px; margin-inline: auto;
+  padding: 14px 16px; border-radius: 18px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); box-shadow: 0 12px 40px rgba(0, 0, 0, .22);
+}
+.tk-notice-t { font-size: 14px; line-height: 1.45; }
+.tk-notice-t a { color: var(--accent-ink); font-weight: 700; }
+.tk-notice-b { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }

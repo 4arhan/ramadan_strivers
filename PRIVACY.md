@@ -1,6 +1,6 @@
 # Privacy — Ramadan Strivers
 
-**Default: everything stays on your device.** Deeds, Quran pages, badges, journal and settings are stored in your browser's local storage. No account is needed. No analytics beyond basic page views (Google Analytics on the public site; none inside the installed app flows).
+**Default: everything stays on your device.** Deeds, Quran pages, badges, journal and settings are stored in your browser's local storage. No account is needed. Usage statistics (Google Analytics) count which screens are opened and how often a few features are used (for example a deed ticked, a city set, a competition joined), plus the app language, mode and theme. They never include your name, email, journal, which deeds you ticked or your coordinates. Statistics cookies are off in the EEA, the UK and Switzerland until you allow them, you can turn statistics off in Me → Settings, and they are always off in kids mode. Advertising features are disabled.
 
 **If you create an account (optional):** we store your email, an encrypted password hash (or nothing, with magic-link sign-in), and a JSON snapshot of your tracker data so it can sync between your devices. You can delete the account and all cloud data in one tap (More → Account → Delete). Deletion is immediate and permanent.
 

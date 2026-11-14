@@ -283,5 +283,13 @@
   "tl.setup.qPrayer": "Prayer times",
   "tl.setup.prayerSub": "Next, choose your city to see prayer, suhoor and iftar times. You can skip it.",
   "tl.setup.skip": "Skip",
-  "tl.setup.go": "Get started"
+  "tl.setup.go": "Get started",
+  "tk.title": "Usage statistics.",
+  "tk.body": "We count visits and which features are used, to improve the app. Never your name, what you log or where you are.",
+  "tk.more": "Privacy",
+  "tk.allow": "Allow",
+  "tk.deny": "No thanks",
+  "tk.set": "Usage statistics",
+  "tk.setSub": "Counts of screens and features used, sent to Google Analytics. Nothing you log.",
+  "tk.setKids": "Always off in kids mode."
 }

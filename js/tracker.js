@@ -1402,7 +1402,8 @@
     var cloudRows = RS.cloud && typeof RS.cloud.settingsRowsHtml === 'function' ? cloudTry(function () { return RS.cloud.settingsRowsHtml(); }, '') : '';
     if (cloudRows) out.push(ui.card({ kicker: { icon: 'cloud', text: t('me.set.cloud') }, cls: 'tr-set tr-set-cloud', body: cloudRows }));
     out.push(ui.card({ kicker: { icon: 'sprout', text: t('me.set.prep') }, cls: 'is-tight tr-set', body: ui.list([
-      ui.row({ title: t('me.set.showPrep'), sub: t('me.set.showPrepSub'), toggle: { on: !!s.showPrep, act: 'tr.showprep' }, id: 'tr-set-prep' })]) }));
+      ui.row({ title: t('me.set.showPrep'), sub: t('me.set.showPrepSub'), toggle: { on: !!s.showPrep, act: 'tr.showprep' }, id: 'tr-set-prep' }),
+      RS.trackRowHtml ? RS.trackRowHtml() : '']) }));
     view.innerHTML = out.join('');
   }
   function applyBody() {

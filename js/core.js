@@ -1062,6 +1062,7 @@
     var fn = acts[name];
     if (!fn) { warnOnce('no action handler', name); return; }
     try { return fn(arg, el || null, e || null); } catch (err) { console.error('[RS] action "' + name + '" failed', err); }
+    finally { try { RS.emit('act', { name: name, arg: typeof arg === 'string' ? arg : null }); } catch (e2) { /* listeners never break an action */ } }
   };
   doc.addEventListener('click', function (e) {
     // A route link inside an open sheet or dialog: close it first (giving back its history entry), then go.
