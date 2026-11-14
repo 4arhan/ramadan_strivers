@@ -13,6 +13,7 @@ feature switches itself on when its environment variable exists. Set these in **
 | Daily cron (push + digests) | `CRON_SECRET` (recommended) | Any random string; Vercel sends it automatically to `/api/cron/daily` (schedule in `vercel.json`, 15:00 UTC daily; Hobby plan allows one run per day). |
 | AI explain / reflection prompts / quiz levels | `ANTHROPIC_API_KEY`, optional `AI_MODEL` (default `claude-opus-5-5`; set `claude-sonnet-5-5` to lower cost) | console.anthropic.com. Explanations are cached per deed/language/level, so cost is minimal. |
 | WhatsApp bot | Twilio WhatsApp sender → webhook `https://<your-domain>/api/whatsapp` (POST) | twilio.com. Commands: `JOIN CODE Name`, `PAGES n`, `STATUS`, `HADITH`. |
+| Super admin area (Me → Super admin): every competition, verify/suspend, leagues, notes to organisers, feature switches | `SUPER_ADMIN_EMAILS` | Comma-separated emails of the accounts that run the platform, e.g. `you@example.com`. Sign in to the app with an account that uses one of them. Without it nobody is a super admin and no league can be created. |
 | Canonical URL in emails/share links | `APP_URL` (e.g. `https://www.ramadanstrivers.com`) | Optional; defaults to the request host. |
 | Hijri offset for the server cron | `HIJRI_OFFSET` (`-1`, `0`, `1`) | Optional. |
 

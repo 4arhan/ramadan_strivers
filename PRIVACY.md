@@ -6,6 +6,8 @@
 
 **Competitions:** a participant shares only a display name, an optional class/team label, and aggregate scores (points, days logged, average %, Quran pages). The organiser can see per-day totals for integrity review — never which individual deeds were ticked. Participants can leave at any time; organisers can remove anyone. Closing a competition stops all score updates.
 
+**Competitions, extras:** Other things a competition can hold, only when used: the dates you checked in at an event with the organiser's QR code, your display name on a sign-up list you chose to join, and the email addresses of the colleagues an organiser adds to help run it. A record of the changes organisers make (who, what, when) is kept so mistakes can be traced. An organisation's public page and league tables show totals and class or team names only, never a participant's name.
+
 **Buddies:** if you create a buddy link, the server stores the name you typed and a short summary (your Ramadan day, today's completion %, your best current streak, days logged, Quran pages and the date you were last active). Anyone who has the link can see that summary and send you one of four preset encouragements with their name; they cannot send free text. Individual deeds, the journal and sisters' mode are never shared. "Stop sharing" deletes the link and its data from the server.
 
 **Family profiles and the home display:** profiles are kept only on your device; nothing about them is sent to the server. The home display reads the data already on the device. An embedded leaderboard on an organiser's website shows the same public board as the app (display names, teams, points) and sets no cookies.
