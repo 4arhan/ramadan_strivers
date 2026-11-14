@@ -33,6 +33,20 @@ const ROUTES = [
   ['comp/:code/poster', () => require('./_routes/comp/code/poster')],
   ['comp/:code/certs', () => require('./_routes/comp/code/certs')],
   ['comp/:code/analytics', () => require('./_routes/comp/code/analytics')],
+  ['comp/:code/admins', () => require('./_routes/comp/code/admins')],
+  ['comp/:code/awards', () => require('./_routes/comp/code/awards')],
+  ['comp/:code/audit', () => require('./_routes/comp/code/audit')],
+  ['comp/:code/signups', () => require('./_routes/comp/code/signups')],
+  ['comp/:code/slips', () => require('./_routes/comp/code/slips')],
+  ['comp/:code/checkin', () => require('./_routes/comp/code/checkin')],
+  ['comp/:code/challenge', () => require('./_routes/comp/code/challenge')],
+  ['o/:code', () => require('./_routes/orgpage')],
+  ['league', () => require('./_routes/league/index')],
+  ['league/:slug', () => require('./_routes/league/item')],
+  ['l/:slug', () => require('./_routes/league/page')],
+  ['admin', () => require('./_routes/admin/index')],
+  ['admin/leagues', () => require('./_routes/admin/leagues')],
+  ['admin/misc', () => require('./_routes/admin/misc')],
 ].map(([pattern, load]) => ({ parts: pattern.split('/'), load }));
 
 function match(path){

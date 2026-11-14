@@ -2,7 +2,7 @@
 // Built from the per-day summaries participants already send; nothing new is collected.
 const { handler, send, query } = require('../../../_lib/util'); const { q } = require('../../../_lib/db'); const C = require('../../../_lib/comp');
 module.exports = handler(async (req, res) => {
-  const { c } = await C.requireOwner(req, query(req).code);
+  const { c } = await C.access(req, query(req).code, 'viewer');
   const rows = (await q('SELECT id,name,grp,total_pts,days_logged,avg_pct,quran_pages,last_day,days,claimed,hidden,flagged FROM participants WHERE comp_code=$1', [c.code])).rows;
   const joined = rows.filter(r => r.claimed), invited = rows.length - joined.length;
   const today = joined.reduce((m, r) => Math.max(m, r.last_day || 0), 0);

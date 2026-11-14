@@ -8,7 +8,9 @@ module.exports = handler(async (req, res) => {
   let storageVars;
   if(!db.configured()) storageVars = Object.keys(process.env).filter(k => /(DATABASE|POSTGRES|PG|NEON|SUPABASE|STORAGE|KV|REDIS|BLOB|EDGE_CONFIG|MONGO|MYSQL)/i.test(k)).sort().slice(0, 40)
     .map(k => k + ':' + ((String(process.env[k]).match(/^([a-z][a-z0-9+]*):\/\//i) || [])[1] || 'value'));
-  send(res, 200, { ok: true, db: db.configured(), dbOk, dbErr, env: process.env.VERCEL_ENV || undefined, storageVars, features: {
+  // feature switches set by the super admin (all on unless switched off)
+  let flags = {}; if(dbOk){ try { (await db.q('SELECT key,value FROM flags', [])).rows.forEach(r => { flags[r.key] = r.value !== false; }); } catch(e){ flags = {}; } }
+  send(res, 200, { ok: true, flags, db: db.configured(), dbOk, dbErr, env: process.env.VERCEL_ENV || undefined, storageVars, features: {
     accounts: db.configured(), competitions: db.configured(), buddies: db.configured(), sync: db.configured(),
     email: email.configured(), ai: ai.configured(), push: !!(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY),
     whatsapp: !!process.env.TWILIO_AUTH_TOKEN || !!process.env.WHATSAPP_ENABLED } });

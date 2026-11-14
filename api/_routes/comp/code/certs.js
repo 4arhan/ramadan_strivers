@@ -5,7 +5,7 @@ const { handler, html, query, esc } = require('../../../_lib/util'); const { q }
 const MOON = '<svg class="ic" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>';
 const PRINTER = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>';
 module.exports = handler(async (req, res) => {
-  const qs = query(req); const { c } = await C.requireOwner(req, qs.code);
+  const qs = query(req); const { c } = await C.access(req, qs.code, 'viewer');
   let rows = (await q('SELECT id,name,grp,total_pts,days_logged,avg_pct,quran_pages FROM participants WHERE comp_code=$1 AND claimed AND hidden=false ORDER BY total_pts DESC', [c.code])).rows;
   rows = rows.map((r, i) => Object.assign({ rank: i + 1, total: rows.length }, r)); if(qs.p) rows = rows.filter(r => String(r.id) === String(qs.p));
   const year = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { year: 'numeric' }).format(new Date()).replace(/\D/g, '');

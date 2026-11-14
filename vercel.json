@@ -15,6 +15,14 @@
       "destination": "/?join=:code"
     },
     {
+      "source": "/o/:code",
+      "destination": "/api/router?__p=o/:code"
+    },
+    {
+      "source": "/l/:slug",
+      "destination": "/api/router?__p=l/:slug"
+    },
+    {
       "source": "/api/:path((?!router$).*)",
       "destination": "/api/router?__p=:path"
     }
