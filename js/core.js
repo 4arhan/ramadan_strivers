@@ -464,9 +464,12 @@
       if (x > 0 && s.indexOf('+') < 0 && /[1-9]/.test(s)) s = (RS.isRTL() ? '\u200e' : '') + '+' + s;
       return s;
     },
-    time: function (d) {
+    // time(d, timeZone?) — the clock time; with a time zone (an IANA name), as the clock shows it there.
+    time: function (d, tz) {
       d = toDate(d);
-      return d ? dateFmt({ hour: 'numeric', minute: '2-digit' }).format(d) : '';
+      if (!d) return '';
+      if (tz) { try { return dateFmt({ hour: 'numeric', minute: '2-digit', timeZone: tz }).format(d); } catch (e) { /* the device time zone */ } }
+      return dateFmt({ hour: 'numeric', minute: '2-digit' }).format(d);
     },
     dur: function (ms) {
       var total = Math.max(0, Math.floor((Number(ms) || 0) / 60000));

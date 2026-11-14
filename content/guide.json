@@ -39,7 +39,7 @@
   "id": "prayer",
   "icon": "clock",
   "title": "Prayer times and iftar",
-  "body": "Allow your location (or enter coordinates) to see today's prayer times and a countdown to iftar and to the end of suhoor. Choose the calculation method your community follows in settings. Your location stays on your device unless you turn on reminders."
+  "body": "Search for your city (any city or town in the world), use your location or enter coordinates to see today's prayer times and a countdown to iftar and to the end of suhoor. The app suggests the calculation method most mosques in your country use; you can choose from 23 methods, set Hanafi or standard Asr, and under Advanced adjust each time by a few minutes to match your mosque. Your location stays on your device unless you turn on reminders or sync."
  },
  {
   "id": "streaks",

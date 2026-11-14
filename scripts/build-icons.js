@@ -25,7 +25,7 @@ const NAMES = [
   'landmark', 'settings', 'sliders-horizontal', 'languages', 'globe', 'bell', 'share-2', 'download', 'upload', 'printer',
   'qr-code', 'link', 'copy', 'external-link', 'x', 'plus', 'minus', 'refresh-cw', 'rotate-ccw', 'repeat', 'shuffle',
   'log-in', 'log-out', 'mail', 'lock', 'info', 'circle-help', 'triangle-alert', 'trash-2', 'pencil', 'eye', 'eye-off',
-  'list', 'layers', 'target', 'compass', 'map-pin', 'droplets', 'utensils', 'search', 'play', 'message-circle', 'gift',
+  'list', 'layers', 'target', 'compass', 'map-pin', 'locate-fixed', 'droplets', 'utensils', 'search', 'play', 'message-circle', 'gift',
   'sprout', 'notebook-pen', 'footprints', 'file-text', 'scroll-text', 'circle-x', 'circle-dot', 'cloud', 'wifi-off',
   // extras used by the shell / likely needed by modules
   'chevron-up', 'house', 'ellipsis', 'flower-2', 'bell-ring', 'cloud-off', 'calendar-days', 'list-checks', 'chart-line',

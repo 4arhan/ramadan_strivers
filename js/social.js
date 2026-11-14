@@ -393,12 +393,14 @@
     L.push('END:VCALENDAR');
     return L.map(fold).join('\r\n') + '\r\n';
   }
+  // A prayer time as the clock shows it at the prayer location (the cloud module knows its time zone).
+  function pf(d) { var P = RS.cloud && RS.cloud.prayer; return P && typeof P.fmt === 'function' ? P.fmt(d) : RS.fmt.time(d); }
   var ODD = { 20: 21, 22: 23, 24: 25, 26: 27, 28: 29 };     // the evening of day 20 begins night 21, and so on
   function personalEvents(start, withTimes) {
     var ev = [], P = RS.cloud && RS.cloud.prayer, canTimes = withTimes && P && P.configured() && P.loaded();
     for (var n = 1; n <= 30; n++) {
       var d = addDays(start.date, n - 1), desc = [], pt = canTimes ? P.times(d) : null;
-      if (pt && pt.fajr && pt.maghrib) desc.push(t('cal.times', { fajr: RS.fmt.time(pt.fajr), maghrib: RS.fmt.time(pt.maghrib) }));
+      if (pt && pt.fajr && pt.maghrib) desc.push(t('cal.times', { fajr: pf(pt.fajr), maghrib: pf(pt.maghrib) }));
       if (n === 20) desc.push(t('cal.lastTen'));
       if (ODD[n]) desc.push(t('cal.oddNight', { n: nf(ODD[n]) }));
       ev.push({ uid: 'day' + n, day: d, title: t('cal.day', { n: nf(n) }), desc: desc.join('\n'), url: location.origin + '/' });
@@ -540,8 +542,8 @@
     var out = { v: 1, at: Date.now(), lang: RS.lang(), dir: RS.dir(), mode: s.m, day: s.d, pct: s.p, streak: s.s, pages: s.q,
       title: s.m === 'ramadan' ? t('disp.day', { n: nf(s.d) }) : t('core.mode.' + s.m), hijri: RS.fmt.hijri(new Date()),
       pctText: RS.fmt.pct(s.p), streakText: tn('buddy.sumStreak', s.s), hijriMonth: h.month, labels: { iftar: t('disp.iftar'), suhoor: t('disp.suhoor'), next: t('disp.next'), open: t('core.app') } };
-    if (pt) { out.fajr = +pt.fajr; out.maghrib = +pt.maghrib; out.fajrText = RS.fmt.time(pt.fajr); out.maghribText = RS.fmt.time(pt.maghrib); }
-    if (nx) { out.nextName = nx.name; out.nextAt = +nx.time; out.nextText = RS.fmt.time(nx.time); }
+    if (pt) { out.fajr = +pt.fajr; out.maghrib = +pt.maghrib; out.fajrText = pf(pt.fajr); out.maghribText = pf(pt.maghrib); }
+    if (nx) { out.nextName = nx.name; out.nextAt = +nx.time; out.nextText = pf(nx.time); }
     return out;
   }
   function pushWidget() {
@@ -561,7 +563,7 @@
     if (nx) h.push('<p class="so-disp-next">' + esc(t('disp.nextIn', { prayer: nx.name, time: RS.fmt.dur(Math.max(0, nx.inMs)) })) + '</p>');
     else h.push('<p class="so-disp-next">' + ui.btn(t('disp.setLocation'), { act: 'prayer.setup', variant: 'secondary', icon: 'map-pin' }) + '</p>');
     var tiles = [];
-    if (pt) { tiles.push({ label: t('disp.suhoor'), value: RS.fmt.time(pt.fajr) }); tiles.push({ label: t('disp.iftar'), value: RS.fmt.time(pt.maghrib) }); }
+    if (pt) { tiles.push({ label: t('disp.suhoor'), value: pf(pt.fajr) }); tiles.push({ label: t('disp.iftar'), value: pf(pt.maghrib) }); }
     if (s.m === 'ramadan') { tiles.push({ label: t('disp.day', { n: nf(s.d) }), value: RS.fmt.pct(s.p) }); }
     if (s.s > 0) tiles.push({ label: t('disp.streak'), value: nf(s.s) });
     if (tiles.length) h.push('<div class="so-disp-tiles">' + ui.metrics(tiles, { onDark: true }) + '</div>');

@@ -6,6 +6,7 @@ const ROUTES = [
   ['sync', () => require('./_routes/sync')],
   ['share', () => require('./_routes/share')],
   ['og', () => require('./_routes/og')],
+  ['geo', () => require('./_routes/geo')],
   ['whatsapp', () => require('./_routes/whatsapp')],
   ['auth/register', () => require('./_routes/auth/register')],
   ['auth/login', () => require('./_routes/auth/login')],

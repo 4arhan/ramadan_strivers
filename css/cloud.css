@@ -203,3 +203,31 @@ html[lang] .cl-codefield .input::placeholder { letter-spacing: normal !important
 /* AI explanation ------------------------------------------------------------------- */
 .cl-ai { color: var(--ink); font-size: 15.5px; line-height: 1.6; }
 .cl-ai p + p { margin-top: 10px; }
+
+/* Prayer setup: city search, the chosen place, coordinates and advanced settings ------------------------------ */
+.cl-city-sel {
+  display: flex; align-items: flex-start; gap: var(--s3);
+  padding: 12px 14px; border-radius: 16px; background: var(--accent-soft); color: var(--ink);
+}
+.cl-city-sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cl-city-sel > .ic { flex: none; margin-top: 2px; color: var(--accent-ink); }
+.cl-city-sel-t { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cl-city-sel-n { font-weight: 700; overflow-wrap: anywhere; }
+.cl-city-status { min-height: 1.4em; margin-top: 6px; }
+.cl-city-status:empty { min-height: 0; margin: 0; }
+#cl-city-res .list { margin-top: var(--s2); }
+.cl-suggest:empty { display: none; }
+.cl-suggest { margin-top: 6px; color: var(--accent-ink); font-weight: 600; }
+.cl-more { border-top: 1px solid var(--hairline); padding-top: var(--s3); }
+.cl-more > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
+  min-height: 44px; font-weight: 700; color: var(--ink); border-radius: 12px;
+}
+.cl-more > summary::-webkit-details-marker { display: none; }
+.cl-more > summary::after { content: ''; width: 8px; height: 8px; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-inline-end: 6px; transition: transform .2s; }
+.cl-more[open] > summary::after { transform: rotate(-135deg); }
+.cl-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cl-adj { border: 0; padding: 0; margin-inline: 0; min-inline-size: 0; }
+.cl-adj-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s2); }
+.cl-adj-grid .field { margin-top: 0; }
+@media (max-width: 360px) { .cl-adj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

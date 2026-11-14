@@ -9,7 +9,7 @@
    - /api/*, /s/* share pages, /poster/*: never cached.
    Shipping: bump VERSION, and ASSET_V together with the ?v= query strings in index.html (ICON_V with the icon URLs
    in index.html and manifest.webmanifest when the app icon changes). */
-const VERSION = 'rs-v8.0.0-6';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
+const VERSION = 'rs-v8.0.0-7';   // -3: drops caches whose '/' entry a visit to privacy.html had replaced
 const ASSET_V = '8.0.0';
 const ICON_V = '8';            // icons are cached as immutable: a new icon needs a new ?v= (index.html, manifest, push)
 const SHELL_FILES = [
@@ -18,7 +18,7 @@ const SHELL_FILES = [
   'js/tracker.js', 'js/learn.js', 'js/prep.js', 'js/cloud.js', 'js/social.js', 'js/main.js'
 ].map(p => '/' + p + '?v=' + ASSET_V);
 const STATIC_FILES = [
-  '/', '/manifest.webmanifest', '/vendor/adhan.umd.min.js', '/vendor/honorific.woff2',
+  '/', '/manifest.webmanifest', '/vendor/adhan.umd.min.js', '/data/cities.js', '/vendor/honorific.woff2',
   '/icons/icon.svg?v=' + ICON_V, '/icons/icon-192.png?v=' + ICON_V, '/icons/icon-512.png?v=' + ICON_V,
   '/icons/maskable-512.png?v=' + ICON_V, '/icons/apple-touch-icon.png?v=' + ICON_V, '/icons/badge-96.png?v=' + ICON_V,
   'https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap'

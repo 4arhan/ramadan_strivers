@@ -14,7 +14,7 @@
    Storage (v6/v7-compatible)  rs-auth (raw token) · rs-user · rs-sync-at · rs-push · rs-comp {role, code, token?, name?,
      grp?, cname?, donate?} · rs-comp-prev [participant entries this device switched away from, newest first, max 5:
      their personal tokens cannot be recovered otherwise] · sessionStorage rs-invite (+ rs-invite-code) ·
-     RS.settings.prayer {lat, lng, method, madhab?} (coordinates rounded to 2 decimals, about 1 km) ·
+     RS.settings.prayer {lat, lng, method, madhab?, city? {n, r, c, near?}, tz?, hlr?, adj? {fajr..isha}, fa?, ia?} (coordinates rounded to 2 decimals, about 1 km) ·
      RS.settings.quizLevel · rs-sync-meta {q: {day: {p, ts}}, s: {prayer|mode: {v, ts}}} (when this device last changed
      a day's Quran pages, the prayer location and the mode; see "cloud sync").
      The cloud snapshot keeps the v7 shape and adds extras.learn (rs-learn), extras.prep (rs-prep), extras.qPagesTs,
@@ -31,8 +31,23 @@
   var API = String(window.RS_API_BASE || '').replace(/\/+$/, '');
   var DEFAULT_DONATE = 'https://www.launchgood.com/';
   var TYPES = ['School', 'University', 'Mosque', 'Community', 'Company', 'Family', 'Other'];
-  var METHODS = ['MuslimWorldLeague', 'NorthAmerica', 'Egyptian', 'Karachi', 'UmmAlQura', 'Dubai', 'Kuwait', 'Qatar',
-    'Singapore', 'Turkey', 'Tehran', 'MoonsightingCommittee'];
+  // Prayer-time calculation methods, in the order the picker lists them. A preset is built by the adhan library; the
+  // others set the twilight angles published by each authority (Fajr angle, then Isha angle or minutes after Maghrib).
+  var METHODS = ['MuslimWorldLeague', 'UmmAlQura', 'Egyptian', 'Karachi', 'NorthAmerica', 'MoonsightingCommittee', 'Dubai', 'Gulf',
+    'Kuwait', 'Qatar', 'Jordan', 'Turkey', 'Tehran', 'Jafari', 'JAKIM', 'Kemenag', 'Singapore', 'France', 'Russia', 'Morocco',
+    'Algeria', 'Tunisia', 'Portugal', 'Custom'];
+  var METHOD_ANGLES = {        // [Fajr angle, Isha angle | null, Isha minutes after Maghrib | null, Maghrib angle | null]
+    Gulf: [19.5, null, 90], Jordan: [18, 18], Jafari: [16, 14, null, 4], JAKIM: [20, 18], Kemenag: [20, 18], France: [12, 12],
+    Russia: [16, 15], Morocco: [19, 17], Algeria: [18, 17], Tunisia: [18, 18], Portugal: [18, null, 77]
+  };
+  // The method most local mosques use in a country (a suggestion when a city is chosen; it can always be changed).
+  var METHOD_BY_CC = { SA: 'UmmAlQura', YE: 'UmmAlQura', AE: 'Dubai', KW: 'Kuwait', QA: 'Qatar', BH: 'Gulf', OM: 'Gulf', EG: 'Egyptian', SD: 'Egyptian',
+    LY: 'Egyptian', SY: 'Egyptian', LB: 'Egyptian', JO: 'Jordan', PS: 'Jordan', PK: 'Karachi', IN: 'Karachi', BD: 'Karachi', AF: 'Karachi',
+    US: 'NorthAmerica', CA: 'NorthAmerica', GB: 'MoonsightingCommittee', IE: 'MoonsightingCommittee', FR: 'France', TR: 'Turkey', IR: 'Tehran',
+    MY: 'JAKIM', ID: 'Kemenag', SG: 'Singapore', BN: 'Singapore', RU: 'Russia', MA: 'Morocco', DZ: 'Algeria', TN: 'Tunisia', PT: 'Portugal' };
+  var HANAFI_CC = { PK: 1, IN: 1, BD: 1, AF: 1 };
+  var HLR = ['auto', 'middle', 'seventh', 'twilight'];
+  var ADJ_KEYS = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
   var FIVE = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
   var PUSH_HOURS = [6, 7, 8, 12, 17, 18, 19, 20, 21, 22];
   // The dua when breaking the fast (Abu Dawud 2357, hasan per al-Albani). Arabic and transliteration stay untranslated.
@@ -1961,24 +1976,76 @@
     if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
     return Object.assign({}, p, { lat: round2(lat), lng: round2(lng) });
   }
+  function validTz(tz) {
+    if (typeof tz !== 'string' || !tz || tz.length > 60) return '';
+    try { new Intl.DateTimeFormat('en', { timeZone: tz }); return tz; } catch (e) { return ''; }
+  }
+  function deviceTz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } }
+  function angle(v, dflt) { v = Number(v); return isFinite(v) && v >= 10 && v <= 22 ? Math.round(v * 10) / 10 : dflt; }
+  // The saved prayer settings, checked: {lat, lng, method, madhab, city {n, r, c} | null, tz, hlr, adj {fajr..isha}, fa, ia}.
   function pcfg() {
     var p = roundPrayer(RS.settings.prayer);
     if (!p) return null;
-    return { lat: p.lat, lng: p.lng, method: METHODS.indexOf(p.method) >= 0 ? p.method : 'MuslimWorldLeague', madhab: p.madhab === 'hanafi' ? 'hanafi' : 'shafi' };
+    var adj = {}, a = isObj(p.adj) ? p.adj : {};
+    ADJ_KEYS.forEach(function (k) { var v = parseInt(a[k], 10); adj[k] = isFinite(v) ? RS.clamp(v, -30, 30) : 0; });
+    var city = isObj(p.city) && typeof p.city.n === 'string' && p.city.n ? { n: String(p.city.n).slice(0, 80), r: typeof p.city.r === 'string' ? p.city.r.slice(0, 80) : '',
+      c: /^[A-Z]{2}$/.test(p.city.c || '') ? p.city.c : '', near: !!p.city.near } : null;
+    return { lat: p.lat, lng: p.lng, method: METHODS.indexOf(p.method) >= 0 ? p.method : 'MuslimWorldLeague', madhab: p.madhab === 'hanafi' ? 'hanafi' : 'shafi',
+      city: city, tz: validTz(p.tz), hlr: HLR.indexOf(p.hlr) >= 0 ? p.hlr : 'auto', adj: adj, fa: angle(p.fa, 18), ia: angle(p.ia, 17) };
+  }
+  // Calculation parameters for a method (a copy: callers may change them).
+  function methodParams(A, method, fa, ia) {
+    if (A.CalculationMethod[method]) return A.CalculationMethod[method]();
+    var params = A.CalculationMethod.Other(), m = method === 'Custom' ? [fa, ia] : METHOD_ANGLES[method];
+    if (!m) return A.CalculationMethod.MuslimWorldLeague();
+    params.fajrAngle = m[0];
+    if (m[1] != null) params.ishaAngle = m[1]; else { params.ishaAngle = 0; params.ishaInterval = m[2]; }
+    if (m[3] != null) params.maghribAngle = m[3];
+    return params;
+  }
+  // "Fajr 18° · Isha 17°" for the method picker's hint.
+  function methodAngles(method, c) {
+    var A = adhanLib();
+    if (!A) return '';
+    try {
+      var p = methodParams(A, method, c ? c.fa : 18, c ? c.ia : 17), fa = RS.fmt.n(p.fajrAngle);
+      return p.ishaInterval > 0 ? t('prayer.anglesInterval', { fajr: fa, min: RS.fmt.n(p.ishaInterval) }) : t('prayer.angles', { fajr: fa, isha: RS.fmt.n(p.ishaAngle) });
+    } catch (e) { return ''; }
+  }
+  // The calendar date at the prayer location (its own time zone when it has one) as local noon, plus `plus` days.
+  function placeDay(d, c, plus) {
+    var y = d.getFullYear(), m = d.getMonth(), day = d.getDate();
+    if (c && c.tz) {
+      try {
+        var parts = new Intl.DateTimeFormat('en-US', { timeZone: c.tz, year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(d), o = {};
+        parts.forEach(function (x) { o[x.type] = parseInt(x.value, 10); });
+        if (o.year && o.month && o.day) { y = o.year; m = o.month - 1; day = o.day; }
+      } catch (e) { /* the device date */ }
+    }
+    return new Date(y, m, day + (plus || 0), 12);
   }
   function validDate(d) { return d instanceof Date && !isNaN(d.getTime()); }
-  function timesFor(date) {
+  // The prayer times of a day at the saved location (`plus` days after the location's date of `date`).
+  function timesFor(date, plus) {
     var A = adhanLib(), c = pcfg();
     if (!A || !c) return null;
     try {
-      var params = A.CalculationMethod[c.method]();
+      var params = methodParams(A, c.method, c.fa, c.ia), coords = new A.Coordinates(c.lat, c.lng);
       if (c.madhab === 'hanafi') params.madhab = A.Madhab.Hanafi;
-      var d = date instanceof Date ? date : new Date();
-      return new A.PrayerTimes(new A.Coordinates(c.lat, c.lng), new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12), params);
+      params.highLatitudeRule = c.hlr === 'middle' ? A.HighLatitudeRule.MiddleOfTheNight : c.hlr === 'seventh' ? A.HighLatitudeRule.SeventhOfTheNight :
+        c.hlr === 'twilight' ? A.HighLatitudeRule.TwilightAngle : A.HighLatitudeRule.recommended(coords);
+      // Where the sun does not rise or set on a day (near the poles), use the nearest latitude where it does.
+      params.polarCircleResolution = A.PolarCircleResolution.AqrabBalad;
+      var day = placeDay(date instanceof Date ? date : new Date(), c, plus), adj = Object.assign({}, c.adj);
+      // Umm al-Qura sets Isha 90 minutes after Maghrib, and 120 minutes in Ramadan.
+      if (c.method === 'UmmAlQura' && RS.hijri(day).month === 9) adj.isha += 30;
+      params.adjustments = adj;
+      return new A.PrayerTimes(coords, day, params);
     } catch (e) { return null; }
   }
-  function tomorrow(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 12); }
-  function fmtT(d) { return validDate(d) ? RS.fmt.time(d) : '–'; }
+  // A prayer time as the clock shows it at the prayer location: in its own time zone when that differs from the device.
+  function placeTz() { var c = pcfg(); return c && c.tz && c.tz !== deviceTz() ? c.tz : ''; }
+  function fmtT(d) { return validDate(d) ? RS.fmt.time(d, placeTz()) : '–'; }
   function pName(id) { return t('prayer.' + id); }
   // A fasting day comes from the calendar, never from the app mode (a competition keeps the mode on Ramadan all year):
   // a day of Ramadan that is not marked as a sisters' (hayd) day, or a Sunnah fast logged for that date. The two Eids
@@ -2001,7 +2068,7 @@
       var d = pt[order[i]];
       if (validDate(d) && d > now) return { id: order[i], time: d, tomorrow: false };
     }
-    var tm = timesFor(tomorrow(now));
+    var tm = timesFor(now, 1);
     return tm && validDate(tm.fajr) ? { id: 'fajr', time: tm.fajr, tomorrow: true } : null;
   }
   function currentId(now, pt) {
@@ -2038,10 +2105,34 @@
   }
   // "51.51, -0.13 · Moonsighting Committee": the coordinates are one left-to-right isolate (the minus sign stays
   // with its number in right-to-left languages) and the separator is drawn by RS.ui.meta.
+  // A country's name in the app language ("BD" → "Bangladesh"), or '' when unknown.
+  var regionNames = {};
+  function countryName(cc) {
+    if (!cc) return '';
+    var l = RS.lang();
+    try {
+      if (!regionNames[l]) regionNames[l] = new Intl.DisplayNames([l, 'en'], { type: 'region' });
+      var n = regionNames[l].of(cc);
+      return n && n !== cc ? n : '';
+    } catch (e) { return ''; }
+  }
+  // "Dhaka, Bangladesh" · "Near Leeds, United Kingdom" · "51.51, -0.13" (no city).
+  function placeLabel(c) {
+    if (!c) return '';
+    if (!c.city) return t('prayer.coords', { lat: c.lat.toFixed(2), lng: c.lng.toFixed(2) });
+    var name = c.city.near ? t('prayer.city.near', { city: c.city.n }) : c.city.n, cn = countryName(c.city.c);
+    return cn ? t('prayer.city.place', { city: name, country: cn }) : name;
+  }
+  // "Dhaka, Bangladesh · Karachi · Hanafi Asr": the place is an isolate (coordinates stay left-to-right), the separator is
+  // drawn by RS.ui.meta. A time zone other than the device's, and any adjustment, are named too.
   function whereHtml() {
     var c = pcfg();
     if (!c) return '';
-    return ui.meta([ltr(t('prayer.coords', { lat: c.lat.toFixed(2), lng: c.lng.toFixed(2) })), bdi(t('prayer.m.' + c.method))]);
+    var bits = [c.city ? bdi(placeLabel(c)) : ltr(placeLabel(c)), bdi(t('prayer.m.' + c.method))];
+    if (c.madhab === 'hanafi') bits.push(bdi(t('prayer.madhab.hanafiShort')));
+    if (ADJ_KEYS.some(function (k) { return c.adj[k]; })) bits.push(bdi(t('prayer.adjusted')));
+    if (placeTz()) bits.push(bdi(t('prayer.tzNote', { place: c.city ? c.city.n : c.tz })));
+    return ui.meta(bits);
   }
   function whereLine(cls) {
     return '<p class="cl-where caption' + (cls ? ' ' + cls : '') + '">' + RS.icon('map-pin', { size: 14 }) + '<span class="cl-where-t">' + whereHtml() + '</span></p>';
@@ -2123,12 +2214,19 @@
       (cd ? '<div class="mt-3" id="cl-prayer-cd">' + countdownHtml(cd) + '</div>' : '') +
       '<div class="cl-prayer mt-2">' + ui.list(rows, { label: t('prayer.title') }) + '</div>' +
       (fasting ? duaHtml() : '') +
-      '<div class="mt-4">' + ui.select({ id: 'cl-method', label: t('prayer.method'), value: c.method, act: 'prayer.method', hint: t('prayer.methodHint'), options: methodOptions() }) +
+      '<div class="mt-4">' + ui.select({ id: 'cl-method', label: t('prayer.method'), value: c.method, act: 'prayer.method', hint: methodHint(c.method, c), options: methodOptions() }) +
       ui.select({ id: 'cl-madhab', label: t('prayer.madhab'), value: c.madhab, act: 'prayer.madhab', hint: t('prayer.madhabHint'), options: madhabOptions() }) + '</div>' +
       whereLine('mt-4');
   }
   function countdownHtml(cd) { return ui.note('', { icon: 'clock', html: metaLine([cd.text, cd.eyebrow]) }); }
-  var PRAYER_ACTIONS = function () { return [{ text: t('prayer.changeLocation'), act: 'prayer.setup', icon: 'map-pin' }]; };
+  var PRAYER_ACTIONS = function () { return [{ text: t('prayer.settings'), act: 'prayer.setup', icon: 'map-pin' }]; };
+  // "Fajr 18° · Isha 17°. Choose the method your local mosque follows." (+ the Ramadan rule for Umm al-Qura)
+  function methodHint(method, c) {
+    var a = methodAngles(method, c), parts = [];
+    if (a) parts.push(a + (method === 'UmmAlQura' ? ' ' + t('prayer.ramadanIsha') : ''));
+    parts.push(t('prayer.methodHint'));
+    return parts.join(' ');
+  }
   // The times sheet. While the offline library loads it shows a spinner; if it cannot load, a Try again button. The
   // "Change location" action is always there, so the sheet is never a dead end.
   function openPrayer() {
@@ -2148,34 +2246,187 @@
     }
     RS.sheet.open({ title: t('prayer.title'), body: prayerSheetBody(), cls: 'cl-prayer-sheet', actions: PRAYER_ACTIONS() });
   }
+  /* The setup sheet: a city search (major cities offline, then every city and town worldwide), the device location or
+     coordinates; the method (suggested from the city's country), Asr time, and under "Advanced" the high-latitude rule,
+     custom angles and minute adjustments to match a local mosque. Nothing is saved until Save. */
+  var setup = null;      // {pick: {lat, lng, tz, city} | null, methodTouched, madhabTouched, q, seq, online: [], timer}
+  function setupPickFrom(c) { return c ? { lat: c.lat, lng: c.lng, tz: c.tz || deviceTz(), city: c.city } : null; }
+  function selectedHtml() {
+    var pk = setup && setup.pick;
+    if (!pk) return '';
+    var c = { lat: pk.lat, lng: pk.lng, city: pk.city };
+    return '<div class="cl-city-sel" role="status">' + RS.icon('map-pin', { size: 18 }) + '<span class="cl-city-sel-t"><span class="caption">' + esc(t('prayer.city.selected')) +
+      '</span><span class="cl-city-sel-n">' + (pk.city ? bdi(placeLabel(c)) : ltr(placeLabel(c))) + '</span>' +
+      (pk.city && pk.city.r ? '<span class="caption">' + bdi(pk.city.r) + '</span>' : '') + '</span></div>';
+  }
+  function suggestHint() {
+    var pk = setup && setup.pick, cc = pk && pk.city && pk.city.c, m = cc && METHOD_BY_CC[cc];
+    return m ? t('prayer.recommended', { country: countryName(cc) || cc, method: t('prayer.m.' + m) }) : '';
+  }
   function openPrayerSetup() {
     var c = pcfg();
     var p = isObj(RS.settings.prayer) ? RS.settings.prayer : {};
     var method = c ? c.method : (METHODS.indexOf(p.method) >= 0 ? p.method : 'MuslimWorldLeague');
-    // One primary action: Save (the footer button submits the form, so Enter in a field saves too).
+    setup = { pick: setupPickFrom(c), methodTouched: !!c, madhabTouched: !!c, q: '', seq: 0, online: [], timer: null };
+    loadCities();
+    loadAdhan().then(function () { var h = document.getElementById('cl-setup-method-hint'); if (h) h.textContent = methodHint(curSetupMethod(), setupCustom()); }, noop);
+    var adj = c ? c.adj : {};
     var body = '<p>' + esc(t('prayer.setup.body')) + '</p>' +
-      ui.btn(t('prayer.setup.locate'), { variant: 'secondary', block: true, icon: 'map-pin', act: 'prayer.locate', cls: 'mt-4', id: 'cl-locate' }) +
-      '<p class="cl-or"><span>' + esc(t('prayer.setup.manual')) + '</span></p>' +
-      '<form id="cl-prayer-form" data-act-submit="prayer.save" novalidate><div class="cl-latlng">' +
-      ui.field({ id: 'cl-lat', label: t('prayer.setup.lat'), value: c ? String(c.lat) : '', placeholder: t('prayer.setup.latPh'), maxlength: 12, autocomplete: 'off', attrs: { dir: 'ltr', spellcheck: 'false' } }) +
-      ui.field({ id: 'cl-lng', label: t('prayer.setup.lng'), value: c ? String(c.lng) : '', placeholder: t('prayer.setup.lngPh'), maxlength: 12, autocomplete: 'off', attrs: { dir: 'ltr', spellcheck: 'false' } }) +
-      '</div><div class="mt-3">' + ui.select({ id: 'cl-setup-method', label: t('prayer.method'), value: method, hint: t('prayer.methodHint'), options: methodOptions() }) +
-      ui.select({ id: 'cl-setup-madhab', label: t('prayer.madhab'), value: c ? c.madhab : 'shafi', hint: t('prayer.madhabHint'), options: madhabOptions() }) + '</div>' +
+      '<div id="cl-city-sel" class="mt-3">' + selectedHtml() + '</div>' +
+      '<div class="cl-city mt-3">' + ui.field({ id: 'cl-city-q', type: 'search', label: t('prayer.city.label'), placeholder: t('prayer.city.ph'), hint: t('prayer.city.hint'), maxlength: 80,
+        autocomplete: 'off', actInput: 'prayer.cityInput', attrs: { spellcheck: 'false', enterkeyhint: 'search', 'aria-controls': 'cl-city-res' } }) +
+      '<p class="caption cl-city-status" id="cl-city-status" role="status" aria-live="polite"></p><div id="cl-city-res"></div></div>' +
+      ui.btn(t('prayer.setup.locate'), { variant: 'secondary', block: true, icon: 'locate-fixed', act: 'prayer.locate', cls: 'mt-3', id: 'cl-locate' }) +
+      '<form id="cl-prayer-form" data-act-submit="prayer.save" novalidate>' +
+      '<details class="cl-more mt-3"' + (c && !c.city ? ' open' : '') + '><summary>' + esc(t('prayer.setup.coordsToggle')) + '</summary><div class="cl-latlng mt-2">' +
+      ui.field({ id: 'cl-lat', label: t('prayer.setup.lat'), value: c && !c.city ? String(c.lat) : '', placeholder: t('prayer.setup.latPh'), maxlength: 12, autocomplete: 'off', attrs: { dir: 'ltr', spellcheck: 'false' } }) +
+      ui.field({ id: 'cl-lng', label: t('prayer.setup.lng'), value: c && !c.city ? String(c.lng) : '', placeholder: t('prayer.setup.lngPh'), maxlength: 12, autocomplete: 'off', attrs: { dir: 'ltr', spellcheck: 'false' } }) +
+      '</div></details>' +
+      '<div class="mt-4">' + ui.select({ id: 'cl-setup-method', label: t('prayer.method'), value: method, act: 'prayer.setupMethod', hint: methodHint(method, c), options: methodOptions() }) +
+      '<p class="caption cl-suggest" id="cl-suggest">' + esc(suggestHint()) + '</p>' +
+      '<div class="cl-latlng mt-2" id="cl-custom"' + (method === 'Custom' ? '' : ' hidden') + '>' +
+      ui.field({ id: 'cl-fa', label: t('prayer.custom.fajr'), value: String(c ? c.fa : 18), inputmode: 'decimal', maxlength: 5, attrs: { dir: 'ltr' } }) +
+      ui.field({ id: 'cl-ia', label: t('prayer.custom.isha'), value: String(c ? c.ia : 17), inputmode: 'decimal', maxlength: 5, attrs: { dir: 'ltr' } }) + '</div>' +
+      ui.select({ id: 'cl-setup-madhab', label: t('prayer.madhab'), value: c ? c.madhab : 'shafi', act: 'prayer.setupMadhab', hint: t('prayer.madhabHint'), options: madhabOptions() }) + '</div>' +
+      '<details class="cl-more mt-4"' + (c && (c.hlr !== 'auto' || ADJ_KEYS.some(function (k) { return adj[k]; })) ? ' open' : '') + '><summary>' + esc(t('prayer.advanced')) + '</summary><div class="mt-2">' +
+      ui.select({ id: 'cl-hlr', label: t('prayer.hlr'), value: c ? c.hlr : 'auto', hint: t('prayer.hlr.hint'), options: HLR.map(function (h) { return { value: h, text: t('prayer.hlr.' + h) }; }) }) +
+      '<fieldset class="cl-adj mt-3"><legend class="field-lbl">' + esc(t('prayer.adj.title')) + '</legend><p class="field-hint">' + esc(t('prayer.adj.hint')) + '</p><div class="cl-adj-grid">' +
+      ADJ_KEYS.map(function (k) {
+        return ui.field({ id: 'cl-adj-' + k, label: pName(k), value: adj[k] ? String(adj[k]) : '', placeholder: '0', inputmode: 'numeric', maxlength: 3, attrs: { dir: 'ltr' } });
+      }).join('') + '</div></fieldset></div></details>' +
       errBox('cl-prayer-err') + '</form>' +
       (c ? '<div class="t-center mt-3"><button type="button" class="link-btn cl-danger-link" data-act="prayer.remove">' + esc(t('prayer.setup.remove')) + '</button></div>' : '');
     RS.sheet.open({ title: t('prayer.setup.title'), body: body, cls: 'cl-setup-sheet',
       actions: [{ text: t('core.cancel'), act: 'sheet.close' }, { text: t('prayer.setup.save'), variant: 'primary', type: 'submit', attrs: { form: 'cl-prayer-form' } }] });
   }
-  function savePrayer(lat, lng, method, madhab) {
-    var p = { lat: round2(lat), lng: round2(lng), method: METHODS.indexOf(method) >= 0 ? method : 'MuslimWorldLeague' };
-    if (madhab === 'hanafi') p.madhab = 'hanafi';
+  function curSetupMethod() { var m = document.getElementById('cl-setup-method'); return m && METHODS.indexOf(m.value) >= 0 ? m.value : 'MuslimWorldLeague'; }
+  function setupCustom() {
+    var fa = document.getElementById('cl-fa'), ia = document.getElementById('cl-ia');
+    return { fa: angle(fa && parseCoord(fa.value), 18), ia: angle(ia && parseCoord(ia.value), 17) };
+  }
+  // After a place is picked: show it, and suggest the country's usual method and Asr time unless the person chose them.
+  function setPick(pk) {
+    if (!setup) return;
+    setup.pick = pk;
+    var sel = document.getElementById('cl-city-sel');
+    if (sel) sel.innerHTML = selectedHtml();
+    var cc = pk && pk.city && pk.city.c, m = document.getElementById('cl-setup-method'), h = document.getElementById('cl-setup-madhab');
+    if (m && !setup.methodTouched) { m.value = (cc && METHOD_BY_CC[cc]) || 'MuslimWorldLeague'; onSetupMethod(m.value); }
+    if (h && !setup.madhabTouched) h.value = cc && HANAFI_CC[cc] ? 'hanafi' : 'shafi';
+    var sg = document.getElementById('cl-suggest');
+    if (sg) sg.textContent = suggestHint();
+  }
+  function onSetupMethod(v) {
+    var box = document.getElementById('cl-custom');
+    if (box) box.hidden = v !== 'Custom';
+    var hint = document.getElementById('cl-setup-method-hint');
+    if (hint) hint.textContent = methodHint(v, setupCustom());
+  }
+  function savePrayer(o) {
+    var p = { lat: round2(o.lat), lng: round2(o.lng), method: METHODS.indexOf(o.method) >= 0 ? o.method : 'MuslimWorldLeague' };
+    if (o.madhab === 'hanafi') p.madhab = 'hanafi';
+    if (o.city) p.city = o.city;
+    if (validTz(o.tz)) p.tz = o.tz;
+    if (HLR.indexOf(o.hlr) > 0) p.hlr = o.hlr;
+    if (o.adj && ADJ_KEYS.some(function (k) { return o.adj[k]; })) p.adj = o.adj;
+    if (p.method === 'Custom') { p.fa = o.fa; p.ia = o.ia; }
     RS.settings.prayer = p;
     RS.saveSettings();
     RS.emit('data', { source: 'cloud' });
     RS.sheet.close();
+    setup = null;
     RS.toast(t('prayer.setup.saved'), { tone: 'success' });
     loadAdhan().then(function () { softRefresh(); }, onAdhanFail);
     softRefresh();
+  }
+
+  /* City search. Major cities (data/cities.js, precached) answer at once and offline; /api/geo then adds every city and
+     town worldwide (GeoNames via Open-Meteo; straight to Open-Meteo when this host has no API). */
+  var citiesP = null;
+  function loadCities() {
+    if (RS.CITIES) return Promise.resolve(RS.CITIES);
+    if (!citiesP) citiesP = RS.lazy('data/cities.js').then(function () { return RS.CITIES || []; }, function (e) { citiesP = null; throw e; });
+    return citiesP;
+  }
+  function fold(v) {
+    v = String(v || '').toLowerCase();
+    try { v = v.normalize('NFD').replace(/[̀-ͯ]/g, ''); } catch (e) { /* old engines: as typed */ }
+    return v.replace(/[‘’'`ʼ.]/g, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function localMatches(q) {
+    var list = RS.CITIES || [], fq = fold(q), parts = fq.split(/\s*,\s*/), name = parts[0], ctry = parts[1] || '';
+    if (name.length < 2) return [];
+    var out = [];
+    list.forEach(function (r) {
+      var n = fold(r[0]), cn = fold(countryName(r[2])), score = 0;
+      if (n === name) score = 4; else if (n.indexOf(name) === 0) score = 3; else if ((' ' + n).indexOf(' ' + name) >= 0) score = 2;
+      else if (name.length >= 4 && cn.indexOf(name) === 0) score = 1;          // "pakistan" lists Pakistan's cities
+      if (!score || (ctry && cn.indexOf(ctry) !== 0 && fold(r[1]).indexOf(ctry) !== 0)) return;
+      out.push({ score: score, pop: r[6], name: r[0], region: r[1], cc: r[2], lat: r[3], lng: r[4], tz: r[5] });
+    });
+    out.sort(function (a, b) { return b.score - a.score || b.pop - a.pop; });
+    return out.slice(0, 8);
+  }
+  function geoFetch(q) {
+    var qs = '?q=' + encodeURIComponent(q) + '&lang=' + encodeURIComponent(RS.lang());
+    var direct = function () {
+      return fetch('https://geocoding-api.open-meteo.com/v1/search?count=15&format=json&language=' + encodeURIComponent(RS.lang()) + '&name=' + encodeURIComponent(q))
+        .then(function (r) { if (!r.ok) throw new Error('geo'); return r.json(); })
+        .then(function (j) {
+          return (j && Array.isArray(j.results) ? j.results : []).filter(function (x) { return x && x.timezone && /^(PPL|ADM)/.test(x.feature_code || 'PPL'); }).slice(0, 10)
+            .map(function (x) { return { name: x.name, region: x.admin1 || '', country: x.country || '', cc: String(x.country_code || '').toUpperCase(), lat: x.latitude, lng: x.longitude, tz: x.timezone }; });
+        });
+    };
+    return api('/api/geo' + qs, { auth: false }).then(function (j) { return j && Array.isArray(j.results) ? j.results : []; }, function (e) {
+      if (e && e.status === 502) throw e;            // the geocoder itself is down: no point asking it directly
+      return direct();
+    });
+  }
+  function resultRows(list) {
+    return ui.list(list.map(function (r, i) {
+      var cn = countryName(r.cc) || r.country || '', sub = [r.region, cn].filter(function (x) { return x && x !== r.name; }).join(', ');
+      return ui.row({ titleHtml: bdi(r.name), subHtml: sub ? bdi(sub) : '', act: 'prayer.pick', arg: String(i), icon: 'map-pin', cls: 'cl-city-row' });
+    }), { label: t('prayer.city.label'), id: 'cl-city-list' });
+  }
+  function showResults(list, status) {
+    if (!setup) return;
+    setup.results = list;
+    var res = document.getElementById('cl-city-res'), st = document.getElementById('cl-city-status');
+    if (res) res.innerHTML = list.length ? resultRows(list) : '';
+    if (st) st.textContent = status || '';
+  }
+  function same(a, b) { return a.cc === b.cc && Math.abs(a.lat - b.lat) < 0.15 && Math.abs(a.lng - b.lng) < 0.15; }
+  function citySearch(q) {
+    if (!setup) return;
+    q = String(q || '').trim().slice(0, 80);
+    setup.q = q;
+    clearTimeout(setup.timer);
+    var seq = ++setup.seq;
+    if (q.length < 2) { showResults([], ''); return; }
+    loadCities().then(function () {
+      if (!setup || seq !== setup.seq) return;
+      var local = localMatches(q);
+      showResults(local, navigator.onLine === false ? t('prayer.city.offline') : t('prayer.city.searching'));
+      if (navigator.onLine === false) { if (!local.length) showResults([], t('prayer.city.none')); return; }
+      setup.timer = setTimeout(function () {
+        geoFetch(q).then(function (online) {
+          if (!setup || seq !== setup.seq) return;
+          var all = local.slice();
+          online.forEach(function (r) { if (isFinite(r.lat) && isFinite(r.lng) && !all.some(function (x) { return same(x, r); })) all.push(r); });
+          all = all.slice(0, 10);
+          showResults(all, all.length ? tn('prayer.city.count', all.length) : t('prayer.city.none'));
+        }, function () {
+          if (!setup || seq !== setup.seq) return;
+          showResults(local, local.length ? t('prayer.city.offline') : t('prayer.city.none'));
+        });
+      }, 350);
+    }, function () { showResults([], t('prayer.city.none')); });
+  }
+  // The nearest listed city to a point, if within about 60 km ("Near Leeds").
+  function nearestCity(lat, lng) {
+    var best = null, bd = Infinity, k = Math.cos(lat * Math.PI / 180);
+    (RS.CITIES || []).forEach(function (r) { var dx = (r[4] - lng) * k, dy = r[3] - lat, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = r; } });
+    return best && Math.sqrt(bd) * 111 < 60 ? best : null;
   }
   function parseCoord(v) {
     var s = String(v == null ? '' : v).trim().replace(/−/g, '-');
@@ -2561,8 +2812,14 @@
     btnBusy(el, true);
     RS.toast(t('prayer.setup.locating'));
     navigator.geolocation.getCurrentPosition(function (pos) {
-      var m = document.getElementById('cl-setup-method'), h = document.getElementById('cl-setup-madhab');
-      savePrayer(pos.coords.latitude, pos.coords.longitude, m ? m.value : 'MuslimWorldLeague', h ? h.value : 'shafi');
+      btnBusy(el, false);
+      var lat = round2(pos.coords.latitude), lng = round2(pos.coords.longitude);
+      loadCities().then(noop, noop).then(function () {
+        var near = nearestCity(lat, lng);
+        setPick({ lat: lat, lng: lng, tz: deviceTz(), city: near ? { n: near[0], r: near[1], c: near[2], near: true } : { n: t('prayer.city.myLocation'), r: '', c: '' } });
+        var sel = document.getElementById('cl-city-sel');
+        if (sel) focusEl(sel);
+      });
     }, function () {
       btnBusy(el, false);
       RS.toast(t('prayer.setup.noGeo'), { tone: 'error' });
@@ -2572,11 +2829,48 @@
   function submitPrayerForm() {
     var form = document.getElementById('cl-prayer-form');
     if (!form) return;
-    var lat = parseCoord((form.querySelector('#cl-lat') || {}).value), lng = parseCoord((form.querySelector('#cl-lng') || {}).value);
-    if (!isFinite(lat) || Math.abs(lat) > 90) { formErr(form, t('prayer.setup.invalid'), '#cl-lat'); return; }
-    if (!isFinite(lng) || Math.abs(lng) > 180) { formErr(form, t('prayer.setup.invalid'), '#cl-lng'); return; }
-    savePrayer(lat, lng, (form.querySelector('#cl-setup-method') || {}).value, (form.querySelector('#cl-setup-madhab') || {}).value);
+    var val = function (sel) { return (form.querySelector(sel) || {}).value || ''; };
+    var rawLat = val('#cl-lat').trim(), rawLng = val('#cl-lng').trim(), where = setup && setup.pick;
+    // Coordinates typed in the form win over a picked city; then the picked city; else nothing is chosen yet.
+    if (rawLat || rawLng) {
+      var lat = parseCoord(rawLat), lng = parseCoord(rawLng);
+      var box = form.querySelector('details'); if (box) box.open = true;
+      if (!isFinite(lat) || Math.abs(lat) > 90) { formErr(form, t('prayer.setup.invalid'), '#cl-lat'); return; }
+      if (!isFinite(lng) || Math.abs(lng) > 180) { formErr(form, t('prayer.setup.invalid'), '#cl-lng'); return; }
+      where = { lat: lat, lng: lng, tz: deviceTz(), city: null };
+    }
+    if (!where) { formErr(form, t('prayer.city.choose'), '#cl-city-q'); var q = document.getElementById('cl-city-q'); if (q) q.focus(); return; }
+    var method = val('#cl-setup-method'), cust = setupCustom(), adj = {}, bad = null;
+    if (method === 'Custom') {
+      var fa = parseCoord(val('#cl-fa')), ia = parseCoord(val('#cl-ia'));
+      if (!(fa >= 10 && fa <= 22)) bad = '#cl-fa'; else if (!(ia >= 10 && ia <= 22)) bad = '#cl-ia';
+      if (bad) { formErr(form, t('prayer.custom.invalid'), bad); return; }
+    }
+    ADJ_KEYS.forEach(function (k) {
+      var raw = val('#cl-adj-' + k).trim().replace(/[−–]/g, '-').replace(/^\+/, '');
+      if (!raw) { adj[k] = 0; return; }
+      var v = /^-?\d{1,2}$/.test(raw) ? parseInt(raw, 10) : NaN;
+      if (!(v >= -30 && v <= 30) && !bad) bad = '#cl-adj-' + k;
+      adj[k] = v || 0;
+    });
+    if (bad) { var adv = form.querySelectorAll('details'); if (adv.length) adv[adv.length - 1].open = true; formErr(form, t('prayer.adj.invalid'), bad); return; }
+    savePrayer({ lat: where.lat, lng: where.lng, tz: where.tz, city: where.city, method: method, madhab: val('#cl-setup-madhab'), hlr: val('#cl-hlr'), adj: adj, fa: cust.fa, ia: cust.ia });
   }
+  RS.act('prayer.cityInput', function (v) { citySearch(v); });
+  RS.act('prayer.pick', function (i) {
+    var r = setup && setup.results && setup.results[parseInt(i, 10)];
+    if (!r) return;
+    var la = document.getElementById('cl-lat'), lo = document.getElementById('cl-lng');
+    if (la) la.value = ''; if (lo) lo.value = '';
+    setPick({ lat: round2(r.lat), lng: round2(r.lng), tz: validTz(r.tz) || deviceTz(), city: { n: String(r.name).slice(0, 80), r: String(r.region || '').slice(0, 80), c: /^[A-Z]{2}$/.test(r.cc || '') ? r.cc : '' } });
+    showResults([], '');
+    var q = document.getElementById('cl-city-q');
+    if (q) q.value = '';
+    var sel = document.getElementById('cl-city-sel');
+    if (sel) focusEl(sel);
+  });
+  RS.act('prayer.setupMethod', function (v) { if (setup) setup.methodTouched = true; onSetupMethod(v); });
+  RS.act('prayer.setupMadhab', function () { if (setup) setup.madhabTouched = true; });
   RS.act('prayer.submit', submitPrayerForm);
   RS.act('prayer.save', submitPrayerForm);
   RS.act('prayer.remove', function () {
@@ -2590,7 +2884,10 @@
   function setPrayerOpt(key, val) {
     var p = isObj(RS.settings.prayer) ? Object.assign({}, RS.settings.prayer) : null;
     if (!p) return;
-    if (key === 'method') p.method = METHODS.indexOf(val) >= 0 ? val : 'MuslimWorldLeague';
+    if (key === 'method') {
+      p.method = METHODS.indexOf(val) >= 0 ? val : 'MuslimWorldLeague';
+      if (p.method === 'Custom' && !(p.fa && p.ia)) { p.fa = 18; p.ia = 17; }
+    }
     else if (val === 'hanafi') p.madhab = 'hanafi';
     else delete p.madhab;
     RS.settings.prayer = p;
@@ -3061,6 +3358,8 @@
       cardHtml: cardHtml,
       next: next,
       times: times,
+      fmt: fmtT,
+      place: function () { return placeLabel(pcfg()); },
       open: openPrayer,
       setup: openPrayerSetup
     },

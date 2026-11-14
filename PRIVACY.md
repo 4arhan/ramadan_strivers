@@ -14,7 +14,7 @@
 
 **Push notifications:** stored as a browser subscription endpoint plus your chosen hour and, if you enabled prayer times, your approximate coordinates (for iftar reminders). Turn off in Settings to delete the subscription.
 
-**Prayer times:** your location is stored only on your device unless you enable push reminders.
+**Prayer times:** your location (a chosen city, or coordinates rounded to about 1 km) is stored on your device, and leaves it only with push reminders or, when signed in, your synced settings. Times are calculated on the device. A city search sends only the typed text and app language to our server, which asks the Open-Meteo geocoding service (GeoNames data); major cities are searched offline, and "Use my location" is matched to the nearest city on the device.
 
 **AI features (when the server enables them):** the deed label, its cited source, your language and reading level are sent to the AI provider to generate an explanation; your name and tracker data are not. Explanations are cached and are never religious rulings.
 
