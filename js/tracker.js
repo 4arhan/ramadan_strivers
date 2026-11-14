@@ -513,6 +513,7 @@
     h.push(ui.hero({
       id: 'tr-hero', kicker: kick, number: nf(st.pct), unit: '%',
       label: liveDay() === day ? t('today.hero.labelLive') : t('today.hero.label', { n: nf(day) }),
+      text: liveDay() === day && st.pct < 50 ? (st.done ? tn('today.hero.kind', st.done) : t('today.hero.start')) : '',
       ring: { pct: st.pct, id: 'tr-ring', label: t('today.hero.ring', { done: nf(st.done), tot: nf(st.tot) }) },
       metrics: [
         { label: t('today.metric.deeds'), value: nf(st.done) + '/' + nf(st.tot) },
@@ -523,10 +524,12 @@
       cta: heroCta()
     }));
     h.push(installCard());
+    if (RS.tools && liveDay() === day && (day <= 2 || day >= 28)) h.push(RS.tools.dateNoteHtml({ eid: day >= 28 }));
     h.push(prayerCard());
     h.push(lqCard(day));
     h.push(hadithCard(day));
     if (RS.settings.showPrep) h.push(planCard());
+    h.push(fastStateCard(ctx));
     h.push(checklist(ctx, rec));
     h.push(journalCard(ctx));
     return h.join('');
@@ -700,6 +703,59 @@
   }
   function qada() { var q = extras().qada; q = isObj(q) ? q : {}; return { owed: Math.max(0, Math.round(num(q.owed))), done: Math.max(0, Math.round(num(q.done))) }; }
 
+  /* ---------------------------------------------------------------- the fast of each Ramadan day */
+  // extras.rfast {ts, s: season, d: {day: code}}: no entry = fasted; 'ill' | 'travel' | 'period' | 'other' = not
+  // fasting (a fast to make up: qada.owed goes up by one, and down again if it is changed back); 'half' = a practice
+  // fast of part of the day (children learning to fast; not owed). Turning sisters' mode on marks the day 'period'.
+  var MISSED = ['ill', 'travel', 'period', 'other'];
+  function rfast() { var r = extras().rfast; return isObj(r) && String(r.s) === season() && isObj(r.d) ? r.d : {}; }
+  function fastCode(day) { var c = rfast()[day]; return MISSED.indexOf(c) >= 0 || c === 'half' ? c : ''; }
+  function setFastCode(day, code, silent) {
+    var before = fastCode(day), d = Object.assign({}, rfast());
+    code = MISSED.indexOf(code) >= 0 || code === 'half' ? code : '';
+    if (code === before) return;
+    if (code) d[day] = code; else delete d[day];
+    var was = MISSED.indexOf(before) >= 0, now = MISSED.indexOf(code) >= 0;
+    if (was !== now) { var q = qada(); q.owed = Math.max(0, q.owed + (now ? 1 : -1)); q.ts = Date.now(); setExtra('qada', null, q, true); }
+    setExtra('rfast', null, { ts: Date.now(), s: season(), d: d }, true);
+    if (!silent) emit();
+  }
+  function fastStateCard(ctx) {
+    var code = fastCode(ctx.day), state = MISSED.indexOf(code) >= 0 ? 'no' : (code === 'half' ? 'half' : 'yes'), q = qada(), left = Math.max(0, q.owed - q.done);
+    var body = ui.seg([{ value: 'yes', text: t('fast.state.yes') }, { value: 'half', text: t('fast.state.half') }, { value: 'no', text: t('fast.state.no') }], state,
+      { act: 'tr.fstate', label: t('fast.kicker', { n: nf(ctx.day) }), cls: 'tr-fseg' });
+    if (state === 'no') {
+      body += '<p class="tr-fq mt-3">' + esc(t('fast.reason')) + '</p><div class="chips mt-2">' + MISSED.map(function (r) {
+        return ui.chip(t('fast.r.' + r), { act: 'tr.freason', arg: r, active: code === r });
+      }).join('') + '</div><p class="caption mt-3">' + esc(tn('fast.owedNote', left)) + '</p>';
+    } else if (state === 'half') body += '<p class="caption mt-3">' + esc(t('fast.halfNote')) + '</p>';
+    return ui.card({ kicker: { icon: 'moon', text: t('fast.kicker', { n: nf(ctx.day) }) }, cls: 'tr-fast-state is-tight', id: 'tr-fstate', body: body });
+  }
+  // Year-round: the fasts still to make up, a plan and the day's make-up fast.
+  function qadaCard() {
+    var q = qada(), left = Math.max(0, q.owed - q.done);
+    if (!q.owed && !q.done) return '';
+    var iso = RS.todayISO(), f = extras().fasts, cur = isObj(f) && isObj(f[iso]) ? f[iso] : null, made = !!(cur && cur.v && cur.q);
+    function row(k, label) {
+      return '<div class="tr-qada-row"><span class="tr-qada-l" id="tr-qd-' + k + '">' + esc(label) + '</span>' +
+        ui.iconBtn('minus', { act: 'tr.qada', arg: k + ':-1', label: t('modes.plan.less', { what: label }) }) +
+        '<output class="tr-qada-n" aria-labelledby="tr-qd-' + k + '">' + esc(nf(q[k])) + '</output>' +
+        ui.iconBtn('plus', { act: 'tr.qada', arg: k + ':1', label: t('modes.plan.more', { what: label }) }) + '</div>';
+    }
+    var plan = '';
+    if (left > 0) {
+      var weeks = Math.ceil(left / 2), end = noonPlus(weeks * 7), dl = daysToRamadan();
+      plan = '<p class="mt-3">' + esc(t('fast.plan', { date: RS.fmt.date(end, { day: 'numeric', month: 'long', year: 'numeric' }) })) + '</p>' +
+        (dl != null && dl > 0 ? '<p class="caption mt-1">' + esc(tn('fast.planRamadan', dl)) + '</p>' : '');
+    }
+    var fi = fastInfo(new Date());
+    var toggle = left > 0 || made ? '<ul class="list mt-3"><li class="li">' + ui.row({ icon: 'calendar-check', title: t('fast.madeUpToday'), sub: t('fast.madeUpSub'),
+      toggle: { on: made, act: 'tr.qadaToday' }, disabled: fi.blocked && !made, id: 'tr-qada-today' }) + '</li></ul>' : '';
+    return ui.card({ kicker: { icon: 'calendar-check', text: t('fast.qadaKicker') }, cls: 'tr-qada-card', id: 'tr-qada-card',
+      body: '<p class="tr-qada-big">' + esc(left > 0 ? tn('modes.plan.left', left) : t('modes.plan.caughtUp')) + '</p>' + plan +
+        '<div class="tr-qada mt-3">' + row('owed', t('modes.plan.owed')) + row('done', t('modes.plan.madeUp')) + '</div>' + toggle });
+  }
+
   /* ---------------------------------------------------------------- prep mode */
   function prepToday() {
     var h = [];
@@ -713,6 +769,7 @@
       });
     }
     h.push(hero);
+    if (RS.tools) h.push(RS.tools.dateNoteHtml());
     h.push(installCard());
     h.push(prayerCard());
     var cards = RS.prep && typeof RS.prep.todayCardsHtml === 'function' ? cloudTry(function () { return RS.prep.todayCardsHtml(); }, '') : '';
@@ -775,12 +832,13 @@
         { label: t('modes.year.mDeeds'), value: nf(st.done) + '/' + nf(st.tot) }],
       cta: heroCta()
     }));
+    out.push(RS.tools ? RS.tools.countdownHtml() : prepRow());
     out.push(installCard());
     out.push(prayerCard());
     out.push(fastCard(fi, h, ctx.date));
+    out.push(qadaCard());
     if (h.month === 10) out.push(shawwalCard(h));
     if (h.month === 12 && h.day <= 13) out.push(dhCard(h));
-    out.push(prepRow());
     if (RS.settings.showPrep) {
       var cards = RS.prep && typeof RS.prep.todayCardsHtml === 'function' ? cloudTry(function () { return RS.prep.todayCardsHtml(); }, '') : '';
       if (cards) out.push(cards);
@@ -1003,7 +1061,7 @@
     var m = meData(), b = T.best(), cur = T.streaks(), bm = badgeMap(), bc = badgeCount(bm), day = curDay();
     var bestAll = Math.max(b.fajr, b.night, b.quran, b.charity);
     RS.topbar({ title: t('nav.me'), sub: t('me.sub', { year: season() }),
-      actions: RS.cloud ? [{ icon: 'share-2', act: 'share.progress', label: t('me.share') }] : [] });
+      actions: RS.cloud ? [{ icon: 'share-2', act: RS.tools ? 'tl.share' : 'share.progress', label: t('me.share') }] : [] });
     var h = [];
     h.push(ui.hero({
       kicker: { icon: 'chart-line', text: t('me.kicker') }, number: nf(m.avg), unit: '%',
@@ -1055,7 +1113,7 @@
       ui.row({ icon: 'circle-help', title: t('me.guide'), sub: t('me.guideSub'), act: 'nav.go', arg: 'me/guide', chevron: true })
     ];
     if (RS.router.has('prep')) more.push(ui.row({ icon: 'sprout', title: t('me.prep'), sub: t('me.prepSub'), act: 'nav.go', arg: 'prep', chevron: true }));
-    if (RS.cloud) more.push(ui.row({ icon: 'share-2', title: t('me.share'), sub: t('me.shareSub'), act: 'share.progress', chevron: true }));
+    if (RS.cloud) more.push(ui.row({ icon: 'share-2', title: t('me.share'), sub: t('me.shareSub'), act: RS.tools ? 'tl.share' : 'share.progress', chevron: true }));
     h.push(ui.card({ cls: 'is-tight', body: ui.list(more) }));
     // data
     h.push(ui.card({ kicker: { icon: 'file-text', text: t('me.data.title') }, cls: 'tr-data', body: ui.list([
@@ -1806,7 +1864,12 @@
   // arg: empty (Today), or a Ramadan day number (me/day)
   RS.act('tr.hayd', function (arg) {
     var n = parseInt(arg, 10), ctx = n >= 1 && n <= DAYS ? rCtx(n) : checkCtx();
-    change(ctx, function (ck, st) { st.hayd = !st.hayd; });
+    var turnedOn = false;
+    change(ctx, function (ck, st) { st.hayd = !st.hayd; turnedOn = st.hayd; });
+    if (ctx.kind !== 'year') {
+      if (turnedOn && !fastCode(ctx.day)) setFastCode(ctx.day, 'period');
+      else if (!turnedOn && fastCode(ctx.day) === 'period') setFastCode(ctx.day, '');
+    }
     RS.buzz(8);
     refresh();
   });
@@ -1847,6 +1910,28 @@
     setExtra('qada', null, q);
     refresh();
   });
+  RS.act('tr.fstate', function (v) {
+    var day = rCtx().day, cur = fastCode(day);
+    if (v === 'yes') setFastCode(day, '');
+    else if (v === 'half') setFastCode(day, 'half');
+    else if (v === 'no' && MISSED.indexOf(cur) < 0) setFastCode(day, 'other');
+    refresh();
+  });
+  RS.act('tr.freason', function (r) { if (MISSED.indexOf(r) >= 0) { setFastCode(rCtx().day, r); refresh(); } });
+  // "I made up a fast today": logs today's fast (if it is not logged yet) as a make-up fast and counts it.
+  RS.act('tr.qadaToday', function () {
+    var iso = RS.todayISO(), f = extras().fasts, cur = isObj(f) && isObj(f[iso]) ? f[iso] : null, made = !!(cur && cur.v && cur.q);
+    if (!made && fastInfo(new Date()).blocked) return;
+    var q = qada();
+    q.done = Math.max(0, q.done + (made ? -1 : 1)); q.ts = Date.now();
+    setExtra('qada', null, q, true);
+    setExtra('fasts', iso, Object.assign({}, cur || {}, { v: true, q: !made, ts: Date.now() }), true);
+    var y = yCtx(iso), r = getRec(y.key);
+    if (r) RS.store.set(y.key, build(y, r.ck, r.hayd, r.hck));
+    emit();
+    if (!made && q.done >= q.owed && q.owed > 0) RS.toast(t('modes.plan.caughtUp'), { tone: 'success' });
+    refresh();
+  });
   // A fast logged from 2 Shawwal on also counts toward the six days of Shawwal (until six are marked), and undoing
   // it takes that one back. Today's year-round record is re-totalled, because the fast-day deeds count only with a fast.
   RS.act('tr.fast', function () {
@@ -1859,6 +1944,7 @@
       else if (on && cur.sh) six = Math.max(0, n - 1);
     }
     if (six >= 0) setExtra('shawwal', String(h.year), six, true);
+    if (on && cur.q) { var qq = qada(); qq.done = Math.max(0, qq.done - 1); qq.ts = Date.now(); setExtra('qada', null, qq, true); }
     setExtra('fasts', iso, entry, true);
     var y = yCtx(iso), r = getRec(y.key);
     if (r) RS.store.set(y.key, build(y, r.ck, r.hayd, r.hck));

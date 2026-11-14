@@ -395,6 +395,7 @@
   }
   // A prayer time as the clock shows it at the prayer location (the cloud module knows its time zone).
   function pf(d) { var P = RS.cloud && RS.cloud.prayer; return P && typeof P.fmt === 'function' ? P.fmt(d) : RS.fmt.time(d); }
+  function moonNote() { return RS.tools ? RS.tools.disclaimer() : t('cal.moonNote'); }
   var ODD = { 20: 21, 22: 23, 24: 25, 26: 27, 28: 29 };     // the evening of day 20 begins night 21, and so on
   function personalEvents(start, withTimes) {
     var ev = [], P = RS.cloud && RS.cloud.prayer, canTimes = withTimes && P && P.configured() && P.loaded();
@@ -406,14 +407,14 @@
       ev.push({ uid: 'day' + n, day: d, title: t('cal.day', { n: nf(n) }), desc: desc.join('\n'), url: location.origin + '/' });
       if (pt && pt.maghrib) ev.push({ uid: 'iftar' + n, at: pt.maghrib, mins: 30, title: t('cal.iftar', { n: nf(n) }), desc: t('cal.iftarDesc') });
     }
-    ev.push({ uid: 'eid', day: addDays(start.date, 30), title: t('cal.eid'), desc: t('cal.moonNote') });
+    ev.push({ uid: 'eid', day: addDays(start.date, 30), title: t('cal.eid'), desc: moonNote() });
     return ev;
   }
   function openCalendar() {
     var start = ramadanStart(), P = RS.cloud && RS.cloud.prayer, hasTimes = !!(P && P.configured() && P.loaded());
     if (!start) { RS.toast(t('err.generic'), { tone: 'error' }); return; }
     RS.sheet.open({ title: t('cal.title'), body: '<p>' + esc(t('cal.body', { date: RS.fmt.date(start.date, { day: 'numeric', month: 'long', year: 'numeric' }), year: String(start.year) })) + '</p>' +
-      ui.note(t(hasTimes ? 'cal.withTimes' : 'cal.noTimes'), { icon: hasTimes ? 'clock' : 'map-pin', tone: 'plain' }) + ui.note(t('cal.moonNote'), { icon: 'moon', tone: 'plain' }) +
+      ui.note(t(hasTimes ? 'cal.withTimes' : 'cal.noTimes'), { icon: hasTimes ? 'clock' : 'map-pin', tone: 'plain' }) + ui.note(moonNote(), { icon: 'moon', tone: 'plain' }) +
       ui.btn(t('cal.download'), { act: 'cal.download', block: true, icon: 'download' }) });
   }
   RS.act('cal.open', openCalendar);
@@ -429,7 +430,7 @@
       { uid: 'c1', day: start.date, title: t('cal.compStart', { name: c.name }), desc: join, url: url },
       { uid: 'c2', day: addDays(start.date, 19), title: t('cal.compLastTen', { name: c.name }), desc: t('cal.lastTen') + '\n' + join, url: url },
       { uid: 'c3', day: addDays(start.date, 29), title: t('cal.compEnd', { name: c.name }), desc: join, url: url },
-      { uid: 'c4', day: addDays(start.date, 30), title: t('cal.compEid', { name: c.name }), desc: t('cal.moonNote'), url: url }
+      { uid: 'c4', day: addDays(start.date, 30), title: t('cal.compEid', { name: c.name }), desc: moonNote(), url: url }
     ];
     download(buildIcs(ev, c.name), 'ramadan-' + String(c.code).toLowerCase() + '.ics', 'text/calendar;charset=utf-8');
     RS.toast(t('cal.done'), { tone: 'success' });
@@ -558,7 +559,8 @@
   function dispHtml() {
     var now = new Date(), s = summary(), P = RS.cloud && RS.cloud.prayer, nx = P ? P.next() : null, pt = P && P.configured() && P.loaded() ? P.times(now) : null;
     var hd = s.m === 'ramadan' && RS.has('hadith.' + s.d) ? t('hadith.' + s.d) : '';
-    var h = ['<div class="so-disp-top"><p class="so-disp-date">' + esc(RS.fmt.date(now, { weekday: 'long', day: 'numeric', month: 'long' })) + '</p><p class="so-disp-hijri">' + esc(RS.fmt.hijri(now)) + '</p></div>'];
+    var note = RS.tools && (s.m === 'ramadan' || s.m === 'prep') ? '<p class="so-disp-note">' + esc(RS.tools.disclaimer(true)) + '</p>' : '';
+    var h = ['<div class="so-disp-top"><p class="so-disp-date">' + esc(RS.fmt.date(now, { weekday: 'long', day: 'numeric', month: 'long' })) + '</p><p class="so-disp-hijri">' + esc(RS.fmt.hijri(now)) + '</p>' + note + '</div>'];
     h.push('<p class="so-disp-clock" aria-live="off">' + esc(RS.fmt.time(now)) + '</p>');
     if (nx) h.push('<p class="so-disp-next">' + esc(t('disp.nextIn', { prayer: nx.name, time: RS.fmt.dur(Math.max(0, nx.inMs)) })) + '</p>');
     else h.push('<p class="so-disp-next">' + ui.btn(t('disp.setLocation'), { act: 'prayer.setup', variant: 'secondary', icon: 'map-pin' }) + '</p>');

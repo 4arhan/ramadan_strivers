@@ -1332,7 +1332,7 @@
     title: function () { return t('title'); },
     render: function (view) {
       var s = state();
-      RS.topbar({ title: t('title'), sub: RS.fmt.hijri(), back: 'today' });
+      RS.topbar({ title: t('title'), sub: RS.fmt.hijri(), back: document.querySelector('[data-nav="prep"]') ? null : 'today' });
       if (isOn(s)) homeView(view, s); else introView(view, s);
     },
     onHide: flush

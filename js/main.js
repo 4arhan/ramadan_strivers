@@ -10,10 +10,23 @@
   var RS = window.RS;
   if (!RS || !RS.router) return;
 
-  var NAV_ICONS = { today: 'circle-check', quran: 'book-open', learn: 'graduation-cap', compete: 'trophy', me: 'user' };
+  var NAV_ICONS = { today: 'circle-check', quran: 'book-open', learn: 'graduation-cap', compete: 'trophy', prep: 'sprout', me: 'user' };
 
   /* ------------------------------------------------------------------ shell */
+  // From Rajab until Ramadan the fourth tab is Ramadan Prep instead of Compete (RS.tools.prepTabOn).
+  var prepTab = null;
+  function swapPrepTab() {
+    var on = !!(RS.tools && RS.tools.prepTabOn());
+    if (on === prepTab) return false;
+    prepTab = on;
+    var a = RS.$('[data-nav="compete"], [data-nav="prep"]');
+    if (!a) return false;
+    a.setAttribute('data-nav', on ? 'prep' : 'compete');
+    a.setAttribute('href', on ? '#/prep' : '#/compete');
+    return true;
+  }
   function labelShell() {
+    swapPrepTab();
     RS.$$('[data-nav]').forEach(function (a) {
       var tab = a.getAttribute('data-nav');
       var label = RS.t('nav.' + tab);
@@ -113,6 +126,9 @@
       RS.startLang().then(function (lang) {
         labelShell();
         RS.on('lang', labelShell);
+        // the month, the Prep plan or a competition can change which tab shows
+        RS.on('route', function () { if (swapPrepTab()) { labelShell(); RS.refresh(); } });
+        RS.on('data', function () { if (swapPrepTab()) { labelShell(); RS.refresh(); } });
         var nav = document.getElementById('nav');
         if (nav) nav.addEventListener('click', onNavClick);
         window.addEventListener('resize', RS.debounce(fitNav, 150));

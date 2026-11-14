@@ -1578,6 +1578,8 @@
   function renderRoute(view, def, params) {
     var tab = tabOf(cur.route, def);
     var isTab = isTabRoute(cur.route);
+    // Ramadan Prep is a tab of its own while the nav shows it (js/main.js); its pages highlight it.
+    if (/^prep(\/|$)/.test(cur.route) && doc.querySelector('[data-nav="prep"]')) { tab = 'prep'; if (cur.route === 'prep') isTab = true; }
     setNav(tab, def ? (def.nav != null ? !!def.nav : isTab) : true);
     var title = '';
     try { title = def && def.title ? def.title(params) : (isTab ? RS.t('nav.' + cur.route) : ''); } catch (e) { console.error(e); }

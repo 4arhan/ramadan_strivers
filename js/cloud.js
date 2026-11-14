@@ -2216,10 +2216,18 @@
       (fasting ? duaHtml() : '') +
       '<div class="mt-4">' + ui.select({ id: 'cl-method', label: t('prayer.method'), value: c.method, act: 'prayer.method', hint: methodHint(c.method, c), options: methodOptions() }) +
       ui.select({ id: 'cl-madhab', label: t('prayer.madhab'), value: c.madhab, act: 'prayer.madhab', hint: t('prayer.madhabHint'), options: madhabOptions() }) + '</div>' +
-      whereLine('mt-4');
+      whereLine('mt-4') + prayerTools();
   }
   function countdownHtml(cd) { return ui.note('', { icon: 'clock', html: metaLine([cd.text, cd.eyebrow]) }); }
   var PRAYER_ACTIONS = function () { return [{ text: t('prayer.settings'), act: 'prayer.setup', icon: 'map-pin' }]; };
+  // Below the times: the Qibla direction and the printable Ramadan timetable (js/tools.js).
+  function prayerTools() {
+    if (!RS.tools) return '';
+    return '<div class="mt-4">' + ui.list([
+      ui.row({ icon: 'compass', title: t('tl.qibla.title'), sub: t('tl.qibla.rowSub'), act: 'tl.qibla', chevron: true }),
+      ui.row({ icon: 'printer', title: t('tl.tt.sheet'), sub: t('tl.tt.rowSub'), act: 'tl.timetable', chevron: true })
+    ], { label: t('tl.prayerTools') }) + '</div>';
+  }
   // "Fajr 18° · Isha 17°. Choose the method your local mosque follows." (+ the Ramadan rule for Umm al-Qura)
   function methodHint(method, c) {
     var a = methodAngles(method, c), parts = [];
@@ -3360,6 +3368,9 @@
       times: times,
       fmt: fmtT,
       place: function () { return placeLabel(pcfg()); },
+      coords: function () { var c = pcfg(); return c ? { lat: c.lat, lng: c.lng } : null; },
+      methodName: function () { var c = pcfg(); return c ? t('prayer.m.' + c.method) : ''; },
+      load: loadAdhan,
       open: openPrayer,
       setup: openPrayerSetup
     },

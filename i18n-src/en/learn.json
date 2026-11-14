@@ -1,6 +1,5 @@
 {
   "learn.home.sub": "Quizzes and flashcards",
-
   "learn.hero.kicker": "Today's 5",
   "learn.unit.days.one": "day",
   "learn.unit.days.other": "days",
@@ -22,7 +21,6 @@
   "learn.cta.doneEyebrow": "Done for today",
   "learn.cta.review": "Review due cards",
   "learn.cta.more": "Practise more",
-
   "learn.m.accuracy": "Accuracy",
   "learn.m.overall": "Overall accuracy",
   "learn.m.mastered": "Cards mastered",
@@ -36,7 +34,6 @@
   "learn.m.new": "New",
   "learn.m.recalled": "Recalled",
   "learn.m.next": "Next review",
-
   "learn.cat.all": "All mixed",
   "learn.quiz.kicker": "Quiz",
   "learn.tf.title": "True or false",
@@ -65,7 +62,6 @@
   "learn.n.nextOf.one": "Next {k} of {n} question",
   "learn.n.nextOf.other": "Next {k} of {n} questions",
   "learn.bestPct": "Best {pct}",
-
   "learn.s.qOf": "Question {i} of {n}",
   "learn.s.cardOf": "Card {i} of {n}",
   "learn.s.qOfSr": "Question {i} of {n}.",
@@ -100,7 +96,6 @@
   "learn.keys.fc": "Keys: Space to turn the card, {first} to {last} to rate it",
   "learn.ai.pending": "Adapting the questions to your level",
   "learn.ai.done": "Reworded for your level by AI",
-
   "learn.fc.show": "Show answer",
   "learn.fc.showEyebrow": "Recall it first",
   "learn.fc.answer": "Answer",
@@ -117,7 +112,6 @@
   "learn.when.tomorrow": "Tomorrow",
   "learn.when.days.one": "In {n} day",
   "learn.when.days.other": "In {n} days",
-
   "learn.r.done": "Round complete: {n} of {total} correct",
   "learn.r.perfect": "A perfect score, masha'Allah. You know this topic well.",
   "learn.r.great": "Excellent. You are learning your deen with every question.",
@@ -134,9 +128,8 @@
   "learn.r.answer": "Answer: {answer}",
   "learn.r.answerOpt": "Answer: {key}. {text}",
   "learn.r.ok": "Correct",
-  "learn.r.no": "Incorrect",
+  "learn.r.no": "Not quite",
   "learn.r.allClear": "All clear",
-
   "learn.fs.done.one": "Session complete: {n} card reviewed",
   "learn.fs.done.other": "Session complete: {n} cards reviewed",
   "learn.fs.label": "reviewed in this session",
@@ -151,7 +144,6 @@
   "learn.fe.mastered.other": "cards mastered · nothing is due right now",
   "learn.fe.cramEyebrow": "Review ahead of schedule",
   "learn.fe.cram": "Practise anyway",
-
   "learn.d.title": "Today's 5",
   "learn.d.sub": "Daily practice",
   "learn.d.done": "Today's 5 complete: {n} of {total} correct",
@@ -159,10 +151,8 @@
   "learn.d.newDay": "A new day has started, so Today's 5 has a new set.",
   "learn.d.newDayTitle": "A new day has started",
   "learn.d.newDayLabel": "A new day has started. Today's 5 has a new set waiting for you.",
-
   "learn.rv.title": "Mistakes review",
-  "learn.rv.sub": "Learn from what you missed",
-
+  "learn.rv.sub": "Go over the ones to revisit",
   "learn.e.backEyebrow": "Learn",
   "learn.e.back": "Back to Learn",
   "learn.e.tfTitle": "No questions yet",
@@ -174,7 +164,7 @@
   "learn.e.noTopic": "This topic could not be found.",
   "learn.e.noDeck": "This deck could not be found.",
   "learn.e.daily": "Today's 5 needs quiz questions, and none are available yet.",
-  "learn.e.review": "Nothing to review. Questions you miss will appear here.",
+  "learn.e.review": "Nothing to review. Questions to revisit will appear here.",
   "learn.e.decks": "Flashcard decks are on their way.",
   "learn.e.tfAll": "True or false questions are on their way.",
   "learn.e.mcqAll": "Multiple-choice questions are on their way."
