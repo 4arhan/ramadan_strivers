@@ -38,6 +38,29 @@ CREATE TABLE IF NOT EXISTS buddies(
   summary JSONB NOT NULL DEFAULT '{}'::jsonb, nudges JSONB NOT NULL DEFAULT '[]'::jsonb,
   created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
 CREATE TABLE IF NOT EXISTS ai_cache(key TEXT PRIMARY KEY, value JSONB NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS comp_admins(
+  id SERIAL PRIMARY KEY, comp_code TEXT NOT NULL REFERENCES competitions(code) ON DELETE CASCADE,
+  email TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'admin', grp TEXT NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT now(), UNIQUE(comp_code, email));
+CREATE TABLE IF NOT EXISTS signups(
+  id SERIAL PRIMARY KEY, comp_code TEXT NOT NULL REFERENCES competitions(code) ON DELETE CASCADE,
+  title TEXT NOT NULL, day TEXT NOT NULL DEFAULT '', slots INT NOT NULL DEFAULT 1,
+  taken JSONB NOT NULL DEFAULT '[]'::jsonb, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS audit(
+  id SERIAL PRIMARY KEY, at TIMESTAMPTZ DEFAULT now(), email TEXT, comp_code TEXT, action TEXT NOT NULL, detail JSONB NOT NULL DEFAULT '{}'::jsonb);
+CREATE INDEX IF NOT EXISTS audit_comp_idx ON audit(comp_code, id DESC);
+CREATE TABLE IF NOT EXISTS notices(id SERIAL PRIMARY KEY, text TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS flags(key TEXT PRIMARY KEY, value JSONB NOT NULL);
+CREATE TABLE IF NOT EXISTS leagues(
+  id SERIAL PRIMARY KEY, slug TEXT UNIQUE NOT NULL, name TEXT NOT NULL, country TEXT NOT NULL DEFAULT '',
+  about TEXT NOT NULL DEFAULT '', open BOOLEAN NOT NULL DEFAULT true, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS league_members(
+  league_id INT NOT NULL REFERENCES leagues(id) ON DELETE CASCADE, comp_code TEXT NOT NULL REFERENCES competitions(code) ON DELETE CASCADE,
+  division TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'pending', joined_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY(league_id, comp_code));
+CREATE TABLE IF NOT EXISTS challenges(
+  id SERIAL PRIMARY KEY, a_code TEXT NOT NULL REFERENCES competitions(code) ON DELETE CASCADE, b_code TEXT NOT NULL REFERENCES competitions(code) ON DELETE CASCADE,
+  start_day INT NOT NULL, end_day INT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ DEFAULT now());
+ALTER TABLE participants ADD COLUMN IF NOT EXISTS attendance JSONB NOT NULL DEFAULT '{}'::jsonb;
 `;
 // Vercel's storage integrations name the variable differently depending on the provider and on the prefix chosen when the
 // database is connected (DATABASE_URL, POSTGRES_URL, STORAGE_URL, MYDB_DATABASE_URL, ...). Take the standard names first,
