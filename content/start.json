@@ -1,0 +1,831 @@
+{
+ "guide": [
+  {
+   "id": "what",
+   "icon": "moon",
+   "title": "What Ramadan is and why we fast",
+   "paras": [
+    "Ramadan is the ninth month of the Islamic calendar. It is the month in which the Quran was first sent down (Quran 2:185). All month, Muslims fast each day from dawn until sunset: no food, no drink and no marital relations in those hours.",
+    "Fasting in Ramadan is one of the five pillars of Islam (Bukhari 8). Allah tells us the reason: fasting was prescribed 'that you may become righteous' (Quran 2:183). The Arabic word is taqwa, which means being mindful of Allah in what you do and what you leave.",
+    "So Ramadan is more than an empty stomach. It is a month to pray, read the Quran, give and guard your tongue. The Prophet ﷺ said that whoever fasts Ramadan with faith, hoping for Allah's reward, will have their past sins forgiven (Bukhari 1901)."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 2:183",
+     "url": "https://quran.com/2/183"
+    },
+    {
+     "ref": "Quran 2:185",
+     "url": "https://quran.com/2/185"
+    },
+    {
+     "ref": "Bukhari 8",
+     "url": "https://sunnah.com/bukhari:8"
+    },
+    {
+     "ref": "Bukhari 1901",
+     "url": "https://sunnah.com/bukhari:1901"
+    }
+   ]
+  },
+  {
+   "id": "who",
+   "icon": "users",
+   "title": "Who has to fast, and who is excused",
+   "paras": [
+    "Fasting Ramadan is a duty for every adult Muslim who is sane and well enough to fast. If you are a new Muslim, you fast from now on. You do not owe the Ramadans from before your Islam, because Islam wipes out what came before it (Muslim 121).",
+    "Allah gives ease to people in difficulty. Someone who is ill or travelling may leave the fast and make up the same number of days later (Quran 2:184). A woman does not fast during her period or bleeding after childbirth, and makes those days up afterwards (Muslim 335). A woman who is pregnant or nursing may leave the fast if she fears harm for herself or her baby (Tirmidhi 715). Scholars differ on what she does afterwards, so ask your local imam.",
+    "A very old person, or someone with a lasting illness who can never fast, feeds a poor person for each day instead (Quran 2:184, Bukhari 4505). This is called fidya. Your mosque can tell you the amount.",
+    "Children do not have to fast until they reach puberty (Abu Dawud 4403). Many practise with a few days, as the children of the Companions did (Bukhari 1960). If you are unsure whether you are excused, ask an imam and your doctor."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 2:184",
+     "url": "https://quran.com/2/184"
+    },
+    {
+     "ref": "Muslim 121",
+     "url": "https://sunnah.com/muslim:121"
+    },
+    {
+     "ref": "Muslim 335",
+     "url": "https://sunnah.com/muslim:335"
+    },
+    {
+     "ref": "Tirmidhi 715",
+     "url": "https://sunnah.com/tirmidhi:715"
+    },
+    {
+     "ref": "Bukhari 4505",
+     "url": "https://sunnah.com/bukhari:4505"
+    },
+    {
+     "ref": "Abu Dawud 4403",
+     "url": "https://sunnah.com/abudawud:4403"
+    },
+    {
+     "ref": "Bukhari 1960",
+     "url": "https://sunnah.com/bukhari:1960"
+    }
+   ]
+  },
+  {
+   "id": "day",
+   "icon": "sunrise",
+   "title": "What a fasting day looks like",
+   "paras": [
+    "The day begins before dawn with suhoor, a meal eaten before the Fajr prayer time. The Prophet ﷺ said, 'Take suhoor, for there is blessing in it' (Bukhari 1923). Even a little food and water counts.",
+    "You need to intend the fast before dawn (Abu Dawud 2454). It is in your heart, with no words needed. Getting up for suhoor because you mean to fast is already an intention.",
+    "From the start of Fajr until sunset (Maghrib) you do not eat or drink (Quran 2:187). School, work and prayers carry on as normal. Use the prayer times from your local mosque or this app.",
+    "When the sun sets, break your fast straight away (Bukhari 1957). This is iftar. The Prophet ﷺ used to break his fast with dates, or with water if there were none (Abu Dawud 2356). When he broke his fast he said: 'Dhahabaz-zama'u wabtallatil-'uruqu wa thabatal-ajru in sha' Allah', which means 'The thirst is gone, the veins are moistened, and the reward is confirmed, if Allah wills' (Abu Dawud 2357). Then pray Maghrib and eat your meal."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 1923",
+     "url": "https://sunnah.com/bukhari:1923"
+    },
+    {
+     "ref": "Abu Dawud 2454",
+     "url": "https://sunnah.com/abudawud:2454"
+    },
+    {
+     "ref": "Quran 2:187",
+     "url": "https://quran.com/2/187"
+    },
+    {
+     "ref": "Bukhari 1957",
+     "url": "https://sunnah.com/bukhari:1957"
+    },
+    {
+     "ref": "Abu Dawud 2356",
+     "url": "https://sunnah.com/abudawud:2356"
+    },
+    {
+     "ref": "Abu Dawud 2357",
+     "url": "https://sunnah.com/abudawud:2357"
+    }
+   ]
+  },
+  {
+   "id": "breaks",
+   "icon": "shield",
+   "title": "What breaks the fast and what does not",
+   "paras": [
+    "Three things break the fast when done on purpose between dawn and sunset: eating, drinking and marital relations (Quran 2:187). Making yourself vomit on purpose also breaks it (Tirmidhi 720). If a woman's period begins during the day, that day's fast ends and she makes it up later (Muslim 335).",
+    "Eating or drinking because you truly forgot does not break the fast. The Prophet ﷺ said such a person should complete the fast, 'for what he has eaten or drunk has been given to him by Allah' (Bukhari 1933). Stop when you remember and carry on. Being sick without meaning to does not break it either (Tirmidhi 720).",
+    "Having a shower or bath is fine (Bukhari 1926). So is rinsing your mouth, as long as you do not swallow the water (Abu Dawud 2385). In wudu, just do not sniff water deep into your nose while fasting (Tirmidhi 788). Swallowing your own saliva is fine. You can clean your teeth if you swallow nothing. Many people keep toothpaste for before dawn and after sunset to be safe.",
+    "Scholars differ about inhalers, injections, drops and other medical matters. Ask your local imam, and never stop a medicine without asking your doctor.",
+    "A fast can also lose its reward. The Prophet ﷺ warned that Allah has no need of a person leaving food and drink if they do not leave lying and bad behaviour (Bukhari 1903)."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 2:187",
+     "url": "https://quran.com/2/187"
+    },
+    {
+     "ref": "Tirmidhi 720",
+     "url": "https://sunnah.com/tirmidhi:720"
+    },
+    {
+     "ref": "Muslim 335",
+     "url": "https://sunnah.com/muslim:335"
+    },
+    {
+     "ref": "Bukhari 1933",
+     "url": "https://sunnah.com/bukhari:1933"
+    },
+    {
+     "ref": "Bukhari 1926",
+     "url": "https://sunnah.com/bukhari:1926"
+    },
+    {
+     "ref": "Abu Dawud 2385",
+     "url": "https://sunnah.com/abudawud:2385"
+    },
+    {
+     "ref": "Tirmidhi 788",
+     "url": "https://sunnah.com/tirmidhi:788"
+    },
+    {
+     "ref": "Bukhari 1903",
+     "url": "https://sunnah.com/bukhari:1903"
+    }
+   ]
+  },
+  {
+   "id": "missed",
+   "icon": "calendar-check",
+   "title": "If you miss a day or break your fast",
+   "paras": [
+    "If you missed days for a good reason, such as illness, travel or your period, you make up one day for each day missed (Quran 2:184). Making up a fast is called qada. Try to finish them before the next Ramadan, as Aishah, may Allah be pleased with her, did (Bukhari 1950).",
+    "If you broke a fast on purpose without a good reason, do not give up. Turn back to Allah, ask His forgiveness and make the day up. Breaking the fast by marital relations during the day carries a heavy penalty as well (Bukhari 1936). Scholars differ on some of these details, so speak to your local imam about what you owe.",
+    "One bad day does not spoil your Ramadan. Fast the next day, and write down any days you owe so they are not forgotten."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 2:184",
+     "url": "https://quran.com/2/184"
+    },
+    {
+     "ref": "Bukhari 1950",
+     "url": "https://sunnah.com/bukhari:1950"
+    },
+    {
+     "ref": "Bukhari 1936",
+     "url": "https://sunnah.com/bukhari:1936"
+    }
+   ]
+  },
+  {
+   "id": "prayers",
+   "icon": "clock",
+   "title": "The five prayers and Tarawih",
+   "paras": [
+    "The five daily prayers are a duty all year, and they matter more than any extra worship in Ramadan. Allah says in a hadith that nothing brings His servant closer to Him than the duties He has set (Bukhari 6502). If you are new to prayer, make the five prayers your first goal.",
+    "Tarawih is an extra night prayer in Ramadan, prayed after Isha. It is a sunnah, not a duty. The Prophet ﷺ said that whoever stands in prayer in Ramadan with faith, hoping for reward, will have their past sins forgiven (Bukhari 37).",
+    "Tarawih is prayed two rakahs at a time. The number of rakahs differs between mosques, so simply follow your imam. The Prophet ﷺ said that whoever stands with the imam until he finishes has the reward of praying the whole night (Tirmidhi 806). You may also pray it at home. If you get tired, pray what you can."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 6502",
+     "url": "https://sunnah.com/bukhari:6502"
+    },
+    {
+     "ref": "Bukhari 37",
+     "url": "https://sunnah.com/bukhari:37"
+    },
+    {
+     "ref": "Tirmidhi 806",
+     "url": "https://sunnah.com/tirmidhi:806"
+    }
+   ]
+  },
+  {
+   "id": "quran",
+   "icon": "book-open",
+   "title": "Reading the Quran when you are new",
+   "paras": [
+    "Ramadan is the month of the Quran (Quran 2:185). The angel Jibril met the Prophet ﷺ every night of Ramadan to go through the Quran with him (Bukhari 6).",
+    "If you cannot read Arabic yet, read a translation in your own language. Listening to a reciter while you follow the meaning helps too. Learn the Arabic letters with a teacher when you can.",
+    "Do not worry about finishing the whole Quran in your first Ramadan. Choose a small amount you can keep up every day, even one page or ten minutes. The Prophet ﷺ said that the person who reads the Quran with difficulty has a double reward (Bukhari 4937)."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 2:185",
+     "url": "https://quran.com/2/185"
+    },
+    {
+     "ref": "Bukhari 6",
+     "url": "https://sunnah.com/bukhari:6"
+    },
+    {
+     "ref": "Bukhari 4937",
+     "url": "https://sunnah.com/bukhari:4937"
+    }
+   ]
+  },
+  {
+   "id": "last-ten",
+   "icon": "moon-star",
+   "title": "The last ten nights and Laylatul Qadr",
+   "paras": [
+    "The last ten nights are the best part of Ramadan. When they began, the Prophet ﷺ worked harder in worship, stayed up at night and woke his family (Bukhari 2024).",
+    "One of these nights is Laylatul Qadr, the Night of Decree. Allah says it is 'better than a thousand months' (Quran 97:3). We are not told which night it is. The Prophet ﷺ said to look for it in the odd nights of the last ten (Bukhari 2017). Whoever stands in prayer on that night with faith, hoping for reward, has their past sins forgiven (Bukhari 1901).",
+    "Aishah, may Allah be pleased with her, asked what to say on that night. The Prophet ﷺ taught her: 'Allahumma innaka 'afuwwun tuhibbul-'afwa fa'fu 'anni', which means 'O Allah, You are Pardoning and You love to pardon, so pardon me' (Ibn Majah 3850).",
+    "You do not need to stay awake all night. Pray Isha and Fajr on time, pray some extra rakahs, read some Quran, and make dua in your own words on each of the ten nights."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 2024",
+     "url": "https://sunnah.com/bukhari:2024"
+    },
+    {
+     "ref": "Quran 97:1-5",
+     "url": "https://quran.com/97/1-5"
+    },
+    {
+     "ref": "Bukhari 2017",
+     "url": "https://sunnah.com/bukhari:2017"
+    },
+    {
+     "ref": "Bukhari 1901",
+     "url": "https://sunnah.com/bukhari:1901"
+    },
+    {
+     "ref": "Ibn Majah 3850",
+     "url": "https://sunnah.com/ibnmajah:3850"
+    }
+   ]
+  },
+  {
+   "id": "charity",
+   "icon": "hand-heart",
+   "title": "Charity, zakat al-fitr and Eid",
+   "paras": [
+    "The Prophet ﷺ was the most generous of people, and he was most generous of all in Ramadan (Bukhari 6). Giving does not have to be money. Sharing food counts: whoever gives a fasting person food to break their fast earns the same reward as that person (Tirmidhi 807).",
+    "At the end of Ramadan there is a special charity called zakat al-fitr. It is a set amount, measured in food, given to the poor for every member of the family, young and old, and it must be given before the Eid prayer (Bukhari 1503). Most mosques collect it and announce the amount for each person, so ask yours how and when to pay.",
+    "Ramadan lasts 29 or 30 days, and the day after it ends is Eid al-Fitr. Nobody fasts on Eid (Bukhari 1990). The Prophet ﷺ ate some dates before going out to the Eid prayer (Bukhari 953). Wear your best clean clothes, pray the Eid prayer with the community, thank Allah for guiding you (Quran 2:185) and enjoy the day."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 6",
+     "url": "https://sunnah.com/bukhari:6"
+    },
+    {
+     "ref": "Tirmidhi 807",
+     "url": "https://sunnah.com/tirmidhi:807"
+    },
+    {
+     "ref": "Bukhari 1503",
+     "url": "https://sunnah.com/bukhari:1503"
+    },
+    {
+     "ref": "Bukhari 1990",
+     "url": "https://sunnah.com/bukhari:1990"
+    },
+    {
+     "ref": "Bukhari 953",
+     "url": "https://sunnah.com/bukhari:953"
+    },
+    {
+     "ref": "Quran 2:185",
+     "url": "https://quran.com/2/185"
+    }
+   ]
+  },
+  {
+   "id": "family",
+   "icon": "heart",
+   "title": "When your family or colleagues are not Muslim",
+   "paras": [
+    "Many new Muslims fast in a home, school or office where nobody else does. It can feel lonely, but you can do it. Tell people simply and calmly: 'I am fasting for Ramadan, so I will not eat or drink until sunset.' Most people respect a clear, friendly answer.",
+    "Plan ahead. Put something easy for suhoor by your bed or in the fridge the night before. Carry dates and water in case you are out at iftar. At work or school, ask politely for a quiet place to pray.",
+    "Keep good relations with your parents and family, even if they do not agree with your faith. Allah tells us to keep company with our parents 'with appropriate kindness' (Quran 31:15). When Asma asked whether she should be good to her mother, who was not a Muslim, the Prophet ﷺ said, 'Yes, keep good relations with her' (Bukhari 2620). Eat with them in the evening when you can, help at home, and let your good manners speak for you. If someone argues with you, the Prophet ﷺ taught us to say, 'I am fasting' (Bukhari 1904).",
+    "Find company too. Look for a mosque or a community iftar near you, and ask one Muslim friend to be your Ramadan buddy who checks in with you each day."
+   ],
+   "refs": [
+    {
+     "ref": "Quran 31:15",
+     "url": "https://quran.com/31/15"
+    },
+    {
+     "ref": "Bukhari 2620",
+     "url": "https://sunnah.com/bukhari:2620"
+    },
+    {
+     "ref": "Bukhari 1904",
+     "url": "https://sunnah.com/bukhari:1904"
+    }
+   ]
+  },
+  {
+   "id": "mosque",
+   "icon": "landmark",
+   "title": "Your first visit to a mosque and a community iftar",
+   "paras": [
+    "Anyone may walk into a mosque. Dress modestly in clean clothes. Take off your shoes at the door and put them on the rack. There is a washing area for wudu. Most mosques have separate prayer areas for men and women.",
+    "Inside there are no reserved seats. Sit on the carpet wherever there is room. If you are able, pray two rakahs before you sit down (Bukhari 444). When the prayer starts, stand shoulder to shoulder in the row and follow the imam. Put your phone on silent.",
+    "At a community iftar, people usually break the fast with dates and water at the call to prayer, pray Maghrib together and then eat the meal. You do not need an invitation or money. Feeding a fasting person is something people are glad to do (Tirmidhi 807).",
+    "It is fine to ask. Tell someone, 'I am new, can you show me what to do?' People are usually delighted to help a new Muslim."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 444",
+     "url": "https://sunnah.com/bukhari:444"
+    },
+    {
+     "ref": "Tirmidhi 807",
+     "url": "https://sunnah.com/tirmidhi:807"
+    }
+   ]
+  },
+  {
+   "id": "gentle",
+   "icon": "sprout",
+   "title": "Be gentle with yourself",
+   "paras": [
+    "You do not have to do everything in your first Ramadan. Start with what is required: the fast and the five prayers. Then add one or two small things, such as a page of Quran each day.",
+    "Small and steady is better than big and short. The Prophet ﷺ said that the deeds Allah loves most are the regular ones, even if they are small (Bukhari 6464). He also said that the religion is easy, and that whoever makes it too hard on himself will not be able to keep going (Bukhari 39).",
+    "You will make mistakes. Everyone does. When you slip, ask Allah to forgive you and carry on the same day. Allah says He 'does not charge a soul except with that within its capacity' (Quran 2:286), and that He intends ease for you and not hardship (Quran 2:185)."
+   ],
+   "refs": [
+    {
+     "ref": "Bukhari 6464",
+     "url": "https://sunnah.com/bukhari:6464"
+    },
+    {
+     "ref": "Bukhari 39",
+     "url": "https://sunnah.com/bukhari:39"
+    },
+    {
+     "ref": "Quran 2:286",
+     "url": "https://quran.com/2/286"
+    },
+    {
+     "ref": "Quran 2:185",
+     "url": "https://quran.com/2/185"
+    }
+   ]
+  }
+ ],
+ "pray": {
+  "intro": [
+   "Salah is the prayer a Muslim offers five times a day. It is the second pillar of Islam (Bukhari 8) and it has set times (Quran 4:103). It is a few minutes of standing, bowing and prostrating before Allah. The Prophet ﷺ said, 'Pray as you have seen me praying' (Bukhari 631).",
+   "A prayer is made of units called rakahs. Fajr, before sunrise, has 2 rakahs. Dhuhr, just after midday, has 4. Asr, in the afternoon, has 4. Maghrib, just after sunset, has 3. Isha, at night, has 4.",
+   "Before you pray, be clean. Make wudu, and make sure your body, your clothes and the place where you pray are clean. Dress modestly, and stand facing the Qibla, the direction of the Kaaba in Makkah (Quran 2:144). A compass app or your local mosque can show you the direction. A woman does not pray during her period and does not make those prayers up (Muslim 335).",
+   "The steps below show the prayer in a simple form. The four schools of law agree on the main actions, and differ in a few small details of position and wording. Follow the way your teacher or local mosque shows you."
+  ],
+  "wudu": [
+   {
+    "id": "w1",
+    "title": "Intend and begin",
+    "text": "Intend in your heart that you are making wudu for prayer. Say 'Bismillah' (in the name of Allah) and use clean water."
+   },
+   {
+    "id": "w2",
+    "title": "Wash your hands",
+    "text": "Wash both hands up to the wrists three times, getting water between your fingers."
+   },
+   {
+    "id": "w3",
+    "title": "Rinse your mouth",
+    "text": "Take water into your mouth, swirl it and spit it out, three times. When fasting, take care not to swallow any."
+   },
+   {
+    "id": "w4",
+    "title": "Rinse your nose",
+    "text": "Sniff a little water gently into your nose and blow it out, three times. When fasting, do not sniff deeply."
+   },
+   {
+    "id": "w5",
+    "title": "Wash your face",
+    "text": "Wash your whole face three times, from the hairline to the chin and from ear to ear."
+   },
+   {
+    "id": "w6",
+    "title": "Wash your arms",
+    "text": "Wash your right arm from the fingertips up to and including the elbow three times. Then do the same with your left arm."
+   },
+   {
+    "id": "w7",
+    "title": "Wipe your head",
+    "text": "Wet your hands and wipe them over your head. Then wipe the inside and back of your ears with your wet fingers."
+   },
+   {
+    "id": "w8",
+    "title": "Wash your feet",
+    "text": "Wash your right foot up to and including the ankle three times, with water between the toes. Then do the same with your left foot."
+   },
+   {
+    "id": "w9",
+    "title": "Keeping your wudu",
+    "text": "The Quran names washing the face, washing the arms, wiping the head and washing the feet. The other steps follow the way the Prophet ﷺ made wudu. Washing once is enough, and three times is the sunnah. Your wudu lasts until you use the toilet, pass wind or fall into a deep sleep. Schools differ on a few other things, so ask your local imam."
+   }
+  ],
+  "wuduRefs": [
+   {
+    "ref": "Quran 5:6",
+    "url": "https://quran.com/5/6"
+   },
+   {
+    "ref": "Bukhari 159",
+    "url": "https://sunnah.com/bukhari:159"
+   },
+   {
+    "ref": "Muslim 226",
+    "url": "https://sunnah.com/muslim:226"
+   },
+   {
+    "ref": "Tirmidhi 36",
+    "url": "https://sunnah.com/tirmidhi:36"
+   },
+   {
+    "ref": "Tirmidhi 788",
+    "url": "https://sunnah.com/tirmidhi:788"
+   },
+   {
+    "ref": "Bukhari 135",
+    "url": "https://sunnah.com/bukhari:135"
+   }
+  ],
+  "steps": [
+   {
+    "id": "p1",
+    "pose": "stand",
+    "title": "Stand and intend",
+    "text": "Stand facing the Qibla. Know in your heart which prayer you are about to pray, for example Fajr. You do not need to say the intention aloud.",
+    "arabic": "",
+    "translit": "",
+    "meaning": ""
+   },
+   {
+    "id": "p2",
+    "pose": "hands",
+    "title": "The opening takbir",
+    "text": "Raise both hands and say the takbir. The prayer has now begun, so do not talk or look around. Most Muslims then place the right hand over the left, and some leave their arms at their sides. Do as your teacher shows you.",
+    "arabic": "اللَّهُ أَكْبَرُ",
+    "translit": "Allahu Akbar",
+    "meaning": "Allah is the Greatest."
+   },
+   {
+    "id": "p3",
+    "pose": "stand",
+    "title": "Recite Al-Fatiha",
+    "text": "Standing, recite Surah Al-Fatiha, the first chapter of the Quran. It has seven ayat and is part of every rakah. After it, say 'Ameen'. In the first two rakahs, then recite another short surah or a few ayat that you know. Schools differ on what you recite when praying behind an imam, so ask your teacher.",
+    "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+    "translit": "Bismillahir-Rahmanir-Rahim. Al-hamdu lillahi Rabbil-'alamin. Ar-Rahmanir-Rahim. Maliki yawmid-din. Iyyaka na'budu wa iyyaka nasta'in. Ihdinas-siratal-mustaqim. Siratal-ladhina an'amta 'alayhim, ghayril-maghdubi 'alayhim wa lad-dallin.",
+    "meaning": "In the name of Allah, the Entirely Merciful, the Especially Merciful. All praise is due to Allah, Lord of the worlds. The Entirely Merciful, the Especially Merciful. Master of the Day of Judgement. It is You we worship and You we ask for help. Guide us to the straight path. The path of those You have favoured, not of those who have earned anger, nor of those who have gone astray."
+   },
+   {
+    "id": "p4",
+    "pose": "ruku",
+    "title": "Bow (ruku)",
+    "text": "Say 'Allahu Akbar' and bow, with your hands on your knees and your back level. Stay until your body is still, and say these words. Three times is common.",
+    "arabic": "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+    "translit": "Subhana Rabbiyal-'Azim",
+    "meaning": "Glory be to my Lord, the Almighty."
+   },
+   {
+    "id": "p5",
+    "pose": "rise",
+    "title": "Stand up straight",
+    "text": "Rise from bowing, saying the first phrase as you come up. Stand fully straight and still, and say the second phrase.",
+    "arabic": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ ۝ رَبَّنَا لَكَ الْحَمْدُ",
+    "translit": "Sami'Allahu liman hamidah. Rabbana lakal-hamd.",
+    "meaning": "Allah hears the one who praises Him. Our Lord, to You belongs all praise."
+   },
+   {
+    "id": "p6",
+    "pose": "sujood",
+    "title": "Prostrate (sujood)",
+    "text": "Say 'Allahu Akbar' and go down so that your forehead and nose, both palms, both knees and the toes of both feet rest on the ground. Stay until you are still, and say these words. Three times is common.",
+    "arabic": "سُبْحَانَ رَبِّيَ الْأَعْلَى",
+    "translit": "Subhana Rabbiyal-A'la",
+    "meaning": "Glory be to my Lord, the Most High."
+   },
+   {
+    "id": "p7",
+    "pose": "sit",
+    "title": "Sit briefly",
+    "text": "Say 'Allahu Akbar' and sit up. Rest until you are still, with your hands on your thighs. You can ask Allah for forgiveness here.",
+    "arabic": "رَبِّ اغْفِرْ لِي",
+    "translit": "Rabbighfir li",
+    "meaning": "My Lord, forgive me."
+   },
+   {
+    "id": "p8",
+    "pose": "sujood",
+    "title": "Prostrate again",
+    "text": "Say 'Allahu Akbar' and prostrate a second time, saying the same words as in the first sujood. That completes one rakah.",
+    "arabic": "سُبْحَانَ رَبِّيَ الْأَعْلَى",
+    "translit": "Subhana Rabbiyal-A'la",
+    "meaning": "Glory be to my Lord, the Most High."
+   },
+   {
+    "id": "p9",
+    "pose": "stand",
+    "title": "The second rakah",
+    "text": "Say 'Allahu Akbar' and stand up. The second rakah is the same as the first: Al-Fatiha, another short passage, ruku, standing, and two sujood with a sitting between them. The only difference is that you do not raise your hands for an opening takbir again.",
+    "arabic": "",
+    "translit": "",
+    "meaning": ""
+   },
+   {
+    "id": "p10",
+    "pose": "sit",
+    "title": "Sit for the tashahhud",
+    "text": "After the second sujood of the second rakah, stay sitting and say the tashahhud. This wording is the one taught in Bukhari 831. Some schools teach another wording that is also from the Prophet ﷺ, so learn the one your teacher uses. In Maghrib, Dhuhr, Asr and Isha, then say 'Allahu Akbar' and stand for the third rakah. In the third and fourth rakahs, recite Al-Fatiha only.",
+    "arabic": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+    "translit": "At-tahiyyatu lillahi was-salawatu wat-tayyibat. As-salamu 'alayka ayyuhan-Nabiyyu wa rahmatullahi wa barakatuh. As-salamu 'alayna wa 'ala 'ibadillahis-salihin. Ash-hadu an la ilaha illallah, wa ash-hadu anna Muhammadan 'abduhu wa rasuluh.",
+    "meaning": "All greetings, prayers and good things are for Allah. Peace be upon you, O Prophet, and the mercy of Allah and His blessings. Peace be upon us and upon the righteous servants of Allah. I bear witness that there is no god but Allah, and I bear witness that Muhammad is His servant and Messenger."
+   },
+   {
+    "id": "p11",
+    "pose": "sit",
+    "title": "The final sitting",
+    "text": "In the last rakah of any prayer, sit after the second sujood and say the tashahhud again. Then ask Allah to send blessings on the Prophet ﷺ with these words, and make a short dua if you wish. If you have not learned these words yet, say what you know and keep learning with your teacher.",
+    "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    "translit": "Allahumma salli 'ala Muhammadin wa 'ala ali Muhammad, kama sallayta 'ala Ibrahima wa 'ala ali Ibrahim, innaka Hamidun Majid. Allahumma barik 'ala Muhammadin wa 'ala ali Muhammad, kama barakta 'ala Ibrahima wa 'ala ali Ibrahim, innaka Hamidun Majid.",
+    "meaning": "O Allah, send Your mercy upon Muhammad and the family of Muhammad, as You sent Your mercy upon Ibrahim and the family of Ibrahim. You are the Praiseworthy, the Glorious. O Allah, bless Muhammad and the family of Muhammad, as You blessed Ibrahim and the family of Ibrahim. You are the Praiseworthy, the Glorious."
+   },
+   {
+    "id": "p12",
+    "pose": "salam",
+    "title": "End with salam",
+    "text": "Turn your head to the right and say the salam, then turn to the left and say it again. The prayer is complete.",
+    "arabic": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+    "translit": "As-salamu 'alaykum wa rahmatullah",
+    "meaning": "Peace be upon you, and the mercy of Allah."
+   }
+  ],
+  "refs": [
+   {
+    "ref": "Bukhari 8",
+    "url": "https://sunnah.com/bukhari:8"
+   },
+   {
+    "ref": "Quran 4:103",
+    "url": "https://quran.com/4/103"
+   },
+   {
+    "ref": "Quran 2:144",
+    "url": "https://quran.com/2/144"
+   },
+   {
+    "ref": "Bukhari 631",
+    "url": "https://sunnah.com/bukhari:631"
+   },
+   {
+    "ref": "Muslim 335",
+    "url": "https://sunnah.com/muslim:335"
+   },
+   {
+    "ref": "Bukhari 757",
+    "url": "https://sunnah.com/bukhari:757"
+   },
+   {
+    "ref": "Quran 1:1-7",
+    "url": "https://quran.com/1/1-7"
+   },
+   {
+    "ref": "Bukhari 756",
+    "url": "https://sunnah.com/bukhari:756"
+   },
+   {
+    "ref": "Bukhari 789",
+    "url": "https://sunnah.com/bukhari:789"
+   },
+   {
+    "ref": "Muslim 772",
+    "url": "https://sunnah.com/muslim:772"
+   },
+   {
+    "ref": "Bukhari 812",
+    "url": "https://sunnah.com/bukhari:812"
+   },
+   {
+    "ref": "Ibn Majah 897",
+    "url": "https://sunnah.com/ibnmajah:897"
+   },
+   {
+    "ref": "Bukhari 776",
+    "url": "https://sunnah.com/bukhari:776"
+   },
+   {
+    "ref": "Bukhari 831",
+    "url": "https://sunnah.com/bukhari:831"
+   },
+   {
+    "ref": "Bukhari 3370",
+    "url": "https://sunnah.com/bukhari:3370"
+   },
+   {
+    "ref": "Abu Dawud 996",
+    "url": "https://sunnah.com/abudawud:996"
+   }
+  ],
+  "note": "This is a simple outline and cannot replace a teacher. Ask your local mosque or a Muslim you trust to pray beside you and correct you gently. The positions of the hands and feet and some of the words differ slightly between the schools of law, so follow the way you are taught. Praying imperfectly while you learn is still prayer. Do not wait until you know everything before you begin."
+ },
+ "terms": [
+  {
+   "id": "suhoor",
+   "term": "Suhoor",
+   "def": "The meal eaten before dawn, before a day of fasting begins."
+  },
+  {
+   "id": "iftar",
+   "term": "Iftar",
+   "def": "Breaking the fast at sunset, and the meal eaten then."
+  },
+  {
+   "id": "salah",
+   "term": "Salah",
+   "def": "The prayer a Muslim offers five times a day, with set actions and words."
+  },
+  {
+   "id": "fajr",
+   "term": "Fajr",
+   "def": "The dawn prayer, 2 rakahs, prayed between first light and sunrise. The fast starts when its time begins."
+  },
+  {
+   "id": "dhuhr",
+   "term": "Dhuhr",
+   "def": "The midday prayer, 4 rakahs, prayed after the sun passes its highest point."
+  },
+  {
+   "id": "asr",
+   "term": "Asr",
+   "def": "The afternoon prayer, 4 rakahs."
+  },
+  {
+   "id": "maghrib",
+   "term": "Maghrib",
+   "def": "The sunset prayer, 3 rakahs. The fast ends when its time begins."
+  },
+  {
+   "id": "isha",
+   "term": "Isha",
+   "def": "The night prayer, 4 rakahs, prayed once the sky is fully dark."
+  },
+  {
+   "id": "wudu",
+   "term": "Wudu",
+   "def": "Washing the face, arms, head and feet in a set way before prayer."
+  },
+  {
+   "id": "rakah",
+   "term": "Rak'ah",
+   "def": "One unit of prayer: standing, bowing once and prostrating twice."
+  },
+  {
+   "id": "qibla",
+   "term": "Qibla",
+   "def": "The direction Muslims face in prayer, towards the Kaaba in Makkah."
+  },
+  {
+   "id": "ruku",
+   "term": "Ruku",
+   "def": "Bowing in prayer, with the hands on the knees."
+  },
+  {
+   "id": "sujood",
+   "term": "Sujood",
+   "def": "Prostration: placing the forehead, nose, hands, knees and toes on the ground in prayer."
+  },
+  {
+   "id": "sunnah",
+   "term": "Sunnah prayers",
+   "def": "Extra prayers the Prophet ﷺ prayed regularly before or after the five daily prayers. They bring reward and are not obligatory."
+  },
+  {
+   "id": "witr",
+   "term": "Witr",
+   "def": "A night prayer with an odd number of rakahs, prayed after Isha and before Fajr."
+  },
+  {
+   "id": "tarawih",
+   "term": "Tarawih",
+   "def": "The extra night prayer of Ramadan, prayed after Isha, usually together in the mosque."
+  },
+  {
+   "id": "tahajjud",
+   "term": "Tahajjud",
+   "def": "A voluntary prayer in the night, usually after sleeping and before Fajr."
+  },
+  {
+   "id": "duha",
+   "term": "Duha",
+   "def": "A voluntary prayer in the morning, after the sun has risen and before midday."
+  },
+  {
+   "id": "dua",
+   "term": "Dua",
+   "def": "Asking Allah for something, in any language and at any time."
+  },
+  {
+   "id": "dhikr",
+   "term": "Dhikr",
+   "def": "Remembering Allah, often by repeating short phrases of praise such as Subhanallah and Alhamdulillah."
+  },
+  {
+   "id": "adhkar",
+   "term": "Adhkar",
+   "def": "The plural of dhikr. It often means the set words of remembrance for the morning, the evening and after prayer."
+  },
+  {
+   "id": "istighfar",
+   "term": "Istighfar",
+   "def": "Asking Allah for forgiveness, for example by saying Astaghfirullah."
+  },
+  {
+   "id": "salawat",
+   "term": "Salawat",
+   "def": "Asking Allah to send blessings and peace upon the Prophet Muhammad ﷺ."
+  },
+  {
+   "id": "tadabbur",
+   "term": "Tadabbur",
+   "def": "Thinking carefully about the meaning of the Quran as you read or listen."
+  },
+  {
+   "id": "khatm",
+   "term": "Khatm",
+   "def": "Completing a reading of the whole Quran from beginning to end."
+  },
+  {
+   "id": "juz",
+   "term": "Juz'",
+   "def": "One of the thirty equal parts of the Quran. Reading one a day completes the Quran in a month."
+  },
+  {
+   "id": "taqwa",
+   "term": "Taqwa",
+   "def": "Being mindful of Allah, so that you do what pleases Him and keep away from what does not."
+  },
+  {
+   "id": "ikhlas",
+   "term": "Ikhlas",
+   "def": "Sincerity: doing a good deed only for Allah."
+  },
+  {
+   "id": "riya",
+   "term": "Riya",
+   "def": "Showing off: doing a good deed so that people will see it and praise you."
+  },
+  {
+   "id": "muhasaba",
+   "term": "Muhasaba",
+   "def": "Looking back honestly over your day to see what went well and what to put right."
+  },
+  {
+   "id": "gheebah",
+   "term": "Gheebah",
+   "def": "Backbiting: saying something about a person behind their back that they would dislike, even if it is true."
+  },
+  {
+   "id": "sadaqah",
+   "term": "Sadaqah",
+   "def": "Voluntary charity. It can be money, food, help or even a kind word."
+  },
+  {
+   "id": "zakat-al-fitr",
+   "term": "Zakat al-Fitr",
+   "def": "A set charity of food given for each member of the family at the end of Ramadan, before the Eid prayer."
+  },
+  {
+   "id": "qada",
+   "term": "Qada",
+   "def": "Making up a missed fast or prayer on a later day."
+  },
+  {
+   "id": "fidya",
+   "term": "Fidya",
+   "def": "Feeding a poor person for each day missed, for someone who can never fast because of old age or lasting illness."
+  },
+  {
+   "id": "hayd",
+   "term": "Hayd",
+   "def": "A woman's monthly period. She does not pray or fast during it, and makes up the fasts afterwards."
+  },
+  {
+   "id": "laylatul-qadr",
+   "term": "Laylatul Qadr",
+   "def": "The Night of Decree, when the Quran was first sent down. It is better than a thousand months and falls in the last ten nights."
+  },
+  {
+   "id": "itikaf",
+   "term": "I'tikaf",
+   "def": "Staying in the mosque for a time to worship Allah, especially in the last ten days of Ramadan."
+  },
+  {
+   "id": "hilal",
+   "term": "Hilal",
+   "def": "The thin new crescent moon. Seeing it marks the start of Ramadan and the start of Eid."
+  },
+  {
+   "id": "eid-al-fitr",
+   "term": "Eid al-Fitr",
+   "def": "The day of celebration after Ramadan, the first day of the month of Shawwal. It begins with the Eid prayer."
+  }
+ ]
+}
