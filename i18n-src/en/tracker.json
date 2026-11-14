@@ -150,7 +150,7 @@
   "fast.r.ill": "Illness",
   "fast.r.travel": "Travel",
   "fast.r.period": "Period",
-  "fast.r.other": "Other reason",
+  "fast.r.otherReason": "Other reason",
   "fast.owedNote.one": "Added to your make-up fasts: {n} to make up after Ramadan.",
   "fast.owedNote.other": "Added to your make-up fasts: {n} to make up after Ramadan.",
   "fast.halfNote": "Part of the day, for children learning to fast. It is not counted as a missed fast.",

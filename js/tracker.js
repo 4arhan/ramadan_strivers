@@ -726,7 +726,7 @@
       { act: 'tr.fstate', label: t('fast.kicker', { n: nf(ctx.day) }), cls: 'tr-fseg' });
     if (state === 'no') {
       body += '<p class="tr-fq mt-3">' + esc(t('fast.reason')) + '</p><div class="chips mt-2">' + MISSED.map(function (r) {
-        return ui.chip(t('fast.r.' + r), { act: 'tr.freason', arg: r, active: code === r });
+        return ui.chip(t(r === 'other' ? 'fast.r.otherReason' : 'fast.r.' + r), { act: 'tr.freason', arg: r, active: code === r });
       }).join('') + '</div><p class="caption mt-3">' + esc(tn('fast.owedNote', left)) + '</p>';
     } else if (state === 'half') body += '<p class="caption mt-3">' + esc(t('fast.halfNote')) + '</p>';
     return ui.card({ kicker: { icon: 'moon', text: t('fast.kicker', { n: nf(ctx.day) }) }, cls: 'tr-fast-state is-tight', id: 'tr-fstate', body: body });

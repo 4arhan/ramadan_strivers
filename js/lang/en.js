@@ -863,7 +863,7 @@
   "fast.planRamadan.other": "Next Ramadan is about {n} days away.",
   "fast.qadaKicker": "Make-up fasts (qada)",
   "fast.r.ill": "Illness",
-  "fast.r.other": "Other reason",
+  "fast.r.otherReason": "Other reason",
   "fast.r.period": "Period",
   "fast.r.travel": "Travel",
   "fast.reason": "Why not today?",
