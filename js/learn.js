@@ -1398,7 +1398,7 @@
       kicker: { icon: 'target', text: L('hero.kicker') },
       number: num(dv.streak), unit: LN('unit.days', dv.streak), label: canDaily ? streakLabel(dv) : L('e.daily'),
       ring: todayRing(dv), metrics: heroMetrics(o, st, dv), cta: heroCta(dv, o, canDaily)
-    }), quizCard(o, 'tf'), quizCard(o, 'mcq'), flashCard(o)];
+    }), RS.start ? RS.start.hubRowHtml() : '', quizCard(o, 'tf'), quizCard(o, 'mcq'), flashCard(o)];
     if (mis) h.push(mistakesCard(mis));
     h.push(statsCard(st, o));
     view.innerHTML = h.join('');

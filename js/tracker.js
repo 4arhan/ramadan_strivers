@@ -60,10 +60,37 @@
     return out;
   }
   function deedLabel(id) {
-    var k = 'deed.' + id + '.kids';
-    if (RS.settings.level === 'kids' && RS.has(k)) return t(k);
+    var lvl = RS.settings.level;
+    if (lvl === 'kids' && RS.has('kid.' + id)) return t('kid.' + id);
+    if (lvl === 'new' && RS.has('easy.' + id)) return t('easy.' + id);
     return t('deed.' + id + '.label');
   }
+
+  /* ---------------------------------------------------------------- shorter checklists (settings.level) */
+  // New to Islam: the essentials first, growing week by week through Ramadan (NEW_TIERS[0] in week 1, plus [1] in
+  // week 2 ...; outside Ramadan the first two). Kids: one short list. settings.simple === false shows the full list.
+  // Points are scaled so that a complete day is worth what a complete full-list day is worth (fair in a competition).
+  var NEW_TIERS = [
+    ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'quran-recitation', 'dua-iftar', 'charity-given'],
+    ['tarawih', 'istighfar', 'tongue', 'helped-family', 'quran-listening', 'no-lying'],
+    ['fajr-sunnah', 'witr', 'morning-adhkar', 'evening-adhkar', 'made-happy', 'forgave', 'no-backbiting', 'dua-others'],
+    ['laylat-qadr', 'extra-dua', 'tahajjud', 'dua-night', 'maintained-ties', 'quran-reflection']
+  ];
+  var KIDS_LIST = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'quran-recitation', 'dua-iftar', 'helped-family', 'made-happy', 'tongue', 'charity-given', 'no-lying', 'laylat-qadr'];
+  function simpleOn() { var l = RS.settings.level; return (l === 'new' || l === 'kids') && RS.settings.simple !== false; }
+  function newWeek(ctx) { return ctx.kind === 'ramadan' ? RS.clamp(Math.ceil(ctx.day / 7), 1, NEW_TIERS.length) : 2; }
+  var listCache = { k: '', set: null };
+  function listSet(ctx) {
+    if (!simpleOn()) return null;
+    var lvl = RS.settings.level, wk = lvl === 'new' ? newWeek(ctx) : 0, k = lvl + wk;
+    if (listCache.k !== k) {
+      var set = {};
+      (lvl === 'kids' ? KIDS_LIST : [].concat.apply([], NEW_TIERS.slice(0, wk))).forEach(function (id) { set[id] = 1; });
+      listCache = { k: k, set: set };
+    }
+    return listCache.set;
+  }
+  T.listInfo = function () { var ctx = checkCtx(); return { on: simpleOn(), level: RS.settings.level, week: newWeek(ctx), weeks: NEW_TIERS.length }; };
   function deedExp(id) { var k = 'deed.' + id + '.exp'; if (!RS.has(k)) return ''; var s = t(k); return s && s.trim() ? s : ''; }
   function badges() { return content().badges || []; }
   function badgeName(id) { return t('badge.' + id + '.name'); }
@@ -91,6 +118,11 @@
   // arguments while fasting) only on a date with a logged fast, so an ordinary day can reach 100%.
   var YEAR_OFF = { tarawih: 1 }, FAST_ONLY = { 'dua-iftar': 1, 'abu-bakr-fasting': 1, 'no-overeating': 1, arguments: 1 };
   function counts(ctx, id) {
+    var ls = listSet(ctx);
+    if (ls && !ls[id]) return false;
+    return countsFull(ctx, id);
+  }
+  function countsFull(ctx, id) {
     if (ctx.kind !== 'year') return true;
     if (YEAR_OFF[id]) return false;
     if (!FAST_ONLY[id]) return true;
@@ -117,6 +149,13 @@
       out[id] = on; tot++;
       if (on) { done++; pts += num(d.pts); }
     });
+    // A shorter checklist: scale the points so 100% of it equals 100% of the full list.
+    if (listSet(ctx) && tot) {
+      var maxShort = 0, maxFull = 0;
+      applicable(ctx).forEach(function (id) { var d = deed(id); if (!(hayd && d.haydOff)) maxShort += num(d.pts); });
+      sections().forEach(function (s) { if (s.l10 && !ctx.l10) return; secIds(s).forEach(function (id) { var d = deed(id); if (countsFull(ctx, id) && !(hayd && d.haydOff)) maxFull += num(d.pts); }); });
+      if (maxShort > 0 && maxFull > maxShort) pts = pts * maxFull / maxShort;
+    }
     var rec = { ck: out, ts: Date.now(), hayd: !!hayd, done: done, tot: tot, pct: tot ? Math.round(done / tot * 100) : 0, pts: Math.round(pts * ctx.mult) };
     if (ctx.kind === 'ramadan') rec.day = ctx.day; else rec.date = ctx.date;
     if (hayd && isObj(hck)) {
@@ -529,6 +568,7 @@
     h.push(lqCard(day));
     h.push(hadithCard(day));
     if (RS.settings.showPrep) h.push(planCard());
+    if (RS.start) h.push(RS.start.todayCardHtml());
     h.push(fastStateCard(ctx));
     h.push(checklist(ctx, rec));
     h.push(journalCard(ctx));
@@ -572,6 +612,7 @@
     var v = { ctx: ctx, ck: rec ? rec.ck : {}, hayd: rec ? rec.hayd : false, detail: !!RS.settings.detail, preview: !!o.preview, pin: o.pin || 0 };
     var h = [ui.section(t('today.list.title'), { text: t(v.detail ? 'today.list.hideSources' : 'today.list.showSources'), act: 'tr.detail', icon: v.detail ? 'eye-off' : 'eye' })];
     if (!v.preview) h.push(haydCard(v.hayd, v.pin));
+    if (!v.preview) h.push(listNote(ctx));
     sections().forEach(function (sec) {
       if (sec.l10 && !ctx.l10) return;
       h.push(secCard(sec, v));
@@ -630,6 +671,10 @@
       }
       if (links.length) extra += '<div class="tr-links">' + ui.meta(links) + '</div>';
     }
+    if (!preview && RS.start && (RS.settings.level === 'new' || v.detail)) {
+      var tl = RS.start.termLinkHtml(id);
+      if (tl) extra += '<div class="tr-links tr-term">' + tl + '</div>';
+    }
     if (id === 'dua-list') {
       var dl = duaLines();
       if (dl.length) extra += '<div class="tr-dualist"><p class="tr-dualist-t">' + esc(t('today.duaList')) + '</p><ul>' + dl.slice(0, 20).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
@@ -647,6 +692,17 @@
     });
   }
 
+  // "Your checklist grows each week" (new to Islam) / "Kids checklist", with the way to the full list and back.
+  function listNote(ctx) {
+    var lvl = RS.settings.level;
+    if (lvl !== 'new' && lvl !== 'kids') return '';
+    var on = simpleOn(), text;
+    if (!on) text = t('list.full');
+    else if (lvl === 'kids') text = t('list.kids');
+    else text = ctx.kind === 'ramadan' ? t('list.newWeek', { n: nf(newWeek(ctx)), of: nf(NEW_TIERS.length) }) : t('list.new');
+    return ui.card({ cls: 'tr-listnote is-tight', id: 'tr-listnote', body: ui.list([ui.row({ icon: lvl === 'kids' ? 'star' : 'sprout', title: text,
+      sub: t(on ? 'list.showFull' : 'list.showShort'), toggle: { on: on, act: 'tr.simple' }, id: 'tr-simple-row' })]) });
+  }
   function haydCard(on, pin) {
     var row = ui.row({ icon: 'flower-2', title: t('today.hayd.title'), sub: t('today.hayd.sub'), toggle: { on: on, act: 'tr.hayd', arg: pin || null }, id: 'tr-hayd-row' });
     var body = '<ul class="list"><li class="li">' + row + '</li></ul>';
@@ -844,6 +900,7 @@
       if (cards) out.push(cards);
       out.push(planCard());
     }
+    if (RS.start) out.push(RS.start.todayCardHtml());
     out.push(checklist(ctx, rec));
     out.push(journalCard(ctx));
     return out.join('');
@@ -1875,6 +1932,15 @@
     refresh();
   });
   RS.act('tr.sec', function (id) { setOpen(id, !isOpen(id)); refresh(); });
+  // Shorter checklist on/off: the day being viewed is re-totalled with the other list (ticks are kept either way).
+  RS.act('tr.simple', function () {
+    saveSetting('simple', !simpleOn());
+    listCache = { k: '', set: null };
+    var ctx = checkCtx(), r = getRec(ctx.key);
+    if (r) RS.store.set(ctx.key, build(ctx, r.ck, r.hayd, r.hck));
+    emit();
+    refresh();
+  });
   RS.act('tr.detail', function () { saveSetting('detail', !RS.settings.detail); refresh(); });
   RS.act('tr.jinput', function (v, el) { var key = el.getAttribute('data-arg'); later('j:' + key, function () { saveJournal(key, v); }, 700); });
   RS.act('tr.jsave', function (v, el) { var key = el.getAttribute('data-arg'); if (pend['j:' + key]) clearTimeout(pend['j:' + key].tm); delete pend['j:' + key]; saveJournal(key, v); });

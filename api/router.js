@@ -18,6 +18,7 @@ const ROUTES = [
   ['ai/explain', () => require('./_routes/ai/explain')],
   ['ai/reflect', () => require('./_routes/ai/reflect')],
   ['ai/quiz', () => require('./_routes/ai/quiz')],
+  ['ai/ask', () => require('./_routes/ai/ask')],
   ['buddy', () => require('./_routes/buddy/index')],
   ['buddy/:code', () => require('./_routes/buddy/item')],
   ['buddy/:code/nudge', () => require('./_routes/buddy/nudge')],

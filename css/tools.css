@@ -61,3 +61,24 @@
 .tk-notice-t { font-size: 14px; line-height: 1.45; }
 .tk-notice-t a { color: var(--accent-ink); font-weight: 700; }
 .tk-notice-b { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+
+/* Start here: guide chapters, how to pray, words explained (js/start.js) -------------------------------------- */
+.st-p { line-height: 1.6; margin-top: 10px; }
+.st-p:first-child { margin-top: 0; }
+.st-h { font-size: 22px; line-height: 1.25; font-weight: 700; margin-bottom: 4px; }
+.st-refs { margin-top: var(--s4); }
+.st-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s4); }
+.st-step { display: flex; gap: 14px; align-items: flex-start; }
+.st-step > div { min-width: 0; flex: 1 1 auto; }
+.st-step-n { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--accent-soft); color: var(--accent-ink); }
+.st-step-t { font-size: 16px; font-weight: 700; }
+.st-pose { flex: none; width: 56px; height: 56px; padding: 4px; border-radius: 16px; background: var(--accent-soft); color: var(--accent-ink); fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.st-pose circle { fill: currentColor; stroke: none; }
+.st-ar { margin-top: 10px; }
+.st-tr { font-style: italic; color: var(--ink-2, var(--ink)); margin-top: 6px; }
+.st-mean { color: var(--ink-3); margin-top: 4px; }
+.st-words { margin-top: var(--s3); }
+.st-word { padding: 12px 0; border-top: 1px solid var(--hairline); }
+.st-word dt { font-weight: 700; }
+.st-word dd { margin: 2px 0 0; color: var(--ink-2, var(--ink)); line-height: 1.5; }
+.tr-term { margin-top: 4px; }
