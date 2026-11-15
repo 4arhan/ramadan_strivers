@@ -22,8 +22,8 @@ universities and mosques. Live at [www.ramadanstrivers.com](https://www.ramadans
   entries, export CSV and print certificates at Eid.
 - **Year-round:** Sunnah fasts (Mondays, Thursdays, the white days), the six days of Shawwal and the first ten days of
   Dhul Hijjah, using the Umm al-Qura Hijri calendar with a one-day moon-sighting adjustment.
-- **10 languages:** English, 中文, हिन्दी, Español, Français, العربية, বাংলা, Português, Русский, اردو, with right-to-left
-  layout for Arabic and Urdu. The religious content is translated too (see below).
+- **15 languages:** English, 中文, हिन्दी, Español, Français, العربية, বাংলা, Português, Русский, اردو, Bahasa Indonesia, Bahasa Melayu, Türkçe, فارسی, Kiswahili, with right-to-left
+  layout for Arabic, Urdu and Persian. The religious content is translated too (see below).
 - **Optional cloud features:** accounts with sync, web push reminders, share cards, AI explanations scoped to the
   cited texts, a WhatsApp bot. Everything degrades gracefully: without a server it is the same offline tracker.
 

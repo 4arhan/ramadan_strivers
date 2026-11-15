@@ -68,6 +68,6 @@ body{margin:0;background:#F2F5F3;color:#101915;font-family:Manrope,ui-sans-serif
 <ol class="steps"><li>Open the app and tap <b>Compete</b></li><li>Enter the code and your name</li><li>Tick your daily deeds: your points count on the live leaderboard</li></ol>
 ${prizes.length ? '<div class="prizes"><span class="ttl">' + icon('gift', 15) + 'Prizes</span><ul>' + prizes.join('') + '</ul></div>' : ''}
 </section>
-<p class="foot">Free · Private · Works offline · 10 languages · From Muslim to Mu'min</p>
+<p class="foot">Free · Private · Works offline · 15 languages · From Muslim to Mu'min</p>
 <p class="np"><button type="button" onclick="print()">${icon('printer', 18)}Print poster</button></p></main></body></html>`, 'public, max-age=300');
 }, ['GET']);
