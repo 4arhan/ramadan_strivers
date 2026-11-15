@@ -76,6 +76,7 @@ npm install
 # optional Postgres for accounts, sync and competitions:
 DATABASE_URL=postgresql://user@localhost:5432/ramadan AUTH_SECRET=dev npm run dev     # http://localhost:3000
 BASE=http://localhost:3000 npm run test:api      # end-to-end API tests
+BASE=http://localhost:3000 npm run test:demo     # the live demo (/?demo=1) keeps its promises; needs Playwright
 npm run build:content                            # after editing content/*.json
 npm run build:i18n                               # after editing i18n-src/
 npm run check:i18n                               # translation health for all languages

@@ -10,6 +10,7 @@
     "check:i18n": "node scripts/check-i18n.js",
     "test": "node scripts/test-api.js",
     "test:api": "node scripts/test-api.js",
+    "test:demo": "node scripts/test-demo.js",
     "product:shots": "node scripts/product-shots.js"
   },
   "dependencies": {

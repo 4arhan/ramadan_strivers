@@ -416,7 +416,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 .demo-head { grid-area: head; } .demo-side { grid-area: side; }
 .demo-stage { grid-area: stage; position: sticky; top: 86px; display: grid; gap: 14px; justify-items: center; }
 .demo-ph { width: 408px; max-width: 100%; }
-.demo-screen { aspect-ratio: auto; height: clamp(540px, calc(100vh - 208px), 870px); transition: background .3s; }
+.demo-screen { aspect-ratio: auto; height: clamp(430px, calc(100vh - 208px), 870px); transition: background .3s; }
 .demo-screen.dark { background: #070D0A; }
 .demo-screen::before { content: ""; position: absolute; z-index: 4; top: 9px; left: 50%; width: 76px; height: 9px; margin-left: -38px; border-radius: 99px; background: rgba(16, 25, 21, .2); }
 .demo-screen.dark::before { background: rgba(238, 248, 242, .22); }
@@ -462,6 +462,12 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 .demo-link { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; background: none; color: var(--mint-2); font-size: 14.5px; font-weight: 700; text-decoration: none; cursor: pointer; }
 .demo-link:hover { color: var(--mint); } .demo-link + .demo-link { margin-inline-start: 12px; } .demo-link .i { font-size: 16px; }
 .demo-note { margin-top: 26px; display: flex; gap: 12px; font-size: 14px; color: var(--on-dark-3); max-width: 62ch; } .demo-note .i { flex: none; font-size: 18px; color: var(--mint-2); margin-top: 2px; }
+
+.kick-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.see-live { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px; background: var(--soft); color: var(--accent-ink); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .15s; }
+.see-live:hover { background: rgba(4, 120, 87, .17); } .see-live .i { font-size: 12px; }
+.tour-ctl a { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: var(--mint); color: var(--pine-900); font-size: 13.5px; font-weight: 700; text-decoration: none; }
+.tour-ctl a .i { font-size: 13px; }
 
 /* open it on a phone, and pass it on */
 .qr { display: flex; align-items: center; gap: 26px; max-width: 640px; margin: 22px auto 0; padding: 22px 26px; border-radius: 24px; background: var(--card); border: 1px solid var(--hair); }
@@ -618,15 +624,15 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="head reveal"><div class="kick">Take the tour</div><h2>Nine screens. Two minutes. The whole app.</h2><p class="lead">These are real screens from the app, scrolling as they do in your hand. Pick one, or sit back and let it play.</p></div>
     <div class="tour auto reveal" data-tour>
       <div class="tour-tabs" role="tablist" aria-label="App tour">
-        <button class="tour-tab" role="tab" aria-selected="true" type="button"><span class="ico"><svg class="i"><use href="#i-list"/></svg></span><span><b>Today</b><span class="one">Your day at a glance</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>A ring that fills as you tick, with points and streaks</li><li><svg class="i"><use href="#i-check"/></svg>The next prayer and a countdown to iftar</li><li><svg class="i"><use href="#i-check"/></svg>The hadith of the day, then your deeds in <span data-n="groups">7</span> groups</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-book"/></svg></span><span><b>Quran</b><span class="one">Finish the Quran this month</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Log your pages after each sitting</li><li><svg class="i"><use href="#i-check"/></svg>See the pace you need for the days left</li><li><svg class="i"><use href="#i-check"/></svg>A chart of your reading, juz by juz</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-sunrise"/></svg></span><span><b>Ramadan Prep</b><span class="one">Arrive ready, not rushed</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="prepDays">30</span> days before Ramadan, three small actions a day</li><li><svg class="i"><use href="#i-check"/></svg>Daily salah and Quran check-ins</li><li><svg class="i"><use href="#i-check"/></svg>Your readiness, area by area</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-cap"/></svg></span><span><b>Learn</b><span class="one">Quizzes and flashcards</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="questions">211</span> questions and <span data-n="cards">100</span> flashcards</li><li><svg class="i"><use href="#i-check"/></svg>Today's 5: a short daily mix that builds a streak</li><li><svg class="i"><use href="#i-check"/></svg>Every answer shows its source</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-heart"/></svg></span><span><b>New to Islam</b><span class="one">How to pray, step by step</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Wudu in <span data-n="wudu">9</span> steps, the prayer in <span data-n="praySteps">12</span></li><li><svg class="i"><use href="#i-check"/></svg>A drawing of each position and the words to say</li><li><svg class="i"><use href="#i-check"/></svg>Arabic, how to pronounce it, and what it means</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-smile"/></svg></span><span><b>Kids mode</b><span class="one">A Ramadan a child can own</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="kidDeeds">13</span> deeds in plain words, with bigger text</li><li><svg class="i"><use href="#i-check"/></svg>A night sky that lights a star for each good day</li><li><svg class="i"><use href="#i-check"/></svg>A short story every day, with a question</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-trophy"/></svg></span><span><b>Compete</b><span class="one">Race each other to good</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Your rank, your group's goal and its charity target</li><li><svg class="i"><use href="#i-check"/></svg>Sign-up lists, weekly awards and the leaderboard</li><li><svg class="i"><use href="#i-check"/></svg>Only your display name and totals are shared</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-school"/></svg></span><span><b>Organise</b><span class="one">Run it for a school or mosque</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Weekly awards and a report to print</li><li><svg class="i"><use href="#i-check"/></svg>Goals, double-points days and your own deeds</li><li><svg class="i"><use href="#i-check"/></svg>Helpers, sign-up lists, challenges and leagues</li></ul><span class="bar"><i></i></span></div></span></span></button>
-        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button"><span class="ico"><svg class="i"><use href="#i-user"/></svg></span><span><b>Me</b><span class="one">Your month, added up</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Average completion, perfect days and <span data-n="streaks">4</span> streaks</li><li><svg class="i"><use href="#i-check"/></svg><span data-n="badges">12</span> badges to earn</li><li><svg class="i"><use href="#i-check"/></svg>An Eid report to download and keep</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="true" type="button" data-live='{"level":"adult","go":"today"}'><span class="ico"><svg class="i"><use href="#i-list"/></svg></span><span><b>Today</b><span class="one">Your day at a glance</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>A ring that fills as you tick, with points and streaks</li><li><svg class="i"><use href="#i-check"/></svg>The next prayer and a countdown to iftar</li><li><svg class="i"><use href="#i-check"/></svg>The hadith of the day, then your deeds in <span data-n="groups">7</span> groups</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"quran"}'><span class="ico"><svg class="i"><use href="#i-book"/></svg></span><span><b>Quran</b><span class="one">Finish the Quran this month</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Log your pages after each sitting</li><li><svg class="i"><use href="#i-check"/></svg>See the pace you need for the days left</li><li><svg class="i"><use href="#i-check"/></svg>A chart of your reading, juz by juz</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"prep"}'><span class="ico"><svg class="i"><use href="#i-sunrise"/></svg></span><span><b>Ramadan Prep</b><span class="one">Arrive ready, not rushed</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="prepDays">30</span> days before Ramadan, three small actions a day</li><li><svg class="i"><use href="#i-check"/></svg>Daily salah and Quran check-ins</li><li><svg class="i"><use href="#i-check"/></svg>Your readiness, area by area</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"learn"}'><span class="ico"><svg class="i"><use href="#i-cap"/></svg></span><span><b>Learn</b><span class="one">Quizzes and flashcards</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="questions">211</span> questions and <span data-n="cards">100</span> flashcards</li><li><svg class="i"><use href="#i-check"/></svg>Today's 5: a short daily mix that builds a streak</li><li><svg class="i"><use href="#i-check"/></svg>Every answer shows its source</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"learn/start"}'><span class="ico"><svg class="i"><use href="#i-heart"/></svg></span><span><b>New to Islam</b><span class="one">How to pray, step by step</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Wudu in <span data-n="wudu">9</span> steps, the prayer in <span data-n="praySteps">12</span></li><li><svg class="i"><use href="#i-check"/></svg>A drawing of each position and the words to say</li><li><svg class="i"><use href="#i-check"/></svg>Arabic, how to pronounce it, and what it means</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"kids","go":"today"}'><span class="ico"><svg class="i"><use href="#i-smile"/></svg></span><span><b>Kids mode</b><span class="one">A Ramadan a child can own</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg><span data-n="kidDeeds">13</span> deeds in plain words, with bigger text</li><li><svg class="i"><use href="#i-check"/></svg>A night sky that lights a star for each good day</li><li><svg class="i"><use href="#i-check"/></svg>A short story every day, with a question</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"compete"}'><span class="ico"><svg class="i"><use href="#i-trophy"/></svg></span><span><b>Compete</b><span class="one">Race each other to good</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Your rank, your group's goal and its charity target</li><li><svg class="i"><use href="#i-check"/></svg>Sign-up lists, weekly awards and the leaderboard</li><li><svg class="i"><use href="#i-check"/></svg>Only your display name and totals are shared</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"compete/org"}'><span class="ico"><svg class="i"><use href="#i-school"/></svg></span><span><b>Organise</b><span class="one">Run it for a school or mosque</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Weekly awards and a report to print</li><li><svg class="i"><use href="#i-check"/></svg>Goals, double-points days and your own deeds</li><li><svg class="i"><use href="#i-check"/></svg>Helpers, sign-up lists, challenges and leagues</li></ul><span class="bar"><i></i></span></div></span></span></button>
+        <button class="tour-tab" role="tab" aria-selected="false" tabindex="-1" type="button" data-live='{"level":"adult","go":"me"}'><span class="ico"><svg class="i"><use href="#i-user"/></svg></span><span><b>Me</b><span class="one">Your month, added up</span><span class="more"><div><ul><li><svg class="i"><use href="#i-check"/></svg>Average completion, perfect days and <span data-n="streaks">4</span> streaks</li><li><svg class="i"><use href="#i-check"/></svg><span data-n="badges">12</span> badges to earn</li><li><svg class="i"><use href="#i-check"/></svg>An Eid report to download and keep</li></ul><span class="bar"><i></i></span></div></span></span></button>
       </div>
       <div>
         <div class="tour-stage">
@@ -643,7 +649,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
           </div></div>
         </div>
         <div class="tour-cap" aria-hidden="true"><b></b><span></span></div>
-        <div class="tour-ctl"><button type="button" data-tour-toggle aria-pressed="false"><svg class="i"><use href="#i-pause"/></svg><span>Pause</span></button></div>
+        <div class="tour-ctl"><button type="button" data-tour-toggle aria-pressed="false"><svg class="i"><use href="#i-pause"/></svg><span>Pause</span></button><a href="#demo" id="tour-live"><svg class="i"><use href="#i-play"/></svg>Try this screen live</a></div>
       </div>
     </div>
   </div>
@@ -769,7 +775,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat">
       <div class="feat-media reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/today.webp" alt="The Today screen: today's progress, the countdown to iftar and the hadith of the day" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/checklist.webp" alt="The checklist: each deed with its points, hadith reference and grading" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">1 · Daily checklist</div>
+        <div class="kick-row"><div class="kick">1 · Daily checklist</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"today"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>Tick your deeds. See your day take shape.</h2>
         <p class="lead">From the two rakahs before Fajr to the last istighfar before sleep: salah, sunnah prayers, adhkar, Quran, charity, character and the things to stay away from. Tick what you did and the day adds itself up.</p>
         <ul class="facts"><li><b data-n="deeds">68</b>deeds to tick</li><li><b data-n="groups">7</b>groups</li><li><b data-n="sourced">67</b>cite a hadith or verse</li><li><b data-n="badges">12</b>badges</li></ul>
@@ -786,7 +792,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat flip">
       <div class="feat-media deep reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/prayer.webp" alt="Prayer times for London with the next prayer highlighted" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/qibla.webp" alt="Qibla direction: a compass pointing to the Kaaba, with the bearing from where you are" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">2 · Prayer times and dates</div>
+        <div class="kick-row"><div class="kick">2 · Prayer times and dates</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"today","open":"prayer"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>The right time, wherever you are.</h2>
         <p class="lead">Search for any city or town in the world, use your location or type in coordinates. The app suggests the method most mosques in your country follow, then counts down to iftar and to the end of suhoor.</p>
         <ul class="facts"><li><b data-n="methods">23</b>calculation methods</li><li><b data-n="cities">563</b>cities ready offline</li><li><b>5</b>daily prayers, plus sunrise</li></ul>
@@ -807,7 +813,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat">
       <div class="feat-media reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/quran.webp" alt="The Quran tracker: 224 pages read, 37% of the way, and the pages needed each day" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/story.webp" alt="A share image of today's progress, ready for a story" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">3 · Quran tracker</div>
+        <div class="kick-row"><div class="kick">3 · Quran tracker</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"quran"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>Finish the Quran, a few pages at a time.</h2>
         <p class="lead">Log the pages you read after each sitting. The tracker knows the Madani mushaf, shows which juz you are in, and works out the pace you need for the days that are left.</p>
         <ul class="facts"><li><b>604</b>pages</li><li><b>30</b>juz</li><li><b>20</b>pages a day finishes it</li></ul>
@@ -823,7 +829,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat flip">
       <div class="feat-media deep reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/prep.webp" alt="Ramadan Prep: the day of the programme and today's three actions" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/countdown.webp" alt="The countdown to Ramadan with the note that the date is an estimate" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">4 · Ramadan Prep</div>
+        <div class="kick-row"><div class="kick">4 · Ramadan Prep</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"prep"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>Arrive ready, not rushed.</h2>
         <p class="lead">A 30-day programme for the month before. It begins with a short check of where you are, then gives you three small actions a day: first your salah, then the Quran, then fasting and habits, and finally the heart, family and charity.</p>
         <ul class="facts"><li><b data-n="prepDays">30</b>days</li><li><b data-n="prepActions">90</b>small actions</li><li><b data-n="prepAreas">6</b>areas of your life</li><li><b data-n="prepCheck">7</b>readiness questions</li></ul>
@@ -838,7 +844,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat">
       <div class="feat-media reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/quiz.webp" alt="A true or false question about fasting" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/flash.webp" alt="A flashcard of a dua in Arabic with its transliteration and meaning" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">5 · Learn</div>
+        <div class="kick-row"><div class="kick">5 · Learn</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"learn"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>Know why, not only what.</h2>
         <p class="lead">Learn turns the hadith and verses behind the deeds into quick questions and flashcards. Five minutes after Fajr is enough.</p>
         <ul class="facts"><li><b data-n="tf">149</b>true or false</li><li><b data-n="mcq">62</b>multiple choice</li><li><b data-n="cards">100</b>flashcards in <span data-n="decks">7</span> decks</li><li><b data-n="topics">10</b>topics</li></ul>
@@ -854,7 +860,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat flip">
       <div class="feat-media deep reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/start.webp" alt="New to Islam: start here. My first Ramadan, how to pray, words explained" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/pray.webp" alt="How to pray: a drawing of the position, the Arabic words, how to say them and what they mean" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">6 · New to Islam</div>
+        <div class="kick-row"><div class="kick">6 · New to Islam</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"learn/start"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>A gentle first Ramadan.</h2>
         <p class="lead">Written for people at the beginning. What Ramadan is, who fasts and who is excused, what breaks a fast, how to make wudu, and how to pray, one position at a time with the words to say.</p>
         <ul class="facts"><li><b data-n="chapters">12</b>short chapters</li><li><b data-n="wudu">9</b>steps of wudu</li><li><b data-n="praySteps">12</b>steps of prayer</li><li><b data-n="terms">40</b>words explained</li></ul>
@@ -869,7 +875,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat" id="families">
       <div class="feat-media reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/kids.webp" alt="Kids mode: a simpler day and a night sky with a star for each good day" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/kids-story.webp" alt="The story of the day in kids mode, with a question at the end" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">7 · Children and families</div>
+        <div class="kick-row"><div class="kick">7 · Children and families</div><a class="see-live" href="#demo" data-demo='{"level":"kids","go":"today"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>The whole house, on one phone or many.</h2>
         <p class="lead">Kids mode, made for ages 8 to 12, swaps the long list for deeds a child can own, lights a star for each good day and tells a short story every evening. Parents stay in charge.</p>
         <ul class="facts"><li><b data-n="kidDeeds">13</b>deeds for children</li><li><b data-n="stories">30</b>stories, one a day</li><li><b data-n="kidQuiz">48</b>easier questions</li></ul>
@@ -889,7 +895,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     <div class="feat flip">
       <div class="feat-media deep reveal"><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/board.webp" alt="A leaderboard of individuals with points, days and Quran pages" width="390" height="844"></div></div><div class="ph"><div class="ph-screen"><img class="shot" loading="lazy" src="/product/img/goal.webp" alt="A shared goal of 3,000 Quran pages, a charity target, double-points days and the organiser's own deeds" width="390" height="844"></div></div></div>
       <div class="reveal d1">
-        <div class="kick">8 · Compete in good</div>
+        <div class="kick-row"><div class="kick">8 · Compete in good</div><a class="see-live" href="#demo" data-demo='{"level":"adult","go":"compete"}'><svg class="i"><use href="#i-play"/></svg>See it live</a></div>
         <h2>Race each other to what matters.</h2>
         <p class="lead">Join with a six-letter code, a link or a QR code, choose a display name, and your points appear on your group's leaderboard. Classes and teams are ranked on averages, so a small group can beat a large one.</p>
         <ul class="facts"><li><b>6</b>letters to join</li><li><b>10</b>prizes an organiser can set</li><li><b>4</b>weekly rounds of awards</li></ul>
@@ -1486,7 +1492,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     if (!sec || !screen || !start || og) return;
     var APP = /(^|\.)ramadanstrivers\.com$/.test(location.hostname) ? 'https://www.ramadanstrivers.com' : location.origin, SRC = APP + '/?demo=1';
     var frame = null, ready = false, queue = [], last = null, slow = null, upT = null;
-    var controls = $$('[data-demo]', sec), dark = $('#demo-dark'), kids = $('#demo-kids'), lang = $('#demo-lang'), again = $('#demo-again'), full = $('#demo-full');
+    var controls = $$('[data-demo]', sec), outside = $$('[data-demo]').filter(function (b) { return !sec.contains(b); }), tourLive = $('#tour-live'), dark = $('#demo-dark'), kids = $('#demo-kids'), lang = $('#demo-lang'), again = $('#demo-again'), full = $('#demo-full');
     var score = $('#demo-score'), wait = $('#demo-wait'), nums = $('#demo-nums'), rankEl = $('#demo-rank'), ofEl = $('#demo-of'), ptsEl = $('#demo-pts'), up = $('#demo-up');
     function inPage() { return !window.matchMedia || matchMedia('(min-width: 761px)').matches; }
     function n(v) { return Number(v).toLocaleString('en-GB'); }
@@ -1529,11 +1535,15 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
       paint(m);
     });
     start.addEventListener('click', function (e) { if (!inPage()) return; e.preventDefault(); begin(false); show(); });
-    controls.forEach(function (b) { b.addEventListener('click', function () {
-      var d = JSON.parse(b.getAttribute('data-demo'));
+    function act(d, e) {
+      if (e) e.preventDefault();
       if (!inPage()) { location.href = SRC + (d.level === 'kids' ? '&kids=1' : '') + '#/' + d.go; return; }
       send(d);
-    }); });
+    }
+    controls.forEach(function (b) { b.addEventListener('click', function () { act(JSON.parse(b.getAttribute('data-demo'))); }); });
+    // "See it live" beside each feature, and the tour's screen of the moment
+    outside.forEach(function (b) { b.addEventListener('click', function (e) { act(JSON.parse(b.getAttribute('data-demo')), e); }); });
+    if (tourLive) tourLive.addEventListener('click', function (e) { var t = $('#tour [role="tab"][aria-selected="true"]'), d = t && t.getAttribute('data-live'); if (d) act(JSON.parse(d), e); });
     if (dark) dark.addEventListener('click', function () { send({ theme: dark.getAttribute('aria-pressed') === 'true' ? 'light' : 'dark' }); });
     if (kids) kids.addEventListener('click', function () { send({ level: kids.getAttribute('aria-pressed') === 'true' ? 'adult' : 'kids' }); });
     if (lang) lang.addEventListener('change', function () { send({ lang: lang.value }); });

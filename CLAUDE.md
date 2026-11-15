@@ -49,5 +49,9 @@ on its own page. Two pieces make it work, and neither does anything outside demo
 
 When a change adds or alters a server call that a participant's screens make, add or update its answer in `answer()`,
 otherwise that part of the demo shows the switched-off message. When the scoring rules on the server change, change
-them in `js/demo.js` as well. The page talks to the frame with `postMessage` (`type: 'rs-demo'`; `go`, `theme`, `lang`,
-`level` in; the screen, language, theme and the visitor's place on the sample board out).
+them in `js/demo.js` as well. Then run `BASE=http://localhost:<port> node scripts/test-demo.js`: it checks that the
+demo reads and changes nothing of a visitor's, calls nothing on the server but the city search, opens every screen
+without an error, and that the normal app is untouched.
+
+The page talks to the frame with `postMessage` (`type: 'rs-demo'`): `go`, `theme`, `lang`, `level` and `open` go
+in; the screen, language, theme and the visitor's place on the sample board come out.

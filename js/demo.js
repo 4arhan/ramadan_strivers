@@ -9,7 +9,7 @@
            prayer times for the largest city in the visitor's time zone, two buddies, and a place in a school
            competition whose leaderboard, weekly awards and league table answer to what the visitor ticks.
            The clock is moved to that day (same time of day), so dates, prayer times and the week all agree.
-   Steer   The product page drives the app with window.postMessage({ type: 'rs-demo', go | theme | lang | level })
+   Steer   The product page drives the app with window.postMessage({ type: 'rs-demo', go | theme | lang | level | open })
            from an allowed origin, and is told when the app is ready, which screen is open and where the visitor
            stands on the leaderboard. ?fresh=1 starts the sample month again; ?kids=1 starts in kids mode.
    Nothing in this file runs outside demo mode.
@@ -324,10 +324,11 @@
   window.addEventListener('message', function (e) {
     var m = e.data;
     if (!isObj(m) || m.type !== 'rs-demo' || e.source !== window.parent || !trusted(e.origin)) return;
-    if (m.level === 'kids' || m.level === 'adult') RS.runAct('tr.level', m.level);
+    if ((m.level === 'kids' || m.level === 'adult') && m.level !== (RS.settings.level === 'kids' ? 'kids' : 'adult')) RS.runAct('tr.level', m.level);
     if (m.theme === 'dark' || m.theme === 'light') RS.runAct('tr.theme', m.theme);
     if (typeof m.lang === 'string' && RS.LANGS.some(function (l) { return l.code === m.lang; })) RS.setLang(m.lang);
     if (typeof m.go === 'string' && /^[a-z]{2,12}(\/[a-z]{2,12}){0,2}$/.test(m.go)) { RS.router.go(m.go); window.scrollTo(0, 0); }
+    if (m.open === 'prayer') setTimeout(function () { RS.runAct('prayer.open'); }, 450);          // the day's prayer times, once the screen is there
     if (m.ask) tell();
   });
   RS.on('boot', function () { label(); });
