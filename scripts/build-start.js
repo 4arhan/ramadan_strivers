@@ -13,7 +13,7 @@ const ROOT = path.join(__dirname, '..');
 const src = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'start.json'), 'utf8'));
 const ui = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'start-ui.json'), 'utf8'));
 global.window = {}; eval(fs.readFileSync(path.join(ROOT, 'js', 'icons.js'), 'utf8'));
-const ICONS = window.RS.icons, POSES = ['stand', 'hands', 'ruku', 'rise', 'sujood', 'sit', 'salam'];
+const ICONS = window.RS.icons, POSES = ['stand', 'hands', 'recite', 'ruku', 'rise', 'sujood', 'sit', 'tashahhud', 'salam'];   // the pictures js/start.js can draw
 const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F2FF}\u{2B50}\u{2B55}]/u;
 const errs = [], text = Object.assign({}, ui), seen = new Set();
 const put = (k, v) => { v = String(v == null ? '' : v).trim(); if (!v) errs.push('empty text: ' + k); if (EMOJI.test(v)) errs.push('emoji in ' + k); if (/—/.test(v)) errs.push('em dash in ' + k); text[k] = v; };

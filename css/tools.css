@@ -72,8 +72,29 @@
 .st-step > div { min-width: 0; flex: 1 1 auto; }
 .st-step-n { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--accent-soft); color: var(--accent-ink); }
 .st-step-t { font-size: 16px; font-weight: 700; }
-.st-pose { flex: none; width: 56px; height: 56px; padding: 4px; border-radius: 16px; background: var(--accent-soft); color: var(--accent-ink); fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-.st-pose circle { fill: currentColor; stroke: none; }
+/* How to pray: a drawn picture of a man in each position (js/start.js draws the shapes, the colours are set here).
+   One look in both themes: a white thobe and a dark figure on green, a little deeper in the dark theme. */
+.st-step.is-pose { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; }
+.st-say { grid-column: 1 / -1; margin-top: 12px; padding: 12px 14px; border-radius: var(--r-block); background: var(--card-2); border: 1px solid var(--hairline); }
+.st-say > :first-child { margin-top: 0; }
+.st-art { display: block; width: 92px; height: 92px; border-radius: 22px; background: var(--art-bg);
+  --art-bg: linear-gradient(180deg, #2F8466, #1F644C); --art-robe: #FFFFFF; --art-fold: #C9E2D6; --art-skin: #0A2A1E; --art-hair: #020A07;
+  --art-mat: #A7F3D0; --art-mat-2: rgba(5, 46, 34, .45); --art-shadow: rgba(3, 16, 11, .26); --art-move: #D1FAE5; }
+:root[data-theme="dark"] .st-art { --art-bg: linear-gradient(180deg, #25664F, #1A4E3D); --art-robe: #F4FBF7; --art-skin: #06140E; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .st-art { --art-bg: linear-gradient(180deg, #25664F, #1A4E3D); --art-robe: #F4FBF7; --art-skin: #06140E; } }
+@media (max-width: 350px) { .st-art { width: 76px; height: 76px; border-radius: 18px; } .st-step.is-pose { column-gap: 12px; } }
+@media (min-width: 520px) { .st-art { width: 112px; height: 112px; border-radius: 26px; } .st-step.is-pose { column-gap: 16px; } }
+.st-art .r, .st-art .c { fill: var(--art-robe); }
+.st-art .s { fill: var(--art-skin); }
+.st-art .h { fill: var(--art-hair); }
+.st-art .m { fill: var(--art-mat); }
+.st-art .sh { fill: var(--art-shadow); }
+.st-art .arm, .st-art .f, .st-art .fin, .st-art .m2, .st-art .a { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.st-art .arm { stroke: var(--art-fold); stroke-width: 6.6; }
+.st-art .f { stroke: var(--art-fold); stroke-width: 1.3; }
+.st-art .fin { stroke: var(--art-skin); stroke-width: 2.2; }
+.st-art .m2 { stroke: var(--art-mat-2); stroke-width: 1.3; stroke-dasharray: .1 4; }
+.st-art .a { stroke: var(--art-move); stroke-width: 1.9; }
 .st-ar { margin-top: 10px; }
 .st-tr { font-style: italic; color: var(--ink-2, var(--ink)); margin-top: 6px; }
 .st-mean { color: var(--ink-3); margin-top: 4px; }

@@ -469,7 +469,7 @@
    },
    {
     "id": "p3",
-    "pose": "stand",
+    "pose": "recite",
     "title": "Recite Al-Fatiha",
     "text": "Standing, recite Surah Al-Fatiha, the first chapter of the Quran. It has seven ayat and is part of every rakah. After it, say 'Ameen'. In the first two rakahs, then recite another short surah or a few ayat that you know. Schools differ on what you recite when praying behind an imam, so ask your teacher.",
     "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
@@ -523,7 +523,7 @@
    },
    {
     "id": "p9",
-    "pose": "stand",
+    "pose": "recite",
     "title": "The second rakah",
     "text": "Say 'Allahu Akbar' and stand up. The second rakah is the same as the first: Al-Fatiha, another short passage, ruku, standing, and two sujood with a sitting between them. The only difference is that you do not raise your hands for an opening takbir again.",
     "arabic": "",
@@ -532,7 +532,7 @@
    },
    {
     "id": "p10",
-    "pose": "sit",
+    "pose": "tashahhud",
     "title": "Sit for the tashahhud",
     "text": "After the second sujood of the second rakah, stay sitting and say the tashahhud. This wording is the one taught in Bukhari 831. Some schools teach another wording that is also from the Prophet ﷺ, so learn the one your teacher uses. In Maghrib, Dhuhr, Asr and Isha, then say 'Allahu Akbar' and stand for the third rakah. In Fajr, stay sitting and go on to the next step. In the third and fourth rakahs, recite Al-Fatiha only.",
     "arabic": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",

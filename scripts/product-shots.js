@@ -317,7 +317,7 @@ async function shoot(name, route, o) {
   await shoot('daily', 'learn/daily', {});
   await shoot('start', 'learn/start', {});
   await shoot('read', 'learn/start/read?c=what', {});
-  await shoot('pray', 'learn/start/pray', { top: '.st-pose, .st-steps, [class*="st-pose"]' });
+  await shoot('pray', 'learn/start/pray', { top: '.card:has(.st-art)' });      // from the card with the prayer's steps and their pictures
   await shoot('words', 'learn/start/words', {});
   await shoot('kids', 'today', { settings: { level: 'kids' }, top: '#kd-sky' });
   await shoot('kids-story', 'today', { settings: { level: 'kids' }, top: '#kd-story, .kd-story, [id*="story"]' });

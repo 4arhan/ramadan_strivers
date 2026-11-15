@@ -2,7 +2,7 @@
    Ramadan Strivers v8 — start.js. "Start here": the basics for people who are new to Islam (and older children).
    - My first Ramadan: short chapters (what Ramadan is, who fasts, what breaks the fast, fasting among non-Muslim
      family, a first visit to a mosque ...). Chapters read are remembered on this device.
-   - How to pray: wudu and the prayer step by step, with a pictogram of each position.
+   - How to pray: wudu and the prayer step by step, with a drawn picture of a man in each position.
    - Words explained: the Arabic terms the app uses; a term can also be opened from a deed in the checklist.
    - Ask a question: the server's AI helper for basics, when the server has it; never a ruling.
    Structure (ids, icons, references, Arabic) is in js/start-data.js (RS.startData), generated with the English text
@@ -102,16 +102,72 @@
   });
 
   /* ------------------------------------------------------------------ how to pray */
-  var POSE = {
-    stand: '<circle cx="32" cy="10" r="5"/><path d="M32 15v25M32 40l-5 18M32 40l5 18M25 27h14"/>',
-    hands: '<circle cx="32" cy="10" r="5"/><path d="M32 15v25M32 40l-5 18M32 40l5 18M32 21l-9-9M32 21l9-9"/>',
-    ruku: '<circle cx="15" cy="27" r="5"/><path d="M20 29h21M41 29v29M27 29v15"/>',
-    rise: '<circle cx="32" cy="10" r="5"/><path d="M32 15v25M32 40l-5 18M32 40l5 18M32 21l-6 15M32 21l6 15"/>',
-    sujood: '<circle cx="13" cy="50" r="5"/><path d="M18 48l19-12M37 36l4 19M41 55l14 2M21 47l-4 10"/><path d="M6 58h52" opacity=".35"/>',
-    sit: '<circle cx="29" cy="23" r="5"/><path d="M29 28l2 19M31 47l15 2M46 49l-12 6M30 36l11 9"/><path d="M6 58h52" opacity=".35"/>',
-    salam: '<circle cx="29" cy="23" r="5"/><path d="M29 28l2 19M31 47l15 2M46 49l-12 6M30 36l11 9M40 20l5 3-5 3"/><path d="M6 58h52" opacity=".35"/>'
-  };
-  function pose(k) { return '<svg class="st-pose" viewBox="0 0 64 64" aria-hidden="true" focusable="false">' + (POSE[k] || POSE.stand) + '</svg>'; }
+  // The pictures: a man in a thobe and cap in each position of the prayer, drawn as plain shapes. No face is drawn.
+  // Each shape takes its colour from a class that css/tools.css sets: r thobe · arm sleeve · f fold · s skin ·
+  // fin finger · h hair and beard · c cap · m mat · m2 its stripe · sh shadow · a movement.
+  // He is drawn on a 120 by 120 field with the ground at y = 97 (pose() then enlarges the scene to fill the tile)
+  // and keeps one size in every picture: head 8.4 in radius, shoulder to hip 26, hip to knee 16, knee to ankle 15.
+  // In the side views he faces right, so the side we see is his right: the hand that points in the tashahhud is
+  // his right hand, and in the salam his head is turned to his right. For that reason the pictures are never
+  // mirrored, in right-to-left languages either.
+  var ART = (function () {
+    function shadow(cx, rx) { return '<ellipse class="sh" cx="' + cx + '" cy="97.3" rx="' + rx + '" ry="2.2"/>'; }
+    function hand(x, y) { return '<circle class="s" cx="' + x + '" cy="' + y + '" r="3.4"/>'; }
+    function arm(d) { return '<path class="arm" d="' + d + '"/>'; }
+    var CAP = '<path class="c" d="M-8.9-2.4a8.9 8.5 0 0 1 17.8 0z"/></g>';
+    // the head from the front: the beard round the chin, the cap on top
+    function front(cx, cy) {
+      return '<g transform="translate(' + cx + ' ' + cy + ')"><circle class="s" r="8.4"/><path class="h" d="M-8.3.8c.5 5.5 4 9.3 8.3 9.3s7.8-3.8 8.3-9.3c-2 3-4.8 4.4-8.3 4.4s-6.3-1.4-8.3-4.4z"/>' + CAP;
+    }
+    // the head from the side, looking right: the beard under the chin and the hair at the
+    // nape tell which way. turn is in degrees clockwise (90 looks at the ground), flip looks left
+    function side(cx, cy, turn, flip) {
+      return '<g transform="translate(' + cx + ' ' + cy + ')' + (flip ? ' scale(-1 1)' : '') + (turn ? ' rotate(' + turn + ')' : '') + '"><circle class="s" r="8.4"/>' +
+        '<path class="h" d="M-8.3-1.6c-.6 3.8.5 7 2.9 8.9c-.8-3.2-.7-6.2.3-8.9z"/><path class="h" d="M-1.8 2c.2 4.9 3 8 6.7 7.7c3.1-.3 4.7-3.6 3.4-7.9c-2.7 2.4-6.7 2.7-10.1.2z"/>' + CAP;
+    }
+    // standing, from the front: feet, neck, thobe and its placket
+    var FRONT = '<path class="s" d="M49 97.4c0-3.3 2-5.4 4.9-5.4s4.9 2.1 4.9 5.4zM61.2 97.4c0-3.3 2-5.4 4.9-5.4s4.9 2.1 4.9 5.4z"/><path class="s" d="M56.6 29h6.8v8h-6.8z"/>' +
+      '<path class="r" d="M55.4 34.6c-5.8.5-10.2 3.1-11.4 7.9l1.7 50.5h28.6l1.7-50.5c-1.2-4.8-5.6-7.4-11.4-7.9c-1 2-2.6 3-4.6 3s-3.6-1-4.6-3z"/><path class="f" d="M60 40.5v14"/>';
+    // standing, from the side
+    var SIDE = '<path class="s" d="M51.4 97.4c0-3.2 1.8-5.2 4.7-5.2h4.4c4 0 7.3 2.2 7.3 5.2z"/><path class="s" d="M55.3 29h6.6v8h-6.6z"/>' +
+      '<path class="r" d="M50 93V44.4c0-5 3.5-8.8 8.1-8.8s8 3.8 8 8.8l.5 48.6z"/>';
+    // sitting on the heels, from the side: the right foot stays upright behind him
+    var SIT = '<path class="s" d="M36.6 97.4c-1.5-3.4-1.2-7.2.8-9.9l4.8 1.6c-1.2 2.9-1 5.7.4 8.3z"/><path class="s" d="M52.7 50.8h6.6v8h-6.6z"/>' +
+      '<path class="r" d="M43.8 97.4c-2.8-5-1.9-11.2 2.8-15.3V66.4c0-5 3.5-8.8 8.1-8.8s8 3.8 8 8.8l.4 13.4l9.7 4.7c4 1.8 5.9 6 5.4 12.9z"/>';
+    var LAP = arm('M55 64.5l2.6 12.5l8.4 7.4');
+    return {
+      // standing and facing the qibla, arms at the sides
+      stand: shadow(60, 16) + FRONT + arm('M46.3 43c-2.3 6.2-3.4 13.2-3.7 21') + arm('M73.7 43c2.3 6.2 3.4 13.2 3.7 21') + hand(42.4, 68.2) + hand(77.6, 68.2) + front(60, 22.6),
+      // the opening takbir: both hands raised beside the head, palms to the front
+      hands: shadow(60, 16) + FRONT + arm('M46.3 43l-8.5 7.2l1.6-13.6') + arm('M73.7 43l8.5 7.2l-1.6-13.6') +
+        '<rect class="s" x="36.2" y="23.6" width="6.4" height="9.6" rx="3.2"/><rect class="s" x="77.4" y="23.6" width="6.4" height="9.6" rx="3.2"/><path class="fin" d="M42.2 31.4l3-2.8M77.8 31.4l-3-2.8"/>' + front(60, 22.6),
+      // standing for the recitation, the right hand over the left
+      recite: shadow(60, 16) + FRONT + arm('M73.7 43l3 14.8L58.5 60.4') + arm('M46.3 43l-3 14.8L60.6 59.6') + hand(63.8, 59.4) + front(60, 22.6),
+      // bowing: the back level, the hands on the knees
+      ruku: shadow(47, 13) + '<path class="s" d="M39.2 97.4c0-3.2 1.8-5.2 4.7-5.2h4.4c4 0 7.3 2.2 7.3 5.2z"/><path class="s" d="M73 59.4h8v6.4h-8z"/>' +
+        '<path class="r" d="M38.4 93V63.2c0-5.2 3.9-9.2 9.2-9.2h22.2c4.7 0 8.2 3.6 8.2 8.2s-3.5 8.2-8.2 8.2H55.2c-1 0-1.6.6-1.6 1.6L53.4 93z"/>' +
+        arm('M69.5 63.4L53.2 77.4') + hand(50.6, 79.6) + side(85, 62.6, 78),
+      // standing up straight again after bowing
+      rise: shadow(59, 12) + SIDE + arm('M58.2 43.5l.5 20.5') + hand(58.8, 68.2) + side(58.8, 22.6, 8),
+      // prostrating: forehead and nose, both palms, both knees and the toes on the ground
+      sujood: shadow(58, 34) + '<path class="s" d="M27.6 97.4c-1.8-3.8-1.5-8 .7-11l5.2 1.8c-1.4 3.2-1.2 6.3.5 9.2z"/><path class="s" d="M72 84.8l8 1.4l-1 6.6l-8-1.4z"/>' +
+        '<path class="r" d="M32.8 97.4c-.9-9.4 2-21.4 9.7-25.9c3.5-2 7.9-1.8 11 .2l19 9.3c4 2 5.5 6 4 9.5c-.7 1.7-2 2.9-3.9 3.3l-13.6-6.3l-1.4 9.9z"/>' +
+        arm('M70 87.4l-3.2 4.8l4.2 2.6') + '<ellipse class="s" cx="73.4" cy="95.6" rx="3.6" ry="2"/>' + side(87, 89, 100),
+      // sitting between the two prostrations, hands on the thighs
+      sit: shadow(60, 22) + SIT + LAP + hand(68.6, 86.4) + side(56.2, 44.4, 8),
+      // sitting for the tashahhud, the right forefinger pointing
+      tashahhud: shadow(60, 22) + SIT + LAP + '<path class="fin" d="M70 85.8l6.2-2.8"/>' + hand(68.6, 86.4) + side(56.2, 44.4, 8),
+      // the salam: the head turned to the right, then to the left
+      salam: shadow(60, 30) + '<path class="s" d="M56.6 50.8h6.8v8h-6.8z"/>' +
+        '<path class="r" d="M55.4 56.4c-5.8.5-10.2 3.1-11.4 7.9l-2.3 16.2c-5.7 3.3-8.8 9.3-8.4 16.9h53.4c.4-7.6-2.7-13.6-8.4-16.9l-2.3-16.2c-1.2-4.8-5.6-7.4-11.4-7.9c-1 2-2.6 3-4.6 3s-3.6-1-4.6-3z"/>' +
+        '<path class="f" d="M60 84v13"/>' + arm('M46.3 64.8l-3.7 13.7l5.2 8.3') + arm('M73.7 64.8l3.7 13.7l-5.2 8.3') + hand(49.2, 89.4) + hand(70.8, 89.4) + side(60, 44.4, 0, true) +
+        '<path class="a" d="M43.5 31.5a18.5 18.5 0 0 1 33 0M42.7 26.3l.8 5.2l5-1.6M77.3 26.3l-.8 5.2l-5-1.6"/>'
+    };
+  })();
+  function pose(k) {
+    return '<svg class="st-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><g transform="matrix(1.16 0 0 1.16 -9.6 -7.5)">' +
+      '<rect class="m" x="15" y="97" width="90" height="7" rx="3.5"/><path class="m2" d="M22 100.5h76"/>' + (ART[k] || ART.stand) + '</g></svg>';
+  }
   function renderPray(view) {
     RS.topbar({ title: t('st.pray.title'), back: 'learn/start' });
     var p = D().pray, h = [];
@@ -124,7 +180,9 @@
       if (s.arabic) words += ui.arabic(s.arabic, { cls: 'st-ar' });
       if (s.translit) words += '<p class="st-tr" lang="ar-Latn" dir="ltr">' + esc(s.translit) + '</p>';
       if (RS.has('st.p.' + s.id + '.m') && t('st.p.' + s.id + '.m')) words += '<p class="st-mean">' + esc(t('st.p.' + s.id + '.m')) + '</p>';
-      return '<li class="st-step is-pose">' + pose(s.pose) + '<div><h3 class="st-step-t">' + esc(t('st.p.' + s.id + '.t')) + '</h3><p class="st-p">' + esc(t('st.p.' + s.id + '.x')) + '</p>' + words + '</div></li>';
+      // the picture beside what to do; what to say gets the full width underneath
+      return '<li class="st-step is-pose">' + pose(s.pose) + '<div><h3 class="st-step-t">' + esc(t('st.p.' + s.id + '.t')) + '</h3><p class="st-p">' + esc(t('st.p.' + s.id + '.x')) + '</p></div>' +
+        (words ? '<div class="st-say">' + words + '</div>' : '') + '</li>';
     }).join('') + '</ol>' + refsHtml(p.refs) }));
     h.push(ui.note(t('st.pr.note'), { icon: 'info', tone: 'plain' }));
     view.innerHTML = h.join('');
