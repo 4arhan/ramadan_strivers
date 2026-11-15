@@ -10,7 +10,7 @@
           "value": "about.ramadanstrivers.com"
         }
       ],
-      "destination": "/product/index.html"
+      "destination": "/product"
     },
     {
       "source": "/s/:id",
