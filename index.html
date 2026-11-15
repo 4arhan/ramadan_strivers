@@ -11,6 +11,48 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Ramadan Strivers">
 <meta name="description" content="Ramadan Strivers: your Ramadan planner and tracker. Daily deeds, Quran, learning and competitions. From Muslim to Mu'min.">
+<script>
+  /* Demo mode (?demo=1: the live demo on the product page). The app then runs on a sample month and must never read
+     or write the visitor's own data. So before anything else runs, the browser's storage is replaced by a copy kept
+     in memory (carried through a reload in one key of this tab's session storage, gone when the tab closes) and
+     statistics are switched off. If the browser will not allow the replacement, nothing else on this page runs.
+     js/demo.js supplies the sample month and answers the app's server calls. */
+  (function () {
+    if (!/[?&]demo=1(&|$)/.test(location.search)) return;
+    var KEY = 'rs-demo', real = null, st = null, ok = false, again = /[?&]fresh=1(&|$)/.test(location.search), kids = /[?&]kids=1(&|$)/.test(location.search);
+    try { real = window.sessionStorage; st = again ? null : JSON.parse(real.getItem(KEY) || 'null'); } catch (e) { st = null; }
+    // ?fresh=1 starts the sample month again and ?kids=1 opens it in kids mode. Both are taken out of the address,
+    // so a reload keeps what happened since.
+    if (again || kids) { try { history.replaceState(history.state, '', location.pathname + '?demo=1' + location.hash); } catch (e) { /* the address stays */ } }
+    if (!st || st.v !== 1 || !st.l || !st.s || typeof st.l !== 'object' || typeof st.s !== 'object') st = { v: 1, l: {}, s: {} };
+    function keep() { try { if (real) real.setItem(KEY, JSON.stringify(st)); } catch (e) { /* memory only */ } }
+    function has(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+    function store(o) {
+      return {
+        getItem: function (k) { k = String(k); return has(o, k) ? o[k] : null; },
+        setItem: function (k, v) { o[String(k)] = String(v); keep(); },
+        removeItem: function (k) { delete o[String(k)]; keep(); },
+        clear: function () { Object.keys(o).forEach(function (k) { delete o[k]; }); keep(); },
+        key: function (i) { var ks = Object.keys(o); return i >= 0 && i < ks.length ? ks[i] : null; },
+        get length() { return Object.keys(o).length; }
+      };
+    }
+    var ls = store(st.l), ss = store(st.s);
+    try {
+      Object.defineProperty(window, 'localStorage', { configurable: true, get: function () { return ls; } });
+      Object.defineProperty(window, 'sessionStorage', { configurable: true, get: function () { return ss; } });
+      ok = window.localStorage === ls && window.sessionStorage === ss;
+    } catch (e) { ok = false; }
+    if (!ok) { document.write('<plaintext style="display:none">'); location.replace('/product'); return; }   // the rest of the page is never run
+    window['ga-disable-G-Y3WDNYW5P2'] = true;
+    window.RS_DEMO = { fresh: !has(st.l, 'rs-settings'), kids: kids };
+    if (window.RS_DEMO.fresh) {
+      ls.setItem('rs-setup', '1'); ls.setItem('rs-consent', 'no'); ls.setItem('rs-inst-x', '1');
+      ls.setItem('rs-settings', JSON.stringify({ mode: 'ramadan', day: 12, theme: 'light', themeChosen: true, detail: true }));
+    }
+    document.write('<script src="data/cities.js"><\/script>');   // so the demo can show prayer times for the visitor's time zone at once
+  })();
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3WDNYW5P2"></script>
 <script>
@@ -107,6 +149,7 @@
 <script src="js/icons.js?v=8.0.0"></script>
 <script src="js/lang/en.js?v=8.0.0"></script>
 <script src="js/content.js?v=8.0.0"></script>
+<script src="js/demo.js?v=8.0.0"></script>
 <script src="js/tracker.js?v=8.0.0"></script>
 <script src="js/learn.js?v=8.0.0"></script>
 <script src="js/prep.js?v=8.0.0"></script>

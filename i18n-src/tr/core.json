@@ -61,5 +61,8 @@
   "err.lang": "Bu dil yüklenemedi; uygulama {lang} olarak gösteriliyor.",
   "err.boot": "Uygulama başlatılamadı. Tekrar denemek için sayfayı yenile.",
   "err.render.title": "Bir şeyler ters gitti",
-  "err.render.body": "Bu ekran görüntülenemedi. Geri dön ve tekrar dene."
+  "err.render.body": "Bu ekran görüntülenemedi. Geri dön ve tekrar dene.",
+  "demo.label": "Demo",
+  "demo.open": "Gerçek uygulamayı aç",
+  "demo.off": "Bu özellik demoda kapalı. Kullanmak için gerçek uygulamayı açın."
 }

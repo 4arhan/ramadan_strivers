@@ -61,5 +61,8 @@
   "err.lang": "Lugha hiyo haikuweza kupakiwa, kwa hiyo programu inaonyeshwa kwa {lang}.",
   "err.boot": "Programu haikuweza kuanza. Pakia ukurasa upya ili ujaribu tena.",
   "err.render.title": "Hitilafu imetokea",
-  "err.render.body": "Skrini hii haikuweza kuonyeshwa. Rudi nyuma kisha ujaribu tena."
+  "err.render.body": "Skrini hii haikuweza kuonyeshwa. Rudi nyuma kisha ujaribu tena.",
+  "demo.label": "Onyesho",
+  "demo.open": "Fungua programu halisi",
+  "demo.off": "Kipengele hiki kimezimwa kwenye onyesho. Fungua programu halisi ili kukitumia."
 }

@@ -61,5 +61,8 @@
   "err.lang": "Cette langue n'a pas pu être chargée : l'application s'affiche en {lang}.",
   "err.boot": "L'application n'a pas pu démarrer. Rechargez la page pour réessayer.",
   "err.render.title": "Un problème est survenu",
-  "err.render.body": "Cet écran n'a pas pu s'afficher. Revenez en arrière et réessayez."
+  "err.render.body": "Cet écran n'a pas pu s'afficher. Revenez en arrière et réessayez.",
+  "demo.label": "Démo",
+  "demo.open": "Ouvrir la vraie application",
+  "demo.off": "Cette fonction est désactivée dans la démo. Ouvrez la vraie application pour l'utiliser."
 }

@@ -6,7 +6,10 @@
      2. counts what the app really contains (deeds, questions, flashcards, lessons, languages, ...) and writes those
         numbers into every element of the page that carries a data-n="<name>" attribute,
      3. rebuilds the "try it" checklist from the app's own deeds, sets each image's width and height, counts the
-        features in the catalogue and renders the social-share image.
+        features in the catalogue and renders the social-share image,
+     4. fills in the language menu of the live demo from the app's list of languages, draws the QR code that opens
+        the app, and writes the "Just added" list from product/whats-new.json (newest six; {n:name} in a text
+        becomes a counted number). Add an entry to that file when something new ships.
 
    Run it before every deploy that changes how the app looks or what it offers:
 
@@ -64,6 +67,30 @@ function tryRows() {
       '<span class="tr-txt"><b>' + esc(label) + '</b><small>' + esc(d.ref) + (d.grade ? ' · ' + esc(d.grade.replace(/\s*\(.*\)$/, '')) : '') + '</small></span><span class="tr-pts">+' + d.pts + '</span></button></li>';
   }).join('\n');
 }
+// The app's languages, in its own order and with its own names (js/core.js RS.LANGS).
+function appLangs() {
+  const out = [];
+  fs.readFileSync(path.join(ROOT, 'js', 'core.js'), 'utf8').replace(/\{ code: '([a-z]{2})', name: '((?:[^'\\]|\\.)*)', dir: '(?:ltr|rtl)' \}/g, (m, code, name) => { out.push({ code, name: JSON.parse('"' + name + '"') }); return m; });
+  return out;
+}
+// A QR code as one SVG path (the qrcode package the server's posters already use).
+function qrSvg(text, label) {
+  const q = require('qrcode').create(text, { errorCorrectionLevel: 'M' }), size = q.modules.size, data = q.modules.data, pad = 2;
+  let d = '';
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (data[y * size + x]) d += 'M' + (x + pad) + ' ' + (y + pad) + 'h1v1h-1z';
+  return '<svg class="code" viewBox="0 0 ' + (size + pad * 2) + ' ' + (size + pad * 2) + '" role="img" aria-label="' + esc(label) + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path fill="#06140E" d="' + d + '"/></svg>';
+}
+// "Just added": the newest six entries of product/whats-new.json. {n:name} in a text is replaced by that number,
+// counted from the app like every other number on the page.
+function newsHtml(n) {
+  const file = path.join(ROOT, 'product', 'whats-new.json');
+  if (!fs.existsSync(file)) return null;
+  const list = JSON.parse(fs.readFileSync(file, 'utf8')).filter(x => x && /^\d{4}-\d{2}-\d{2}$/.test(x.date) && x.title).map((x, i) => Object.assign({ i }, x)).sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : a.i - b.i).slice(0, 6);
+  const day = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const text = s => esc(s).replace(/\{n:([a-zA-Z]+)\}/g, (m, k) => n[k] === undefined ? m : '<span data-n="' + k + '">' + fmt(n[k]) + '</span>');
+  return list.map((x, i) => '      <li class="reveal' + (i % 3 ? ' d' + (i % 3) : '') + '"><time datetime="' + x.date + '">' + day(x.date) + '</time><h3>' + esc(x.title) + '</h3><p>' + text(x.text || '') +
+    (x.href ? ' <a href="' + esc(x.href) + '">' + esc(x.link || 'See it') + '</a>' : '') + '</p></li>').join('\n');
+}
 function patchPage(sizes) {
   let html = fs.readFileSync(PAGE, 'utf8');
   const n = numbers();
@@ -72,6 +99,11 @@ function patchPage(sizes) {
   let missing = [];
   html = html.replace(/(<[a-z0-9]+\b[^>]*\bdata-n="([a-zA-Z]+)"[^>]*>)([^<]*)(<)/g, (m, open, key, old, close) => { if (n[key] === undefined) { missing.push(key); return m; } return open + fmt(n[key]) + close; });
   html = html.replace(/(<!-- try:start -->)[\s\S]*?(<!-- try:end -->)/, (m, a, b) => a + '\n' + tryRows() + '\n        ' + b);
+  const langs = appLangs();
+  if (langs.length) html = html.replace(/(<!-- langs:start -->)[\s\S]*?(<!-- langs:end -->)/, (m, a, b) => a + '\n' + langs.map(l => '              <option value="' + l.code + '" lang="' + l.code + '">' + esc(l.name) + '</option>').join('\n') + '\n              ' + b);
+  html = html.replace(/(<!-- qr:start -->)[\s\S]*?(<!-- qr:end -->)/, (m, a, b) => a + qrSvg('https://www.ramadanstrivers.com/', 'QR code that opens ramadanstrivers.com') + b);
+  const news = newsHtml(n);
+  if (news !== null) html = html.replace(/(<!-- new:start -->)[\s\S]*?(<!-- new:end -->)/, (m, a, b) => a + '\n' + news + '\n      ' + b);
   // every screenshot gets its real width and height (in CSS pixels), so nothing jumps while the page loads
   html = html.replace(/<img\b[^>]*\b(?:data-)?src="\/product\/img\/([a-z0-9-]+)\.(webp|jpg)"[^>]*>/g, (tag, name) => {
     const s = sizes[name]; if (!s) return tag;

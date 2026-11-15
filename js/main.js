@@ -95,6 +95,7 @@
   /* ------------------------------------------------------------------ service worker */
   function registerSW() {
     if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+    if (window.RS_DEMO) return;                      // the live demo installs nothing on the visitor's device
     var qs = new URLSearchParams(location.search);
     if (qs.get('sw') === '1') RS.store.setRaw('rs-dev-sw', '1');
     if (qs.get('sw') === '0') RS.store.del('rs-dev-sw');

@@ -61,5 +61,8 @@
   "err.lang": "无法加载该语言，因此应用以{lang}显示。",
   "err.boot": "应用无法启动。请刷新页面重试。",
   "err.render.title": "出了点问题",
-  "err.render.body": "无法显示此页面。请返回后重试。"
+  "err.render.body": "无法显示此页面。请返回后重试。",
+  "demo.label": "演示",
+  "demo.open": "打开正式应用",
+  "demo.off": "演示中已关闭此功能。请打开正式应用来使用。"
 }

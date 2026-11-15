@@ -61,5 +61,8 @@
   "err.lang": "Bahasa itu tidak dapat dimuat, jadi aplikasi ditampilkan dalam {lang}.",
   "err.boot": "Aplikasi tidak dapat dimulai. Muat ulang halaman untuk mencoba lagi.",
   "err.render.title": "Terjadi kesalahan",
-  "err.render.body": "Layar ini tidak dapat ditampilkan. Kembali dan coba lagi."
+  "err.render.body": "Layar ini tidak dapat ditampilkan. Kembali dan coba lagi.",
+  "demo.label": "Demo",
+  "demo.open": "Buka aplikasi asli",
+  "demo.off": "Fitur ini dimatikan di demo. Buka aplikasi asli untuk memakainya."
 }

@@ -61,5 +61,8 @@
   "err.lang": "Bahasa itu tidak dapat dimuatkan, jadi aplikasi dipaparkan dalam {lang}.",
   "err.boot": "Aplikasi tidak dapat dimulakan. Muat semula halaman untuk mencuba lagi.",
   "err.render.title": "Ada masalah berlaku",
-  "err.render.body": "Skrin ini tidak dapat dipaparkan. Kembali dan cuba lagi."
+  "err.render.body": "Skrin ini tidak dapat dipaparkan. Kembali dan cuba lagi.",
+  "demo.label": "Demo",
+  "demo.open": "Buka aplikasi sebenar",
+  "demo.off": "Ciri ini dimatikan dalam demo. Buka aplikasi sebenar untuk menggunakannya."
 }

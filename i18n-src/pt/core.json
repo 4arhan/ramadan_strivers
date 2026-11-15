@@ -61,5 +61,8 @@
   "err.lang": "Não foi possível carregar esse idioma, então o app está sendo exibido em {lang}.",
   "err.boot": "O app não conseguiu iniciar. Recarregue a página para tentar de novo.",
   "err.render.title": "Algo deu errado",
-  "err.render.body": "Não foi possível exibir esta tela. Volte e tente de novo."
+  "err.render.body": "Não foi possível exibir esta tela. Volte e tente de novo.",
+  "demo.label": "Demonstração",
+  "demo.open": "Abrir a aplicação real",
+  "demo.off": "Isto está desativado na demonstração. Abra a aplicação real para o usar."
 }

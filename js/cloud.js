@@ -336,6 +336,7 @@
   function errText(e, notFoundKey) {
     if (!e) return t('err.generic');
     if (e.code === 'network' || e.status === 0) return t('err.network');
+    if (e.code === 'demo') return t('demo.off');     // the live demo on the product page (js/demo.js) answers this for what it leaves out
     if (ERR[e.code] && e.code !== 'not_found') return t(ERR[e.code]);
     if (e.code === 'not_found' || e.status === 404) return t(notFoundKey || 'cloud.err.notFound');
     if (e.status === 401) return t('cloud.err.session');
@@ -3409,6 +3410,7 @@
       place: function () { return placeLabel(pcfg()); },
       coords: function () { var c = pcfg(); return c ? { lat: c.lat, lng: c.lng } : null; },
       methodName: function () { var c = pcfg(); return c ? t('prayer.m.' + c.method) : ''; },
+      suggest: function (cc) { return { method: (cc && METHOD_BY_CC[cc]) || 'MuslimWorldLeague', madhab: cc && HANAFI_CC[cc] ? 'hanafi' : 'shafi' }; },   // a country's usual method and Asr time
       load: loadAdhan,
       open: openPrayer,
       setup: openPrayerSetup
