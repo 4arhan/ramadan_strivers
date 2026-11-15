@@ -1,17 +1,20 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
       "has": [
         {
           "type": "host",
-          "value": "about.ramadanstrivers.com"
+          "value": "about\\.ramadanstrivers\\.com"
         }
       ],
-      "destination": "/product"
-    },
+      "destination": "/product",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     {
       "source": "/s/:id",
       "destination": "/api/router?__p=share&id=:id"

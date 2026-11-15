@@ -2,8 +2,9 @@
 
 ## Product page (about.ramadanstrivers.com)
 
-`product/index.html` is the public product and demo page. It is served at `about.ramadanstrivers.com` (host rewrite in
-`vercel.json`) and at `/product` on the main domain. Everything on it comes from the app through
+`product/index.html` is the public product and demo page. It is served at `/product` on both domains, and
+`about.ramadanstrivers.com` on its own is sent there by a redirect in `vercel.json` (a rewrite cannot do it: the app's
+`index.html` already answers `/`, and on Vercel an existing file wins over a rewrite). Everything on it comes from the app through
 `scripts/product-shots.js`:
 
 - **Screenshots** in `product/img/` (phone screens, the long scrolling captures the tour plays, the pages organisers
