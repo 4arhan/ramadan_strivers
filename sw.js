@@ -14,7 +14,7 @@ const ASSET_V = '8.0.0';
 const ICON_V = '8';            // icons are cached as immutable: a new icon needs a new ?v= (index.html, manifest, push)
 const SHELL_FILES = [
   'css/app.css', 'css/tracker.css', 'css/learn.css', 'css/prep.css', 'css/cloud.css', 'css/social.css', 'css/tools.css',
-  'js/core.js', 'js/icons.js', 'js/lang/en.js', 'js/content.js', 'js/demo.js',
+  'js/core.js', 'js/icons.js', 'js/lang/en.js', 'js/content.js', 'js/demo-guard.js', 'js/demo.js',
   'js/tracker.js', 'js/learn.js', 'js/prep.js', 'js/cloud.js', 'js/social.js', 'js/start-data.js', 'js/start.js', 'js/kids.js', 'js/org.js', 'js/admin.js', 'js/tools.js', 'js/track.js', 'js/main.js'
 ].map(p => '/' + p + '?v=' + ASSET_V);
 const STATIC_FILES = [

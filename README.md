@@ -64,7 +64,7 @@ Corrections are welcome: m.farhan.bava@gmail.com. When editing content, always k
 | `api/` | Vercel serverless API (one function, `api/router.js`, routes in `api/_routes/`), Postgres |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline app shell, push) |
 | `product/`, `scripts/product-shots.js` | The product page (`about.ramadanstrivers.com`, `/product`): its screenshots, numbers, QR code and "Just added" list are produced from the running app by the script |
-| `js/demo.js` | Demo mode (`/?demo=1`), used by the product page's live demo: a sample day of Ramadan with storage kept in memory and server calls answered in the page, so a visitor's own data is never touched |
+| `js/demo-guard.js`, `js/demo.js` | Demo mode (`/?demo=1`), used by the product page's live demo. The guard keeps storage in memory, keeps server calls on the page and keeps links from leaving the demo, so a visitor's own data is never touched; `demo.js` supplies a sample day of Ramadan and answers those calls |
 | `vercel.json` | Rewrites, headers, daily cron |
 
 Generated files (`js/content.js`, `js/lang/*.js`, `i18n-src/en/content.json`, `api/_lib/content.js`) are committed.

@@ -1,17 +1,17 @@
 /* =====================================================================================================
    Ramadan Strivers v8 — demo.js: the live demo on the product page (the app opened with ?demo=1).
 
-   Safety  The first script in index.html has already replaced the browser's storage with a copy kept in memory
-           (and stopped the page if it could not), so the visitor's own data is never read or written, and
-           statistics are off. This file answers every /api/ call itself from sample data: no account, no sync,
-           no real competition is touched. The one call that reaches the server is the city search (read only).
+   Safety  js/demo-guard.js has already run (index.html stops the page otherwise): the browser's storage is a copy
+           kept in memory, calls to /api/ cannot leave the page, links cannot lead out of the demo, statistics are
+           off. This file is what answers those calls (RS_DEMO.answer), from sample data: no account, no sync, no
+           real competition is touched. The one call that reaches the server is the city search (read only).
    Sample  The 12th day of a Ramadan: eleven days already logged and today just begun, Quran pages, badges,
            prayer times for the largest city in the visitor's time zone, two buddies, and a place in a school
            competition whose leaderboard, weekly awards and league table answer to what the visitor ticks.
            The clock is moved to that day (same time of day), so dates, prayer times and the week all agree.
    Steer   The product page drives the app with window.postMessage({ type: 'rs-demo', go | theme | lang | level | open })
            from an allowed origin, and is told when the app is ready, which screen is open and where the visitor
-           stands on the leaderboard. ?fresh=1 starts the sample month again; ?kids=1 starts in kids mode.
+           stands on the leaderboard. What the address can ask for (?fresh, ?kids, ?open) is in demo-guard.js.
    Nothing in this file runs outside demo mode.
    ===================================================================================================== */
 (function () {
@@ -52,6 +52,7 @@
   Clock.UTC = RealDate.UTC;
   window.Date = Clock;
   function iso(daysAgo) { return new Date(Date.now() - daysAgo * 864e5).toISOString(); }
+  var EVENING = (function () { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1, 20, 0, 0, 0).toISOString(); })();   // yesterday evening: when the organiser wrote
   function ymd(daysAgo) { var d = new Date(Date.now() - daysAgo * 864e5), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
 
   /* ------------------------------------------------------------------ the sample month (written once) */
@@ -79,14 +80,27 @@
     put('rs-buddy', { follow: [{ code: 'AISHA123', name: 'Aisha' }, { code: 'HAMZA456', name: 'Hamza' }] });
   }
   if (D.fresh) seed();
-  if (D.kids && RS.settings.level !== 'kids') { RS.settings.level = 'kids'; RS.saveSettings(); }
+  if (D.kids === true && RS.settings.level !== 'kids') { RS.settings.level = 'kids'; RS.saveSettings(); }
+  if (D.kids === false && RS.settings.level === 'kids') { RS.settings.level = 'adult'; RS.saveSettings(); }
 
   // Prayer times for where the visitor is: the largest city in their time zone (the list is sorted by population).
   function place() {
     if (isObj(RS.settings.prayer) || !RS.CITIES || !RS.cloud || !RS.cloud.prayer) return;
-    var tz = '', list = RS.CITIES, city = null, i;
+    var tz = '', list = RS.CITIES, city = null, i, names = {}, hours = {};
     try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { tz = ''; }
+    // Browsers report some zones under an older name than the list uses (Asia/Calcutta for Asia/Kolkata, ...), so a
+    // zone also matches when the browser gives it the same name; and where no city shares the zone, the largest
+    // city on the same clock stands in.
+    var name = function (z) { if (!(z in names)) { try { names[z] = new Intl.DateTimeFormat('en', { timeZone: z }).resolvedOptions().timeZone; } catch (e) { names[z] = z; } } return names[z]; };
+    var clock = function (z) {
+      if (!(z in hours)) { try { var p = {}; new Intl.DateTimeFormat('en-US', { timeZone: z, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }).formatToParts(new RealDate()).forEach(function (x) { p[x.type] = parseInt(x.value, 10); });
+        hours[z] = Math.round((RealDate.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) - RealDate.now()) / 900000) * 15; } catch (e) { hours[z] = null; } }
+      return hours[z];
+    };
     for (i = 0; i < list.length && !city; i++) if (list[i][5] === tz) city = list[i];
+    for (i = 0; tz && i < list.length && !city; i++) if (name(list[i][5]) === tz) city = list[i];
+    var here = -new RealDate().getTimezoneOffset();
+    for (i = 0; i < list.length && !city; i++) if (clock(list[i][5]) === here) city = list[i];
     for (i = 0; i < list.length && !city; i++) if (list[i][0] === 'Mecca' || list[i][0] === 'Makkah') city = list[i];
     if (!city) return;
     var use = RS.cloud.prayer.suggest ? RS.cloud.prayer.suggest(city[2]) : { method: 'MuslimWorldLeague', madhab: 'shafi' };
@@ -137,7 +151,7 @@
   function everyone() { return [me].concat(others); }
   function publicComp() {
     return { code: CODE, name: SCHOOL, type: 'School', prizes: ['A day out for the class', 'Book voucher', 'Book voucher'], open: true, created_at: iso(20),
-      settings: { dailyCap: null, teams: true, donateUrl: '', sponsor: 'Al-Noor Trust', message: 'Jumuah mubarak. Double points today.', messageAt: iso(0.2), endDay: 30,
+      settings: { dailyCap: null, teams: true, donateUrl: '', sponsor: 'Al-Noor Trust', message: 'Double points on day 12. Make every deed count.', messageAt: EVENING, endDay: 30,
         goal: { k: 'q', n: 3000 }, custom: [{ id: 'c1', label: 'Help set up iftar', pts: 12 }, { id: 'c2', label: 'Tidy the prayer hall', pts: 8 }], bonus: BONUS,
         charity: { target: 2000, raised: 1340, currency: 'GBP', cause: 'Water wells' }, country: 'GB', verified: true, under13: false } };
   }
@@ -259,45 +273,16 @@
         if (body.name !== undefined) b.name = String(body.name).trim().slice(0, 24) || b.name;
         if (body.summary !== undefined) b.summary = isObj(body.summary) ? body.summary : {};
         // a buddy answers once the link exists, so the visitor sees what an encouragement looks like
-        if (body.ack) { b.nudges = []; b.acked = true; } else if (!b.acked && !b.nudges.length) b.nudges = [{ k: 'dua', from: 'Aisha', at: Date.now() }];
+        if (body.ack) { b.nudges = []; LS.setItem('rs-demo-ack', '1'); } else if (!LS.getItem('rs-demo-ack') && !b.nudges.length) b.nudges = [{ k: 'dua', from: 'Aisha', at: Date.now() }];
         return [200, { code: code, name: b.name, summary: b.summary, updatedAt: iso(0), nudges: b.nudges }];
       }
     }
     return off();                                    // accounts, sync, share links, alerts, AI help, the admin area
   }
-  // The app's server is this site, or the one a build of the app was pointed at (window.RS_API_BASE).
-  var server = location.origin;
-  try { if (window.RS_API_BASE) server = new URL(String(window.RS_API_BASE), location.href).origin; } catch (e) { server = location.origin; }
-  function ours(u) { return !!u && (u.origin === location.origin || u.origin === server); }
-  var realFetch = window.fetch ? window.fetch.bind(window) : null;
-  window.fetch = function (input, init) {
-    var u = null;
-    try { u = new URL(typeof input === 'string' ? input : (input && input.url) || '', location.href); } catch (e) { u = null; }
-    if (!ours(u) || u.pathname.indexOf('/api/') !== 0) return realFetch ? realFetch(input, init) : Promise.reject(new TypeError('network'));
-    var path = u.pathname.replace(/^\/api\//, '').replace(/\/+$/, '');
-    if (path === 'geo') return realFetch ? realFetch(input, init) : Promise.reject(new TypeError('network'));   // the city search only reads
-    var method = String((init && init.method) || 'GET').toUpperCase(), body = null;
-    try { body = init && typeof init.body === 'string' && init.body ? JSON.parse(init.body) : null; } catch (e) { body = null; }
-    return new Promise(function (resolve) {
-      setTimeout(function () {
-        var r;
-        try { r = answer(path, method, u.searchParams, body); } catch (e) { r = [500, { error: 'server', message: 'Demo error' }]; }
-        resolve(new Response(JSON.stringify(r[1]), { status: r[0], headers: { 'Content-Type': 'application/json' } }));
-      }, 120);
-    });
-  };
-  // Pages the real server makes (the QR poster, an organisation's public page, a league's page, a share link) do not
-  // exist for the sample school: say so instead of opening a page that is not there.
-  var realOpen = window.open;
-  window.open = function (url) {
-    var to = null;
-    try { to = url ? new URL(String(url), location.href) : null; } catch (e) { to = null; }
-    if (ours(to) && /^\/(poster|o|l|s|api)\//.test(to.pathname)) {
-      RS.toast(say('off'));
-      return { closed: true, opener: null, close: function () {}, focus: function () {}, location: {}, document: { open: function () {}, write: function () {}, close: function () {}, title: '', body: null } };
-    }
-    return realOpen.apply(window, arguments);
-  };
+  // js/demo-guard.js keeps every /api/ call on the page and asks here for the answer; it also stops the pages the real
+  // server makes (the QR poster, a public page, a league's page, a share link), which do not exist for the sample school.
+  D.answer = answer;
+  D.blocked = function () { if (RS.toast) RS.toast(say('off')); };
 
   /* ------------------------------------------------------------------ on its own page: a label and a way out */
   var framed = window.top !== window.self;
@@ -316,12 +301,12 @@
     }
     var pill = document.createElement('div');
     pill.id = 'demo-pill';
-    pill.innerHTML = '<div role="note"><span>' + RS.esc(say('label')) + '</span><a href="/">' + RS.esc(say('open')) + '</a></div>';
+    pill.innerHTML = '<div role="note"><span>' + RS.esc(say('label')) + '</span><a href="/" data-demo-exit>' + RS.esc(say('open')) + '</a></div>';
     document.body.appendChild(pill);
   }
 
   /* ------------------------------------------------------------------ steering from the product page */
-  var ALLOWED = /^https:\/\/([a-z0-9-]+\.)?ramadanstrivers\.com$|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+  var ALLOWED = /^https:\/\/([a-z0-9-]+\.)?ramadanstrivers\.com$/;
   function trusted(origin) { return origin === location.origin || ALLOWED.test(origin); }
   function state() {
     var c = RS.router.current();
@@ -350,6 +335,7 @@
     setTimeout(function () {
       try { if (RS.cloud && RS.cloud.agg) me.s = applyScore(RS.cloud.agg().days); } catch (e) { /* the first score sync fills it in */ }
       tell({ ready: true });
+      if (D.open === 'prayer') setTimeout(function () { RS.runAct('prayer.open'); }, 600);
     }, 0);
   });
 })();

@@ -1491,14 +1491,14 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     var sec = $('#demo'), screen = $('#demo-screen'), start = $('#demo-start'), hint = $('#demo-hint'), stage = $('.demo-stage');
     if (!sec || !screen || !start || og) return;
     var APP = /(^|\.)ramadanstrivers\.com$/.test(location.hostname) ? 'https://www.ramadanstrivers.com' : location.origin, SRC = APP + '/?demo=1';
-    var frame = null, ready = false, queue = [], last = null, slow = null, upT = null;
+    var frame = null, ready = false, queue = [], last = null, slow = null, upT = null, alive = 0, check = null, cannot = false;
     var controls = $$('[data-demo]', sec), outside = $$('[data-demo]').filter(function (b) { return !sec.contains(b); }), tourLive = $('#tour-live'), dark = $('#demo-dark'), kids = $('#demo-kids'), lang = $('#demo-lang'), again = $('#demo-again'), full = $('#demo-full');
     var score = $('#demo-score'), wait = $('#demo-wait'), nums = $('#demo-nums'), rankEl = $('#demo-rank'), ofEl = $('#demo-of'), ptsEl = $('#demo-pts'), up = $('#demo-up');
     function inPage() { return !window.matchMedia || matchMedia('(min-width: 761px)').matches; }
     function n(v) { return Number(v).toLocaleString('en-GB'); }
     start.href = SRC; if (full) full.href = SRC;
     function post(m) { m.type = 'rs-demo'; try { frame.contentWindow.postMessage(m, APP); } catch (e) { /* the frame is between pages */ } }
-    function send(m) { if (frame && ready) post(m); else { queue.push(m); begin(false); } show(); }
+    function send(m) { if (cannot) { location.href = APP + '/'; return; } if (frame && ready) post(m); else { queue.push(m); begin(false); } show(); }
     function show() { if (!stage || !inPage()) return; var r = stage.getBoundingClientRect(); if (r.top < 60 || r.bottom > innerHeight - 6) window.scrollTo({ top: scrollY + r.top - 96, behavior: calm ? 'auto' : 'smooth' }); }
     function begin(fresh) {
       if (frame) return;
@@ -1507,8 +1507,23 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
       frame = document.createElement('iframe');
       frame.title = 'Ramadan Strivers, live demo'; frame.setAttribute('allow', 'clipboard-write');
       frame.src = SRC + (fresh ? '&fresh=1' : '');
+      // Whatever the frame has just loaded must answer as the demo. A page that does not is never shown as one.
+      frame.addEventListener('load', function () {
+        var f = frame, asked = Date.now();
+        clearTimeout(check); post({ ask: true });
+        check = setTimeout(function () { if (frame === f && alive < asked) stop('The demo is not running. Start it again.'); }, 5000);
+      });
       screen.appendChild(frame);
       clearTimeout(slow); slow = setTimeout(function () { if (!ready && hint) hint.textContent = 'Still loading. On a slow connection this takes a little while.'; }, 9000);
+    }
+    function stop(text, forGood) {
+      if (frame && frame.parentNode) frame.parentNode.removeChild(frame);
+      frame = null; ready = false; queue = []; last = null; clearTimeout(slow); clearTimeout(check);
+      screen.classList.remove('live', 'loading', 'dark'); sec.classList.remove('started');
+      if (hint) hint.textContent = text;
+      nums.hidden = true; wait.hidden = false; wait.textContent = 'Start the demo and take your place in the class.'; if (up) up.hidden = true;
+      controls.forEach(function (b) { b.setAttribute('aria-current', 'false'); });
+      if (forGood) { cannot = true; start.href = APP + '/'; start.lastChild.textContent = ' Open the app'; }
     }
     function paint(m) {
       controls.forEach(function (b) { var d = JSON.parse(b.getAttribute('data-demo')), tip = !b.classList.contains('demo-chip'); b.setAttribute('aria-current', d.go === m.route && (!tip || (d.level || 'adult') === m.level) ? 'true' : 'false'); });
@@ -1531,13 +1546,16 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     addEventListener('message', function (e) {
       var m = e.data;
       if (!frame || e.source !== frame.contentWindow || e.origin !== APP || !m || m.type !== 'rs-demo') return;
+      if (m.failed) { stop('The demo cannot run in this browser. The app itself can.', true); return; }
+      alive = Date.now();
       if (m.ready) { ready = true; clearTimeout(slow); screen.classList.remove('loading'); screen.classList.add('live'); queue.splice(0).forEach(post); }
       paint(m);
     });
-    start.addEventListener('click', function (e) { if (!inPage()) return; e.preventDefault(); begin(false); show(); });
+    start.addEventListener('click', function (e) { if (cannot || !inPage()) return; e.preventDefault(); begin(false); show(); });
     function act(d, e) {
       if (e) e.preventDefault();
-      if (!inPage()) { location.href = SRC + (d.level === 'kids' ? '&kids=1' : '') + '#/' + d.go; return; }
+      if (cannot) { location.href = APP + '/'; return; }
+      if (!inPage()) { location.href = SRC + (d.level ? '&kids=' + (d.level === 'kids' ? '1' : '0') : '') + (d.open === 'prayer' ? '&open=prayer' : '') + '#/' + d.go; return; }
       send(d);
     }
     controls.forEach(function (b) { b.addEventListener('click', function () { act(JSON.parse(b.getAttribute('data-demo'))); }); });
@@ -1548,8 +1566,9 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
     if (kids) kids.addEventListener('click', function () { send({ level: kids.getAttribute('aria-pressed') === 'true' ? 'adult' : 'kids' }); });
     if (lang) lang.addEventListener('change', function () { send({ lang: lang.value }); });
     if (again) again.addEventListener('click', function () {
+      if (cannot) { location.href = APP + '/'; return; }
       if (frame && frame.parentNode) frame.parentNode.removeChild(frame);
-      frame = null; queue = []; last = null; if (up) up.hidden = true;
+      frame = null; queue = []; last = null; clearTimeout(check); if (up) up.hidden = true;
       begin(true); show();
     });
   })();

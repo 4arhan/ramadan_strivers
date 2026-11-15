@@ -578,6 +578,7 @@
     return out;
   }
   function pushWidget() {
+    if (window.RS_DEMO) return;                      // the live demo's sample numbers are not the person's own
     var C = window.Capacitor, Pref = C && C.Plugins && C.Plugins.Preferences;
     if (!Pref || !Pref.set) return;
     try {

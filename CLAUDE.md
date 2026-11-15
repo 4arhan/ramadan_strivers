@@ -35,25 +35,31 @@ The page follows the app's design rules: green only (no purple, no gold), no emo
 ## Live demo (the app opened with `?demo=1`)
 
 The product page shows the app itself in a frame, on a sample twelfth day of Ramadan. On a phone the same demo opens
-on its own page. Two pieces make it work, and neither does anything outside demo mode:
+on its own page. Two files make it work, and neither does anything outside demo mode:
 
-- The **first script in `index.html`** replaces the browser's storage with a copy kept in memory before anything else
-  runs (carried through a reload in one session-storage key, `rs-demo`) and switches statistics off. Where a browser
-  will not let the storage objects be replaced, their methods are redirected instead, and a probe proves a write no
-  longer arrives; if neither works the page stops. A visitor's real data must never be read or written in demo mode,
-  so the app must keep to `getItem`, `setItem`, `removeItem`, `key` and `length` when it touches storage.
-  `?fresh=1` starts the sample again; `?kids=1` opens it in kids mode.
+- **`js/demo-guard.js`** is loaded by the first script in `index.html`, before anything else and only in demo mode; if
+  it does not load or cannot do its job, `index.html` stops the page. It alone keeps the demo apart from everything
+  real: browser storage becomes a copy kept in memory (carried through a reload in one session-storage key,
+  `rs-demo`; where the storage objects cannot be replaced their methods are redirected and a probe proves it),
+  `fetch()` to `/api/` never leaves the page (only the city search does, as a bare address), a link that would leave
+  the demo opens in a new tab, pages the server makes (`/poster/`, `/o/`, `/l/`, `/s/`) are not opened, the service
+  worker cannot be reached, and statistics get nothing. `?fresh=1` starts the sample again, `?kids=1` or `?kids=0`
+  picks the mode, `?open=prayer` opens the prayer times.
 - **`js/demo.js`** moves the clock to the 12th of Ramadan, writes the sample month (real deed ids, so badges and
-  streaks are really earned), and answers every `/api/` call from memory in `answer()`: health, the sample competition
+  streaks are really earned), and answers the `/api/` calls from memory in `answer()`: health, the sample competition
   `DEMO01` (board, score, join, awards, sign-ups, head to head), a league and buddies. The scoring there mirrors
-  `api/_lib/comp.js`. Only the city search reaches the real server. Anything not answered says it is switched off in
-  the demo (`demo.off`), as do pages the server would make (`/poster/`, `/o/`, `/l/`, `/s/`).
+  `api/_lib/comp.js`. Anything it does not answer says it is switched off in the demo (`demo.off`).
+
+The guard relies on two habits of the app, so keep them: storage is only touched with `getItem`, `setItem`,
+`removeItem`, `key` and `length`, and the server is only called with `fetch()`. A link to another page of this site
+(like `privacy.html`) is fine: in the demo it opens in a new tab.
 
 When a change adds or alters a server call that a participant's screens make, add or update its answer in `answer()`,
 otherwise that part of the demo shows the switched-off message. When the scoring rules on the server change, change
 them in `js/demo.js` as well. Then run `BASE=http://localhost:<port> node scripts/test-demo.js`: it checks that the
-demo reads and changes nothing of a visitor's, calls nothing on the server but the city search, opens every screen
-without an error, and that the normal app is untouched.
+demo reads and changes nothing of a visitor's, calls nothing on the server but the city search, cannot be left for
+the real app inside its own window, opens every screen without an error, and that the normal app is untouched.
 
 The page talks to the frame with `postMessage` (`type: 'rs-demo'`): `go`, `theme`, `lang`, `level` and `open` go
-in; the screen, language, theme and the visitor's place on the sample board come out.
+in; the screen, language, theme and the visitor's place on the sample board come out. Each time the frame loads
+something the page asks it to answer as the demo, and takes the frame away if it does not.
