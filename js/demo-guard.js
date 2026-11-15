@@ -167,6 +167,8 @@
     if (serverPage(u)) { blocked(); return; }
     realOpen.call(window, u.href, '_blank', 'noopener,noreferrer');
   }, false);
+  // The app handles its forms itself. One the browser sent instead would load this address without ?demo=1.
+  window.addEventListener('submit', function (e) { e.preventDefault(); }, false);
 
   /* ------------------------------------------------------------------ a first look for the app */
   if (D.fresh) {
