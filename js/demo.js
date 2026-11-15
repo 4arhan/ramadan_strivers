@@ -265,11 +265,15 @@
     }
     return off();                                    // accounts, sync, share links, alerts, AI help, the admin area
   }
+  // The app's server is this site, or the one a build of the app was pointed at (window.RS_API_BASE).
+  var server = location.origin;
+  try { if (window.RS_API_BASE) server = new URL(String(window.RS_API_BASE), location.href).origin; } catch (e) { server = location.origin; }
+  function ours(u) { return !!u && (u.origin === location.origin || u.origin === server); }
   var realFetch = window.fetch ? window.fetch.bind(window) : null;
   window.fetch = function (input, init) {
     var u = null;
     try { u = new URL(typeof input === 'string' ? input : (input && input.url) || '', location.href); } catch (e) { u = null; }
-    if (!u || u.origin !== location.origin || u.pathname.indexOf('/api/') !== 0) return realFetch ? realFetch(input, init) : Promise.reject(new TypeError('network'));
+    if (!ours(u) || u.pathname.indexOf('/api/') !== 0) return realFetch ? realFetch(input, init) : Promise.reject(new TypeError('network'));
     var path = u.pathname.replace(/^\/api\//, '').replace(/\/+$/, '');
     if (path === 'geo') return realFetch ? realFetch(input, init) : Promise.reject(new TypeError('network'));   // the city search only reads
     var method = String((init && init.method) || 'GET').toUpperCase(), body = null;
@@ -286,9 +290,9 @@
   // exist for the sample school: say so instead of opening a page that is not there.
   var realOpen = window.open;
   window.open = function (url) {
-    var path = '';
-    try { path = url ? new URL(String(url), location.href).pathname : ''; } catch (e) { path = ''; }
-    if (/^\/(poster|o|l|s|api)\//.test(path)) {
+    var to = null;
+    try { to = url ? new URL(String(url), location.href) : null; } catch (e) { to = null; }
+    if (ours(to) && /^\/(poster|o|l|s|api)\//.test(to.pathname)) {
       RS.toast(say('off'));
       return { closed: true, opener: null, close: function () {}, focus: function () {}, location: {}, document: { open: function () {}, write: function () {}, close: function () {}, title: '', body: null } };
     }
