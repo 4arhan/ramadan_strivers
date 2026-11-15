@@ -5,7 +5,8 @@
    which deeds were ticked, or coordinates.
    Consent: index.html sets the default (off in the EEA, UK and Switzerland until allowed; on elsewhere). The
    notice on first use and the switch in Settings store the person's choice in rs-consent ('yes' | 'no', this
-   device only). In kids mode nothing is sent and the choice is treated as 'no'.
+   device only). In kids mode nothing is sent and the choice is treated as 'no'. Nothing is sent from the live demo
+   on the product page either (js/demo.js).
    API      RS.track(name, params) · RS.trackConsent() → 'yes' | 'no' | '' · RS.setTrackConsent(bool)
    Actions  tk.allow · tk.deny · tk.toggle
    ===================================================================================================== */
@@ -21,7 +22,7 @@
   function consent() { var c = raw('rs-consent'); return c === 'yes' || c === 'no' ? c : ''; }
   // Sending is off when the person said no or the device is in kids mode; otherwise Google's consent mode decides
   // what is stored (the regional default from index.html until a choice is made).
-  function off() { return kids() || consent() === 'no'; }
+  function off() { return !!window.RS_DEMO || kids() || consent() === 'no'; }
   function applyConsent() {
     var c = off() ? 'denied' : (consent() === 'yes' ? 'granted' : null);
     if (c) g('consent', 'update', { analytics_storage: c });

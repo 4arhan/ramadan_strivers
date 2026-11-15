@@ -23,6 +23,10 @@
   function put(k, v) { LS.setItem(k, typeof v === 'string' ? v : JSON.stringify(v)); }
   function read(k) { try { return JSON.parse(LS.getItem(k) || 'null'); } catch (e) { return null; } }
   function isObj(o) { return !!o && typeof o === 'object' && !Array.isArray(o); }
+  // The demo's own phrases. English stands in when the language file on the device is from before the demo existed
+  // (a returning visitor's cached copy, for one visit).
+  var WORDS = { label: 'Demo', open: 'Open the real app', off: 'This is switched off in the demo. Open the real app to use it.' };
+  function say(k) { return RS.has && RS.has('demo.' + k) ? RS.t('demo.' + k) : WORDS[k]; }
 
   /* ------------------------------------------------------------------ the clock: today is the 12th of Ramadan */
   // The next date (today included) that the app's own calendar calls the 12th of Ramadan, at this time of day.
@@ -85,7 +89,7 @@
     for (i = 0; i < list.length && !city; i++) if (list[i][5] === tz) city = list[i];
     for (i = 0; i < list.length && !city; i++) if (list[i][0] === 'Mecca' || list[i][0] === 'Makkah') city = list[i];
     if (!city) return;
-    var use = RS.cloud.prayer.suggest(city[2]);
+    var use = RS.cloud.prayer.suggest ? RS.cloud.prayer.suggest(city[2]) : { method: 'MuslimWorldLeague', madhab: 'shafi' };
     var p = { lat: city[3], lng: city[4], method: use.method, tz: city[5], city: { n: city[0], r: city[1], c: city[2] } };
     if (use.madhab === 'hanafi') p.madhab = 'hanafi';
     RS.settings.prayer = p;
@@ -114,8 +118,10 @@
     return { days: clean, totalPts: total, daysLogged: n, avgPct: n ? Math.round(pct / n) : 0, quranPages: pages };
   }
   // Eleven classmates: steady ones, strong ones, and a few who miss a day. Half have logged something today.
-  var NAMES = [['Hana T.', '7B', 418], ['Zaid M.', '7A', 396], ['Fatima Z.', '7A', 371], ['Yusuf A.', '7B', 352], ['Ibrahim N.', '7A', 330], ['Noor P.', '7B', 318],
-    ['Idris L.', '7A', 301], ['Safiya D.', '7B', 286], ['Bilal R.', '7B', 262], ['Maryam H.', '7A', 244], ['Omar S.', '7B', 215]];
+  // Their levels are set so the next place up is a few ticks away, the one after that takes a good day, and the top
+  // takes a perfect one.
+  var NAMES = [['Hana T.', '7B', 388], ['Zaid M.', '7A', 345], ['Fatima Z.', '7A', 339], ['Yusuf A.', '7B', 375], ['Ibrahim N.', '7A', 332], ['Noor P.', '7B', 341],
+    ['Idris L.', '7A', 293], ['Safiya D.', '7B', 298], ['Bilal R.', '7B', 250], ['Maryam H.', '7A', 249], ['Omar S.', '7B', 200]];
   function classmate(x, k) {
     var days = {}, base = x[2];
     for (var n = 1; n <= DAY; n++) {
@@ -176,7 +182,7 @@
   function leagueTable() {
     var us = standing(), ch = publicComp().settings.charity;
     var out = [Object.assign({ code: CODE, name: SCHOOL, type: 'School', division: 'Secondary school', verified: true }, us, { charity: { raised: ch.raised, target: ch.target, currency: ch.currency, pct: Math.round(ch.raised / ch.target * 100) } }),
-      { code: 'MADINA', name: 'Madina High School', type: 'School', division: 'Secondary school', verified: false, participants: 9, active: 8, totalPts: 27960, avgPts: 3495, quranPages: 1712, avgPages: 214, charity: { raised: 600, target: 1500, currency: 'GBP', pct: 40 } },
+      { code: 'MADINA', name: 'Madina High School', type: 'School', division: 'Secondary school', verified: false, participants: 9, active: 8, totalPts: 27160, avgPts: 3395, quranPages: 1712, avgPages: 214, charity: { raised: 600, target: 1500, currency: 'GBP', pct: 40 } },
       { code: 'SALAM1', name: 'Masjid As-Salam Youth', type: 'Mosque', division: 'Mosque', verified: false, participants: 6, active: 6, totalPts: 22110, avgPts: 3685, quranPages: 1398, avgPages: 233, charity: null }];
     var div = {};
     out.forEach(function (o) { (div[o.division] = div[o.division] || []).push(o); });
@@ -196,7 +202,7 @@
   if (mine && mine.code) buddies[String(mine.code).toUpperCase()] = { name: mine.name || 'Guest', summary: {}, nudges: [], own: true };
 
   /* ------------------------------------------------------------------ the server, played by this file */
-  function off() { return [403, { error: 'demo', message: RS.t('demo.off') }]; }
+  function off() { return [403, { error: 'demo', message: say('off') }]; }
   var NOT_FOUND = [404, { error: 'not_found', message: 'Not found' }];
   function answer(path, method, qs, body) {
     body = isObj(body) ? body : {};
@@ -216,7 +222,7 @@
         return [200, { token: 'demo', participant: { id: ME, name: me.name, grp: me.grp }, competition: publicComp() }];
       }
       if (what === 'awards' && method === 'GET') return [200, awards(parseInt(qs.get('week'), 10) || 0)];
-      if (what === 'challenge' && method === 'GET') { var a = standing(8, 14); return [200, { challenges: [{ id: 1, status: 'active', startDay: 8, endDay: 14, a: { code: CODE, name: SCHOOL, avgPts: a.avgPts, active: a.active }, b: { code: 'MADINA', name: 'Madina High School', avgPts: 1385, active: 8 } }] }]; }
+      if (what === 'challenge' && method === 'GET') { var a = standing(8, 14); return [200, { challenges: [{ id: 1, status: 'active', startDay: 8, endDay: 14, a: { code: CODE, name: SCHOOL, avgPts: a.avgPts, active: a.active }, b: { code: 'MADINA', name: 'Madina High School', avgPts: 1345, active: 8 } }] }]; }   // just ahead: a few ticks turn it
       if (what === 'signups' && method === 'GET') return [200, { signups: signups }];
       if (what === 'signups' && method === 'PATCH') {
         var it = signups.filter(function (x) { return x.id === (parseInt(body.id, 10) || 0); })[0];
@@ -283,7 +289,7 @@
     var path = '';
     try { path = url ? new URL(String(url), location.href).pathname : ''; } catch (e) { path = ''; }
     if (/^\/(poster|o|l|s|api)\//.test(path)) {
-      RS.toast(RS.t('demo.off'));
+      RS.toast(say('off'));
       return { closed: true, opener: null, close: function () {}, focus: function () {}, location: {}, document: { open: function () {}, write: function () {}, close: function () {}, title: '', body: null } };
     }
     return realOpen.apply(window, arguments);
@@ -306,7 +312,7 @@
     }
     var pill = document.createElement('div');
     pill.id = 'demo-pill';
-    pill.innerHTML = '<div role="note"><span>' + RS.esc(RS.t('demo.label')) + '</span><a href="/">' + RS.esc(RS.t('demo.open')) + '</a></div>';
+    pill.innerHTML = '<div role="note"><span>' + RS.esc(say('label')) + '</span><a href="/">' + RS.esc(say('open')) + '</a></div>';
     document.body.appendChild(pill);
   }
 
