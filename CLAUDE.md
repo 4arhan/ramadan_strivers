@@ -13,6 +13,11 @@
   every element with a `data-n="<name>"` attribute. Never type such a number by hand: add a `data-n`.
 - The **"try it" checklist** rows, each image's width and height, and the questions' search-engine data are rebuilt too.
 - The **feature count** is the number of `<li class="fi">` items in the "All features" list.
+- **Who uses the app** (the first number of the strip, the story's headline and the "Where they are" card with a bar
+  for each country) comes from `product/reach.json`, which is kept by hand from the owner's Google Analytics: the
+  total of active users, the last day of the period it was read for, and the countries with the most. These are the
+  only numbers on the page that are not counted from the app; change them only from figures the owner gives, and
+  call them what they are (active users).
 - The **language menu** of the live demo, the **QR code** that opens the app, and the **"Just added" list** are written by
   the script too. "Just added" shows the newest six entries of `product/whats-new.json`; `{n:name}` in a text becomes a
   counted number.

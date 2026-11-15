@@ -1,0 +1,17 @@
+{
+  "about": "Who uses the app, for the product page. Kept by hand from the owner's Google Analytics (Demographics, Active users by Country): the total, the last day of the period it was read for, and the countries with the most. After changing it run: NUMBERS=1 node scripts/product-shots.js",
+  "users": 14245,
+  "until": "2026-09-08",
+  "countries": [
+    { "name": "Bangladesh", "users": 7451 },
+    { "name": "Pakistan", "users": 2717 },
+    { "name": "Indonesia", "users": 1015 },
+    { "name": "Iraq", "users": 953 },
+    { "name": "Australia", "users": 778 },
+    { "name": "India", "users": 240 },
+    { "name": "Malaysia", "users": 154 },
+    { "name": "United States", "users": 151 },
+    { "name": "Saudi Arabia", "users": 131 },
+    { "name": "United Arab Emirates", "users": 128 }
+  ]
+}

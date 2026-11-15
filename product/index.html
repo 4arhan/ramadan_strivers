@@ -137,6 +137,22 @@ section { padding: 104px 0; overflow-x: clip; }
 .quote::after { content: ""; position: absolute; width: 380px; height: 380px; right: -140px; top: -160px; border-radius: 50%; background: radial-gradient(circle, rgba(110, 231, 183, .28), transparent 65%); }
 .quote p { position: relative; font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; line-height: 1.28; letter-spacing: -.015em; }
 .quote small { position: relative; display: block; margin-top: 22px; color: var(--on-dark-2); font-size: 15px; }
+/* where the active users are: the total and the countries come from product/reach.json (scripts/product-shots.js) */
+.reach { margin-top: 64px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; background: var(--card); border: 1px solid var(--hair); border-radius: var(--r); padding: 44px 48px; box-shadow: 0 24px 60px rgba(11, 34, 25, .08); }
+.reach h3 { margin-top: 12px; font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -.02em; line-height: 1.15; }
+.reach-head p { margin-top: 14px; color: var(--ink-2); max-width: 34ch; }
+.reach-head p span { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.reach-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.reach-list li { display: grid; grid-template-columns: 10.5em minmax(0, 1fr) 3.6em; align-items: center; gap: 14px; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.reach-bar { height: 10px; border-radius: 999px; background: var(--soft); overflow: hidden; }
+.reach-bar i { display: block; height: 100%; min-width: 6px; border-radius: 999px; background: linear-gradient(90deg, #2BA47A, var(--accent)); transform-origin: 0 50%; }
+.js .reach .reach-bar i { transform: scaleX(0); transition: transform 1s var(--ease) .15s; }
+.js .reach.in .reach-bar i { transform: none; }
+.reach-list b { text-align: end; color: var(--pine-800); font-variant-numeric: tabular-nums; }
+.reach-note { margin-top: 20px; color: var(--ink-3); font-size: 13.5px; }
+@media (max-width: 900px) { .reach { grid-template-columns: 1fr; gap: 28px; padding: 32px 28px; margin-top: 44px; } .reach-head p { max-width: none; } }
+@media (max-width: 480px) { .reach { padding: 26px 20px; } .reach-list li { grid-template-columns: 7.6em minmax(0, 1fr) 3.4em; gap: 10px; font-size: 14px; } }
+@media (prefers-reduced-motion: reduce) { .js .reach .reach-bar i { transform: none; transition: none; } }
 .places { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .chip { display: inline-flex; padding: 7px 14px; border-radius: 999px; background: var(--soft); color: var(--accent-ink); font-size: 13.5px; font-weight: 700; }
 
@@ -595,7 +611,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 
 <div class="stats wrap">
   <div class="stats-in">
-    <div class="stat"><b class="count">14,245</b><span>people used it last Ramadan</span></div>
+    <div class="stat"><b class="count" data-n="users">14,245</b><span>active users so far</span></div>
     <div class="stat"><b class="count" data-n="features">133</b><span>features, every one of them free</span></div>
     <div class="stat"><b class="count" data-n="languages">15</b><span>languages, right to left included</span></div>
     <div class="stat"><b>0</b><span>ads, fees or sign-up walls</span></div>
@@ -607,13 +623,38 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
   <div class="wrap story">
     <div class="reveal">
       <div class="kick">How it began</div>
-      <h2 style="margin-top:14px">Built for a handful of people. 14,245 showed up.</h2>
+      <h2 style="margin-top:14px">Built for a handful of people. <span data-n="users">14,245</span> showed up.</h2>
       <p class="lead" style="margin-top:18px">Last Ramadan we made Ramadan Strivers for our close friends and family: one simple place to guide each other through the month, tick off our deeds, keep up with the Quran and hold each other to it. Then people shared it. Individuals across the globe used it, and so did a school and a mosque.</p>
-      <div class="places"><span class="chip">Bangladesh</span><span class="chip">Pakistan</span><span class="chip">Indonesia</span><span class="chip">Iraq</span><span class="chip">Australia</span><span class="chip">India</span><span class="chip">Malaysia</span><span class="chip">United States</span><span class="chip">Saudi Arabia</span><span class="chip">UAE</span></div>
     </div>
     <div class="quote reveal d1">
       <p>Alhamdulillah. You are the reason we rebuilt it, so this Ramadan it is ready for your whole circle.</p>
       <small>Start with your close friends and family. That is how it began.</small>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="reach reveal" id="reach">
+      <div class="reach-head">
+        <div class="kick">Where they are</div>
+        <h3>Active users, country by country</h3>
+        <p>The <span data-n="reachCountries">10</span> countries with the most of our <span data-n="users">14,245</span> active users. People in other countries use it too.</p>
+      </div>
+      <div class="reach-body">
+        <!-- reach:start -->
+        <ol class="reach-list">
+          <li><span>Bangladesh</span><span class="reach-bar" aria-hidden="true"><i style="width:100%"></i></span><b>7,451</b></li>
+          <li><span>Pakistan</span><span class="reach-bar" aria-hidden="true"><i style="width:36.5%"></i></span><b>2,717</b></li>
+          <li><span>Indonesia</span><span class="reach-bar" aria-hidden="true"><i style="width:13.6%"></i></span><b>1,015</b></li>
+          <li><span>Iraq</span><span class="reach-bar" aria-hidden="true"><i style="width:12.8%"></i></span><b>953</b></li>
+          <li><span>Australia</span><span class="reach-bar" aria-hidden="true"><i style="width:10.4%"></i></span><b>778</b></li>
+          <li><span>India</span><span class="reach-bar" aria-hidden="true"><i style="width:3.2%"></i></span><b>240</b></li>
+          <li><span>Malaysia</span><span class="reach-bar" aria-hidden="true"><i style="width:2.1%"></i></span><b>154</b></li>
+          <li><span>United States</span><span class="reach-bar" aria-hidden="true"><i style="width:2%"></i></span><b>151</b></li>
+          <li><span>Saudi Arabia</span><span class="reach-bar" aria-hidden="true"><i style="width:1.8%"></i></span><b>131</b></li>
+          <li><span>United Arab Emirates</span><span class="reach-bar" aria-hidden="true"><i style="width:1.7%"></i></span><b>128</b></li>
+        </ol>
+        <p class="reach-note">Active users as counted by Google Analytics, up to <time datetime="2026-09-08">8 September 2026</time>.</p>
+        <!-- reach:end -->
+      </div>
     </div>
   </div>
 </section>

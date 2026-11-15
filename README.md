@@ -63,7 +63,7 @@ Corrections are welcome: m.farhan.bava@gmail.com. When editing content, always k
 | `scripts/check-i18n.js` | Checks every language: missing keys, placeholders, plural forms, emoji, strings whose English changed since translation |
 | `api/` | Vercel serverless API (one function, `api/router.js`, routes in `api/_routes/`), Postgres |
 | `sw.js`, `manifest.webmanifest`, `icons/` | PWA (offline app shell, push) |
-| `product/`, `scripts/product-shots.js` | The product page (`about.ramadanstrivers.com`, `/product`): its screenshots, numbers, QR code and "Just added" list are produced from the running app by the script |
+| `product/`, `scripts/product-shots.js` | The product page (`about.ramadanstrivers.com`, `/product`): its screenshots, numbers, QR code and "Just added" list are produced from the running app by the script; the active users and their countries come from `product/reach.json`, kept by hand from the owner's statistics |
 | `js/demo-guard.js`, `js/demo.js` | Demo mode (`/?demo=1`), used by the product page's live demo. The guard keeps storage in memory, keeps server calls on the page and keeps links from leaving the demo, so a visitor's own data is never touched; `demo.js` supplies a sample day of Ramadan and answers those calls |
 | `vercel.json` | Rewrites, headers, daily cron |
 

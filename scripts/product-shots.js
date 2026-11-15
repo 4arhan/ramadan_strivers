@@ -80,6 +80,24 @@ function qrSvg(text, label) {
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (data[y * size + x]) d += 'M' + (x + pad) + ' ' + (y + pad) + 'h1v1h-1z';
   return '<svg class="code" viewBox="0 0 ' + (size + pad * 2) + ' ' + (size + pad * 2) + '" role="img" aria-label="' + esc(label) + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path fill="#06140E" d="' + d + '"/></svg>';
 }
+// Who uses the app: product/reach.json, kept by hand from the owner's own statistics (the total of active users, the
+// last day of the period it was read for, and the countries with the most). It reaches the page like every other
+// number: {users} and {reachCountries}, and a bar for each country between the page's reach markers.
+function reach() {
+  const file = path.join(ROOT, 'product', 'reach.json');
+  if (!fs.existsSync(file)) return null;
+  const r = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const list = (r.countries || []).filter(c => c && c.name && c.users > 0).sort((a, b) => b.users - a.users);
+  if (!(r.users > 0) || !/^\d{4}-\d{2}-\d{2}$/.test(r.until || '') || !list.length) throw new Error('product/reach.json needs users, until (a date) and countries');
+  // the page says people in other countries use it too, which holds only while the countries listed leave some over
+  if (list.reduce((a, c) => a + c.users, 0) >= r.users) throw new Error('product/reach.json: the countries add up to the total or more, so the page could not say that other countries use it too');
+  return { users: r.users, until: r.until, list };
+}
+function reachHtml(r) {
+  const top = r.list[0].users, day = new Date(r.until + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  return '        <ol class="reach-list">\n' + r.list.map(c => '          <li><span>' + esc(c.name) + '</span><span class="reach-bar" aria-hidden="true"><i style="width:' + Math.max(1, Math.round(c.users / top * 1000) / 10) + '%"></i></span><b>' + fmt(c.users) + '</b></li>').join('\n') +
+    '\n        </ol>\n        <p class="reach-note">Active users as counted by Google Analytics, up to <time datetime="' + r.until + '">' + day + '</time>.</p>';
+}
 // "Just added": the newest six entries of product/whats-new.json. {n:name} in a text is replaced by that number,
 // counted from the app like every other number on the page.
 function newsHtml(n) {
@@ -96,12 +114,15 @@ function patchPage(sizes) {
   const n = numbers();
   n.features = (html.match(/<li class="fi"/g) || []).length;
   n.screens = Object.keys(sizes).filter(k => !/^nav-/.test(k) && k !== 'og').length;
+  const who = reach();
+  if (who) { n.users = who.users; n.reachCountries = who.list.length; }
   let missing = [];
   html = html.replace(/(<[a-z0-9]+\b[^>]*\bdata-n="([a-zA-Z]+)"[^>]*>)([^<]*)(<)/g, (m, open, key, old, close) => { if (n[key] === undefined) { missing.push(key); return m; } return open + fmt(n[key]) + close; });
   html = html.replace(/(<!-- try:start -->)[\s\S]*?(<!-- try:end -->)/, (m, a, b) => a + '\n' + tryRows() + '\n        ' + b);
   const langs = appLangs();
   if (langs.length) html = html.replace(/(<!-- langs:start -->)[\s\S]*?(<!-- langs:end -->)/, (m, a, b) => a + '\n' + langs.map(l => '              <option value="' + l.code + '" lang="' + l.code + '">' + esc(l.name) + '</option>').join('\n') + '\n              ' + b);
   html = html.replace(/(<!-- qr:start -->)[\s\S]*?(<!-- qr:end -->)/, (m, a, b) => a + qrSvg('https://www.ramadanstrivers.com/', 'QR code that opens ramadanstrivers.com') + b);
+  if (who) html = html.replace(/(<!-- reach:start -->)[\s\S]*?(<!-- reach:end -->)/, (m, a, b) => a + '\n' + reachHtml(who) + '\n        ' + b);
   const news = newsHtml(n);
   if (news !== null) html = html.replace(/(<!-- new:start -->)[\s\S]*?(<!-- new:end -->)/, (m, a, b) => a + '\n' + news + '\n      ' + b);
   // every screenshot gets its real width and height (in CSS pixels), so nothing jumps while the page loads

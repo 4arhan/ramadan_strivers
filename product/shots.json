@@ -35,7 +35,9 @@
   "dailyMax": 471,
   "learnItems": 311,
   "features": 133,
-  "screens": 70
+  "screens": 70,
+  "users": 14245,
+  "reachCountries": 10
  },
  "sizes": {
   "nav-tour-today": {
