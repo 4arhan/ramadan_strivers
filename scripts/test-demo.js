@@ -95,7 +95,7 @@ function check(name, pass, note) { if (!pass) failed++; console.log((pass ? '  o
     await page.evaluate(() => RS.router.go('me')); await page.waitForTimeout(600);
     const [tab] = await Promise.all([ctx.waitForEvent('page', { timeout: 8000 }).catch(() => null), page.locator('a[href="privacy.html"]').click()]);
     await page.waitForTimeout(500);
-    check('the privacy page opens in a new tab, and this window stays the demo', !!tab && /privacy\.html/.test(tab.url()) && /\?demo=1/.test(page.url()) && await page.evaluate(() => typeof window.RS_DEMO) === 'object', (tab ? tab.url() : 'no tab') + ' ' + page.url());
+    check('the privacy page opens in a new tab, and this window stays the demo', !!tab && /\/privacy(\.html)?([?#]|$)/.test(tab.url()) && /\?demo=1/.test(page.url()) && await page.evaluate(() => typeof window.RS_DEMO) === 'object', (tab ? tab.url() : 'no tab') + ' ' + page.url());
     if (tab) await tab.close();
     const where = await realKeys(page);
     check('the demo keeps its state in one session key of its own', where.session === 'rs-demo', JSON.stringify(where));
@@ -200,7 +200,7 @@ function check(name, pass, note) { if (!pass) failed++; console.log((pass ? '  o
     await page.evaluate(() => document.querySelector('#demo-screen iframe').contentWindow.RS.router.go('me')); await page.waitForTimeout(900);
     const [tab] = await Promise.all([ctx.waitForEvent('page', { timeout: 8000 }).catch(() => null), frame.locator('a[href="privacy.html"]').click()]);
     await page.waitForTimeout(600);
-    check('a link out of the demo opens a new tab; the frame stays the demo', !!tab && /privacy\.html/.test(tab.url()) && /\?demo=1/.test(await page.evaluate(() => document.querySelector('#demo-screen iframe').contentWindow.location.search)), tab ? tab.url() : 'no tab');
+    check('a link out of the demo opens a new tab; the frame stays the demo', !!tab && /\/privacy(\.html)?([?#]|$)/.test(tab.url()) && /\?demo=1/.test(await page.evaluate(() => document.querySelector('#demo-screen iframe').contentWindow.location.search)), tab ? tab.url() : 'no tab');
     if (tab) await tab.close();
     // if the frame is ever taken somewhere else, the page stops showing it as the demo
     await page.evaluate(() => { document.querySelector('#demo-screen iframe').contentWindow.location.href = '/privacy.html'; });
