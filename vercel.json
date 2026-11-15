@@ -3,6 +3,16 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "about.ramadanstrivers.com"
+        }
+      ],
+      "destination": "/product/index.html"
+    },
+    {
       "source": "/s/:id",
       "destination": "/api/router?__p=share&id=:id"
     },

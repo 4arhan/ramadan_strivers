@@ -9,7 +9,8 @@
     "build:i18n": "node scripts/build-i18n.js",
     "check:i18n": "node scripts/check-i18n.js",
     "test": "node scripts/test-api.js",
-    "test:api": "node scripts/test-api.js"
+    "test:api": "node scripts/test-api.js",
+    "product:shots": "node scripts/product-shots.js"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",

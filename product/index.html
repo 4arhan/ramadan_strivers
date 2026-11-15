@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ramadan Strivers: the Ramadan companion for you, your family, your school and your mosque</title>
+<meta name="description" content="A free Ramadan app: a daily checklist of deeds with sources, a Quran tracker, a 30-day preparation programme, lessons for new Muslims and children, and leaderboards for schools, mosques and families. 15 languages. No ads.">
+<meta name="theme-color" content="#06140E">
+<link rel="canonical" href="https://about.ramadanstrivers.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ramadan Strivers">
+<meta property="og:description" content="Your Ramadan, one deed at a time. Free, in 15 languages, with leaderboards for schools, mosques and families.">
+<meta property="og:image" content="https://www.ramadanstrivers.com/icons/icon-1024.png">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg?v=8">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png?v=8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&amp;display=swap">
+<style>
+:root {
+  --pine-900: #06140E; --pine-800: #0B2219; --pine-700: #103326; --pine-600: #17483A;
+  --paper: #F2F5F3; --card: #FFFFFF; --ink: #101915; --ink-2: #45524C; --ink-3: #6B7872;
+  --accent: #047857; --accent-ink: #03684C; --mint: #A7F3D0; --mint-2: #6EE7B7; --soft: rgba(4, 120, 87, .09);
+  --hair: rgba(16, 25, 21, .09); --on-dark: #EEF8F2; --on-dark-2: #B6CEC3;
+  --font: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --wrap: 1140px; --r: 28px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--paper); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+.kick { font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); }
+h1, h2, h3 { margin: 0; letter-spacing: -.02em; line-height: 1.08; }
+h2 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 700; }
+h3 { font-size: 20px; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+p { margin: 0; }
+.lead { font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-2); max-width: 56ch; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 26px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible, a:focus-visible { outline: 3px solid var(--mint-2); outline-offset: 3px; }
+.btn-mint { background: var(--mint); color: var(--pine-900); box-shadow: 0 10px 30px rgba(110, 231, 183, .28); }
+.btn-ghost { color: var(--on-dark); border: 1.5px solid rgba(238, 248, 242, .28); }
+.btn-ghost:hover { background: rgba(238, 248, 242, .08); }
+.btn-dark { background: var(--pine-800); color: var(--on-dark); }
+.btn svg { width: 18px; height: 18px; }
+
+/* nav */
+.nav { position: sticky; top: 0; z-index: 20; backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); background: rgba(6, 20, 14, .78); border-bottom: 1px solid rgba(238, 248, 242, .08); }
+.nav-in { display: flex; align-items: center; gap: 28px; height: 68px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--on-dark); font-weight: 800; font-size: 17px; letter-spacing: -.01em; }
+.brand img { width: 34px; height: 34px; border-radius: 10px; }
+.nav-links { display: flex; gap: 26px; margin-inline-start: auto; }
+.nav-links a { color: var(--on-dark-2); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+.nav-links a:hover { color: var(--on-dark); }
+.nav .btn { padding: 10px 18px; font-size: 14.5px; }
+
+/* hero */
+.hero { position: relative; overflow: hidden; color: var(--on-dark); background:
+  radial-gradient(900px 520px at 82% -8%, rgba(52, 211, 153, .30), transparent 62%),
+  radial-gradient(700px 480px at 4% 108%, rgba(16, 185, 129, .20), transparent 60%),
+  linear-gradient(180deg, var(--pine-900), var(--pine-800) 55%, #0E2B20); }
+.hero::before { content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+  background-image: radial-gradient(rgba(238, 248, 242, .10) 1px, transparent 1.4px); background-size: 26px 26px; mask-image: linear-gradient(180deg, #000, transparent 72%); -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%); }
+.hero-in { position: relative; display: grid; grid-template-columns: 1.02fr .98fr; gap: 40px; align-items: center; padding: 84px 0 96px; }
+.hero .kick { color: var(--mint-2); }
+.hero h1 { font-size: clamp(42px, 6.4vw, 78px); font-weight: 700; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--mint-2); }
+.hero .lead { color: var(--on-dark-2); margin-top: 22px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.trust { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 30px; padding: 0; list-style: none; color: var(--on-dark-2); font-size: 14.5px; font-weight: 600; }
+.trust li { display: flex; align-items: center; gap: 8px; }
+.trust svg { width: 17px; height: 17px; color: var(--mint-2); flex: none; }
+.phones { position: relative; height: 640px; }
+.phone { position: absolute; width: 292px; border-radius: 44px; padding: 9px; background: linear-gradient(160deg, #20372D, #0A1711); box-shadow: 0 40px 90px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(238, 248, 242, .14); }
+.phone img { border-radius: 36px; width: 100%; height: auto; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; background: var(--paper); }
+.phones .p1 { left: 50%; top: 20px; transform: translateX(-50%); z-index: 3; }
+.phones .p2 { left: 0; top: 96px; transform: rotate(-7deg) scale(.86); z-index: 2; opacity: .96; }
+.phones .p3 { right: 0; top: 96px; transform: rotate(7deg) scale(.86); z-index: 2; opacity: .96; }
+.hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(180deg, transparent, var(--paper)); pointer-events: none; }
+
+/* stats */
+.stats { position: relative; z-index: 4; margin-top: -46px; }
+.stats-in { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--card); border-radius: var(--r); box-shadow: 0 24px 60px rgba(11, 34, 25, .12); border: 1px solid var(--hair); overflow: hidden; }
+.stat { padding: 30px 28px; border-inline-start: 1px solid var(--hair); }
+.stat:first-child { border: 0; }
+.stat b { display: block; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--pine-800); font-variant-numeric: tabular-nums; }
+.stat span { display: block; margin-top: 10px; color: var(--ink-2); font-size: 14.5px; font-weight: 600; }
+
+section { padding: 104px 0; }
+.head { max-width: 720px; }
+.head h2 { margin-top: 14px; }
+.head .lead { margin-top: 18px; }
+
+/* story */
+.story { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.quote { background: var(--pine-800); color: var(--on-dark); border-radius: var(--r); padding: 44px; position: relative; overflow: hidden; }
+.quote::after { content: ""; position: absolute; width: 380px; height: 380px; right: -140px; top: -160px; border-radius: 50%; background: radial-gradient(circle, rgba(110, 231, 183, .28), transparent 65%); }
+.quote p { position: relative; font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; line-height: 1.28; letter-spacing: -.015em; }
+.quote small { position: relative; display: block; margin-top: 22px; color: var(--on-dark-2); font-size: 15px; }
+.places { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.chip { display: inline-flex; padding: 7px 14px; border-radius: 999px; background: var(--soft); color: var(--accent-ink); font-size: 13.5px; font-weight: 700; }
+
+/* feature rows */
+.feat { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 56px 0; }
+.feat.flip .feat-media { order: 2; }
+.feat-media { position: relative; display: flex; justify-content: center; gap: 22px; padding: 44px 24px; border-radius: 36px; background: linear-gradient(160deg, #E4EEE9, #F6F9F7); border: 1px solid var(--hair); overflow: hidden; }
+.feat-media.dark { background: radial-gradient(520px 320px at 80% 0%, rgba(52, 211, 153, .26), transparent 62%), linear-gradient(160deg, var(--pine-800), var(--pine-900)); border-color: transparent; }
+.feat-media .phone { position: relative; width: 250px; box-shadow: 0 26px 60px rgba(11, 34, 25, .26), inset 0 0 0 1px rgba(238, 248, 242, .14); }
+.feat-media .phone + .phone { margin-top: 46px; }
+.feat h2 { font-size: clamp(28px, 3.4vw, 40px); margin-top: 12px; }
+.feat .lead { margin-top: 16px; }
+.ticks { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
+.ticks li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; color: var(--ink-2); font-size: 16px; }
+.ticks li b { color: var(--ink); }
+.ticks svg { width: 26px; height: 26px; padding: 5px; border-radius: 50%; background: var(--soft); color: var(--accent); }
+
+/* band (organisations) */
+.band { background: radial-gradient(900px 480px at 100% 0%, rgba(52, 211, 153, .22), transparent 60%), linear-gradient(180deg, var(--pine-900), var(--pine-800)); color: var(--on-dark); }
+.band .kick { color: var(--mint-2); }
+.band .lead { color: var(--on-dark-2); }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+.tile { border-radius: 24px; padding: 26px; background: rgba(238, 248, 242, .055); border: 1px solid rgba(238, 248, 242, .10); }
+.tile svg { width: 26px; height: 26px; color: var(--mint-2); }
+.tile h3 { margin-top: 16px; color: var(--on-dark); }
+.tile p { margin-top: 8px; color: var(--on-dark-2); font-size: 15px; }
+.band-shots { display: flex; justify-content: center; gap: 26px; margin-top: 60px; flex-wrap: wrap; }
+.band-shots .phone { position: relative; width: 250px; }
+.band-shots .phone:nth-child(2) { margin-top: 40px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 60px; counter-reset: s; }
+.step { padding: 0 6px; }
+.step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--mint); color: var(--pine-900); font-weight: 800; }
+.step h3 { margin-top: 16px; color: var(--on-dark); }
+.step p { margin-top: 8px; color: var(--on-dark-2); font-size: 15px; }
+
+/* cards */
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 44px; }
+.card { background: var(--card); border: 1px solid var(--hair); border-radius: 24px; padding: 26px; }
+.card svg { width: 26px; height: 26px; color: var(--accent); }
+.card h3 { margin-top: 16px; }
+.card p { margin-top: 8px; color: var(--ink-2); font-size: 15px; }
+.langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.langs span { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--hair); font-weight: 600; font-size: 14.5px; }
+
+/* final */
+.final { text-align: center; }
+.final-in { border-radius: 40px; padding: 84px 28px; color: var(--on-dark); background: radial-gradient(700px 380px at 50% -10%, rgba(52, 211, 153, .34), transparent 62%), linear-gradient(180deg, var(--pine-800), var(--pine-900)); }
+.final h2 { font-size: clamp(34px, 5vw, 58px); }
+.final p { color: var(--on-dark-2); margin: 18px auto 0; max-width: 52ch; font-size: 18px; }
+.final .cta-row { justify-content: center; }
+footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
+.foot { display: flex; flex-wrap: wrap; gap: 12px 26px; align-items: center; justify-content: space-between; }
+.foot a { text-decoration: none; font-weight: 600; color: var(--ink-2); }
+.foot nav { display: flex; gap: 22px; flex-wrap: wrap; }
+
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .btn { transition: none; } }
+
+@media (max-width: 980px) {
+  .hero-in { grid-template-columns: 1fr; padding: 56px 0 70px; text-align: center; }
+  .hero .lead { margin-inline: auto; } .cta-row, .trust { justify-content: center; }
+  .phones { height: 560px; max-width: 560px; width: 100%; margin: 0 auto; }
+  .phone { width: 250px; }
+  .stats-in { grid-template-columns: 1fr 1fr; } .stat:nth-child(3) { border-inline-start: 0; } .stat:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .story, .feat { grid-template-columns: 1fr; gap: 32px; } .feat.flip .feat-media { order: 0; }
+  .grid3, .steps { grid-template-columns: 1fr; } .grid4 { grid-template-columns: 1fr 1fr; }
+  section { padding: 72px 0; } .feat { padding: 36px 0; }
+  .nav-links { display: none; } .nav .btn { margin-inline-start: auto; }
+}
+@media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
+  .phones { height: 470px; } .phones .phone { width: 208px; border-radius: 34px; padding: 7px; } .phones .phone img { border-radius: 28px; }
+  .phones .p2 { left: -34px; } .phones .p3 { right: -34px; }
+  .feat-media { padding: 28px 12px; gap: 12px; } .feat-media .phone { width: 46%; max-width: 230px; border-radius: 30px; padding: 6px; } .feat-media .phone img { border-radius: 25px; }
+  .feat-media .phone:only-child { width: 70%; }
+  .band-shots { gap: 12px; } .band-shots .phone { width: 46%; border-radius: 30px; padding: 6px; } .band-shots .phone img { border-radius: 25px; } .band-shots .phone:nth-child(3) { display: none; }
+  .grid4 { grid-template-columns: 1fr; } .quote { padding: 30px; } .stat { padding: 22px 18px; } .final-in { padding: 60px 20px; border-radius: 30px; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h.01M21 21h-4v-3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5 5.5 5.5 0 0 0 2 8.500c0 2.300 1.500 4 3 5.500l7 7Z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01M2 8.800a15 15 0 0 1 20 0M5 12.900a10 10 0 0 1 14 0M8.500 16.400a5 5 0 0 1 7 0"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2ZM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8ZM14 2v6h6M8 13h8M8 17h6"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top"><img src="/icons/icon-192.png?v=8" alt="" width="34" height="34">Ramadan Strivers</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#features">Features</a><a href="#families">Families</a><a href="#organisations">Schools and mosques</a><a href="#languages">Languages</a><a href="#privacy">Privacy</a>
+    </nav>
+    <a class="btn btn-mint" href="https://www.ramadanstrivers.com/">Open the app</a>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <div class="kick">Free. No ads. 15 languages.</div>
+      <h1>Your Ramadan, <em>one deed at a time.</em></h1>
+      <p class="lead">Ramadan Strivers is a daily companion for the month: a checklist of deeds with their sources, a Quran tracker, a 30-day preparation programme, and leaderboards that bring your family, school or mosque along with you.</p>
+      <div class="cta-row">
+        <a class="btn btn-mint" href="https://www.ramadanstrivers.com/">Open the app <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#organisations">For schools and mosques</a>
+      </div>
+      <ul class="trust">
+        <li><svg><use href="#i-check"/></svg>No account needed</li>
+        <li><svg><use href="#i-check"/></svg>Works offline</li>
+        <li><svg><use href="#i-check"/></svg>Installs like an app</li>
+      </ul>
+    </div>
+    <div class="phones" aria-hidden="true">
+      <div class="phone p2"><img src="/product/img/quran.jpg" alt="" width="390" height="844"></div>
+      <div class="phone p1"><img src="/product/img/today.jpg" alt="" width="390" height="844"></div>
+      <div class="phone p3"><img src="/product/img/compete.jpg" alt="" width="390" height="844"></div>
+    </div>
+  </div>
+  <div class="hero-fade"></div>
+</div>
+
+<div class="stats wrap">
+  <div class="stats-in">
+    <div class="stat"><b>14,245</b><span>people used it last Ramadan</span></div>
+    <div class="stat"><b id="n-langs">15</b><span>languages, right to left included</span></div>
+    <div class="stat"><b>60+</b><span>daily deeds, each with its source</span></div>
+    <div class="stat"><b>0</b><span>ads, fees or sign-up walls</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap story">
+    <div class="reveal">
+      <div class="kick">How it began</div>
+      <h2 style="margin-top:14px">Built for a handful of people. 14,245 showed up.</h2>
+      <p class="lead" style="margin-top:18px">Last Ramadan we made Ramadan Strivers for our close friends and family: one simple place to guide each other through the month, tick off our deeds, keep up with the Quran and hold each other to it. Then people shared it. Individuals across the globe used it, and so did a school and a mosque.</p>
+      <div class="places"><span class="chip">Bangladesh</span><span class="chip">Pakistan</span><span class="chip">Indonesia</span><span class="chip">Iraq</span><span class="chip">Australia</span><span class="chip">India</span><span class="chip">Malaysia</span><span class="chip">United States</span><span class="chip">Saudi Arabia</span><span class="chip">UAE</span></div>
+    </div>
+    <div class="quote reveal">
+      <p>Alhamdulillah. You are the reason we rebuilt it, so this Ramadan it is ready for your whole circle.</p>
+      <small>Start with your close friends and family. That is how it began.</small>
+    </div>
+  </div>
+</section>
+
+<section id="features" style="padding-top:0">
+  <div class="wrap">
+    <div class="head reveal"><div class="kick">Every day of the month</div><h2>Everything a good day of Ramadan is made of</h2></div>
+
+    <div class="feat">
+      <div class="feat-media reveal"><div class="phone"><img loading="lazy" src="/product/img/today.jpg" alt="The Today screen: 61% of today's deeds done, with points, Quran pages and the hadith of the day" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/checklist.jpg" alt="The daily checklist: each deed with its hadith reference and grading" width="390" height="844"></div></div>
+      <div class="reveal">
+        <div class="kick">Daily checklist</div>
+        <h2>Tick your deeds. See your day take shape.</h2>
+        <p class="lead">From Fajr to the night prayer: salah, sunnah prayers, adhkar, Quran, charity and character. Every deed carries points, and every one shows where it comes from.</p>
+        <ul class="ticks">
+          <li><svg><use href="#i-check"/></svg><span><b>Sources on every deed.</b> The hadith or verse, its reference and its grading, one tap away.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Streaks and badges</b> that reward showing up, not perfection.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Honest about real life.</b> Not fasting today, travelling or unwell: the day adapts, and missed fasts are kept for later.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feat flip">
+      <div class="feat-media dark reveal"><div class="phone"><img loading="lazy" src="/product/img/quran.jpg" alt="The Quran tracker: 224 pages read, 37% of the way, with a chart of pages per day" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/prep.jpg" alt="Ramadan Prep: a 30-day programme to get ready" width="390" height="844"></div></div>
+      <div class="reveal">
+        <div class="kick">Quran and preparation</div>
+        <h2>Finish the Quran, and arrive ready.</h2>
+        <p class="lead">Log the pages you read and the app works out the pace you need to complete it in the month. Before Ramadan, a 30-day programme steadies your salah, your Quran and your habits, with a countdown to the first fast.</p>
+        <ul class="ticks">
+          <li><svg><use href="#i-check"/></svg><span><b>Pages per day</b> and what is left, always in view.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Prayer times for any city,</b> with 24 calculation methods, Qibla and a printable timetable.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Dates are estimates.</b> The app says so, and reminds you to follow your local mosque for moon sighting or calendar.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-media reveal"><div class="phone"><img loading="lazy" src="/product/img/start.jpg" alt="New to Islam: start here. My first Ramadan, how to pray, words explained" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/pray.jpg" alt="How to pray: wudu explained step by step" width="390" height="844"></div></div>
+      <div class="reveal">
+        <div class="kick">New to Islam</div>
+        <h2>A gentle first Ramadan.</h2>
+        <p class="lead">A guide written for people at the beginning: what Ramadan is, who fasts, what breaks a fast, and how to make wudu and pray, one step at a time with the words to say.</p>
+        <ul class="ticks">
+          <li><svg><use href="#i-check"/></svg><span><b>12 short chapters</b> in plain words, with Quran and hadith references.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>A shorter deed list</b> that grows week by week instead of asking for everything on day one.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>40 words explained,</b> from suhoor to Laylatul Qadr.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feat flip" id="families">
+      <div class="feat-media dark reveal"><div class="phone"><img loading="lazy" src="/product/img/kids.jpg" alt="Kids mode: a simpler day with a night sky that lights a star for each day of good deeds" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/learn.jpg" alt="Learn: daily quiz, true or false, and flashcards" width="390" height="844"></div></div>
+      <div class="reveal">
+        <div class="kick">Children and families</div>
+        <h2>The whole house, on one phone or many.</h2>
+        <p class="lead">Kids mode swaps the long list for 13 deeds a child can own, lights a star in the night sky for each good day, and tells a short story every evening. Parents stay in charge.</p>
+        <ul class="ticks">
+          <li><svg><use href="#i-check"/></svg><span><b>Family profiles</b> on a shared device, and a family goal to reach together.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Grown-up check</b> with a family PIN before a child's day counts on a leaderboard.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Quizzes, flashcards, a printable chart and a certificate</b> for Eid.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-media reveal"><div class="phone"><img loading="lazy" src="/product/img/board.jpg" alt="A competition leaderboard with individuals and teams" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/goal.jpg" alt="A shared goal of 3,000 Quran pages, a charity target, double-points days and the organiser's own deeds" width="390" height="844"></div></div>
+      <div class="reveal">
+        <div class="kick">Compete in good</div>
+        <h2>Race each other to what matters.</h2>
+        <p class="lead">Join with a six-letter code and your points appear on your group's leaderboard. Classes and teams compete on averages, so a small group can beat a large one.</p>
+        <ul class="ticks">
+          <li><svg><use href="#i-check"/></svg><span><b>A shared goal,</b> such as 3,000 Quran pages together, and a charity target beside it.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Weekly awards:</b> most improved, most consistent, most Quran read.</span></li>
+          <li><svg><use href="#i-check"/></svg><span><b>Only a display name is shared.</b> Never which deeds you ticked.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="organisations">
+  <div class="wrap">
+    <div class="head reveal"><div class="kick">Schools, mosques and communities</div><h2>Run a Ramadan challenge without running a spreadsheet.</h2><p class="lead">Create a competition in a minute, share the code or a QR poster, and watch your community take part. Everything an organiser needs is in one tab.</p></div>
+    <div class="grid3">
+      <div class="tile reveal"><svg><use href="#i-users"/></svg><h3>Helpers with the right access</h3><p>Add colleagues as admin, teacher of one class, or viewer of reports only. Every change is logged.</p></div>
+      <div class="tile reveal"><svg><use href="#i-award"/></svg><h3>Weekly awards and reports</h3><p>The week's top three, most improved and top class, with a one-page report to print for assembly or the notice board.</p></div>
+      <div class="tile reveal"><svg><use href="#i-target"/></svg><h3>Your goal, your deeds</h3><p>Set a shared goal, double-points days and up to six deeds of your own, like helping to set up iftar.</p></div>
+      <div class="tile reveal"><svg><use href="#i-qr"/></svg><h3>QR check-in and sign-up lists</h3><p>A daily door poster for Tarawih or class attendance, and lists for iftar dishes and volunteers.</p></div>
+      <div class="tile reveal"><svg><use href="#i-file"/></svg><h3>Made for children's privacy</h3><p>Import a class list, print parent consent slips with each child's own join code, and switch on under-13 protections.</p></div>
+      <div class="tile reveal"><svg><use href="#i-globe"/></svg><h3>Leagues and head to head</h3><p>Challenge another school for a week, or join a league table ranked by average points per active person.</p></div>
+    </div>
+    <div class="band-shots reveal">
+      <div class="phone"><img loading="lazy" src="/product/img/manage.jpg" alt="The organiser's weekly awards" width="390" height="844"></div>
+      <div class="phone"><img loading="lazy" src="/product/img/insights.jpg" alt="Organiser insights: who is active each day and average completion" width="390" height="844"></div>
+      <div class="phone"><img loading="lazy" src="/product/img/league.jpg" alt="A league table of schools and mosques" width="390" height="844"></div>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Create</h3><p>Open Compete, choose "Organise", name your school, mosque or group and add your prizes.</p></div>
+      <div class="step reveal"><h3>Invite</h3><p>Share the code, print the QR poster, or enrol names so each person gets a personal link.</p></div>
+      <div class="step reveal"><h3>Encourage</h3><p>Post a message, celebrate the weekly awards and print certificates at Eid.</p></div>
+    </div>
+    <div class="cta-row" style="justify-content:center;margin-top:52px"><a class="btn btn-mint" href="https://www.ramadanstrivers.com/#/compete">Start a competition <svg><use href="#i-arrow"/></svg></a></div>
+  </div>
+</section>
+
+<section id="languages">
+  <div class="wrap">
+    <div class="feat" style="padding-top:0">
+      <div class="reveal">
+        <div class="kick">For the whole ummah</div>
+        <h2>In the language you make dua in.</h2>
+        <p class="lead">The whole app, including the lessons and the stories, is translated into 15 languages, with proper right-to-left layouts and Quran quotations taken from established translations.</p>
+        <div class="langs"><span>English</span><span lang="ar">العربية</span><span lang="ur">اردو</span><span lang="bn">বাংলা</span><span lang="id">Bahasa Indonesia</span><span lang="ms">Bahasa Melayu</span><span lang="tr">Türkçe</span><span lang="fa">فارسی</span><span lang="hi">हिन्दी</span><span lang="fr">Français</span><span lang="es">Español</span><span lang="pt">Português</span><span lang="ru">Русский</span><span lang="sw">Kiswahili</span><span lang="zh">中文</span></div>
+      </div>
+      <div class="feat-media reveal"><div class="phone"><img loading="lazy" src="/product/img/arabic.jpg" alt="The Today screen in Arabic, laid out right to left" width="390" height="844"></div><div class="phone"><img loading="lazy" src="/product/img/today-dark.jpg" alt="The Today screen in dark mode" width="390" height="844"></div></div>
+    </div>
+
+    <div class="head reveal" id="privacy" style="margin-top:72px"><div class="kick">Built with care</div><h2>Quiet, private and yours.</h2></div>
+    <div class="grid4">
+      <div class="card reveal"><svg><use href="#i-shield"/></svg><h3>Private by default</h3><p>Your deeds stay on your device. No account is needed, and a competition only ever sees a display name and totals.</p></div>
+      <div class="card reveal"><svg><use href="#i-wifi"/></svg><h3>Works offline</h3><p>Install it to your home screen and it opens without a connection, at suhoor or in the mosque.</p></div>
+      <div class="card reveal"><svg><use href="#i-book"/></svg><h3>Sourced content</h3><p>Deeds, lessons and stories cite the Quran and hadith with references and gradings, and say plainly when scholars differ.</p></div>
+      <div class="card reveal"><svg><use href="#i-heart"/></svg><h3>Free, for the sake of Allah</h3><p>No ads, no subscriptions and nothing sold. Light and dark themes, and large, clear text.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final" style="padding-top:0">
+  <div class="wrap">
+    <div class="final-in reveal">
+      <h2>Start with the people closest to you.</h2>
+      <p>Open the app, tick your first deed, and send the link to your family group. It takes less than a minute.</p>
+      <div class="cta-row"><a class="btn btn-mint" href="https://www.ramadanstrivers.com/">Open Ramadan Strivers <svg><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>Ramadan Strivers. <span id="shots-note">Screens shown are from the live app.</span></span>
+    <nav aria-label="Footer"><a href="https://www.ramadanstrivers.com/">Open the app</a><a href="https://www.ramadanstrivers.com/privacy">Privacy</a></nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { for (var i = 0; i < els.length; i++) els[i].classList.add('in'); }
+  else { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px' }); els.forEach(function (el) { io.observe(el); }); }
+  // when the screenshots were last taken from the app (written by scripts/product-shots.js)
+  fetch('/product/shots.json').then(function (r) { return r.json(); }).then(function (j) {
+    if (!j || !j.taken) return;
+    var d = new Date(j.taken + 'T00:00:00Z'), n = document.getElementById('shots-note'), l = document.getElementById('n-langs');
+    if (n) n.textContent = 'Screens taken from the live app on ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) + '.';
+    if (l && j.languages) l.textContent = j.languages;
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>

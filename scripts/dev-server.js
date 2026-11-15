@@ -2,7 +2,7 @@
 // Usage: DATABASE_URL=postgres://... node scripts/dev-server.js [port]
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..'); const PORT = parseInt(process.argv[2] || process.env.PORT || '3000', 10);
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.css': 'text/css', '.ico': 'image/x-icon', '.txt': 'text/plain' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.css': 'text/css', '.ico': 'image/x-icon', '.txt': 'text/plain' };
 // Mirrors vercel.json: every /api/* path except og and router goes to the single router function.
 const REWRITES = [[/^\/s\/([^/?]+)/, (m) => '/api/router?__p=share&id=' + m[1]], [/^\/poster\/([^/?]+)/, (m) => '/api/router?__p=comp/' + m[1] + '/poster'], [/^\/join\/([^/?]+)/, (m) => '/?join=' + m[1]], [/^\/o\/([^/?]+)/, (m) => '/api/router?__p=o/' + m[1]], [/^\/l\/([^/?]+)/, (m) => '/api/router?__p=l/' + m[1]],
   [/^\/api\/(?!router(?:[/?]|$))([^?]*)(\?.*)?$/, (m) => '/api/router?__p=' + m[1] + (m[2] ? '&' + m[2].slice(1) : '')]];
