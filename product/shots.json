@@ -1,24 +1,358 @@
 {
-  "taken": "2026-11-15",
-  "version": "rs-v8.0.0-10",
+ "taken": "2026-11-15",
+ "version": "rs-v8.0.0-10",
+ "numbers": {
+  "deeds": 68,
+  "groups": 7,
+  "sourced": 67,
+  "deedsEarly": 61,
+  "lastTen": 7,
+  "hadith": 30,
+  "badges": 12,
+  "streaks": 4,
+  "tf": 149,
+  "mcq": 62,
+  "questions": 211,
+  "cards": 100,
+  "decks": 7,
+  "topics": 10,
+  "prepDays": 30,
+  "prepActions": 90,
+  "prepAreas": 6,
+  "prepCheck": 7,
+  "chapters": 12,
+  "wudu": 9,
+  "praySteps": 12,
+  "terms": 40,
+  "stories": 30,
+  "kidDeeds": 13,
+  "kidQuiz": 48,
   "languages": 15,
-  "shots": [
-    "today",
-    "today-dark",
-    "checklist",
-    "quran",
-    "prep",
-    "learn",
-    "start",
-    "pray",
-    "kids",
-    "compete",
-    "board",
-    "goal",
-    "manage",
-    "insights",
-    "arabic",
-    "me",
-    "league"
-  ]
+  "methods": 23,
+  "cities": 563,
+  "strings": 4000,
+  "guideTopics": 17,
+  "dailyMax": 471,
+  "learnItems": 311,
+  "features": 133,
+  "screens": 70
+ },
+ "sizes": {
+  "nav-tour-today": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-today": {
+   "w": 390,
+   "h": 3300
+  },
+  "nav-tour-quran": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-quran": {
+   "w": 390,
+   "h": 1943
+  },
+  "nav-tour-prep": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-prep": {
+   "w": 390,
+   "h": 2900
+  },
+  "nav-tour-learn": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-learn": {
+   "w": 390,
+   "h": 2900
+  },
+  "tour-pray": {
+   "w": 390,
+   "h": 3300
+  },
+  "nav-tour-kids": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-kids": {
+   "w": 390,
+   "h": 2900
+  },
+  "nav-tour-compete": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-compete": {
+   "w": 390,
+   "h": 3300
+  },
+  "nav-tour-manage": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-manage": {
+   "w": 390,
+   "h": 3300
+  },
+  "nav-tour-me": {
+   "w": 390,
+   "h": 100
+  },
+  "tour-me": {
+   "w": 390,
+   "h": 2900
+  },
+  "today": {
+   "w": 390,
+   "h": 844
+  },
+  "today-dark": {
+   "w": 390,
+   "h": 844
+  },
+  "checklist": {
+   "w": 390,
+   "h": 844
+  },
+  "prayer": {
+   "w": 390,
+   "h": 844
+  },
+  "qibla": {
+   "w": 390,
+   "h": 844
+  },
+  "story": {
+   "w": 390,
+   "h": 844
+  },
+  "quran": {
+   "w": 390,
+   "h": 844
+  },
+  "countdown": {
+   "w": 390,
+   "h": 844
+  },
+  "prep": {
+   "w": 390,
+   "h": 844
+  },
+  "prep-day": {
+   "w": 390,
+   "h": 844
+  },
+  "prep-result": {
+   "w": 390,
+   "h": 844
+  },
+  "prep-plan": {
+   "w": 390,
+   "h": 844
+  },
+  "learn": {
+   "w": 390,
+   "h": 844
+  },
+  "quiz": {
+   "w": 390,
+   "h": 844
+  },
+  "mcq": {
+   "w": 390,
+   "h": 844
+  },
+  "flash": {
+   "w": 390,
+   "h": 844
+  },
+  "daily": {
+   "w": 390,
+   "h": 844
+  },
+  "start": {
+   "w": 390,
+   "h": 844
+  },
+  "read": {
+   "w": 390,
+   "h": 844
+  },
+  "pray": {
+   "w": 390,
+   "h": 844
+  },
+  "words": {
+   "w": 390,
+   "h": 844
+  },
+  "kids": {
+   "w": 390,
+   "h": 844
+  },
+  "kids-story": {
+   "w": 390,
+   "h": 844
+  },
+  "family": {
+   "w": 390,
+   "h": 844
+  },
+  "buddies": {
+   "w": 390,
+   "h": 844
+  },
+  "me": {
+   "w": 390,
+   "h": 844
+  },
+  "badges": {
+   "w": 390,
+   "h": 844
+  },
+  "settings": {
+   "w": 390,
+   "h": 844
+  },
+  "guide": {
+   "w": 390,
+   "h": 844
+  },
+  "compete": {
+   "w": 390,
+   "h": 844
+  },
+  "board": {
+   "w": 390,
+   "h": 844
+  },
+  "goal": {
+   "w": 390,
+   "h": 844
+  },
+  "awards": {
+   "w": 390,
+   "h": 844
+  },
+  "organise": {
+   "w": 390,
+   "h": 844
+  },
+  "org-board": {
+   "w": 390,
+   "h": 844
+  },
+  "insights": {
+   "w": 390,
+   "h": 844
+  },
+  "roster": {
+   "w": 390,
+   "h": 844
+  },
+  "org-settings": {
+   "w": 390,
+   "h": 844
+  },
+  "org-tools": {
+   "w": 390,
+   "h": 844
+  },
+  "manage": {
+   "w": 390,
+   "h": 844
+  },
+  "people": {
+   "w": 390,
+   "h": 844
+  },
+  "signups": {
+   "w": 390,
+   "h": 844
+  },
+  "league": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-ar": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-ur": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-bn": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-tr": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-id": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-zh": {
+   "w": 390,
+   "h": 844
+  },
+  "lang-fr": {
+   "w": 390,
+   "h": 844
+  },
+  "display": {
+   "w": 1180,
+   "h": 700
+  },
+  "paper-poster": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-certs": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-slips": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-checkin": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-public": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-league": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-report": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-timetable": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-kids-cert": {
+   "w": 794,
+   "h": 1123
+  },
+  "paper-kids-chart": {
+   "w": 794,
+   "h": 1123
+  },
+  "og": {
+   "w": 1200,
+   "h": 630
+  }
+ }
 }
