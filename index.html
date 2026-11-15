@@ -15,17 +15,21 @@
   /* Demo mode (?demo=1: the live demo on the product page). The app then runs on a sample month and must never read
      or write the visitor's own data. So before anything else runs, the browser's storage is replaced by a copy kept
      in memory (carried through a reload in one key of this tab's session storage, gone when the tab closes) and
-     statistics are switched off. If the browser will not allow the replacement, nothing else on this page runs.
+     statistics are switched off. Where the browser will not let the storage objects be replaced, their methods are
+     redirected instead and a probe checks that a write no longer arrives. If neither works, nothing else on this page
+     runs.
      js/demo.js supplies the sample month and answers the app's server calls. */
   (function () {
     if (!/[?&]demo=1(&|$)/.test(location.search)) return;
-    var KEY = 'rs-demo', real = null, st = null, ok = false, again = /[?&]fresh=1(&|$)/.test(location.search), kids = /[?&]kids=1(&|$)/.test(location.search);
+    var KEY = 'rs-demo', real = null, realLocal = null, st = null, ok = false, again = /[?&]fresh=1(&|$)/.test(location.search), kids = /[?&]kids=1(&|$)/.test(location.search);
+    try { realLocal = window.localStorage; } catch (e) { realLocal = null; }
     try { real = window.sessionStorage; st = again ? null : JSON.parse(real.getItem(KEY) || 'null'); } catch (e) { st = null; }
+    var put = function (k, v) { real.setItem(k, v); };                 // how the demo's own state reaches the real session storage
     // ?fresh=1 starts the sample month again and ?kids=1 opens it in kids mode. Both are taken out of the address,
     // so a reload keeps what happened since.
     if (again || kids) { try { history.replaceState(history.state, '', location.pathname + '?demo=1' + location.hash); } catch (e) { /* the address stays */ } }
     if (!st || st.v !== 1 || !st.l || !st.s || typeof st.l !== 'object' || typeof st.s !== 'object') st = { v: 1, l: {}, s: {} };
-    function keep() { try { if (real) real.setItem(KEY, JSON.stringify(st)); } catch (e) { /* memory only */ } }
+    function keep() { try { if (real) put(KEY, JSON.stringify(st)); } catch (e) { /* memory only */ } }
     function has(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
     function store(o) {
       return {
@@ -43,6 +47,27 @@
       Object.defineProperty(window, 'sessionStorage', { configurable: true, get: function () { return ss; } });
       ok = window.localStorage === ls && window.sessionStorage === ss;
     } catch (e) { ok = false; }
+    if (!ok) ok = (function () {
+      try {
+        var P = window.Storage.prototype, get = P.getItem, set = P.setItem, del = P.removeItem, clr = P.clear, key = P.key, len = Object.getOwnPropertyDescriptor(P, 'length');
+        var mine = function (x) { return x === ls || x === ss ? x : (realLocal && x === realLocal ? ls : (real && x === real ? ss : null)); };
+        put = function (k, v) { set.call(real, k, v); };
+        P.getItem = function (k) { var m = mine(this); return m ? m.getItem(k) : get.apply(this, arguments); };
+        P.setItem = function (k, v) { var m = mine(this); return m ? m.setItem(k, v) : set.apply(this, arguments); };
+        P.removeItem = function (k) { var m = mine(this); return m ? m.removeItem(k) : del.apply(this, arguments); };
+        P.clear = function () { var m = mine(this); return m ? m.clear() : clr.apply(this, arguments); };
+        P.key = function (i) { var m = mine(this); return m ? m.key(i) : key.apply(this, arguments); };
+        Object.defineProperty(P, 'length', { configurable: true, enumerable: true, get: function () { var m = mine(this); return m ? m.length : len.get.call(this); } });
+        // the proof: something written the way the app writes it must not arrive in the real storage, either kind
+        var probe = 'rs-demo-probe', leaked = false;
+        window.localStorage.setItem(probe, '1'); window.sessionStorage.setItem(probe, '1');
+        if (realLocal && get.call(realLocal, probe) !== null) { leaked = true; del.call(realLocal, probe); }
+        if (real && get.call(real, probe) !== null) { leaked = true; del.call(real, probe); }
+        var seen = window.localStorage.getItem(probe) === '1' && window.sessionStorage.getItem(probe) === '1' && has(st.l, probe) && has(st.s, probe);
+        window.localStorage.removeItem(probe); window.sessionStorage.removeItem(probe);
+        return seen && !leaked;
+      } catch (e) { return false; }
+    })();
     if (!ok) { document.write('<plaintext style="display:none">'); location.replace('/product'); return; }   // the rest of the page is never run
     window['ga-disable-G-Y3WDNYW5P2'] = true;
     window.RS_DEMO = { fresh: !has(st.l, 'rs-settings'), kids: kids };

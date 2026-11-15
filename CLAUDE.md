@@ -38,8 +38,10 @@ The product page shows the app itself in a frame, on a sample twelfth day of Ram
 on its own page. Two pieces make it work, and neither does anything outside demo mode:
 
 - The **first script in `index.html`** replaces the browser's storage with a copy kept in memory before anything else
-  runs (carried through a reload in one session-storage key, `rs-demo`), switches statistics off, and stops the page if
-  the browser will not allow the replacement. A visitor's real data must never be read or written in demo mode.
+  runs (carried through a reload in one session-storage key, `rs-demo`) and switches statistics off. Where a browser
+  will not let the storage objects be replaced, their methods are redirected instead, and a probe proves a write no
+  longer arrives; if neither works the page stops. A visitor's real data must never be read or written in demo mode,
+  so the app must keep to `getItem`, `setItem`, `removeItem`, `key` and `length` when it touches storage.
   `?fresh=1` starts the sample again; `?kids=1` opens it in kids mode.
 - **`js/demo.js`** moves the clock to the 12th of Ramadan, writes the sample month (real deed ids, so badges and
   streaks are really earned), and answers every `/api/` call from memory in `answer()`: health, the sample competition

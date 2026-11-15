@@ -5,7 +5,8 @@
      - nothing a visitor has saved in the real app is read or changed,
      - no call reaches the server except the city search, and that one carries no credentials,
      - statistics and the service worker stay off,
-     - if the browser will not let storage be replaced, the app does not start,
+     - where the browser will not let the storage objects be replaced, their methods are redirected instead and the
+       same holds; if neither is possible, the app does not start,
      - every screen opens without an error, and what the visitor ticks moves the sample leaderboard,
      - outside demo mode none of this is active.
 
@@ -91,14 +92,36 @@ function check(name, pass, note) { if (!pass) failed++; console.log((pass ? '  o
     await ctx.close();
   }
 
-  /* ---- storage cannot be replaced: the app must not start */
+  /* ---- a browser that will not let the storage objects be replaced: their methods are redirected instead */
+  const realKeys = page => page.evaluate(() => { const f = document.createElement('iframe'); document.body.appendChild(f); const w = f.contentWindow, out = { session: Object.keys(w.sessionStorage).sort().join(), local: Object.keys(w.localStorage).sort().join() }; f.remove(); return out; });
+  const lock = () => { if (location.search.indexOf('demo=1') < 0) return; const l = window.localStorage, s = window.sessionStorage; Object.defineProperty(window, 'localStorage', { configurable: false, get: () => l }); Object.defineProperty(window, 'sessionStorage', { configurable: false, get: () => s }); };
   {
-    const ctx = await open(); const page = await ctx.newPage(); const loaded = [];
-    await page.addInitScript(() => { if (location.search.indexOf('demo=1') < 0) return; const real = window.localStorage; Object.defineProperty(window, 'localStorage', { configurable: false, get: () => real }); });
-    page.on('request', r => { if (/\/js\/(core|tracker|cloud|demo|main)\.js/.test(r.url()) && /demo=1/.test(page.url())) loaded.push(r.url()); });
+    const ctx = await open(); const seed = await ctx.newPage();
+    await seed.goto(BASE + '/privacy.html'); await seed.evaluate(() => { localStorage.clear(); localStorage.setItem('rs-settings', JSON.stringify({ lang: 'fr', theme: 'dark' })); }); await seed.close();
+    const page = await ctx.newPage(); const errors = []; page.on('pageerror', e => errors.push(e.message));
+    await page.addInitScript(lock);
+    await page.goto(BASE + '/?demo=1', { waitUntil: 'networkidle' }); await page.waitForTimeout(900);
+    const seen = await page.evaluate(() => ({ demo: typeof window.RS_DEMO, lang: RS.lang(), same: Object.prototype.toString.call(window.localStorage), day: RS.settings.day }));
+    check('with the storage objects locked, the demo still starts, on its own data', seen.demo === 'object' && seen.lang === 'en' && seen.same === '[object Storage]' && seen.day === 12 && errors.length === 0, JSON.stringify(seen) + ' ' + errors.join(' ; '));
+    await page.locator('[data-act="tr.tick"][aria-checked="false"], [data-act="tr.tick"][aria-pressed="false"]').first().click(); await page.waitForTimeout(400);
+    const done = await page.evaluate(() => RS.tracker.getDay(12).done);
+    const keys = await realKeys(page);
+    check('and still writes nothing but its one session key', keys.session === 'rs-demo' && keys.local === 'rs-settings', JSON.stringify(keys));
+    await page.reload({ waitUntil: 'networkidle' }); await page.waitForTimeout(700);
+    check('and a reload still keeps what the visitor did', await page.evaluate(() => RS.tracker.getDay(12).done) === done && done === 9);
+    await ctx.close();
+  }
+
+  /* ---- neither way works: the app must not start */
+  {
+    const ctx = await open(); const page = await ctx.newPage();
+    await page.addInitScript(lock);
+    await page.addInitScript(() => { if (location.search.indexOf('demo=1') >= 0) Object.freeze(Storage.prototype); });
     await page.goto(BASE + '/?demo=1', { waitUntil: 'domcontentloaded' }).catch(() => {}); await page.waitForTimeout(2000);
     const state = await page.evaluate(() => typeof window.RS + '/' + typeof window.RS_DEMO).catch(() => 'gone');
-    check('if storage cannot be replaced, the app does not start and the visitor is sent away', /\/product/.test(page.url()) && state !== 'object/object', page.url() + ' ' + state);
+    check('if storage cannot be kept apart at all, the app does not start and the visitor is sent away', /\/product/.test(page.url()) && state !== 'object/object', page.url() + ' ' + state);
+    const left = await page.evaluate(() => Object.keys(localStorage).concat(Object.keys(sessionStorage)).join()).catch(() => '?');
+    check('and nothing was left behind in their storage', left === '', left);
     await ctx.close();
   }
 
