@@ -1372,6 +1372,16 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
   var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var og = /[?&]og=1/.test(location.search);
 
+  /* This page's own address has no app on it, so nothing of the app's is kept there. For a short while that address
+     showed the app, and a browser that opened it then still holds the app's service worker and the files it stored:
+     they are removed. On the app's own address (www) the page leaves them alone. */
+  if (location.hostname === 'about.ramadanstrivers.com') {
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }).catch(function () {});
+      if (window.caches && caches.keys) caches.keys().then(function (ks) { ks.forEach(function (k) { if (/^rs-/.test(k)) caches.delete(k); }); }).catch(function () {});
+    } catch (e) { /* a browser that keeps them locked away has nothing to remove */ }
+  }
+
   /* things appear as you reach them */
   var seen = function (el) { el.classList.add('in'); };
   if (!('IntersectionObserver' in window) || og) $$('.reveal').forEach(seen);
