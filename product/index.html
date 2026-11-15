@@ -62,7 +62,7 @@ svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width:
 
 /* progress line + nav */
 .scrollbar { position: fixed; z-index: 30; left: 0; top: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--mint-2), var(--mint)); pointer-events: none; }
-.nav { position: sticky; top: 0; z-index: 20; backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); background: rgba(6, 20, 14, .8); border-bottom: 1px solid rgba(238, 248, 242, .08); }
+.nav { position: sticky; top: 0; z-index: 20; backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); background: rgba(6, 20, 14, .92); border-bottom: 1px solid rgba(238, 248, 242, .08); }
 .nav-in { display: flex; align-items: center; gap: 28px; height: 68px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--on-dark); font-weight: 800; font-size: 17px; letter-spacing: -.01em; white-space: nowrap; }
 .brand img { width: 34px; height: 34px; border-radius: 10px; }
@@ -86,33 +86,36 @@ svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width:
 .once .reel img { animation: reelB var(--dur, 12s) cubic-bezier(.45, .05, .35, 1) .9s both; }
 .paused .reel, .paused .reel img, .paused .bar i, .hold .bar i { animation-play-state: paused !important; }
 
-/* hero */
+/* hero: the app itself is the picture. A short headline, then the three screens; on a phone they rise into the
+   first screenful. Behind them: the crescent of the logo, a glow, and a faint pattern of eight-pointed stars. */
 .hero { position: relative; overflow: hidden; color: var(--on-dark); background:
-  radial-gradient(900px 520px at 82% -8%, rgba(52, 211, 153, .30), transparent 62%),
-  radial-gradient(700px 480px at 4% 108%, rgba(16, 185, 129, .20), transparent 60%),
-  linear-gradient(180deg, var(--pine-900), var(--pine-800) 55%, #0E2B20); }
-.hero::before { content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
-  background-image: radial-gradient(rgba(238, 248, 242, .10) 1px, transparent 1.4px); background-size: 26px 26px; mask-image: linear-gradient(180deg, #000, transparent 72%); -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%); }
-.crescent { position: absolute; right: -120px; top: -150px; width: 620px; height: 620px; color: rgba(167, 243, 208, .07); pointer-events: none; }
-.hero-in { position: relative; display: grid; grid-template-columns: 1.02fr .98fr; gap: 40px; align-items: center; padding: 76px 0 110px; }
-.hero .kick { color: var(--mint-2); display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 0 0 1px var(--glass-line); letter-spacing: .1em; }
-.hero .kick i { width: 8px; height: 8px; border-radius: 50%; background: var(--mint-2); box-shadow: 0 0 0 4px rgba(110, 231, 183, .2); }
-.hero h1 { font-size: clamp(42px, 6.2vw, 80px); font-weight: 700; margin-top: 22px; }
-.hero h1 em { font-style: normal; background: linear-gradient(100deg, var(--mint-2), #D1FAE5 60%, var(--mint-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  radial-gradient(820px 520px at 80% 0%, rgba(52, 211, 153, .22), transparent 62%),
+  radial-gradient(640px 440px at 0% 104%, rgba(16, 185, 129, .16), transparent 60%),
+  linear-gradient(180deg, var(--pine-900), var(--pine-800) 56%, #0E2B20); }
+.hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .16; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='none' stroke='%23A7F3D0' stroke-opacity='.5'%3E%3Cpath d='M30 30h60v60H30zM60 17.6 102.4 60 60 102.4 17.6 60zM-30-30h60v60h-60zM0-42.4 42.4 0 0 42.4-42.4 0zM90-30h60v60H90zM120-42.4 162.4 0 120 42.4 77.6 0zM-30 90h60v60h-60zM0 77.6 42.4 120 0 162.4-42.4 120zM90 90h60v60H90zM120 77.6 162.4 120 120 162.4 77.6 120z'/%3E%3C/svg%3E") 50% 0 / 120px 120px;
+  mask-image: radial-gradient(ellipse 46% 78% at 76% 44%, #000 20%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 46% 78% at 76% 44%, #000 20%, transparent 100%); }
+.hero-in { position: relative; display: grid; grid-template-columns: 1.02fr .98fr; gap: 40px; align-items: center; padding-block: 70px 110px; }
+.hero-copy { min-width: 0; }
+.hero-when { display: flex; align-items: center; gap: 9px; color: var(--mint-2); font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.hero-when .i { font-size: 15px; }
+.hero h1 { font-size: clamp(40px, 6.2vw, 80px); font-weight: 700; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--mint-2); }
 .hero .lead { color: var(--on-dark-2); margin-top: 22px; }
 .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-.trust { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 30px; padding: 0; list-style: none; color: var(--on-dark-2); font-size: 14.5px; font-weight: 600; }
-.trust li { display: flex; align-items: center; gap: 8px; }
-.trust .i { font-size: 17px; color: var(--mint-2); }
+.hero-proof { margin-top: 28px; color: var(--on-dark-3); font-size: 14.5px; font-weight: 600; }
+.hero-proof b { color: var(--on-dark); font-variant-numeric: tabular-nums; }
 .phones { position: relative; height: 660px; }
+.phones::before { content: ""; position: absolute; left: 50%; top: 47%; width: 580px; height: 580px; margin: -290px 0 0 -290px; border-radius: 50%; background: radial-gradient(closest-side, rgba(110, 231, 183, .2), transparent); pointer-events: none; }
+.crescent { position: absolute; left: 50%; top: 50%; width: 720px; height: 720px; margin: -384px 0 0 -372px; color: rgba(167, 243, 208, .075); pointer-events: none; }
 .phones .ph { position: absolute; width: 296px; }
 .phones .p1 { left: 50%; top: 14px; margin-left: -148px; z-index: 3; }
 .phones .p2 { left: -6px; top: 100px; transform: rotate(-7deg) scale(.86); z-index: 2; }
 .phones .p3 { right: -6px; top: 100px; transform: rotate(7deg) scale(.86); z-index: 2; }
-.float { position: absolute; z-index: 4; display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 16px; background: rgba(11, 34, 25, .82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 18px 40px rgba(0, 0, 0, .4), inset 0 0 0 1px rgba(167, 243, 208, .22); font-size: 13.5px; font-weight: 600; color: var(--on-dark-2); animation: bob 7s ease-in-out infinite; }
-.float b { font-size: 20px; color: var(--mint-2); letter-spacing: -.02em; }
-.float.f1 { left: -8px; top: 34px; } .float.f2 { right: -4px; bottom: 96px; animation-delay: -3.5s; }
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+/* everything arrives once, the copy first and the screens after it */
+@keyframes heroUp { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
+.js .hero-copy > * { animation: heroUp .7s var(--ease) both; }
+.js .hero-copy > :nth-child(2) { animation-delay: .05s; } .js .hero-copy > :nth-child(3) { animation-delay: .11s; } .js .hero-copy > :nth-child(4) { animation-delay: .17s; } .js .hero-copy > :nth-child(5) { animation-delay: .23s; }
+.js .phones .ph { animation: heroUp .95s var(--ease) both; } .js .phones .p1 { animation-delay: .12s; } .js .phones .p2 { animation-delay: .26s; } .js .phones .p3 { animation-delay: .34s; }
 .hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(180deg, transparent, var(--paper)); pointer-events: none; }
 
 /* stats */
@@ -370,20 +373,22 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 .js .reveal.d1 { transition-delay: .08s; } .js .reveal.d2 { transition-delay: .16s; } .js .reveal.d3 { transition-delay: .24s; } .js .reveal.d4 { transition-delay: .32s; } .js .reveal.d5 { transition-delay: .4s; }
 
 /* the picture social networks show */
-.og .nav, .og .scrollbar, .og .trust, .og .float { display: none; }
+.og .nav, .og .scrollbar, .og .hero-proof { display: none; }
+.og .hero-copy > *, .og .phones .ph { animation: none; }
 .og .hero-in { padding-block: 58px 0; padding-inline: 56px; grid-template-columns: 1.08fr .92fr; } .og .stats { display: none; } .og .hero h1 { font-size: 66px; } .og .hero .lead { font-size: 19px; } .og .phones { height: 600px; } .og .hero { height: 630px; } .og .hero-fade { display: none; }
 .og .loop .reel, .og .loop .reel img { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
-  .reel, .reel img, .float, .bar i { animation: none !important; }
+  .reel, .reel img, .bar i, .hero-copy > *, .phones .ph { animation: none !important; }
   .btn, .card, .tile, .paper .sheet, .gal .ph { transition: none; }
 }
 @media (max-width: 1080px) { .nav-links { gap: 16px; } .nav-links a.opt { display: none; } .nums { grid-template-columns: repeat(3, 1fr); } .orgnums { grid-template-columns: repeat(3, 1fr); } .cat ul { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 980px) {
-  .hero-in { grid-template-columns: 1fr; padding: 52px 0 76px; text-align: center; }
-  .hero .lead { margin-inline: auto; } .cta-row, .trust { justify-content: center; }
+  .hero-in { grid-template-columns: 1fr; padding-block: 52px 76px; text-align: center; }
+  .hero .lead { margin-inline: auto; } .cta-row, .hero-when { justify-content: center; } .hero h1 .hb { display: none; }
+  .hero::before { mask-image: radial-gradient(ellipse 74% 46% at 50% 72%, #000 20%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 74% 46% at 50% 72%, #000 20%, transparent 100%); }
   .phones { height: 580px; max-width: 580px; width: 100%; margin: 0 auto; }
   .phones .ph { width: 256px; } .phones .p1 { margin-left: -128px; }
   .stats-in { grid-template-columns: 1fr 1fr; } .stat:nth-child(3) { border-inline-start: 0; } .stat:nth-child(n+3) { border-top: 1px solid var(--hair); }
@@ -404,8 +409,11 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
   .day { grid-template-columns: 1fr 1fr; gap: 28px 18px; } .day::before { display: none; }
   section { padding: 76px 0; } .feat { padding: 38px 0; } .sub-h { margin-top: 64px; }
   html { scroll-padding-top: 116px; }
-  .nav-in { flex-wrap: wrap; height: auto; padding-top: 10px; gap: 0 16px; } .nav .btn { margin-inline-start: auto; }
-  .nav-links { order: 3; width: 100%; margin: 8px 0 0; padding-bottom: 11px; gap: 22px; overflow-x: auto; scrollbar-width: none; } .nav-links::-webkit-scrollbar { display: none; }
+  /* one row at the top; the section links are a second bar under it, which comes in once the page is scrolled */
+  .nav-in { height: 60px; gap: 16px; } .nav .btn { margin-inline-start: auto; }
+  .nav-links { position: absolute; left: 0; right: 0; top: 100%; margin: 0; padding: 10px 24px 11px; gap: 22px; overflow-x: auto; scrollbar-width: none; background: rgba(6, 20, 14, .92); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid rgba(238, 248, 242, .08); transition: opacity .25s, transform .3s var(--ease), visibility .25s; } .nav-links::-webkit-scrollbar { display: none; }
+  .js .nav.at-top .nav-links { opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; }
+  html:not(.js) .nav-links { display: none; }          /* without scripts nothing would ever show the second bar, so it stays out of the way */
   .nav-links a.opt { display: inline; }
   .cat-search { margin-inline-start: 0; width: 100%; } .cat-search input { width: 100%; }
   .langrow { justify-content: flex-start; }
@@ -415,8 +423,26 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 .tour-cap span { display: block; margin-top: 6px; font-size: 15px; color: var(--on-dark-2); } .tour.light .tour-cap span { color: var(--ink-2); }
 @media (max-width: 560px) {
   .wrap { padding-inline: 16px; }
-  .phones { height: 480px; } .phones .ph { width: 212px; border-radius: 34px; padding: 7px; } .phones .ph .ph-screen { border-radius: 28px; } .phones .p1 { margin-left: -106px; }
-  .phones .p2 { left: -38px; } .phones .p3 { right: -38px; } .float { display: none; }
+  /* the first screenful on a phone: a short headline, two buttons, and the app rising from below */
+  .nav-links { padding-inline: 16px; }
+  .hero-in { padding-block: 26px 0; gap: 26px; text-align: start; }
+  .hero::before { opacity: .13; background-size: 96px 96px; }
+  .hero-when { justify-content: flex-start; font-size: 11.5px; } .hero h1 { font-size: clamp(38px, 12.4vw, 54px); margin-top: 14px; } .hero h1 .hb { display: inline; }
+  .hero .lead { margin: 14px 0 0; font-size: 16.5px; } .hero .more, .hero-proof { display: none; }
+  .cta-row { margin-top: 22px; gap: 10px; flex-wrap: nowrap; justify-content: flex-start; } .cta-row .btn { padding: 14px 18px; font-size: 15.5px; white-space: nowrap; } .cta-row .btn-mint { flex: 1 1 auto; justify-content: center; }
+  .phones { height: 452px; } .phones .ph { width: 236px; border-radius: 37px; padding: 7px; } .phones .ph .ph-screen { border-radius: 31px; } .phones .p1 { margin-left: -118px; top: 0; }
+  .phones .p2 { left: -72px; top: 84px; } .phones .p3 { right: -72px; top: 84px; }
+  .phones::before { width: 460px; height: 460px; margin: -230px 0 0 -230px; top: 40%; } .crescent { width: 560px; height: 560px; margin: -300px 0 0 -290px; }
+}
+@media (max-width: 384px) {
+  .nav-in { gap: 10px; } .brand { font-size: 15.5px; gap: 9px; } .brand img { width: 30px; height: 30px; border-radius: 9px; } .nav .btn { padding: 9px 14px; font-size: 13.5px; }
+  .cta-row { gap: 8px; } .cta-row .btn { padding: 14px 14px; font-size: 15px; gap: 8px; } .hero .lead { font-size: 16px; }
+}
+@media (max-width: 344px) {
+  .brand { font-size: 14.5px; gap: 8px; } .brand img { width: 28px; height: 28px; } .nav .btn { padding: 8px 12px; font-size: 12.5px; }
+  .cta-row .btn .i { display: none; } .hero-when { font-size: 10.5px; letter-spacing: .1em; }
+}
+@media (max-width: 560px) {
   .feat-media { padding: 28px 12px; gap: 12px; } .feat-media .ph { width: 46%; max-width: 230px; border-radius: 30px; padding: 6px; } .feat-media .ph .ph-screen { border-radius: 25px; }
   .grid4, .cat ul { grid-template-columns: 1fr; } .nums { grid-template-columns: 1fr 1fr; } .orgnums { grid-template-columns: 1fr 1fr; }
   .quote { padding: 30px; } .stat { padding: 22px 18px; } .final-in { padding: 60px 20px; border-radius: 30px; } .cat { padding: 22px 18px; }
@@ -569,7 +595,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 </svg>
 
 <div class="scrollbar" id="scrollbar" aria-hidden="true"></div>
-<header class="nav">
+<header class="nav at-top">
   <div class="wrap nav-in">
     <a class="brand" href="#top"><img src="/icons/icon-192.png?v=8" alt="" width="34" height="34">Ramadan Strivers</a>
     <nav class="nav-links" aria-label="Sections">
@@ -582,28 +608,22 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
 <main id="top">
 <!-- ================================================================ hero -->
 <div class="hero">
-  <svg class="crescent" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M62 6a44 44 0 1 0 32 60A36 36 0 1 1 62 6Z"/></svg>
   <div class="wrap hero-in">
-    <div>
-      <div class="kick"><i></i><span>Free. No ads. <span data-n="languages">15</span> languages.</span></div>
-      <h1>Your Ramadan, <em>one deed at a time.</em></h1>
-      <p class="lead">Ramadan Strivers is a free companion for the whole month: <span data-n="deeds">68</span> deeds to tick with the hadith or verse behind them, prayer times for any city, a Quran tracker, lessons for new Muslims and children, and leaderboards for your family, school or mosque.</p>
+    <div class="hero-copy">
+      <p class="hero-when"><svg class="i"><use href="#i-moon"/></svg><span id="hero-when">Free. No ads. <span data-n="languages">15</span> languages.</span></p>
+      <h1>Your Ramadan,<br><em>one deed<br class="hb"> at a time.</em></h1>
+      <p class="lead">A free companion for the whole month: <span data-n="deeds">68</span> deeds to tick<span class="more"> with the hadith or verse behind them</span>, prayer times<span class="more"> for any city</span>, a Quran tracker, lessons<span class="more"> for new Muslims and children,</span> and leaderboards<span class="more"> for your family, school or mosque</span>.</p>
       <div class="cta-row">
         <a class="btn btn-mint" href="https://www.ramadanstrivers.com/">Open the app <svg class="i"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost" href="#demo"><svg class="i"><use href="#i-play"/></svg> Try the live demo</a>
+        <a class="btn btn-ghost" href="#demo"><svg class="i"><use href="#i-play"/></svg><span>Try the <span class="more">live </span>demo</span></a>
       </div>
-      <ul class="trust">
-        <li><svg class="i"><use href="#i-check"/></svg>No account needed</li>
-        <li><svg class="i"><use href="#i-check"/></svg>Works offline</li>
-        <li><svg class="i"><use href="#i-check"/></svg>Installs like an app</li>
-      </ul>
+      <p class="hero-proof"><b data-n="users">14,245</b> active users so far. No account needed, works offline, installs like an app.</p>
     </div>
     <div class="phones" aria-hidden="true">
+      <svg class="crescent" viewBox="0 0 100 100"><path fill="currentColor" d="M62 6a44 44 0 1 0 32 60A36 36 0 1 1 62 6Z"/></svg>
       <div class="ph p2"><div class="ph-screen"><img class="shot" src="/product/img/quran.webp" alt="" width="390" height="844"></div></div>
       <div class="ph p1 loop" id="hero-phone"><div class="ph-screen"><div class="reel"><img fetchpriority="high" src="/product/img/tour-today.webp" alt="" width="390" height="3300"></div><img class="ph-nav" src="/product/img/nav-tour-today.webp" alt="" width="390" height="100"></div></div>
       <div class="ph p3"><div class="ph-screen"><img class="shot" src="/product/img/compete.webp" alt="" width="390" height="844"></div></div>
-      <div class="float f1"><b data-n="deeds">68</b> deeds to tick,<br>sources included</div>
-      <div class="float f2"><b data-n="languages">15</b> languages,<br>right to left too</div>
     </div>
   </div>
   <div class="hero-fade"></div>
@@ -1429,7 +1449,7 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
   else { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { seen(e.target); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -7% 0px' }); $$('.reveal').forEach(function (el) { io.observe(el); }); }
 
   /* the line at the top, and the section you are in */
-  var bar = $('#scrollbar'), links = $$('.nav-links a'), targets = links.map(function (a) { return $(a.getAttribute('href')); });
+  var bar = $('#scrollbar'), nav = $('.nav'), links = $$('.nav-links a'), targets = links.map(function (a) { return $(a.getAttribute('href')); });
   var ticking = false;
   function onScroll() {
     if (ticking) return; ticking = true;
@@ -1437,11 +1457,33 @@ footer { padding: 36px 0 60px; color: var(--ink-3); font-size: 14px; }
       ticking = false;
       var h = document.documentElement, max = h.scrollHeight - innerHeight;
       if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+      if (nav) nav.classList.toggle('at-top', scrollY < 24);          // on small screens the section links wait until the page is scrolled
       var cur = -1; targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top < innerHeight * .35) cur = i; });
       links.forEach(function (a, i) { a.classList.toggle('on', i === cur); });
     });
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* How far away Ramadan is, in the line over the headline. The browser's own Umm al-Qura calendar says when the month
+     is expected; the real start follows the moon, so the line says "about". Without that calendar the line keeps
+     the words it was written with. */
+  (function () {
+    var el = $('#hero-when'); if (!el || og || !window.Intl || !Intl.DateTimeFormat) return;
+    try {
+      var f = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
+      if (f.resolvedOptions().calendar !== 'islamic-umalqura') return;
+      var read = function (t) { var o = {}; f.formatToParts(new Date(t)).forEach(function (p) { if (p.type === 'year' || p.type === 'relatedYear' || p.type === 'month' || p.type === 'day') o[p.type === 'relatedYear' ? 'year' : p.type] = parseInt(p.value, 10); }); return o; };
+      var now = new Date(), today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()), d = read(today), days = 0, text = '';
+      if (!(d.month >= 1 && d.day >= 1)) return;
+      if (d.month === 9) text = 'Ramadan is here';
+      else {
+        for (days = 1; days <= 360; days++) { d = read(today + days * 864e5); if (d.month === 9 && d.day === 1) break; }
+        if (days > 360) return;
+        text = 'Ramadan is ' + (days === 1 ? 'about a day' : days < 14 ? 'about ' + days + ' days' : 'about ' + Math.round(days / 7) + ' weeks') + ' away';
+      }
+      el.textContent = text;
+    } catch (e) { /* the line keeps its words */ }
+  })();
 
   /* numbers count up once */
   if (!calm && !og && 'IntersectionObserver' in window) {

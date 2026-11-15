@@ -18,6 +18,9 @@
   total of active users, the last day of the period it was read for, and the countries with the most. These are the
   only numbers on the page that are not counted from the app; change them only from figures the owner gives, and
   call them what they are (active users).
+- The **line over the headline** is written by the page itself when it opens: how far away Ramadan is, by the browser's own
+  Umm al-Qura calendar ("about", since the month begins with the moon). The words in the markup are what a browser without
+  that calendar shows, and what the social picture (`og.jpg`) shows.
 - The **language menu** of the live demo, the **QR code** that opens the app, and the **"Just added" list** are written by
   the script too. "Just added" shows the newest six entries of `product/whats-new.json`; `{n:name}` in a text becomes a
   counted number.
